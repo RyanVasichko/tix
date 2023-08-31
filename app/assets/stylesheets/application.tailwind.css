@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
+
 
 @layer components {
   .btn-primary {
@@ -10,4 +10,10 @@
   }
 }
 
-*/
+
+
+@layer components {
+  .navbar-button {
+    @apply flex items-center px-3 py-2 rounded border border-white text-white;
+  }
+}
