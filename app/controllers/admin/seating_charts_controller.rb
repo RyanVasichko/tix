@@ -1,4 +1,4 @@
-class Admin::SeatingChartsController < ApplicationController
+class Admin::SeatingChartsController < Admin::AdminController
   before_action :set_seating_chart, only: %i[show edit update destroy]
 
   def index
@@ -20,12 +20,12 @@ class Admin::SeatingChartsController < ApplicationController
   def create
     @seating_chart = SeatingChart.new(seating_chart_params)
 
-    unless seating_chart_params[:venue_layout]
+    if seating_chart_params[:venue_layout].nil? && params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
       @seating_chart.dup_venue_layout_from(params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from])
     end
 
     if @seating_chart.save
-      redirect_to admin_seating_charts_url, notice: 'Seating chart was successfully created.'
+      redirect_to admin_seating_charts_url, flash: { success: 'Seating chart was successfully created.' }
     else
       respond_to do |format|
         format.turbo_stream
@@ -36,15 +36,25 @@ class Admin::SeatingChartsController < ApplicationController
 
   def update
     if @seating_chart.update(seating_chart_params)
-      redirect_to admin_seating_charts_url, notice: 'Seating chart was successfully updated.'
+      redirect_to admin_seating_charts_url, flash: { success: 'Seating chart was successfully updated.' }
     else
       render :edit
     end
   end
 
   def destroy
-    @seating_chart.destroy
-    redirect_to admin_seating_charts_url, notice: 'Seating chart was successfully deleted.'
+    if @seating_chart.shows.any?
+      @seating_chart.deactivate
+      message = "#{@seating_chart.name} was successfully deactivated."
+    else
+      @seating_chart.destroy
+      message = "#{@seating_chart.name} was successfully deleted."
+    end
+
+    respond_to do |format|
+      format.html { redirect_to admin_seating_charts_url, flash: { success: message } }
+      format.turbo_stream { flash.now[:success] = message }
+    end
   end
 
   private

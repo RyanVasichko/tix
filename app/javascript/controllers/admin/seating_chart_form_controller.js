@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import * as bootstrap from "bootstrap";
 
 export default class extends Controller {
   static targets = [
@@ -18,18 +17,13 @@ export default class extends Controller {
     removedSections: Array
   };
 
-  connect() {
-    this.modal = new bootstrap.Modal(this.modalTarget);
-  }
+  async addSeat() {
+    const response = await fetch(this.newSeatUrlValue);
+    const html = await response.text();
 
-  addSeat() {
-    fetch(this.newSeatUrlValue)
-      .then(response => response.text())
-      .then(html => {
-        this.svgCanvasTarget.innerHTML += html;
-        const newSeat = this.svgCanvasTarget.lastElementChild;
-        this.openModalForSeat(newSeat);
-      });
+    this.svgCanvasTarget.innerHTML += html;
+    const newSeat = this.svgCanvasTarget.lastElementChild;
+    this.openModalForSeat(newSeat);
   }
 
   openModal(event) {
@@ -38,7 +32,7 @@ export default class extends Controller {
 
   openModalForSeat(seat) {
     this.populateSectionsSelectOptions();
-    
+
     this.selectedSeat = seat;
 
     const seatController = this.application.getControllerForElementAndIdentifier(seat, 'admin--seating-chart-form--seat');
@@ -47,7 +41,7 @@ export default class extends Controller {
     this.tableNumberInputTarget.value = seatController?.tableNumberValue || '';
     this.sectionSelectTarget.value = seatController?.sectionIdValue || '';
 
-    this.modal.show();
+    this.application.getControllerForElementAndIdentifier(this.modalTarget, "modal").open();
   }
 
   saveSeatData() {
@@ -64,7 +58,7 @@ export default class extends Controller {
 
   closeModal() {
     this.selectedSeat = null;
-    this.modal.hide();
+    this.application.getControllerForElementAndIdentifier(this.modalTarget, "modal").close();
   }
 
   populateSectionsSelectOptions() {

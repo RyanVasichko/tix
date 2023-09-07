@@ -1,0 +1,7 @@
+<div aria-live="assertive" class="pointer-events-none fixed top-0 right-0 flex flex-col items-end px-4 py-6 space-y-4 sm:items-start sm:p-6">
+  <%= turbo_frame_tag "toast_messages" do %>
+    <% flash.each do |message_type, message| %>
+      <%= render "shared/toast_message/toast_message", { message: message, message_type: message_type } %>
+    <% end %>
+  <% end %>
+</div>

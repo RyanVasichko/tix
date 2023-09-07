@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
 
   namespace :admin do
+    root to: 'admin#index'
+
+    resources :artists
     resources :seating_charts
 
     namespace :seating_charts do 
@@ -12,5 +15,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "admin/seating_charts#new"
+  root to: "admin/admin#index"
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_07_011007) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_08_003214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_011007) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "artists", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "bio"
+    t.string "url"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "seating_chart_seats", force: :cascade do |t|
     t.integer "x", null: false
     t.integer "y", null: false
@@ -68,6 +77,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_011007) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "shows", force: :cascade do |t|
+    t.bigint "artist_id", null: false
+    t.bigint "seating_chart_id", null: false
+    t.datetime "show_date"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_shows_on_artist_id"
+    t.index ["seating_chart_id"], name: "index_shows_on_seating_chart_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -85,4 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_011007) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
+  add_foreign_key "shows", "artists"
+  add_foreign_key "shows", "seating_charts"
 end

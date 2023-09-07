@@ -1,0 +1,29 @@
+<div class="card max-w-xl">
+  <h1 class="text-center text-3xl font-semibold">Artists</h1>
+
+  <div class="flex justify-end">
+    <%= link_to "New Artist", new_admin_artist_path, class: "btn-primary px-2 py-1" %>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="table-th">Name</th>
+        <th scope="col" class="table-th"></th>
+      </tr>
+    </thead>
+    <tbody class="table-tbody">
+      <% @artists.each do |artist| %>
+        <tr id="<%= dom_id(artist, :admin) %>">
+          <td class="table-td text-indigo-600">
+            <%= link_to artist.name, edit_admin_artist_path(artist) %>
+          </td>
+          <td class="table-td text-gray-900 text-right sm:pr-6">
+            <%= render "shared/dropdown", { id: dom_id(artist, :admin)} do %>
+              <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete", [:admin, artist], data: { turbo_method: "DELETE" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

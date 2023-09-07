@@ -109,9 +109,6 @@ GEM
       rdoc (~> 6.5)
       reline (>= 0.3.6)
     jaro_winkler (1.5.6)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     jsbundling-rails (1.1.2)
       railties (>= 6.0.0)
     json (2.6.3)
@@ -286,7 +283,6 @@ DEPENDENCIES
   cssbundling-rails
   debug
   htmlbeautifier
-  jbuilder
   jsbundling-rails
   launchy
   pg (~> 1.1)

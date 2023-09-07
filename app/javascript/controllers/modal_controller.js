@@ -1,20 +1,34 @@
 import { Controller } from "@hotwired/stimulus"
-import * as bootstrap from "bootstrap"
+import { enter, leave } from "el-transition"
 
 export default class extends Controller {
-  connect() {
-    this.modal = new bootstrap.Modal(this.element)
-  }
+  static targets = ["body", "backdrop", "focus"];
 
-  open() {
-    if (!this.modal.isOpened) {
-      this.modal.show();
+  async open() {
+    this.element.classList.remove("hidden");
+    if (this.focusTarget) {
+      this.focusTarget.focus();
     }
+    await Promise.all([
+      enter(this.bodyTarget),
+      enter(this.backdropTarget)
+    ]);
+    this.isOpen = true;
+
   }
 
-  close(event) {
-    if (event.detail.success) {
-      this.modal.hide();
+  async close() {
+    this.isOpen = false;
+    await Promise.all([
+      leave(this.bodyTarget),
+      leave(this.backdropTarget)
+    ]);
+    this.element.classList.add("hidden");
+  }
+
+  hideOnOutsideClick(event) {
+    if (this.isOpen && !this.bodyTarget.contains(event.target)) {
+      this.close();
     }
   }
 }

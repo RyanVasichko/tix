@@ -18,6 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     error_logs = logs.select { |e| e.level == 'SEVERE' }
 
     error_logs.each do |log|
+      puts ""
       puts "[ERROR - #{log.timestamp}] #{log.message}"
     end
 

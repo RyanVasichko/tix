@@ -7,12 +7,7 @@ export default class extends Controller {
     "imageInput"
   ];
 
-  connect() {
-    console.log("connected")
-  }
-
   loadImage(event) {
-    console.log('loading image')
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();

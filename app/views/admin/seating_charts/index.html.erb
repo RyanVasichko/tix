@@ -1,43 +1,29 @@
-<h1 class="text-center">Seating Charts</h1>
+<div class="card max-w-xl">
+  <h1 class="text-center text-3xl font-semibold">Seating Charts</h1>
 
-<div class="container-sm">
-  <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @seating_charts.each do |seating_chart| %>
-            <tr scope="row" id="<%= dom_id(seating_chart, :admin) %>">
-              <td>
-                <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), data: { turbo: false } %>
-              </td>
-              <td>
-                <div class="dropdown text-end">
-                  <button class="btn btn-light btn-sm dropdown-toggle no-caret" type="button" id="<%= dom_id(seating_chart, :admin) %>_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="<%= dom_id(seating_chart, :admin) %>_dropdown">
-                    <li>
-                      <%= link_to "Delete", admin_seating_chart_path(seating_chart), data: { turbo_method: "DELETE" }, class: "dropdown-item" %>
-                    </li>
-                    <li>
-                      <%= link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id), class: "dropdown-item" %>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-3"></div>
+  <div class="flex justify-end">
+    <%= link_to "New Seating Chart", new_admin_seating_chart_path, class: "btn-primary px-2 py-1" %>
   </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="table-th">Name</th>
+        <th scope="col" class="table-th"></th>
+      </tr>
+    </thead>
+    <tbody class="table-tbody">
+      <% @seating_charts.each do |seating_chart| %>
+        <tr id="<%= dom_id(seating_chart, :admin) %>">
+          <td class="table-td text-indigo-600">
+            <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart) %>
+          </td>
+          <td class="table-td text-gray-900 text-right sm:pr-6">
+            <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin)} do %>
+              <%= dropdown_link_to seating_chart.shows.any? ? "Deactivate" : "Delete", [:admin, seating_chart], data: { turbo_method: "DELETE" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

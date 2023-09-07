@@ -5,4 +5,5 @@ class SeatingChart::Section < ApplicationRecord
   accepts_nested_attributes_for :seats, allow_destroy: true
 
   validates :name, presence: true
+  validates :seats, length: { minimum: 1, message: "must have at least 1 seat" }
 end

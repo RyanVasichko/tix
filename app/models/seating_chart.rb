@@ -1,19 +1,16 @@
 class SeatingChart < ApplicationRecord
-  include Rails.application.routes.url_helpers
+  include Deactivatable
 
   has_one_attached :venue_layout
   has_many :sections, dependent: :destroy, class_name: 'SeatingChart::Section', inverse_of: :seating_chart
-  has_many :seats, through: :sections, source: :seats
+has_many :seats, through: :sections, source: :seats
+  has_many :shows
 
   accepts_nested_attributes_for :sections, allow_destroy: true
 
   validates :name, presence: true
   validates :venue_layout, presence: true
   validates :sections, presence: true
-
-  attribute :active, :boolean, default: true
-
-  scope :active, -> { where(active: true) }
 
   def dup
     cloned_seating_chart = super

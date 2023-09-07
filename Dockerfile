@@ -1,36 +1,24 @@
-FROM ruby:3.2.2-bookworm
+FROM ruby:3.2.2-slim-bookworm
 
-# Set environment variables
-ENV RAILS_ROOT /var/www/dosey_doe_tickets
-ENV BUNDLE_PATH /var/www/dosey_doe_tickets/vendor/bundle
-ENV PATH $RAILS_ROOT/vendor/bundle/bin:$PATH
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs curl apt-transport-https libvips-dev
 
-RUN mkdir -p $RAILS_ROOT 
+# Add Yarn repository and install Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update -qq && apt-get install -y yarn
 
-# Set working directory
-WORKDIR $RAILS_ROOT
+ENV INSTALL_PATH /app
+RUN mkdir -p $INSTALL_PATH
 
-# Install dependencies
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client libvips42 npm zsh libpq-dev
-RUN npm install -g yarn
-RUN yarn global add esbuild nodemon sass
+WORKDIR $INSTALL_PATH
 
-RUN sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-SHELL ["/usr/bin/zsh", "-c"]
-
-# Copy necessary files first
-COPY Gemfile Gemfile.lock ./
-COPY package.json yarn.lock ./
-
-# Install Ruby and JS dependencies
+# Install gems and JS packages
+RUN gem install bundler
+COPY Gemfile Gemfile.lock package.json yarn.lock ./
 RUN bundle install
 RUN yarn install
 
 COPY . .
+EXPOSE 3000
 
-RUN bundle exec rails app:update:bin
-
-RUN chmod u+x bin/dev
-
-# Start the application
-CMD ["bin/dev"]
+CMD ["rails", "server", "-b", "0.0.0.0"]

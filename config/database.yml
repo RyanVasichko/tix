@@ -3,16 +3,18 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: db
-  password:
+  password: 
   username: postgres
 
 development:
   <<: *default
   database: dosey-doe-tickets_development
+  password: password
 
 test:
   <<: *default
   database: dosey-doe-tickets_test
+  password: password
 
 production:
   <<: *default

@@ -16,5 +16,23 @@ application.register("admin--seating-chart-form", Admin__SeatingChartFormControl
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
 
+import DismissableController from "./dismissable_controller"
+application.register("dismissable", DismissableController)
+
+import DropdownController from "./dropdown_controller"
+application.register("dropdown", DropdownController)
+
+import EaseOutController from "./ease_out_controller"
+application.register("ease-out", EaseOutController)
+
+import FileDropController from "./file_drop_controller"
+application.register("file-drop", FileDropController)
+
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
+
+import PreviewController from "./preview_controller"
+application.register("preview", PreviewController)
+
+import SlideOverController from "./slide_over_controller"
+application.register("slide-over", SlideOverController)

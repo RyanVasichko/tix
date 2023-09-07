@@ -1,2 +1,7 @@
-test_full_house_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob filename: "seating_chart.bmp" %>
-test_limited_seating_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob filename: "seating_chart.bmp" %>
+test_full_house_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob(filename: "seating_chart.bmp") %>
+
+test_limited_seating_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob(filename: "seating_chart.bmp") %>
+
+radiohead_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "radiohead.jpg") %>
+
+lcd_soundsystem_blob: <%= ActiveStorage::FixtureSet.blob(filename: "lcd_soundsystem.webp") %>

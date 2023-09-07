@@ -11,7 +11,6 @@ gem "jsbundling-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "cssbundling-rails"
-gem "jbuilder"
 gem 'bcrypt', '~> 3.1.7'
 
 # Use Redis adapter to run Action Cable in production
