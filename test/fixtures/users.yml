@@ -1,0 +1,7 @@
+larry_sellers:
+  first_name: Larry
+  last_name: Sellers
+  email: larry_sellers@test.com
+  password_digest: <%= BCrypt::Password.create('password', cost: 4) %>
+  guest: false
+  admin: false

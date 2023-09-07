@@ -11,7 +11,7 @@ RUN mkdir -p $RAILS_ROOT
 WORKDIR $RAILS_ROOT
 
 # Install dependencies
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client libvips42 npm zsh
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client libvips42 npm zsh libpq-dev
 RUN npm install -g yarn
 RUN yarn global add esbuild nodemon sass
 
