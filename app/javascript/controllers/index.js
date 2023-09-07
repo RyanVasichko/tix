@@ -4,14 +4,17 @@
 
 import { application } from "./application"
 
+import Admin__SeatingChartForm__SeatController from "./admin/seating_chart_form/seat_controller"
+application.register("admin--seating-chart-form--seat", Admin__SeatingChartForm__SeatController)
+
+import Admin__SeatingChartForm__VenueLayoutController from "./admin/seating_chart_form/venue_layout_controller"
+application.register("admin--seating-chart-form--venue-layout", Admin__SeatingChartForm__VenueLayoutController)
+
+import Admin__SeatingChartFormController from "./admin/seating_chart_form_controller"
+application.register("admin--seating-chart-form", Admin__SeatingChartFormController)
+
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
-
-import SeatingCharts__SeatController from "./seating_charts/seat_controller"
-application.register("seat", SeatingCharts__SeatController)
-
-import SeatingCharts__SeatingChartController from "./seating_charts/seating_chart_controller"
-application.register("seating-chart", SeatingCharts__SeatingChartController)

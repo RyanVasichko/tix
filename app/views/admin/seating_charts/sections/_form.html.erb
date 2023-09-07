@@ -1,15 +1,15 @@
 <div class="form-group my-1 d-flex justify-content-between" id="<%= dom_id(section_fields.object, :admin) %>" data-controller="destroyable" data-destroyable-persisted-value="<%= section_fields.object.persisted? %>">
   <%= section_fields.text_field :name, 
-                                  class: "form-control me-3", 
+                                  class: "form-control me-3 section-name-input", 
                                   data: 
                                   { 
-                                    section_id: section_fields.index,
-                                    seating_chart_target: "sectionNameInput"
+                                    section_id: section_fields.object.id,
+                                    admin__seating_chart_form_target: "sectionNameInput"
                                   } %>
   <%= section_fields.hidden_field :_destroy, data: { destroyable_target: "destroyInput" } %>
   <%= section_fields.hidden_field :id if section_fields.object.persisted? %>
 
-  <button type="button" class="btn btn-danger btn-sm btn-remove-section" data-action="destroyable#destroy seating-chart#removeSection" data-section-id="<%= section_fields.index %>">
+  <button type="button" class="btn btn-danger btn-sm btn-remove-section" data-action="destroyable#destroy admin--seating-chart-form#removeSection" data-section-id="<%= section_fields.index %>">
     <i class="bi bi-trash"></i>
   </button>
 </div>

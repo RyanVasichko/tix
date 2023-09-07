@@ -1,5 +1,4 @@
 <%= turbo_stream.append "seating_chart_sections" do %>
-  <% @section.id ||= SecureRandom.random_number(1_000_000) %>
   <%= fields_for "seating_chart[sections_attributes]", @section, index: @section.id do |section_fields| %>
     <%= render "form", section_fields: section_fields %>
   <% end %>

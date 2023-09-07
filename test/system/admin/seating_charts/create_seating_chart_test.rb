@@ -25,7 +25,7 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
 
     assert_text 'Seating chart was successfully created.'
 
-    seating_chart = SeatingChart.last
+    seating_chart = SeatingChart.includes(sections: [:seats]).last
 
     assert_equal 'Test Seating Chart', seating_chart.name
     assert_equal 3, seating_chart.sections.count

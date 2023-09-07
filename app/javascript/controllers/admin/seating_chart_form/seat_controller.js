@@ -7,7 +7,8 @@ export default class extends Controller {
     x: Number,
     y: Number,
     seatNumber: Number,
-    tableNumber: Number
+    tableNumber: Number,
+    sectionId: Number
   };
 
   connect() {

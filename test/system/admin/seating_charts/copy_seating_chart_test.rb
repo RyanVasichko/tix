@@ -11,7 +11,7 @@ class Admin::SeatingCharts::CopySeatingChartTest < ApplicationSystemTestCase
 
           find("##{dom_id(full_house, :admin)}_dropdown").click
           click_on 'Copy'
-
+          
           click_on 'Save'
 
           assert_text 'Seating chart was successfully created.'

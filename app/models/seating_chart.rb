@@ -22,6 +22,7 @@ class SeatingChart < ApplicationRecord
 
     sections.each do |section|
       cloned_section = section.dup
+      cloned_section.id = SecureRandom.random_number(1_000_000) + 100_000_000
       cloned_seating_chart.sections << cloned_section
 
       section.seats.each do |seat|

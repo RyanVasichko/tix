@@ -74,8 +74,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_011007) do
     t.string "phone"
     t.string "email"
     t.string "password_digest"
-    t.boolean "guest"
-    t.boolean "admin"
+    t.boolean "guest", default: false
+    t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.check_constraint "guest = false AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL OR guest = true", name: "check_guest_fields"

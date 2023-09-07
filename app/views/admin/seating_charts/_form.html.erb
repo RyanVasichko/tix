@@ -1,9 +1,9 @@
 <%= form_with model: [:admin, seating_chart], 
               data: 
               { 
-                controller: 'seating-chart', 
-                action: 'seating-chart#submitForm', 
-                seating_chart_new_seat_url_value: new_admin_seating_charts_seat_path
+                controller: 'admin--seating-chart-form admin--seating-chart-form--venue-layout', 
+                action: 'admin--seating-chart-form#submitForm', 
+                admin__seating_chart_form_new_seat_url_value: new_admin_seating_charts_seat_path
               }, 
               id: 'eventLayoutForm', 
               class: 'bg-white p-6 rounded shadow-md' do |form| %>
@@ -31,7 +31,7 @@
           <% if seating_chart.new_record? %>
             <div class="form-group mb-3">
               <%= form.label :venue_layout %>
-              <%= form.file_field :venue_layout, class: "form-control", data: { "seating-chart_target": 'imageInput', action: "seating-chart#loadImage" } %>
+              <%= form.file_field :venue_layout, class: "form-control", data: { admin__seating_chart_form__venue_layout_target: 'imageInput', action: "admin--seating-chart-form--venue-layout#loadImage" } %>
               <%= form.hidden_field(:dup_venue_layout_from, value: local_assigns[:dup_venue_layout_from].id) if local_assigns[:dup_venue_layout_from] %>
             </div>
           <% end %>
@@ -55,7 +55,7 @@
           <hr>
 
           <div class="mb-3">
-            <button type="button" data-action="seating-chart#addSeat" class="btn btn-primary">Add Seat</button>
+            <button type="button" data-action="admin--seating-chart-form#addSeat" class="btn btn-primary">Add Seat</button>
           </div>
 
           <div class="form-group mb-3">
@@ -65,8 +65,8 @@
 
         <div class="col-9">
           <div class="col d-flex justify-content-center">
-            <div data-seating-chart-target="seatsContainer"></div>
-            <svg data-seating-chart-target="svgCanvas" class="mt-4 rounded" style="<%= seating_chart_svg_style(seating_chart, local_assigns[:dup_venue_layout_from]) %>">
+            <div data-admin--seating-chart-form-target="seatsContainer"></div>
+            <svg data-admin--seating-chart-form--venue-layout-target="svgCanvas" data-admin--seating-chart-form-target="svgCanvas" class="mt-4 rounded" style="<%= seating_chart_svg_style(seating_chart, local_assigns[:dup_venue_layout_from]) %>">
               <% seating_chart.sections.flat_map { |section| section.seats }.each do |seat| %>
                 <%= render partial: "admin/seating_charts/seats/seat", locals: { seat: seat } %>
               <% end %>
@@ -77,7 +77,7 @@
     </div>
   <% end %>
 
-  <div class="modal fade" id="edit-seat-modal" tabindex="-1" aria-labelledby="edit-seat-modal-label" aria-hidden="true" data-seating-chart-target="modal" data-action="shown.bs.modal->seating-chart#focusSeatNumberInput">
+  <div class="modal fade" id="edit-seat-modal" tabindex="-1" aria-labelledby="edit-seat-modal-label" aria-hidden="true" data-admin--seating-chart-form-target="modal" data-action="shown.bs.modal->admin--seating-chart-form#focusSeatNumberInput">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -87,22 +87,22 @@
         <div class="modal-body">
           <div class="mb-3 form-group">
             <label for="seat-number" class="form-label">Seat Number:</label>
-            <input type="text" class="form-control" id="seat-number" data-seating-chart-target="seatNumberInput" tabindex="1">
+            <input type="text" class="form-control" id="seat-number" data-admin--seating-chart-form-target="seatNumberInput" tabindex="1">
           </div>
           <div class="mb-3 form-group">
             <label for="table-number" class="form-label">Table Number:</label>
-            <input type="text" class="form-control" id="table-number" data-seating-chart-target="tableNumberInput" tabindex="2">
+            <input type="text" class="form-control" id="table-number" data-admin--seating-chart-form-target="tableNumberInput" tabindex="2">
           </div>
 
           <div class="mb-3 form-group">
             <label for="section" class="form-label">Section:</label>
-            <select id="section" class="form-select" data-seating-chart-target="sectionSelect" tabindex="3"></select>
+            <select id="section" class="form-select" data-admin--seating-chart-form-target="sectionSelect" tabindex="3"></select>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" id="btn-remove-seat" data-action="seating-chart#removeSeat">Delete</button>
+          <button type="button" class="btn btn-danger" id="btn-remove-seat" data-action="admin--seating-chart-form#removeSeat">Delete</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-action="seating-chart#saveSeatData">Save changes</button>
+          <button type="button" class="btn btn-primary" data-action="admin--seating-chart-form#saveSeatData">Save changes</button>
         </div>
       </div>
     </div>

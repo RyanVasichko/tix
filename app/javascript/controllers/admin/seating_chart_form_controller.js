@@ -4,7 +4,6 @@ import * as bootstrap from "bootstrap";
 export default class extends Controller {
   static targets = [
     "svgCanvas",
-    "imageInput",
     "seatsContainer",
     "modal",
     "seatNumberInput",
@@ -21,25 +20,6 @@ export default class extends Controller {
 
   connect() {
     this.modal = new bootstrap.Modal(this.modalTarget);
-  }
-
-  loadImage(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          this.svgCanvasTarget.style.width = `${img.width}px`;
-          this.svgCanvasTarget.style.height = `${img.height}px`;
-
-          this.svgCanvasTarget.style.backgroundImage = `url(${e.target.result})`;
-          this.svgCanvasTarget.style.backgroundSize = 'cover';
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
   }
 
   addSeat() {
@@ -61,18 +41,22 @@ export default class extends Controller {
     
     this.selectedSeat = seat;
 
-    this.seatNumberInputTarget.value = seat.dataset.seatSeatNumberValue;
-    this.tableNumberInputTarget.value = seat.dataset.seatTableNumberValue;
-    this.sectionSelectTarget.value = seat.dataset.seatSectionIdValue;
+    const seatController = this.application.getControllerForElementAndIdentifier(seat, 'admin--seating-chart-form--seat');
+
+    this.seatNumberInputTarget.value = seatController?.seatNumberValue || '';
+    this.tableNumberInputTarget.value = seatController?.tableNumberValue || '';
+    this.sectionSelectTarget.value = seatController?.sectionIdValue || '';
 
     this.modal.show();
   }
 
   saveSeatData() {
     if (this.selectedSeat) {
-      this.selectedSeat.dataset.seatSeatNumberValue = this.seatNumberInputTarget.value;
-      this.selectedSeat.dataset.seatTableNumberValue = this.tableNumberInputTarget.value;
-      this.selectedSeat.dataset.seatSectionIdValue = this.sectionSelectTarget.value;
+      const seatController = this.application.getControllerForElementAndIdentifier(this.selectedSeat, 'admin--seating-chart-form--seat');
+
+      seatController.seatNumberValue = this.seatNumberInputTarget.value;
+      seatController.tableNumberValue = this.tableNumberInputTarget.value;
+      seatController.sectionIdValue = this.sectionSelectTarget.value;
     }
 
     this.closeModal();
@@ -81,7 +65,6 @@ export default class extends Controller {
   closeModal() {
     this.selectedSeat = null;
     this.modal.hide();
-    setTimeout(this.modal.hide, 5000);
   }
 
   populateSectionsSelectOptions() {
@@ -98,16 +81,15 @@ export default class extends Controller {
     this.seatsContainerTarget.innerHTML = "";
 
     this.seatTargets.forEach((seat, i) => {
-      const dataset = seat.dataset;
-      const namePrefix = `seating_chart[sections_attributes][${dataset.seatSectionIdValue}][seats_attributes][${i}]`;
-
-      this.appendHiddenField(`${namePrefix}[seat_number]`, dataset.seatSeatNumberValue);
-      this.appendHiddenField(`${namePrefix}[table_number]`, dataset.seatTableNumberValue);
-      this.appendHiddenField(`${namePrefix}[x]`, dataset.seatXValue);
-      this.appendHiddenField(`${namePrefix}[y]`, dataset.seatYValue);
+      const seatController = this.application.getControllerForElementAndIdentifier(seat, 'admin--seating-chart-form--seat');
+      const namePrefix = `seating_chart[sections_attributes][${seatController.sectionIdValue}][seats_attributes][${i}]`;
+      this.appendHiddenField(`${namePrefix}[seat_number]`, seatController.seatNumberValue);
+      this.appendHiddenField(`${namePrefix}[table_number]`, seatController.tableNumberValue);
+      this.appendHiddenField(`${namePrefix}[x]`, seatController.xValue);
+      this.appendHiddenField(`${namePrefix}[y]`, seatController.yValue);
       this.appendHiddenField(`${namePrefix}[_destroy]`, seat.classList.contains("d-none"));
-      if (dataset.seatIdValue) {
-        this.appendHiddenField(`${namePrefix}[id]`, dataset.seatIdValue);
+      if (seatController.idValue) {
+        this.appendHiddenField(`${namePrefix}[id]`, seatController.idValue);
       }
     });
   }
@@ -131,7 +113,8 @@ export default class extends Controller {
   }
 
   removeSeat() {
-    if (this.selectedSeat.dataset.seatIdValue) {
+    const seatController = this.application.getControllerForElementAndIdentifier(this.selectedSeat, 'admin--seating-chart-form--seat');
+    if (seatController.idValue) {
       this.selectedSeat.classList.add("d-none");
     } else {
       this.selectedSeat.remove();

@@ -23,7 +23,7 @@ module Admin::SeatingCharts::SeatingChartFormTestHelpers
     sleep 0.25 # Wait for the new input to get rendered
 
     within('#seating_chart_sections') do
-      all('[data-seating-chart-target="sectionNameInput"]').last.set(name)
+      all('.section-name-input').last.set(name)
     end
   end
 end
