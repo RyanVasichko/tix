@@ -1,0 +1,12 @@
+<%= turbo_stream.replace "seating_chart_errors" do %>
+  <%= turbo_frame_tag "seating_chart_errors" do %>
+    <div id="error_explanation" class="bg-red-100 p-4 rounded border border-red-500 mb-4">
+      <h2 class="text-red-800 font-bold"><%= pluralize(@seating_chart.errors.count, "error") %> prohibited this seating_chart from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% @seating_chart.errors.full_messages.each do |message| %>
+          <li class="text-red-600"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% end %>

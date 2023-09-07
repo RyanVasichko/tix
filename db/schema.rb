@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_31_025232) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_02_230122) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,12 +42,34 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_025232) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "seating_chart_seats", force: :cascade do |t|
+    t.integer "x", null: false
+    t.integer "y", null: false
+    t.string "seat_number", null: false
+    t.string "table_number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "seating_chart_section_id", null: false
+    t.index ["seating_chart_section_id"], name: "index_seating_chart_seats_on_seating_chart_section_id"
+  end
+
+  create_table "seating_chart_sections", force: :cascade do |t|
+    t.string "name"
+    t.bigint "seating_chart_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seating_chart_id"], name: "index_seating_chart_sections_on_seating_chart_id"
+  end
+
   create_table "seating_charts", force: :cascade do |t|
     t.string "name"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "seating_chart_seats", "seating_chart_sections"
+  add_foreign_key "seating_chart_sections", "seating_charts"
 end

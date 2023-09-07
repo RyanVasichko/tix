@@ -5,16 +5,37 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <% if Rails.env.test? %>
+      <style type="text/css">
+        .modal.fade, .fade {
+          -webkit-transition: none;
+          -moz-transition: none;
+          -ms-transition: none;
+          -o-transition: none;
+          transition: none;
+        }
+      </style>
+    <%end%>
   </head>
 
   <body>
-    <%= render 'general/header' %>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <div class="my-5">
       <%= yield %>
-    </main>
+    </div>
+
+    <div class="modal"
+      tabindex="-1"
+      data-controller="modal"
+      data-action="turbo:frame-load->modal#open turbo:submit-end->modal#close">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <%= turbo_frame_tag "modal" %>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

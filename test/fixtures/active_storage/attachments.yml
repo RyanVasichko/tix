@@ -1,0 +1,9 @@
+test_full_house_seating_chart:
+  name: venue_layout
+  record: full_house (SeatingChart)
+  blob: test_full_house_seating_chart_blob
+
+test_limited_seating_seating_chart:
+  name: venue_layout_2
+  record: limited_seating (SeatingChart)
+  blob: test_limited_seating_seating_chart_blob

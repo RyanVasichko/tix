@@ -1,17 +1,110 @@
-<%= form_with(model: admin_seating_chart, class: "contents") do |form| %>
-  <% if admin_seating_chart.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-      <h2><%= pluralize(admin_seating_chart.errors.count, "error") %> prohibited this admin_seating_chart from being saved:</h2>
-
-      <ul>
-        <% admin_seating_chart.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+<%= form_with model: [:admin, seating_chart], 
+              data: 
+              { 
+                controller: 'seating-chart', 
+                action: 'seating-chart#submitForm', 
+                seating_chart_new_seat_url_value: new_admin_seating_charts_seat_path
+              }, 
+              id: 'eventLayoutForm', 
+              class: 'bg-white p-6 rounded shadow-md' do |form| %>
+  <div class="container">
+    <div class="row">
+      <%= turbo_frame_tag "seating_chart_errors" do %>
+        <% if seating_chart.errors.any? %>
+          <div id="error_explanation" class="alert">
+            <ul class="list-disc pl-5">
+              <% seating_chart.errors.full_messages.each do |message| %>
+                <li class="text-red-600"><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
+      </div>
+
+      <div class="row">
+        <div class="col-3">
+          <div class="form-group mb-3">
+            <%= form.label :name %>
+            <%= form.text_field :name, class: "form-control" %>
+          </div>
+
+          <% if seating_chart.new_record? %>
+            <div class="form-group mb-3">
+              <%= form.label :venue_layout %>
+              <%= form.file_field :venue_layout, class: "form-control", data: { "seating-chart_target": 'imageInput', action: "seating-chart#loadImage" } %>
+              <%= form.hidden_field(:dup_venue_layout_from, value: local_assigns[:dup_venue_layout_from].id) if local_assigns[:dup_venue_layout_from] %>
+            </div>
+          <% end %>
+
+          <hr>
+          <div>
+            <div class="d-flex justify-content-between">
+              <h6>Sections</h6>
+              <%= link_to new_admin_seating_charts_section_path, id: "btn-add-section", class: "btn btn-primary btn-sm", data: { turbo_stream: true, turbo_method: "get" } do %>
+                <i class="bi bi-plus"></i>
+              <% end %>
+            </div>
+            <%= turbo_frame_tag "seating_chart_sections" do %>
+              <% seating_chart.sections.each do |section| %>
+                <%= form.fields_for :sections_attributes, section, index: section.id do |section_fields| %>
+                  <%= render "admin/seating_charts/sections/form", section_fields: section_fields %>
+                <% end %>
+              <% end %>
+            <% end  %>
+          </div>
+          <hr>
+
+          <div class="mb-3">
+            <button type="button" data-action="seating-chart#addSeat" class="btn btn-primary">Add Seat</button>
+          </div>
+
+          <div class="form-group mb-3">
+            <%= form.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+
+        <div class="col-9">
+          <div class="col d-flex justify-content-center">
+            <div data-seating-chart-target="seatsContainer"></div>
+            <svg data-seating-chart-target="svgCanvas" class="mt-4 rounded" style="<%= seating_chart_svg_style(seating_chart, local_assigns[:dup_venue_layout_from]) %>">
+              <% seating_chart.sections.flat_map { |section| section.seats }.each do |seat| %>
+                <%= render partial: "admin/seating_charts/seats/seat", locals: { seat: seat } %>
+              <% end %>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   <% end %>
 
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  <div class="modal fade" id="edit-seat-modal" tabindex="-1" aria-labelledby="edit-seat-modal-label" aria-hidden="true" data-seating-chart-target="modal" data-action="shown.bs.modal->seating-chart#focusSeatNumberInput">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-seat-modal-label">Edit Seat</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3 form-group">
+            <label for="seat-number" class="form-label">Seat Number:</label>
+            <input type="text" class="form-control" id="seat-number" data-seating-chart-target="seatNumberInput" tabindex="1">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="table-number" class="form-label">Table Number:</label>
+            <input type="text" class="form-control" id="table-number" data-seating-chart-target="tableNumberInput" tabindex="2">
+          </div>
+
+          <div class="mb-3 form-group">
+            <label for="section" class="form-label">Section:</label>
+            <select id="section" class="form-select" data-seating-chart-target="sectionSelect" tabindex="3"></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="btn-remove-seat" data-action="seating-chart#removeSeat">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-action="seating-chart#saveSeatData">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

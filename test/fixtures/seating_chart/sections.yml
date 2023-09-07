@@ -1,0 +1,11 @@
+premium:
+  name: Premium
+  seating_chart: limited_seating
+
+normal:
+  name: Normal
+  seating_chart: full_house
+
+obstructed:
+  name: Obstructed
+  seating_chart: full_house

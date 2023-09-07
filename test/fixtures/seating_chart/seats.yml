@@ -1,0 +1,2841 @@
+normal_one:
+  x: 580
+  y: 700
+  seat_number: 1
+  table_number: 1
+  section: normal
+
+normal_two:
+  x: 850
+  y: 600
+  seat_number: 2
+  table_number: 1
+  section: normal
+
+obstructed_one:
+  x: 325
+  y: 450
+  seat_number: 1
+  table_number: 1
+  section: obstructed
+
+obstructed_two:
+  x: 925
+  y: 700
+  seat_number: 2
+  table_number: 1
+  section: obstructed
+
+limited_seating_1:
+  x: 949
+  y: 416
+  seat_number: 20
+  table_number: 22
+  section: premium
+
+limited_seating_2:
+  x: 949
+  y: 366
+  seat_number: 10
+  table_number: 22
+  section: premium
+
+limited_seating_3:
+  x: 924
+  y: 416
+  seat_number: 19
+  table_number: 22
+  section: premium
+
+limited_seating_4:
+  x: 924
+  y: 366
+  seat_number: 9
+  table_number: 22
+  section: premium
+
+limited_seating_5:
+  x: 107
+  y: 968
+  seat_number: 1
+  table_number: 602
+  section: premium
+
+limited_seating_6:
+  x: 59
+  y: 1009
+  seat_number: 3
+  table_number: 601
+  section: premium
+
+limited_seating_7:
+  x: 84
+  y: 1009
+  seat_number: 4
+  table_number: 601
+  section: premium
+
+limited_seating_8:
+  x: 84
+  y: 968
+  seat_number: 2
+  table_number: 601
+  section: premium
+
+limited_seating_9:
+  x: 59
+  y: 968
+  seat_number: 1
+  table_number: 601
+  section: premium
+
+limited_seating_10:
+  x: 120
+  y: 954
+  seat_number: 4
+  table_number: 600
+  section: premium
+
+limited_seating_11:
+  x: 85
+  y: 954
+  seat_number: 3
+  table_number: 600
+  section: premium
+
+limited_seating_12:
+  x: 120
+  y: 928
+  seat_number: 2
+  table_number: 600
+  section: premium
+
+limited_seating_13:
+  x: 86
+  y: 928
+  seat_number: 1
+  table_number: 600
+  section: premium
+
+limited_seating_14:
+  x: 187
+  y: 928
+  seat_number: 3
+  table_number: 307
+  section: premium
+
+limited_seating_15:
+  x: 210
+  y: 907
+  seat_number: 2
+  table_number: 307
+  section: premium
+
+limited_seating_16:
+  x: 163
+  y: 907
+  seat_number: 1
+  table_number: 307
+  section: premium
+
+limited_seating_17:
+  x: 95
+  y: 892
+  seat_number: 4
+  table_number: 308
+  section: premium
+
+limited_seating_18:
+  x: 119
+  y: 914
+  seat_number: 3
+  table_number: 308
+  section: premium
+
+limited_seating_19:
+  x: 141
+  y: 892
+  seat_number: 2
+  table_number: 308
+  section: premium
+
+limited_seating_20:
+  x: 119
+  y: 870
+  seat_number: 1
+  table_number: 308
+  section: premium
+
+limited_seating_21:
+  x: 140
+  y: 836
+  seat_number: 6
+  table_number: 500
+  section: premium
+
+limited_seating_22:
+  x: 111
+  y: 836
+  seat_number: 5
+  table_number: 500
+  section: premium
+
+limited_seating_23:
+  x: 81
+  y: 836
+  seat_number: 4
+  table_number: 500
+  section: premium
+
+limited_seating_24:
+  x: 140
+  y: 794
+  seat_number: 3
+  table_number: 500
+  section: premium
+
+limited_seating_25:
+  x: 111
+  y: 794
+  seat_number: 2
+  table_number: 500
+  section: premium
+
+limited_seating_26:
+  x: 170
+  y: 776
+  seat_number: 10
+  table_number: 501
+  section: premium
+
+limited_seating_27:
+  x: 141
+  y: 776
+  seat_number: 9
+  table_number: 501
+  section: premium
+
+limited_seating_28:
+  x: 82
+  y: 794
+  seat_number: 1
+  table_number: 500
+  section: premium
+
+limited_seating_29:
+  x: 112
+  y: 776
+  seat_number: 8
+  table_number: 501
+  section: premium
+
+limited_seating_30:
+  x: 714
+  y: 795
+  seat_number: 2
+  table_number: 201
+  section: premium
+
+limited_seating_31:
+  x: 714
+  y: 759
+  seat_number: 1
+  table_number: 201
+  section: premium
+
+limited_seating_32:
+  x: 714
+  y: 865
+  seat_number: 2
+  table_number: 200
+  section: premium
+
+limited_seating_33:
+  x: 714
+  y: 825
+  seat_number: 1
+  table_number: 200
+  section: premium
+
+limited_seating_34:
+  x: 243
+  y: 1009
+  seat_number: 4
+  table_number: 604
+  section: premium
+
+limited_seating_35:
+  x: 216
+  y: 1009
+  seat_number: 3
+  table_number: 604
+  section: premium
+
+limited_seating_36:
+  x: 243
+  y: 975
+  seat_number: 2
+  table_number: 604
+  section: premium
+
+limited_seating_37:
+  x: 216
+  y: 975
+  seat_number: 1
+  table_number: 604
+  section: premium
+
+limited_seating_38:
+  x: 194
+  y: 1009
+  seat_number: 4
+  table_number: 603
+  section: premium
+
+limited_seating_39:
+  x: 167
+  y: 1009
+  seat_number: 3
+  table_number: 603
+  section: premium
+
+limited_seating_40:
+  x: 194
+  y: 975
+  seat_number: 2
+  table_number: 603
+  section: premium
+
+limited_seating_41:
+  x: 167
+  y: 975
+  seat_number: 1
+  table_number: 603
+  section: premium
+
+limited_seating_42:
+  x: 135
+  y: 1009
+  seat_number: 4
+  table_number: 602
+  section: premium
+
+limited_seating_43:
+  x: 107
+  y: 1009
+  seat_number: 3
+  table_number: 602
+  section: premium
+
+limited_seating_44:
+  x: 170
+  y: 733
+  seat_number: 4
+  table_number: 501
+  section: premium
+
+limited_seating_45:
+  x: 81
+  y: 776
+  seat_number: 7
+  table_number: 501
+  section: premium
+
+limited_seating_46:
+  x: 190
+  y: 754
+  seat_number: 6
+  table_number: 501
+  section: premium
+
+limited_seating_47:
+  x: 63
+  y: 754
+  seat_number: 5
+  table_number: 501
+  section: premium
+
+limited_seating_48:
+  x: 141
+  y: 733
+  seat_number: 3
+  table_number: 501
+  section: premium
+
+limited_seating_49:
+  x: 112
+  y: 733
+  seat_number: 2
+  table_number: 501
+  section: premium
+
+limited_seating_50:
+  x: 81
+  y: 733
+  seat_number: 1
+  table_number: 501
+  section: premium
+
+limited_seating_51:
+  x: 259
+  y: 325
+  seat_number: 3
+  table_number: 81
+  section: premium
+
+limited_seating_52:
+  x: 188
+  y: 86
+  seat_number: 1
+  table_number: 95
+  section: premium
+
+limited_seating_53:
+  x: 188
+  y: 58
+  seat_number: 2
+  table_number: 95
+  section: premium
+
+limited_seating_54:
+  x: 223
+  y: 58
+  seat_number: 3
+  table_number: 95
+  section: premium
+
+limited_seating_55:
+  x: 72
+  y: 398
+  seat_number: 1
+  table_number: 93
+  section: premium
+
+limited_seating_56:
+  x: 117
+  y: 398
+  seat_number: 2
+  table_number: 93
+  section: premium
+
+limited_seating_57:
+  x: 72
+  y: 420
+  seat_number: 3
+  table_number: 93
+  section: premium
+
+limited_seating_58:
+  x: 117
+  y: 420
+  seat_number: 4
+  table_number: 93
+  section: premium
+
+limited_seating_59:
+  x: 72
+  y: 443
+  seat_number: 5
+  table_number: 93
+  section: premium
+
+limited_seating_60:
+  x: 117
+  y: 443
+  seat_number: 6
+  table_number: 93
+  section: premium
+
+limited_seating_61:
+  x: 72
+  y: 466
+  seat_number: 7
+  table_number: 93
+  section: premium
+
+limited_seating_62:
+  x: 117
+  y: 466
+  seat_number: 8
+  table_number: 93
+  section: premium
+
+limited_seating_63:
+  x: 259
+  y: 301
+  seat_number: 1
+  table_number: 81
+  section: premium
+
+limited_seating_64:
+  x: 945
+  y: 476
+  seat_number: 8
+  table_number: 21
+  section: premium
+
+limited_seating_65:
+  x: 927
+  y: 476
+  seat_number: 7
+  table_number: 21
+  section: premium
+
+limited_seating_66:
+  x: 908
+  y: 476
+  seat_number: 6
+  table_number: 21
+  section: premium
+
+limited_seating_67:
+  x: 888
+  y: 476
+  seat_number: 5
+  table_number: 21
+  section: premium
+
+limited_seating_68:
+  x: 849
+  y: 476
+  seat_number: 4
+  table_number: 21
+  section: premium
+
+limited_seating_69:
+  x: 828
+  y: 476
+  seat_number: 3
+  table_number: 21
+  section: premium
+
+limited_seating_70:
+  x: 810
+  y: 476
+  seat_number: 2
+  table_number: 21
+  section: premium
+
+limited_seating_71:
+  x: 788
+  y: 476
+  seat_number: 1
+  table_number: 21
+  section: premium
+
+limited_seating_72:
+  x: 202
+  y: 468
+  seat_number: 8
+  table_number: 91
+  section: premium
+
+limited_seating_73:
+  x: 202
+  y: 445
+  seat_number: 6
+  table_number: 91
+  section: premium
+
+limited_seating_74:
+  x: 160
+  y: 468
+  seat_number: 9
+  table_number: 91
+  section: premium
+
+limited_seating_75:
+  x: 160
+  y: 445
+  seat_number: 7
+  table_number: 91
+  section: premium
+
+limited_seating_76:
+  x: 160
+  y: 423
+  seat_number: 5
+  table_number: 91
+  section: premium
+
+limited_seating_77:
+  x: 160
+  y: 398
+  seat_number: 3
+  table_number: 91
+  section: premium
+
+limited_seating_78:
+  x: 135
+  y: 968
+  seat_number: 2
+  table_number: 602
+  section: premium
+
+limited_seating_79:
+  x: 300
+  y: 407
+  seat_number: 6
+  table_number: 80
+  section: premium
+
+limited_seating_80:
+  x: 636
+  y: 60
+  seat_number: 1
+  table_number: 34
+  section: premium
+
+limited_seating_81:
+  x: 679
+  y: 60
+  seat_number: 2
+  table_number: 34
+  section: premium
+
+limited_seating_82:
+  x: 636
+  y: 78
+  seat_number: 3
+  table_number: 34
+  section: premium
+
+limited_seating_83:
+  x: 679
+  y: 78
+  seat_number: 4
+  table_number: 34
+  section: premium
+
+limited_seating_84:
+  x: 636
+  y: 131
+  seat_number: 1
+  table_number: 33
+  section: premium
+
+limited_seating_85:
+  x: 679
+  y: 131
+  seat_number: 2
+  table_number: 33
+  section: premium
+
+limited_seating_86:
+  x: 636
+  y: 155
+  seat_number: 3
+  table_number: 33
+  section: premium
+
+limited_seating_87:
+  x: 679
+  y: 150
+  seat_number: 4
+  table_number: 33
+  section: premium
+
+limited_seating_88:
+  x: 636
+  y: 177
+  seat_number: 5
+  table_number: 33
+  section: premium
+
+limited_seating_89:
+  x: 679
+  y: 189
+  seat_number: 6
+  table_number: 33
+  section: premium
+
+limited_seating_90:
+  x: 636
+  y: 201
+  seat_number: 7
+  table_number: 33
+  section: premium
+
+limited_seating_91:
+  x: 679
+  y: 205
+  seat_number: 8
+  table_number: 33
+  section: premium
+
+limited_seating_92:
+  x: 636
+  y: 232
+  seat_number: 1
+  table_number: 32
+  section: premium
+
+limited_seating_93:
+  x: 679
+  y: 232
+  seat_number: 2
+  table_number: 32
+  section: premium
+
+limited_seating_94:
+  x: 636
+  y: 258
+  seat_number: 3
+  table_number: 32
+  section: premium
+
+limited_seating_95:
+  x: 679
+  y: 258
+  seat_number: 4
+  table_number: 32
+  section: premium
+
+limited_seating_96:
+  x: 636
+  y: 280
+  seat_number: 5
+  table_number: 32
+  section: premium
+
+limited_seating_97:
+  x: 679
+  y: 280
+  seat_number: 6
+  table_number: 32
+  section: premium
+
+limited_seating_98:
+  x: 636
+  y: 303
+  seat_number: 1
+  table_number: 31
+  section: premium
+
+limited_seating_99:
+  x: 679
+  y: 328
+  seat_number: 2
+  table_number: 31
+  section: premium
+
+limited_seating_100:
+  x: 636
+  y: 328
+  seat_number: 3
+  table_number: 31
+  section: premium
+
+limited_seating_101:
+  x: 679
+  y: 348
+  seat_number: 4
+  table_number: 31
+  section: premium
+
+limited_seating_102:
+  x: 636
+  y: 348
+  seat_number: 5
+  table_number: 31
+  section: premium
+
+limited_seating_103:
+  x: 568
+  y: 250
+  seat_number: 1
+  table_number: 41
+  section: premium
+
+limited_seating_104:
+  x: 608
+  y: 250
+  seat_number: 2
+  table_number: 41
+  section: premium
+
+limited_seating_105:
+  x: 568
+  y: 276
+  seat_number: 3
+  table_number: 41
+  section: premium
+
+limited_seating_106:
+  x: 608
+  y: 276
+  seat_number: 4
+  table_number: 41
+  section: premium
+
+limited_seating_107:
+  x: 568
+  y: 299
+  seat_number: 5
+  table_number: 41
+  section: premium
+
+limited_seating_108:
+  x: 534
+  y: 177
+  seat_number: 6
+  table_number: 52
+  section: premium
+
+limited_seating_109:
+  x: 492
+  y: 201
+  seat_number: 7
+  table_number: 52
+  section: premium
+
+limited_seating_110:
+  x: 534
+  y: 201
+  seat_number: 8
+  table_number: 52
+  section: premium
+
+limited_seating_111:
+  x: 492
+  y: 232
+  seat_number: 1
+  table_number: 51
+  section: premium
+
+limited_seating_112:
+  x: 534
+  y: 232
+  seat_number: 2
+  table_number: 51
+  section: premium
+
+limited_seating_113:
+  x: 492
+  y: 258
+  seat_number: 3
+  table_number: 51
+  section: premium
+
+limited_seating_114:
+  x: 534
+  y: 258
+  seat_number: 4
+  table_number: 51
+  section: premium
+
+limited_seating_115:
+  x: 492
+  y: 279
+  seat_number: 5
+  table_number: 51
+  section: premium
+
+limited_seating_116:
+  x: 534
+  y: 279
+  seat_number: 6
+  table_number: 51
+  section: premium
+
+limited_seating_117:
+  x: 492
+  y: 303
+  seat_number: 7
+  table_number: 51
+  section: premium
+
+limited_seating_118:
+  x: 534
+  y: 303
+  seat_number: 8
+  table_number: 51
+  section: premium
+
+limited_seating_119:
+  x: 492
+  y: 328
+  seat_number: 9
+  table_number: 51
+  section: premium
+
+limited_seating_120:
+  x: 534
+  y: 328
+  seat_number: 10
+  table_number: 51
+  section: premium
+
+limited_seating_121:
+  x: 331
+  y: 321
+  seat_number: 7
+  table_number: 71
+  section: premium
+
+limited_seating_122:
+  x: 534
+  y: 65
+  seat_number: 2
+  table_number: 53
+  section: premium
+
+limited_seating_123:
+  x: 492
+  y: 131
+  seat_number: 1
+  table_number: 52
+  section: premium
+
+limited_seating_124:
+  x: 534
+  y: 131
+  seat_number: 2
+  table_number: 52
+  section: premium
+
+limited_seating_125:
+  x: 492
+  y: 155
+  seat_number: 3
+  table_number: 52
+  section: premium
+
+limited_seating_126:
+  x: 534
+  y: 155
+  seat_number: 4
+  table_number: 52
+  section: premium
+
+limited_seating_127:
+  x: 568
+  y: 60
+  seat_number: 1
+  table_number: 43
+  section: premium
+
+limited_seating_128:
+  x: 608
+  y: 60
+  seat_number: 2
+  table_number: 43
+  section: premium
+
+limited_seating_129:
+  x: 568
+  y: 78
+  seat_number: 3
+  table_number: 43
+  section: premium
+
+limited_seating_130:
+  x: 608
+  y: 78
+  seat_number: 4
+  table_number: 43
+  section: premium
+
+limited_seating_131:
+  x: 568
+  y: 131
+  seat_number: 1
+  table_number: 42
+  section: premium
+
+limited_seating_132:
+  x: 608
+  y: 131
+  seat_number: 2
+  table_number: 42
+  section: premium
+
+limited_seating_133:
+  x: 568
+  y: 155
+  seat_number: 3
+  table_number: 42
+  section: premium
+
+limited_seating_134:
+  x: 608
+  y: 155
+  seat_number: 4
+  table_number: 42
+  section: premium
+
+limited_seating_135:
+  x: 1006
+  y: 461
+  seat_number: 1
+  table_number: 11
+  section: premium
+
+limited_seating_136:
+  x: 1006
+  y: 594
+  seat_number: 2
+  table_number: 10
+  section: premium
+
+limited_seating_137:
+  x: 1006
+  y: 551
+  seat_number: 1
+  table_number: 10
+  section: premium
+
+limited_seating_138:
+  x: 229
+  y: 735
+  seat_number: 4
+  table_number: 403
+  section: premium
+
+limited_seating_139:
+  x: 258
+  y: 735
+  seat_number: 3
+  table_number: 403
+  section: premium
+
+limited_seating_140:
+  x: 258
+  y: 704
+  seat_number: 2
+  table_number: 403
+  section: premium
+
+limited_seating_141:
+  x: 229
+  y: 704
+  seat_number: 1
+  table_number: 403
+  section: premium
+
+limited_seating_142:
+  x: 264
+  y: 784
+  seat_number: 6
+  table_number: 402
+  section: premium
+
+limited_seating_143:
+  x: 250
+  y: 791
+  seat_number: 5
+  table_number: 402
+  section: premium
+
+limited_seating_144:
+  x: 454
+  y: 279
+  seat_number: 6
+  table_number: 61
+  section: premium
+
+limited_seating_145:
+  x: 411
+  y: 328
+  seat_number: 9
+  table_number: 61
+  section: premium
+
+limited_seating_146:
+  x: 454
+  y: 328
+  seat_number: 10
+  table_number: 61
+  section: premium
+
+limited_seating_147:
+  x: 411
+  y: 177
+  seat_number: 5
+  table_number: 62
+  section: premium
+
+limited_seating_148:
+  x: 454
+  y: 177
+  seat_number: 6
+  table_number: 62
+  section: premium
+
+limited_seating_149:
+  x: 411
+  y: 201
+  seat_number: 7
+  table_number: 62
+  section: premium
+
+limited_seating_150:
+  x: 454
+  y: 201
+  seat_number: 8
+  table_number: 62
+  section: premium
+
+limited_seating_151:
+  x: 411
+  y: 232
+  seat_number: 1
+  table_number: 61
+  section: premium
+
+limited_seating_152:
+  x: 454
+  y: 232
+  seat_number: 2
+  table_number: 61
+  section: premium
+
+limited_seating_153:
+  x: 160
+  y: 554
+  seat_number: 7
+  table_number: 90
+  section: premium
+
+limited_seating_154:
+  x: 608
+  y: 299
+  seat_number: 6
+  table_number: 41
+  section: premium
+
+limited_seating_155:
+  x: 568
+  y: 321
+  seat_number: 7
+  table_number: 41
+  section: premium
+
+limited_seating_156:
+  x: 608
+  y: 321
+  seat_number: 8
+  table_number: 41
+  section: premium
+
+limited_seating_157:
+  x: 568
+  y: 343
+  seat_number: 9
+  table_number: 41
+  section: premium
+
+limited_seating_158:
+  x: 608
+  y: 343
+  seat_number: 10
+  table_number: 41
+  section: premium
+
+limited_seating_159:
+  x: 568
+  y: 177
+  seat_number: 5
+  table_number: 42
+  section: premium
+
+limited_seating_160:
+  x: 608
+  y: 177
+  seat_number: 6
+  table_number: 42
+  section: premium
+
+limited_seating_161:
+  x: 568
+  y: 201
+  seat_number: 7
+  table_number: 42
+  section: premium
+
+limited_seating_162:
+  x: 608
+  y: 201
+  seat_number: 8
+  table_number: 42
+  section: premium
+
+limited_seating_163:
+  x: 568
+  y: 224
+  seat_number: 9
+  table_number: 42
+  section: premium
+
+limited_seating_164:
+  x: 608
+  y: 224
+  seat_number: 10
+  table_number: 42
+  section: premium
+
+limited_seating_165:
+  x: 492
+  y: 177
+  seat_number: 5
+  table_number: 52
+  section: premium
+
+limited_seating_166:
+  x: 818
+  y: 548
+  seat_number: 4
+  table_number: 20
+  section: premium
+
+limited_seating_167:
+  x: 160
+  y: 356
+  seat_number: 5
+  table_number: 92
+  section: premium
+
+limited_seating_168:
+  x: 160
+  y: 310
+  seat_number: 3
+  table_number: 92
+  section: premium
+
+limited_seating_169:
+  x: 160
+  y: 283
+  seat_number: 1
+  table_number: 92
+  section: premium
+
+limited_seating_170:
+  x: 202
+  y: 284
+  seat_number: 2
+  table_number: 92
+  section: premium
+
+limited_seating_171:
+  x: 202
+  y: 310
+  seat_number: 4
+  table_number: 92
+  section: premium
+
+limited_seating_172:
+  x: 202
+  y: 334
+  seat_number: 6
+  table_number: 92
+  section: premium
+
+limited_seating_173:
+  x: 202
+  y: 356
+  seat_number: 8
+  table_number: 92
+  section: premium
+
+limited_seating_174:
+  x: 160
+  y: 376
+  seat_number: 1
+  table_number: 91
+  section: premium
+
+limited_seating_175:
+  x: 202
+  y: 388
+  seat_number: 2
+  table_number: 91
+  section: premium
+
+limited_seating_176:
+  x: 202
+  y: 418
+  seat_number: 4
+  table_number: 91
+  section: premium
+
+limited_seating_177:
+  x: 160
+  y: 532
+  seat_number: 5
+  table_number: 90
+  section: premium
+
+limited_seating_178:
+  x: 784
+  y: 336
+  seat_number: 1
+  table_number: 13
+  section: premium
+
+limited_seating_179:
+  x: 830
+  y: 336
+  seat_number: 2
+  table_number: 13
+  section: premium
+
+limited_seating_180:
+  x: 72
+  y: 351
+  seat_number: 1
+  table_number: 94
+  section: premium
+
+limited_seating_181:
+  x: 117
+  y: 351
+  seat_number: 2
+  table_number: 94
+  section: premium
+
+limited_seating_182:
+  x: 72
+  y: 375
+  seat_number: 3
+  table_number: 94
+  section: premium
+
+limited_seating_183:
+  x: 117
+  y: 375
+  seat_number: 4
+  table_number: 94
+  section: premium
+
+limited_seating_184:
+  x: 591
+  y: 910
+  seat_number: 1
+  table_number: 300
+  section: premium
+
+limited_seating_185:
+  x: 634
+  y: 910
+  seat_number: 2
+  table_number: 300
+  section: premium
+
+limited_seating_186:
+  x: 259
+  y: 361
+  seat_number: 1
+  table_number: 80
+  section: premium
+
+limited_seating_187:
+  x: 331
+  y: 386
+  seat_number: 3
+  table_number: 70
+  section: premium
+
+limited_seating_188:
+  x: 331
+  y: 410
+  seat_number: 5
+  table_number: 70
+  section: premium
+
+limited_seating_189:
+  x: 331
+  y: 436
+  seat_number: 7
+  table_number: 70
+  section: premium
+
+limited_seating_190:
+  x: 331
+  y: 459
+  seat_number: 9
+  table_number: 70
+  section: premium
+
+limited_seating_191:
+  x: 374
+  y: 362
+  seat_number: 2
+  table_number: 70
+  section: premium
+
+limited_seating_192:
+  x: 374
+  y: 386
+  seat_number: 4
+  table_number: 70
+  section: premium
+
+limited_seating_193:
+  x: 374
+  y: 410
+  seat_number: 6
+  table_number: 70
+  section: premium
+
+limited_seating_194:
+  x: 374
+  y: 436
+  seat_number: 8
+  table_number: 70
+  section: premium
+
+limited_seating_195:
+  x: 374
+  y: 459
+  seat_number: 10
+  table_number: 70
+  section: premium
+
+limited_seating_196:
+  x: 300
+  y: 361
+  seat_number: 2
+  table_number: 80
+  section: premium
+
+limited_seating_197:
+  x: 300
+  y: 386
+  seat_number: 4
+  table_number: 80
+  section: premium
+
+limited_seating_198:
+  x: 300
+  y: 427
+  seat_number: 8
+  table_number: 80
+  section: premium
+
+limited_seating_199:
+  x: 300
+  y: 452
+  seat_number: 10
+  table_number: 80
+  section: premium
+
+limited_seating_200:
+  x: 300
+  y: 475
+  seat_number: 12
+  table_number: 80
+  section: premium
+
+limited_seating_201:
+  x: 259
+  y: 386
+  seat_number: 3
+  table_number: 80
+  section: premium
+
+limited_seating_202:
+  x: 259
+  y: 407
+  seat_number: 5
+  table_number: 80
+  section: premium
+
+limited_seating_203:
+  x: 259
+  y: 427
+  seat_number: 7
+  table_number: 80
+  section: premium
+
+limited_seating_204:
+  x: 259
+  y: 452
+  seat_number: 9
+  table_number: 80
+  section: premium
+
+limited_seating_205:
+  x: 259
+  y: 475
+  seat_number: 11
+  table_number: 80
+  section: premium
+
+limited_seating_206:
+  x: 411
+  y: 355
+  seat_number: 1
+  table_number: 60
+  section: premium
+
+limited_seating_207:
+  x: 411
+  y: 383
+  seat_number: 3
+  table_number: 60
+  section: premium
+
+limited_seating_208:
+  x: 411
+  y: 407
+  seat_number: 5
+  table_number: 60
+  section: premium
+
+limited_seating_209:
+  x: 411
+  y: 434
+  seat_number: 7
+  table_number: 60
+  section: premium
+
+limited_seating_210:
+  x: 411
+  y: 456
+  seat_number: 9
+  table_number: 60
+  section: premium
+
+limited_seating_211:
+  x: 454
+  y: 355
+  seat_number: 2
+  table_number: 60
+  section: premium
+
+limited_seating_212:
+  x: 454
+  y: 383
+  seat_number: 4
+  table_number: 60
+  section: premium
+
+limited_seating_213:
+  x: 454
+  y: 407
+  seat_number: 6
+  table_number: 60
+  section: premium
+
+limited_seating_214:
+  x: 454
+  y: 434
+  seat_number: 8
+  table_number: 60
+  section: premium
+
+limited_seating_215:
+  x: 454
+  y: 456
+  seat_number: 10
+  table_number: 60
+  section: premium
+
+limited_seating_216:
+  x: 492
+  y: 355
+  seat_number: 1
+  table_number: 50
+  section: premium
+
+limited_seating_217:
+  x: 492
+  y: 383
+  seat_number: 3
+  table_number: 50
+  section: premium
+
+limited_seating_218:
+  x: 492
+  y: 407
+  seat_number: 5
+  table_number: 50
+  section: premium
+
+limited_seating_219:
+  x: 492
+  y: 434
+  seat_number: 7
+  table_number: 50
+  section: premium
+
+limited_seating_220:
+  x: 492
+  y: 456
+  seat_number: 9
+  table_number: 50
+  section: premium
+
+limited_seating_221:
+  x: 534
+  y: 355
+  seat_number: 2
+  table_number: 50
+  section: premium
+
+limited_seating_222:
+  x: 534
+  y: 383
+  seat_number: 4
+  table_number: 50
+  section: premium
+
+limited_seating_223:
+  x: 534
+  y: 407
+  seat_number: 6
+  table_number: 50
+  section: premium
+
+limited_seating_224:
+  x: 534
+  y: 434
+  seat_number: 8
+  table_number: 50
+  section: premium
+
+limited_seating_225:
+  x: 534
+  y: 456
+  seat_number: 10
+  table_number: 50
+  section: premium
+
+limited_seating_226:
+  x: 568
+  y: 368
+  seat_number: 1
+  table_number: 40
+  section: premium
+
+limited_seating_227:
+  x: 608
+  y: 368
+  seat_number: 2
+  table_number: 40
+  section: premium
+
+limited_seating_228:
+  x: 568
+  y: 393
+  seat_number: 3
+  table_number: 40
+  section: premium
+
+limited_seating_229:
+  x: 608
+  y: 393
+  seat_number: 4
+  table_number: 40
+  section: premium
+
+limited_seating_230:
+  x: 568
+  y: 416
+  seat_number: 5
+  table_number: 40
+  section: premium
+
+limited_seating_231:
+  x: 568
+  y: 439
+  seat_number: 7
+  table_number: 40
+  section: premium
+
+limited_seating_232:
+  x: 608
+  y: 439
+  seat_number: 8
+  table_number: 40
+  section: premium
+
+limited_seating_233:
+  x: 608
+  y: 461
+  seat_number: 10
+  table_number: 40
+  section: premium
+
+limited_seating_234:
+  x: 568
+  y: 461
+  seat_number: 9
+  table_number: 40
+  section: premium
+
+limited_seating_235:
+  x: 568
+  y: 484
+  seat_number: 11
+  table_number: 40
+  section: premium
+
+limited_seating_236:
+  x: 608
+  y: 484
+  seat_number: 12
+  table_number: 40
+  section: premium
+
+limited_seating_237:
+  x: 297
+  y: 662
+  seat_number: 1
+  table_number: 706
+  section: premium
+
+limited_seating_238:
+  x: 316
+  y: 662
+  seat_number: 2
+  table_number: 706
+  section: premium
+
+limited_seating_239:
+  x: 350
+  y: 662
+  seat_number: 1
+  table_number: 705
+  section: premium
+
+limited_seating_240:
+  x: 369
+  y: 662
+  seat_number: 2
+  table_number: 705
+  section: premium
+
+limited_seating_241:
+  x: 403
+  y: 663
+  seat_number: 1
+  table_number: 704
+  section: premium
+
+limited_seating_242:
+  x: 421
+  y: 663
+  seat_number: 2
+  table_number: 704
+  section: premium
+
+limited_seating_243:
+  x: 455
+  y: 663
+  seat_number: 1
+  table_number: 703
+  section: premium
+
+limited_seating_244:
+  x: 475
+  y: 663
+  seat_number: 2
+  table_number: 703
+  section: premium
+
+limited_seating_245:
+  x: 507
+  y: 663
+  seat_number: 1
+  table_number: 702
+  section: premium
+
+limited_seating_246:
+  x: 527
+  y: 663
+  seat_number: 2
+  table_number: 702
+  section: premium
+
+limited_seating_247:
+  x: 561
+  y: 663
+  seat_number: 1
+  table_number: 701
+  section: premium
+
+limited_seating_248:
+  x: 579
+  y: 663
+  seat_number: 2
+  table_number: 701
+  section: premium
+
+limited_seating_249:
+  x: 591
+  y: 699
+  seat_number: 1
+  table_number: 700
+  section: premium
+
+limited_seating_250:
+  x: 591
+  y: 740
+  seat_number: 2
+  table_number: 700
+  section: premium
+
+limited_seating_251:
+  x: 331
+  y: 362
+  seat_number: 1
+  table_number: 70
+  section: premium
+
+limited_seating_252:
+  x: 608
+  y: 416
+  seat_number: 6
+  table_number: 40
+  section: premium
+
+limited_seating_253:
+  x: 374
+  y: 321
+  seat_number: 8
+  table_number: 71
+  section: premium
+
+limited_seating_254:
+  x: 331
+  y: 342
+  seat_number: 9
+  table_number: 71
+  section: premium
+
+limited_seating_255:
+  x: 374
+  y: 342
+  seat_number: 10
+  table_number: 71
+  section: premium
+
+limited_seating_256:
+  x: 331
+  y: 253
+  seat_number: 1
+  table_number: 71
+  section: premium
+
+limited_seating_257:
+  x: 374
+  y: 253
+  seat_number: 2
+  table_number: 71
+  section: premium
+
+limited_seating_258:
+  x: 331
+  y: 279
+  seat_number: 3
+  table_number: 71
+  section: premium
+
+limited_seating_259:
+  x: 374
+  y: 279
+  seat_number: 4
+  table_number: 71
+  section: premium
+
+limited_seating_260:
+  x: 331
+  y: 301
+  seat_number: 5
+  table_number: 71
+  section: premium
+
+limited_seating_261:
+  x: 374
+  y: 301
+  seat_number: 6
+  table_number: 71
+  section: premium
+
+limited_seating_262:
+  x: 411
+  y: 258
+  seat_number: 3
+  table_number: 61
+  section: premium
+
+limited_seating_263:
+  x: 454
+  y: 258
+  seat_number: 4
+  table_number: 61
+  section: premium
+
+limited_seating_264:
+  x: 411
+  y: 279
+  seat_number: 5
+  table_number: 61
+  section: premium
+
+limited_seating_265:
+  x: 234
+  y: 762
+  seat_number: 2
+  table_number: 402
+  section: premium
+
+limited_seating_266:
+  x: 221
+  y: 771
+  seat_number: 1
+  table_number: 402
+  section: premium
+
+limited_seating_267:
+  x: 259
+  y: 849
+  seat_number: 5
+  table_number: 401
+  section: premium
+
+limited_seating_268:
+  x: 245
+  y: 858
+  seat_number: 4
+  table_number: 401
+  section: premium
+
+limited_seating_269:
+  x: 225
+  y: 853
+  seat_number: 3
+  table_number: 401
+  section: premium
+
+limited_seating_270:
+  x: 242
+  y: 817
+  seat_number: 2
+  table_number: 401
+  section: premium
+
+limited_seating_271:
+  x: 225
+  y: 826
+  seat_number: 1
+  table_number: 401
+  section: premium
+
+limited_seating_272:
+  x: 260
+  y: 906
+  seat_number: 4
+  table_number: 400
+  section: premium
+
+limited_seating_273:
+  x: 241
+  y: 919
+  seat_number: 3
+  table_number: 400
+  section: premium
+
+limited_seating_274:
+  x: 273
+  y: 65
+  seat_number: 1
+  table_number: 83
+  section: premium
+
+limited_seating_275:
+  x: 317
+  y: 65
+  seat_number: 2
+  table_number: 83
+  section: premium
+
+limited_seating_276:
+  x: 332
+  y: 65
+  seat_number: 1
+  table_number: 73
+  section: premium
+
+limited_seating_277:
+  x: 371
+  y: 65
+  seat_number: 2
+  table_number: 73
+  section: premium
+
+limited_seating_278:
+  x: 411
+  y: 303
+  seat_number: 7
+  table_number: 61
+  section: premium
+
+limited_seating_279:
+  x: 454
+  y: 305
+  seat_number: 8
+  table_number: 61
+  section: premium
+
+limited_seating_280:
+  x: 636
+  y: 368
+  seat_number: 7
+  table_number: 31
+  section: premium
+
+limited_seating_281:
+  x: 679
+  y: 368
+  seat_number: 6
+  table_number: 31
+  section: premium
+
+limited_seating_282:
+  x: 636
+  y: 393
+  seat_number: 9
+  table_number: 31
+  section: premium
+
+limited_seating_283:
+  x: 679
+  y: 393
+  seat_number: 8
+  table_number: 31
+  section: premium
+
+limited_seating_284:
+  x: 636
+  y: 416
+  seat_number: 1
+  table_number: 30
+  section: premium
+
+limited_seating_285:
+  x: 679
+  y: 417
+  seat_number: 2
+  table_number: 30
+  section: premium
+
+limited_seating_286:
+  x: 636
+  y: 439
+  seat_number: 3
+  table_number: 30
+  section: premium
+
+limited_seating_287:
+  x: 679
+  y: 439
+  seat_number: 4
+  table_number: 30
+  section: premium
+
+limited_seating_288:
+  x: 636
+  y: 461
+  seat_number: 5
+  table_number: 30
+  section: premium
+
+limited_seating_289:
+  x: 636
+  y: 486
+  seat_number: 7
+  table_number: 30
+  section: premium
+
+limited_seating_290:
+  x: 679
+  y: 486
+  seat_number: 6
+  table_number: 30
+  section: premium
+
+limited_seating_291:
+  x: 636
+  y: 510
+  seat_number: 9
+  table_number: 30
+  section: premium
+
+limited_seating_292:
+  x: 679
+  y: 510
+  seat_number: 8
+  table_number: 30
+  section: premium
+
+limited_seating_293:
+  x: 636
+  y: 532
+  seat_number: 11
+  table_number: 30
+  section: premium
+
+limited_seating_294:
+  x: 679
+  y: 530
+  seat_number: 10
+  table_number: 30
+  section: premium
+
+limited_seating_295:
+  x: 636
+  y: 553
+  seat_number: 13
+  table_number: 30
+  section: premium
+
+limited_seating_296:
+  x: 679
+  y: 553
+  seat_number: 12
+  table_number: 30
+  section: premium
+
+limited_seating_297:
+  x: 246
+  y: 877
+  seat_number: 2
+  table_number: 400
+  section: premium
+
+limited_seating_298:
+  x: 225
+  y: 887
+  seat_number: 1
+  table_number: 400
+  section: premium
+
+limited_seating_299:
+  x: 283
+  y: 941
+  seat_number: 1
+  table_number: 306
+  section: premium
+
+limited_seating_300:
+  x: 591
+  y: 783
+  seat_number: 1
+  table_number: 202
+  section: premium
+
+limited_seating_301:
+  x: 634
+  y: 783
+  seat_number: 2
+  table_number: 202
+  section: premium
+
+limited_seating_302:
+  x: 591
+  y: 806
+  seat_number: 3
+  table_number: 202
+  section: premium
+
+limited_seating_303:
+  x: 634
+  y: 806
+  seat_number: 4
+  table_number: 202
+  section: premium
+
+limited_seating_304:
+  x: 591
+  y: 827
+  seat_number: 5
+  table_number: 202
+  section: premium
+
+limited_seating_305:
+  x: 634
+  y: 827
+  seat_number: 6
+  table_number: 202
+  section: premium
+
+limited_seating_306:
+  x: 591
+  y: 849
+  seat_number: 7
+  table_number: 202
+  section: premium
+
+limited_seating_307:
+  x: 634
+  y: 849
+  seat_number: 8
+  table_number: 202
+  section: premium
+
+limited_seating_308:
+  x: 591
+  y: 870
+  seat_number: 9
+  table_number: 202
+  section: premium
+
+limited_seating_309:
+  x: 563
+  y: 941
+  seat_number: 2
+  table_number: 301
+  section: premium
+
+limited_seating_310:
+  x: 634
+  y: 870
+  seat_number: 10
+  table_number: 202
+  section: premium
+
+limited_seating_311:
+  x: 591
+  y: 890
+  seat_number: 11
+  table_number: 202
+  section: premium
+
+limited_seating_312:
+  x: 634
+  y: 890
+  seat_number: 12
+  table_number: 202
+  section: premium
+
+limited_seating_313:
+  x: 300
+  y: 941
+  seat_number: 2
+  table_number: 306
+  section: premium
+
+limited_seating_314:
+  x: 335
+  y: 941
+  seat_number: 1
+  table_number: 305
+  section: premium
+
+limited_seating_315:
+  x: 352
+  y: 941
+  seat_number: 2
+  table_number: 305
+  section: premium
+
+limited_seating_316:
+  x: 389
+  y: 941
+  seat_number: 1
+  table_number: 304
+  section: premium
+
+limited_seating_317:
+  x: 406
+  y: 941
+  seat_number: 2
+  table_number: 304
+  section: premium
+
+limited_seating_318:
+  x: 442
+  y: 941
+  seat_number: 1
+  table_number: 303
+  section: premium
+
+limited_seating_319:
+  x: 459
+  y: 941
+  seat_number: 2
+  table_number: 303
+  section: premium
+
+limited_seating_320:
+  x: 510
+  y: 941
+  seat_number: 2
+  table_number: 302
+  section: premium
+
+limited_seating_321:
+  x: 493
+  y: 941
+  seat_number: 1
+  table_number: 302
+  section: premium
+
+limited_seating_322:
+  x: 546
+  y: 941
+  seat_number: 1
+  table_number: 301
+  section: premium
+
+limited_seating_323:
+  x: 810
+  y: 525
+  seat_number: 11
+  table_number: 21
+  section: premium
+
+limited_seating_324:
+  x: 745
+  y: 597
+  seat_number: 11
+  table_number: 20
+  section: premium
+
+limited_seating_325:
+  x: 950
+  y: 548
+  seat_number: 10
+  table_number: 20
+  section: premium
+
+limited_seating_326:
+  x: 927
+  y: 548
+  seat_number: 9
+  table_number: 20
+  section: premium
+
+limited_seating_327:
+  x: 905
+  y: 548
+  seat_number: 8
+  table_number: 20
+  section: premium
+
+limited_seating_328:
+  x: 881
+  y: 548
+  seat_number: 7
+  table_number: 20
+  section: premium
+
+limited_seating_329:
+  x: 859
+  y: 548
+  seat_number: 6
+  table_number: 20
+  section: premium
+
+limited_seating_330:
+  x: 841
+  y: 548
+  seat_number: 5
+  table_number: 20
+  section: premium
+
+limited_seating_331:
+  x: 793
+  y: 548
+  seat_number: 3
+  table_number: 20
+  section: premium
+
+limited_seating_332:
+  x: 768
+  y: 548
+  seat_number: 2
+  table_number: 20
+  section: premium
+
+limited_seating_333:
+  x: 745
+  y: 548
+  seat_number: 1
+  table_number: 20
+  section: premium
+
+limited_seating_334:
+  x: 1006
+  y: 408
+  seat_number: 2
+  table_number: 12
+  section: premium
+
+limited_seating_335:
+  x: 1006
+  y: 363
+  seat_number: 1
+  table_number: 12
+  section: premium
+
+limited_seating_336:
+  x: 1006
+  y: 504
+  seat_number: 2
+  table_number: 11
+  section: premium
+
+limited_seating_337:
+  x: 160
+  y: 512
+  seat_number: 3
+  table_number: 90
+  section: premium
+
+limited_seating_338:
+  x: 202
+  y: 554
+  seat_number: 8
+  table_number: 90
+  section: premium
+
+limited_seating_339:
+  x: 202
+  y: 532
+  seat_number: 6
+  table_number: 90
+  section: premium
+
+limited_seating_340:
+  x: 202
+  y: 512
+  seat_number: 4
+  table_number: 90
+  section: premium
+
+limited_seating_341:
+  x: 202
+  y: 490
+  seat_number: 2
+  table_number: 90
+  section: premium
+
+limited_seating_342:
+  x: 950
+  y: 597
+  seat_number: 20
+  table_number: 20
+  section: premium
+
+limited_seating_343:
+  x: 927
+  y: 597
+  seat_number: 19
+  table_number: 20
+  section: premium
+
+limited_seating_344:
+  x: 905
+  y: 597
+  seat_number: 18
+  table_number: 20
+  section: premium
+
+limited_seating_345:
+  x: 881
+  y: 597
+  seat_number: 17
+  table_number: 20
+  section: premium
+
+limited_seating_346:
+  x: 859
+  y: 597
+  seat_number: 16
+  table_number: 20
+  section: premium
+
+limited_seating_347:
+  x: 841
+  y: 597
+  seat_number: 15
+  table_number: 20
+  section: premium
+
+limited_seating_348:
+  x: 818
+  y: 597
+  seat_number: 14
+  table_number: 20
+  section: premium
+
+limited_seating_349:
+  x: 793
+  y: 597
+  seat_number: 13
+  table_number: 20
+  section: premium
+
+limited_seating_350:
+  x: 788
+  y: 525
+  seat_number: 10
+  table_number: 21
+  section: premium
+
+limited_seating_351:
+  x: 768
+  y: 525
+  seat_number: 9
+  table_number: 21
+  section: premium
+
+limited_seating_352:
+  x: 768
+  y: 597
+  seat_number: 12
+  table_number: 20
+  section: premium
+
+limited_seating_353:
+  x: 236
+  y: 798
+  seat_number: 4
+  table_number: 402
+  section: premium
+
+limited_seating_354:
+  x: 249
+  y: 755
+  seat_number: 3
+  table_number: 402
+  section: premium
+
+limited_seating_355:
+  x: 828
+  y: 525
+  seat_number: 12
+  table_number: 21
+  section: premium
+
+limited_seating_356:
+  x: 849
+  y: 525
+  seat_number: 13
+  table_number: 21
+  section: premium
+
+limited_seating_357:
+  x: 870
+  y: 525
+  seat_number: 14
+  table_number: 21
+  section: premium
+
+limited_seating_358:
+  x: 888
+  y: 525
+  seat_number: 15
+  table_number: 21
+  section: premium
+
+limited_seating_359:
+  x: 908
+  y: 525
+  seat_number: 16
+  table_number: 21
+  section: premium
+
+limited_seating_360:
+  x: 927
+  y: 525
+  seat_number: 17
+  table_number: 21
+  section: premium
+
+limited_seating_361:
+  x: 945
+  y: 525
+  seat_number: 18
+  table_number: 21
+  section: premium
+
+limited_seating_362:
+  x: 901
+  y: 416
+  seat_number: 18
+  table_number: 22
+  section: premium
+
+limited_seating_363:
+  x: 879
+  y: 416
+  seat_number: 17
+  table_number: 22
+  section: premium
+
+limited_seating_364:
+  x: 860
+  y: 416
+  seat_number: 16
+  table_number: 22
+  section: premium
+
+limited_seating_365:
+  x: 836
+  y: 416
+  seat_number: 15
+  table_number: 22
+  section: premium
+
+limited_seating_366:
+  x: 814
+  y: 416
+  seat_number: 14
+  table_number: 22
+  section: premium
+
+limited_seating_367:
+  x: 789
+  y: 416
+  seat_number: 13
+  table_number: 22
+  section: premium
+
+limited_seating_368:
+  x: 744
+  y: 416
+  seat_number: 11
+  table_number: 22
+  section: premium
+
+limited_seating_369:
+  x: 770
+  y: 416
+  seat_number: 12
+  table_number: 22
+  section: premium
+
+limited_seating_370:
+  x: 744
+  y: 366
+  seat_number: 1
+  table_number: 22
+  section: premium
+
+limited_seating_371:
+  x: 770
+  y: 366
+  seat_number: 2
+  table_number: 22
+  section: premium
+
+limited_seating_372:
+  x: 789
+  y: 366
+  seat_number: 3
+  table_number: 22
+  section: premium
+
+limited_seating_373:
+  x: 814
+  y: 366
+  seat_number: 4
+  table_number: 22
+  section: premium
+
+limited_seating_374:
+  x: 836
+  y: 366
+  seat_number: 5
+  table_number: 22
+  section: premium
+
+limited_seating_375:
+  x: 860
+  y: 366
+  seat_number: 6
+  table_number: 22
+  section: premium
+
+limited_seating_376:
+  x: 879
+  y: 366
+  seat_number: 7
+  table_number: 22
+  section: premium
+
+limited_seating_377:
+  x: 901
+  y: 366
+  seat_number: 8
+  table_number: 22
+  section: premium
+
+limited_seating_378:
+  x: 273
+  y: 131
+  seat_number: 1
+  table_number: 82
+  section: premium
+
+limited_seating_379:
+  x: 316
+  y: 131
+  seat_number: 2
+  table_number: 82
+  section: premium
+
+limited_seating_380:
+  x: 273
+  y: 155
+  seat_number: 3
+  table_number: 82
+  section: premium
+
+limited_seating_381:
+  x: 316
+  y: 155
+  seat_number: 4
+  table_number: 82
+  section: premium
+
+limited_seating_382:
+  x: 272
+  y: 177
+  seat_number: 5
+  table_number: 82
+  section: premium
+
+limited_seating_383:
+  x: 316
+  y: 177
+  seat_number: 6
+  table_number: 82
+  section: premium
+
+limited_seating_384:
+  x: 273
+  y: 201
+  seat_number: 7
+  table_number: 82
+  section: premium
+
+limited_seating_385:
+  x: 316
+  y: 201
+  seat_number: 8
+  table_number: 82
+  section: premium
+
+limited_seating_386:
+  x: 300
+  y: 301
+  seat_number: 2
+  table_number: 81
+  section: premium
+
+limited_seating_387:
+  x: 300
+  y: 325
+  seat_number: 4
+  table_number: 81
+  section: premium
+
+limited_seating_388:
+  x: 333
+  y: 131
+  seat_number: 1
+  table_number: 72
+  section: premium
+
+limited_seating_389:
+  x: 374
+  y: 131
+  seat_number: 2
+  table_number: 72
+  section: premium
+
+limited_seating_390:
+  x: 332
+  y: 155
+  seat_number: 3
+  table_number: 72
+  section: premium
+
+limited_seating_391:
+  x: 374
+  y: 155
+  seat_number: 4
+  table_number: 72
+  section: premium
+
+limited_seating_392:
+  x: 333
+  y: 177
+  seat_number: 5
+  table_number: 72
+  section: premium
+
+limited_seating_393:
+  x: 374
+  y: 177
+  seat_number: 6
+  table_number: 72
+  section: premium
+
+limited_seating_394:
+  x: 333
+  y: 201
+  seat_number: 7
+  table_number: 72
+  section: premium
+
+limited_seating_395:
+  x: 374
+  y: 201
+  seat_number: 8
+  table_number: 72
+  section: premium
+
+limited_seating_396:
+  x: 411
+  y: 65
+  seat_number: 1
+  table_number: 63
+  section: premium
+
+limited_seating_397:
+  x: 454
+  y: 65
+  seat_number: 2
+  table_number: 63
+  section: premium
+
+limited_seating_398:
+  x: 411
+  y: 131
+  seat_number: 1
+  table_number: 62
+  section: premium
+
+limited_seating_399:
+  x: 454
+  y: 131
+  seat_number: 2
+  table_number: 62
+  section: premium
+
+limited_seating_400:
+  x: 411
+  y: 155
+  seat_number: 3
+  table_number: 62
+  section: premium
+
+limited_seating_401:
+  x: 454
+  y: 155
+  seat_number: 4
+  table_number: 62
+  section: premium
+
+limited_seating_402:
+  x: 492
+  y: 65
+  seat_number: 1
+  table_number: 53
+  section: premium
