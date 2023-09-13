@@ -1,0 +1,16 @@
+<div class="card max-w-md">
+  <h1 class="text-center text-xl">
+    Upcoming Shows
+  </h1>
+
+  <div class="grid grid-cols-3 gap-4">
+    <% @shows.each do |show| %>
+      <div>
+        <h3 class="text-lg text-center">
+          <%= link_to show.artist.name, show %>
+        </h3>
+        <%= image_tag(url_for(show.artist.image)) %>
+      </div>
+    <% end %>
+  </div>
+</div>

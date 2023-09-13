@@ -1,5 +1,5 @@
 <%= turbo_stream.append "seating_chart_sections" do %>
-  <%= fields_for "seating_chart[sections_attributes]", @section, index: @section.id do |section_fields| %>
-    <%= render "form", section_fields: section_fields %>
+  <%= fields_for "seating_chart[sections_attributes]", @section, index: @section.id do |section_fields, index| %>
+    <%= render "form", section_fields: section_fields, index: index %>
   <% end %>
 <% end %>

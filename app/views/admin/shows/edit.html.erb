@@ -1,0 +1,4 @@
+<div class="card max-w-xl">
+  <h1 class="text-center text-3xl font-semibold"><%= @show.artist.name %> - <%= short_date(@show.show_date) %></h1>  
+  <%= render "form", show: @show %>
+</div>

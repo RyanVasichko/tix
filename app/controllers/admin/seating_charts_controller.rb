@@ -13,7 +13,7 @@ class Admin::SeatingChartsController < Admin::AdminController
       @dup_venue_layout_from = SeatingChart.find(params[:clone_from])
     else
       @seating_chart = SeatingChart.new
-      @seating_chart.sections.build.id = SecureRandom.random_number(1_000_000) + 100_000_000
+      @seating_chart.sections.build.id = SecureRandom.random_number(1_000_000) + 100_000_000_000
     end
   end
 

@@ -1,12 +1,12 @@
-import { Controller } from "@hotwired/stimulus"
 import { enter, leave } from "el-transition"
+import ApplicationController from "./application_controller";
 
-export default class extends Controller {
+class ModalController extends ApplicationController {
   static targets = ["body", "backdrop", "focus"];
 
   async open() {
     this.element.classList.remove("hidden");
-    if (this.focusTarget) {
+    if (this.hasFocusTarget) {
       this.focusTarget.focus();
     }
     await Promise.all([
@@ -32,3 +32,5 @@ export default class extends Controller {
     }
   }
 }
+
+export default ModalController;

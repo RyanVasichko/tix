@@ -1,5 +1,5 @@
 <%= turbo_stream.append "toast_messages" do %>
   <% flash.each do |message_type, message| %>
-    <%= render "shared/toast_message/toast_message", { message_type: message_type, message: message } %>
+    <%= render "shared/toast_messages/toast_message", { message_type: message_type, message: message } %>
   <% end %>
 <% end %>

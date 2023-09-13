@@ -26,4 +26,12 @@ module Admin::SeatingCharts::SeatingChartFormTestHelpers
       all('.section-name-input').last.set(name)
     end
   end
+
+  def close_slide_over
+    click_on "btn-slide-over-close"
+  end
+
+  def open_slide_over
+    click_on "btn-slide-over-toggle"
+  end
 end

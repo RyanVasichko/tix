@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <%= render "layouts/head" %>
+  <%= render "layouts/navbar" %>
 
-  <body>
+  <body data-current-user-id="<%= @current_user_id %>">
     <%= yield %>
   </body>
 </html>

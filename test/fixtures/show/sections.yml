@@ -1,0 +1,19 @@
+radiohead_normal:
+  show: radiohead
+  ticket_price: 69.42
+  seating_chart_section: premium
+
+# radiohead_obstructed:
+#   show: radiohead
+#   ticket_price: 42.69
+#   seating_chart_section: obstructed
+
+lcd_soundsystem_normal:
+  show: lcd_soundsystem
+  ticket_price: 75
+  seating_chart_section: premium
+
+# lcd_soundsystem_obstructed:
+#   show: lcd_soundsystem
+#   ticket_price: 50
+#   seating_chart_section: obstructed

@@ -17,9 +17,11 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
     fill_in 'Name', with: 'Test Seating Chart'
 
     create_test_sections
+    click_on "btn-slide-over-close"
     create_test_seats
+    click_on "btn-slide-over-toggle"
 
-    attach_file('Venue layout', Rails.root.join('test/fixtures/files/seating_chart.bmp'))
+    find("input[type='file']", visible: false).set(Rails.root.join('test/fixtures/files/seating_chart.bmp'))
 
     click_on 'Save'
 
@@ -47,7 +49,9 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
       seat_within_tolerance = seating_chart.seats.where(
         x: (target_x - TOLERANCE)..(target_x + TOLERANCE),
         y: (target_y - TOLERANCE)..(target_y + TOLERANCE)
-      ).exists?
+      )
+
+      assert seat_within_tolerance.exists?
     end
   end
 

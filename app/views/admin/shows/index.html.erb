@@ -1,0 +1,27 @@
+<div class="card max-w-xl">
+  <h1 class="text-center text-3xl font-semibold">Shows</h1>
+
+  <div class="flex justify-end">
+    <%= link_to "New Show", new_admin_show_path, class: "btn-primary px-2 py-1" %>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="table-th">Artist Name</th>
+        <th scope="col" class="table-th text-right sm:pr-6">Show Date</th>
+      </tr>
+    </thead>
+    <tbody class="table-tbody">
+      <% @shows.each do |show| %>
+        <tr id="<%= dom_id(show, :admin) %>">
+          <td class="table-td text-indigo-600">
+            <%= link_to show.artist.name, edit_admin_show_path(show) %>
+          </td>
+          <td class="table-td text-right sm:pr-6">
+            <%= short_date(show.show_date) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_08_003214) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_12_122934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -77,6 +77,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_003214) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "show_seats", force: :cascade do |t|
+    t.bigint "show_section_id", null: false
+    t.integer "x"
+    t.integer "y"
+    t.integer "seat_number"
+    t.integer "table_number"
+    t.integer "reserved_by_id"
+    t.datetime "reserved_until"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
+  end
+
+  create_table "show_sections", force: :cascade do |t|
+    t.bigint "show_id", null: false
+    t.decimal "ticket_price", precision: 10, scale: 2, null: false
+    t.bigint "seating_chart_section_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seating_chart_section_id"], name: "index_show_sections_on_seating_chart_section_id"
+    t.index ["show_id"], name: "index_show_sections_on_show_id"
+  end
+
   create_table "shows", force: :cascade do |t|
     t.bigint "artist_id", null: false
     t.bigint "seating_chart_id", null: false
@@ -106,6 +129,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_003214) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
+  add_foreign_key "show_seats", "show_sections"
+  add_foreign_key "show_sections", "seating_chart_sections"
+  add_foreign_key "show_sections", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "seating_charts"
 end

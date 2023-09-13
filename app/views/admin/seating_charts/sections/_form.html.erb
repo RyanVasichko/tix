@@ -1,8 +1,13 @@
-<div class="flex content-between [&:not(:first-child)]:mt-2" id="<%= dom_id(section_fields.object, :admin) %>" data-controller="destroyable" data-destroyable-persisted-value="<%= section_fields.object.persisted? %>">
+<div class="flex content-between [&:not(:first-child)]:mt-2" id="<%= "#{dom_id(section_fields.object, :admin)}#{ "_new_" + SecureRandom.random_number(1_000_000).to_s unless section_fields.object.persisted? }" %>" data-controller="destroyable" data-destroyable-persisted-value="<%= section_fields.object.persisted? %>">
   <%= section_fields.text_field(
-    :name, 
-    class: "form-control-text mr-2 section-name-input", 
-    data: {  section_id: section_fields.object.id, admin__seating_chart_form_target: "sectionNameInput" }) 
+    :name,
+    class: "form-control-text mr-2 section-name-input",
+    data:
+    {
+      section_id: section_fields.object.id,
+      admin__seating_chart_form_target: "sectionNameInput",
+      section_index: index
+    })
   %>
   <%= section_fields.hidden_field :_destroy, data: { destroyable_target: "destroyInput" } %>
   <%= section_fields.hidden_field :id if section_fields.object.persisted? %>

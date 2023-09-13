@@ -16,7 +16,7 @@ WORKDIR $INSTALL_PATH
 RUN gem install bundler
 COPY Gemfile Gemfile.lock package.json yarn.lock ./
 RUN bundle install
-RUN yarn install
+RUN yarn install --check-files
 
 COPY . .
 EXPOSE 3000

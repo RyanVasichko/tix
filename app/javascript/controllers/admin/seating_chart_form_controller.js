@@ -1,14 +1,12 @@
-import { Controller } from "@hotwired/stimulus";
+import ApplicationController from "../application_controller";
+import { get } from "@rails/request.js";
 
-export default class extends Controller {
+export default class extends ApplicationController {
   static targets = [
     "svgCanvas",
     "seatsContainer",
-    "modal",
-    "seatNumberInput",
-    "tableNumberInput",
-    "sectionSelect",
     "sectionNameInput",
+    "modal",
     "seat"
   ];
 
@@ -17,58 +15,24 @@ export default class extends Controller {
     removedSections: Array
   };
 
+  get sections() {
+    return this.sectionNameInputTargets
+      .filter(i => !this.removedSectionsValue.includes(+i.dataset.sectionId))
+      .map(s => ({ id: s.dataset.sectionId, name: s.value }));
+  }
+
   async addSeat() {
-    const response = await fetch(this.newSeatUrlValue);
-    const html = await response.text();
+    const response = await get(this.newSeatUrlValue);
+    const html = await response.text;
 
     this.svgCanvasTarget.innerHTML += html;
     const newSeat = this.svgCanvasTarget.lastElementChild;
-    this.openModalForSeat(newSeat);
+    this.application.getControllerForElementAndIdentifier(this.modalTarget, "admin--seating-chart-form--seat-form-modal").open(newSeat, this.sections);
   }
 
-  openModal(event) {
-    this.openModalForSeat(event.target);
-  }
-
-  openModalForSeat(seat) {
-    this.populateSectionsSelectOptions();
-
-    this.selectedSeat = seat;
-
-    const seatController = this.application.getControllerForElementAndIdentifier(seat, 'admin--seating-chart-form--seat');
-
-    this.seatNumberInputTarget.value = seatController?.seatNumberValue || '';
-    this.tableNumberInputTarget.value = seatController?.tableNumberValue || '';
-    this.sectionSelectTarget.value = seatController?.sectionIdValue || '';
-
-    this.application.getControllerForElementAndIdentifier(this.modalTarget, "modal").open();
-  }
-
-  saveSeatData() {
-    if (this.selectedSeat) {
-      const seatController = this.application.getControllerForElementAndIdentifier(this.selectedSeat, 'admin--seating-chart-form--seat');
-
-      seatController.seatNumberValue = this.seatNumberInputTarget.value;
-      seatController.tableNumberValue = this.tableNumberInputTarget.value;
-      seatController.sectionIdValue = this.sectionSelectTarget.value;
-    }
-
-    this.closeModal();
-  }
-
-  closeModal() {
-    this.selectedSeat = null;
-    this.application.getControllerForElementAndIdentifier(this.modalTarget, "modal").close();
-  }
-
-  populateSectionsSelectOptions() {
-    this.sectionSelectTarget.innerHTML = '';
-    this.sectionNameInputTargets.filter(i => !this.removedSectionsValue.includes(+i.dataset.sectionId)).forEach(t => {
-      const option = document.createElement("option");
-      option.text = t.value;
-      option.value = t.dataset.sectionId;
-      this.sectionSelectTarget.appendChild(option);
-    });
+  editSeat(event) {
+    const modalController = this.application.getControllerForElementAndIdentifier(this.modalTarget, "admin--seating-chart-form--seat-form-modal");
+    modalController.open(event.target, this.sections);
   }
 
   submitForm() {
@@ -88,10 +52,6 @@ export default class extends Controller {
     });
   }
 
-  focusSeatNumberInput() {
-    this.seatNumberInputTarget.focus();
-  }
-
   appendHiddenField(name, value) {
     const inputField = document.createElement('input');
     inputField.type = 'hidden';
@@ -104,16 +64,5 @@ export default class extends Controller {
     const removedSectionId = e.currentTarget.dataset.sectionId;
     this.removedSectionsValue = [...this.removedSectionsValue, +removedSectionId];
     this.seatTargets.filter(c => c.dataset.seatSectionIdValue === removedSectionId).forEach(c => c.remove());
-  }
-
-  removeSeat() {
-    const seatController = this.application.getControllerForElementAndIdentifier(this.selectedSeat, 'admin--seating-chart-form--seat');
-    if (seatController.idValue) {
-      this.selectedSeat.classList.add("d-none");
-    } else {
-      this.selectedSeat.remove();
-    }
-
-    this.closeModal();
   }
 }

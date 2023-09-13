@@ -14,6 +14,10 @@ module ApplicationHelper
     end
   end
 
+  def short_date(date)
+    date.strftime("%-m/%-d/%Y")
+  end
+
   def drag_and_drop_file_field(object_name, method, options = {})
     label_text = options[:label_text] || "Image"
 

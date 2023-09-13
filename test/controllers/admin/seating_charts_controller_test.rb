@@ -36,6 +36,6 @@ class Admin::SeatingChartsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to admin_seating_charts_url
-    assert_equal 'Seating chart was successfully created.', flash[:notice]
+    assert_equal 'Seating chart was successfully created.', flash[:success]
   end
 end

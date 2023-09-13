@@ -7,11 +7,20 @@ import { application } from "./application"
 import Admin__SeatingChartForm__SeatController from "./admin/seating_chart_form/seat_controller"
 application.register("admin--seating-chart-form--seat", Admin__SeatingChartForm__SeatController)
 
+import Admin__SeatingChartForm__SeatFormModalController from "./admin/seating_chart_form/seat_form_modal_controller"
+application.register("admin--seating-chart-form--seat-form-modal", Admin__SeatingChartForm__SeatFormModalController)
+
 import Admin__SeatingChartForm__VenueLayoutController from "./admin/seating_chart_form/venue_layout_controller"
 application.register("admin--seating-chart-form--venue-layout", Admin__SeatingChartForm__VenueLayoutController)
 
 import Admin__SeatingChartFormController from "./admin/seating_chart_form_controller"
 application.register("admin--seating-chart-form", Admin__SeatingChartFormController)
+
+import Admin__ShowsForm__SectionsController from "./admin/shows_form/sections_controller"
+application.register("admin--shows-form--sections", Admin__ShowsForm__SectionsController)
+
+import ApplicationController from "./application_controller"
+application.register("application", ApplicationController)
 
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
@@ -33,6 +42,12 @@ application.register("modal", ModalController)
 
 import PreviewController from "./preview_controller"
 application.register("preview", PreviewController)
+
+import Shows__SeatingChart__SeatController from "./shows/seating_chart/seat_controller"
+application.register("shows--seating-chart--seat", Shows__SeatingChart__SeatController)
+
+import Shows__SeatingChart__SvgController from "./shows/seating_chart/svg_controller"
+application.register("shows--seating-chart--svg", Shows__SeatingChart__SvgController)
 
 import SlideOverController from "./slide_over_controller"
 application.register("slide-over", SlideOverController)

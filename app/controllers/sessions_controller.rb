@@ -6,10 +6,10 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
 
       log_in user
-      redirect_to root_path
+      redirect_to root_url
     else
 
-      flash.now[:danger] = 'Invalid email/password combination'
+      flash.now[:error] = 'Invalid email/password combination'
       respond_to do |format|
         format.html { render'new' }
         format.turbo_stream

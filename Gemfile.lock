@@ -88,6 +88,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     crass (1.0.6)
     cssbundling-rails (1.2.0)
       railties (>= 6.0.0)
@@ -194,6 +195,9 @@ GEM
     rbs (2.8.4)
     rdoc (6.5.0)
       psych (>= 4.0.0)
+    redis (4.8.1)
+    redis-client (0.17.0)
+      connection_pool
     regexp_parser (2.8.1)
     reline (0.3.8)
       io-console (~> 0.5)
@@ -222,6 +226,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sidekiq (7.1.3)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.14.0)
     solargraph (0.49.0)
       backport (~> 1.2)
       benchmark
@@ -289,9 +298,11 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-mini-profiler
   rails (~> 7.0.7, >= 7.0.7.2)
+  redis (~> 4.0)
   rubocop
   ruby-vips
   selenium-webdriver
+  sidekiq
   solargraph
   sprockets-rails
   stimulus-rails

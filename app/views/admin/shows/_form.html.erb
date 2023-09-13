@@ -1,0 +1,55 @@
+<%= form_with(model: [:admin, show]) do |form| %>
+  <%= turbo_frame_tag "admin_show_errors" do %>
+    <%= render "shared/error_messages", { model: show } %>
+  <% end %>
+
+  <div class="mt-6">
+    <%= form.label :artist_id, class: "form-label" %>
+    <%= form.collection_select :artist_id, Artist.active.select(:id, :name), :id, :name, {}, class: "form-control-select" %>
+  </div>
+
+  <div data-controller="admin--shows-form--sections">
+    <div class="mt-6">
+      <%= form.label :seating_chart_id, class: "form-label" %>
+      <%= form.collection_select(
+        :seating_chart_id, 
+        SeatingChart.active.select(:id, :name), 
+        :id, 
+        :name, 
+        {}, 
+        class: "form-control-select", 
+        data: { action: "admin--shows-form--sections#loadSections" })
+      %>
+    </div>
+
+    <div class="mt-4">
+      <div class="form-label">Sections</div>
+      <%= turbo_frame_tag "show_sections" do %>
+        <% show.sections.each do |section| %>
+          <%= form.fields_for :sections_attributes, section, index: section.seating_chart_section_id do |section_fields| %>
+            <%= render "admin/shows/sections/form", section_fields: section_fields %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= form.label :show_date, class: "form-label" %>
+    <%= form.date_field :show_date, class: "form-control-text" %>
+  </div>
+
+  <div class="mt-6">
+    <%= form.label :start_time, class: "form-label" %>
+    <%= form.time_field :start_time, class: "form-control-text" %>
+  </div>
+
+  <div class="mt-6">
+    <%= form.label :end_time, class: "form-label" %>
+    <%= form.time_field :end_time, class: "form-control-text" %>
+  </div>
+
+  <div class="mt-10 flex items-center justify-end">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>
