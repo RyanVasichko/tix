@@ -17,7 +17,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       assert_difference "Show::Section.count", 2 do
         visit admin_shows_url
         click_on "New Show"
-    
+
         select "Radiohead", from: "Artist"
         select "Full House", from: "Seating chart"
         fill_in "show_sections_attributes_#{@obstructed_section.id}_ticket_price", with: "23.50"
@@ -25,9 +25,9 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         fill_in "Show date", with: "4/5/2024"
         fill_in "Start time", with: "7:30PM"
         fill_in "End time", with: "9:00PM"
-    
+
         click_on "Create Show"
-    
+
         assert_text "Show was successfully created"
       end
     end
@@ -45,18 +45,27 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   end
 
   test "should update Show" do
-    skip
-    visit admin_show_url(@show)
-    click_on "Edit this show", match: :first
+    skip "Can "
+    visit admins_shows_url
+    click_on @show.name
 
-    click_on "Update Show"
+    fill_in "Show date", with: "4/5/2024"
+    fill_in "Start time", with: "7:30PM"
+    fill_in "End time", with: "9:00PM"
 
+    click_on "Save"
     assert_text "Show was successfully updated"
-    click_on "Back"
+
+    @show.reload
+
+    assert_equal Time.zone.parse("2024/04/05 7:30PM"), @show.start_time
+    assert_equal Time.zone.parse("2024/04/05 9:00PM"), @show.end_time
+    assert_equal Date.strptime("04/05/2024", "%m/%d/%Y"), @show.show_date
+
   end
 
   test "should destroy Show" do
-    skip
+    skip "how is deleting/taking a show offsale supposed to be handled?"
     visit admin_show_url(@show)
     click_on "Destroy this show", match: :first
 

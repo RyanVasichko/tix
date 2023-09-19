@@ -1,12 +1,12 @@
-<div data-controller="dropdown" data-action="click@document->dropdown#outsideClick" class="relative inline-block text-left">
+<div data-controller="openable" data-action="click@document->openable#hideOnOutsideClick" class="relative inline-block text-left">
   <div>
-    <button 
-      type="button" 
-      id="<%= id %>_dropdown" 
-      data-action="dropdown#toggle"
-      aria-expanded="true" 
+    <button
+      type="button"
+      id="<%= id %>_dropdown"
+      data-action="openable#toggle"
+      aria-expanded="true"
       aria-haspopup="true"
-      class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100" 
+      class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100"
     >
       <span class="sr-only">Open options</span>
       <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -14,13 +14,18 @@
       </svg>
     </button>
   </div>
-  <div 
-    data-dropdown-target="menu"
-    role="menu" 
-    aria-orientation="vertical" 
-    aria-labelledby="<%= id %>_dropdown" 
+  <div
+    data-openable-target="content"
+    data-transition-enter="transition ease-out duration-100"
+    data-transition-enter-start="transform opacity-0 scale-95"
+    data-transition-enter-end="transform opacity-100 scale-100"
+    data-transition-leave="transition ease-in duration-75"
+    data-transition-leave-start="transform opacity-100 scale-100"
+    data-transition-leave-end="transform opacity-0 scale-95"
+    aria-orientation="vertical"
+    aria-labelledby="<%= id %>_dropdown"
     tabindex="-1"
-    class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-0 scale-95" 
+    class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-0 scale-95"
   >
     <div class="py-1" role="none">
       <%= yield %>

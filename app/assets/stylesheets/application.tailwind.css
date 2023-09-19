@@ -1,13 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+/* @import "./custom-base-styles.css"; */
+@import "./loader.css";
+
+@import "tailwindcss/components";
+/* @import "./custom-components.css"; */
+
+@import "tailwindcss/utilities";
+/* @import "./custom-utilities.css"; */
 
 @layer base {
   .btn-primary {
     @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
   }
   .card {
-    @apply mx-auto border-b rounded-lg border-slate-300 bg-white px-4 py-5 sm:px-6 shadow overflow-auto;
+    @apply mx-auto border-b rounded-lg border-slate-300 bg-white px-4 py-5 sm:px-6 shadow overflow-visible;
   }
 
   .form-label {
@@ -37,4 +43,16 @@
   .table-td {
     @apply whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium;
   }
+}
+
+input[type=submit] {
+  cursor: pointer;
+}
+
+input[type=submit]:disabled {
+  cursor: not-allowed;
+}
+
+button[type=submit]:disabled {
+  cursor: not-allowed;
 }

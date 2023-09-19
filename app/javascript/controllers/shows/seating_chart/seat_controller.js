@@ -6,7 +6,8 @@ export default class extends Controller {
   static values = {
     reservedById: Number,
     reservationPath: String,
-    reservedUntil: Number
+    reservedUntil: Number,
+    soldToUserId: Number
   };
 
   get reservedUntilDate() {
@@ -21,16 +22,24 @@ export default class extends Controller {
     return this.currentUserId === this.reservedByIdValue && this.reservedUntilDate > new Date();
   }
 
+  get soldToCurrentUser() {
+    return this.currentUserId === this.soldToUserIdValue;
+  }
+
   get notReserved() {
     return this.reservedByIdValue === 0 || this.reservedUntilDate < new Date();
   }
 
+  get notSold() {
+    return this.soldToUserIdValue === 0;
+  }
+
   get fillColor() {
-    if (this.notReserved) {
+    if (this.notReserved && this.notSold) {
       return "green";
     }
 
-    return this.reservedByCurrentUser ? "yellow" : "red";
+    return this.reservedByCurrentUser || this.soldToCurrentUser ? "yellow" : "red";
   }
 
   get currentUserId() {
@@ -48,7 +57,7 @@ export default class extends Controller {
       return;
     }
 
-    if (this.notReserved) {
+    if (this.notReserved && this.notSold) {
       await post(this.reservationPathValue, { responseKind: "turbo-stream" });
     }
   }

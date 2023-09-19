@@ -5,19 +5,20 @@
 
   <div class="mt-6">
     <%= form.label :artist_id, class: "form-label" %>
-    <%= form.collection_select :artist_id, Artist.active.select(:id, :name), :id, :name, {}, class: "form-control-select" %>
+    <%= form.collection_select :artist_id, Artist.active.select(:id, :name), :id, :name, {}, class: "form-control-select", disabled: show.persisted? %>
   </div>
 
   <div data-controller="admin--shows-form--sections">
     <div class="mt-6">
       <%= form.label :seating_chart_id, class: "form-label" %>
       <%= form.collection_select(
-        :seating_chart_id, 
-        SeatingChart.active.select(:id, :name), 
-        :id, 
-        :name, 
-        {}, 
-        class: "form-control-select", 
+        :seating_chart_id,
+        SeatingChart.active.select(:id, :name),
+        :id,
+        :name,
+        {},
+        class: "form-control-select",
+        disabled: show.persisted?,
         data: { action: "admin--shows-form--sections#loadSections" })
       %>
     </div>
@@ -26,7 +27,7 @@
       <div class="form-label">Sections</div>
       <%= turbo_frame_tag "show_sections" do %>
         <% show.sections.each do |section| %>
-          <%= form.fields_for :sections_attributes, section, index: section.seating_chart_section_id do |section_fields| %>
+          <%= form.fields_for :sections, section do |section_fields| %>
             <%= render "admin/shows/sections/form", section_fields: section_fields %>
           <% end %>
         <% end %>
@@ -34,19 +35,21 @@
     </div>
   </div>
 
-  <div class="mt-6">
-    <%= form.label :show_date, class: "form-label" %>
-    <%= form.date_field :show_date, class: "form-control-text" %>
-  </div>
+  <div class="mt-6 grid grid-cols-3 gap-x-2">
+    <div>
+      <%= form.label :show_date, class: "form-label" %>
+      <%= form.date_field :show_date, class: "form-control-text" %>
+    </div>
 
-  <div class="mt-6">
-    <%= form.label :start_time, class: "form-label" %>
-    <%= form.time_field :start_time, class: "form-control-text" %>
-  </div>
+    <div>
+      <%= form.label :start_time, class: "form-label" %>
+      <%= form.time_field :start_time, class: "form-control-text" %>
+    </div>
 
-  <div class="mt-6">
-    <%= form.label :end_time, class: "form-label" %>
-    <%= form.time_field :end_time, class: "form-control-text" %>
+    <div>
+      <%= form.label :end_time, class: "form-label" %>
+      <%= form.time_field :end_time, class: "form-control-text" %>
+    </div>
   </div>
 
   <div class="mt-10 flex items-center justify-end">

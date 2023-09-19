@@ -1,11 +1,19 @@
 class User < ApplicationRecord
-  has_secure_password
+  include Stripeable, Reserver
 
-  has_many :reserved_seats, class_name: "Show::Seat", inverse_of: :reserved_by, foreign_key: "reserved_by_id"
-  
-  validates :first_name, :last_name, :email, presence: true, unless: :guest?
-  validates :email, uniqueness: true
+  has_secure_password validations: false
 
-  attribute :guest, default: false
-  attribute :admin, default: false
+  has_many :orders
+
+  def ticket_reservation_time
+    15.minutes
+  end
+
+  def shopping_cart
+    @shopping_cart ||= ShoppingCart.new(self)
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end

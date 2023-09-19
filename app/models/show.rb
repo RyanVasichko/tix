@@ -3,6 +3,7 @@ class Show < ApplicationRecord
   belongs_to :seating_chart
   has_many :sections, class_name: "Show::Section", inverse_of: :show
   has_many :seats, through: :sections
+  has_many :tickets, class_name: "Order::Ticket", inverse_of: :show
 
   validates :show_date, presence: true
   validates :start_time, presence: true
@@ -13,6 +14,10 @@ class Show < ApplicationRecord
   accepts_nested_attributes_for :sections, allow_destroy: true
 
   before_save :sync_start_and_end_time_with_show_date
+
+  def build_seats
+    sections.each { |section| section.build_seats }
+  end
 
   private
 

@@ -1,8 +1,7 @@
-require "test_helper"
+require "application_integration_test_case"
 
-class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
+class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
   setup do
-    skip "for now"
     @artist = artists(:radiohead)
   end
 
@@ -64,10 +63,10 @@ class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy an artist without any shows" do
-    @artist.shows.destroy_all
-
+    artist = Artist.create!(name: "Test Artist", bio: "Test Bio", url: "Test URL")
+    
     assert_difference("Artist.count", -1) do
-      delete admin_artist_url(@artist)
+      delete admin_artist_url(artist)
     end
 
     assert_redirected_to admin_artists_url

@@ -1,6 +1,6 @@
-require 'test_helper'
+require "application_integration_test_case"
 
-class Admin::SeatingChartsControllerTest < ActionDispatch::IntegrationTest
+class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
   test 'should create seating chart with two sections and two seats in each' do
     params = {
       seating_chart: {

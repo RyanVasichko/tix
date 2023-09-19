@@ -10,8 +10,14 @@ module ApplicationHelper
     when :notice
       "indigo"
     else
-      flash_type.to_s
+      message_type.to_s
     end
+  end
+
+  def non_blank_errors_for(model)
+    model.errors.details.map do |field, errors_array|
+      field if errors_array.none? { |error_info| error_info[:error] == :blank }
+    end.compact.map { |field| model.errors.full_messages_for(field) }.flatten
   end
 
   def short_date(date)

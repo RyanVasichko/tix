@@ -4,6 +4,7 @@
   data-shows--seating-chart--seat-reservation-path-value="<%= show_seat_reservation_path(seat.show, seat) %>"
   data-shows--seating-chart--seat-reserved-by-id-value="<%= seat.reserved_by_id %>"
   data-shows--seating-chart--seat-reserved-until-value="<%= seat.reserved_until.to_i %>"
+  data-shows--seating-chart--seat-sold-to-user-id-value="<%= seat.sold_to_user&.id %>"
   data-action="click->shows--seating-chart--seat#clickHandler"
   id="<%= dom_id(seat) %>"
   r="7"

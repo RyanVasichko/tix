@@ -4,13 +4,19 @@
   <div>
     <%= text_field_tag :seating_chart_section_name, section_fields.object.seating_chart_section.name, class: "form-control-text mt-2", disabled: true %>
   </div>
-  <div> 
+  <div>
     <div class="relative mt-2 rounded-md shadow-sm">
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <span class="text-gray-500 sm:text-sm">$</span>
       </div>
-      
-      <%= section_fields.number_field :ticket_price, class: "form-control-text pl-7 pr-12", min: "0", step: "0.01" %>
+
+      <%= section_fields.number_field(
+        :ticket_price,
+        value: number_with_precision(section_fields.object.ticket_price, precision: 2),
+        class: "form-control-text pl-7 pr-12",
+        min: "0",
+        step: "0.01")
+      %>
       <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
         <span class="text-gray-500 sm:text-sm" id="price-currency">USD</span>
       </div>

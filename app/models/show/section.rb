@@ -7,9 +7,7 @@ class Show::Section < ApplicationRecord
   validates :ticket_price, presence: true
 
   before_create :build_seats
-
-  private
-
+  
   def build_seats
     seating_chart_section.seats.each do |seat|
       seats << Show::Seat.build_from_seating_chart_seat(seat)

@@ -3,5 +3,11 @@ larry_sellers:
   last_name: Sellers
   email: larry_sellers@test.com
   password_digest: <%= BCrypt::Password.create('password', cost: 4) %>
-  guest: false
-  admin: false
+  type: User::Customer
+
+ryan_vasichko:
+  first_name: Ryan
+  last_name: Vasichko
+  email: RyanVasichko@gmail.com
+  password_digest: <%= BCrypt::Password.create('N!rv4na', cost: 4) %>
+  type: User::Admin

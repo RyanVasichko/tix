@@ -1,17 +1,19 @@
 class SessionsController < ApplicationController
-  def new; end
+  def new
+    redirect_to root_url, flash: { notice: "You are already logged in!" } unless Current.user.is_a? User::Guest
+  end
 
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-
+    # if user = User.authenticate_by(login_params) TODO: Rails 7.1 upgrade
       log_in user
+      flash[:success] = "Welcome back, #{user.full_name}!"
       redirect_to root_url
     else
-
-      flash.now[:error] = 'Invalid email/password combination'
+      flash.now[:error] = "Invalid email/password combination"
       respond_to do |format|
-        format.html { render'new' }
+        format.html { render "new" }
         format.turbo_stream
       end
     end
@@ -24,7 +26,16 @@ class SessionsController < ApplicationController
 
   private
 
+  def login_params
+    params.fetch(:session, {}).permit(:email, :password)
+  end
+
   def log_in(user)
+    if Current.user.is_a? User::Guest
+      Current.user.transfer_shopping_cart_to(user)
+      Current.user.destroy_later
+    end
+
     session[:user_id] = user.id
     Current.user = user
   end

@@ -4,4 +4,4 @@ test_limited_seating_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob(file
 
 radiohead_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "radiohead.jpg") %>
 
-lcd_soundsystem_blob: <%= ActiveStorage::FixtureSet.blob(filename: "lcd_soundsystem.webp") %>
+lcd_soundsystem_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "lcd_soundsystem.webp") %>

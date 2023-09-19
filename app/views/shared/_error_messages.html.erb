@@ -1,4 +1,5 @@
-<% if model.errors.any? %>
+<% errors_to_display = non_blank_errors_for(model) %>
+<% if errors_to_display.any? %>
   <div class="rounded-md bg-red-50 p-4">
     <div class="flex">
       <div class="flex-shrink-0">
@@ -8,11 +9,11 @@
       </div>
       <div class="ml-3">
         <h3 class="text-sm font-medium text-red-800">
-          There <%= "was".pluralize(model.errors.count) %> <%= pluralize(model.errors.count, "error") %> with your submission
+          There <%= "was".pluralize(errors_to_display.count) %> <%= pluralize(errors_to_display.count, "error") %> with your submission
         </h3>
         <div class="mt-2 text-sm text-red-700">
           <ul role="list" class="list-disc space-y-1 pl-5">
-            <% model.errors.full_messages.each do |message| %>
+            <% errors_to_display.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
           </ul>

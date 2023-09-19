@@ -22,14 +22,14 @@ application.register("admin--shows-form--sections", Admin__ShowsForm__SectionsCo
 import ApplicationController from "./application_controller"
 application.register("application", ApplicationController)
 
+import CheckoutController from "./checkout_controller"
+application.register("checkout", CheckoutController)
+
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
 
 import DismissableController from "./dismissable_controller"
 application.register("dismissable", DismissableController)
-
-import DropdownController from "./dropdown_controller"
-application.register("dropdown", DropdownController)
 
 import EaseOutController from "./ease_out_controller"
 application.register("ease-out", EaseOutController)
@@ -39,6 +39,9 @@ application.register("file-drop", FileDropController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
+
+import OpenableController from "./openable_controller"
+application.register("openable", OpenableController)
 
 import PreviewController from "./preview_controller"
 application.register("preview", PreviewController)

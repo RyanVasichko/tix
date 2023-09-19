@@ -1,8 +1,8 @@
-require "test_helper"
+require "application_integration_test_case"
 
-class ShowsControllerTest < ActionDispatch::IntegrationTest
+class ShowsControllerTest < ApplicationIntegrationTestCase
   setup do
-    @show = shows(:one)
+    @show = shows(:radiohead)
   end
 
   test "should get index" do
@@ -10,39 +10,8 @@ class ShowsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_show_url
-    assert_response :success
-  end
-
-  test "should create show" do
-    assert_difference("Show.count") do
-      post shows_url, params: { show: {  } }
-    end
-
-    assert_redirected_to show_url(Show.last)
-  end
-
   test "should show show" do
     get show_url(@show)
     assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_show_url(@show)
-    assert_response :success
-  end
-
-  test "should update show" do
-    patch show_url(@show), params: { show: {  } }
-    assert_redirected_to show_url(@show)
-  end
-
-  test "should destroy show" do
-    assert_difference("Show.count", -1) do
-      delete show_url(@show)
-    end
-
-    assert_redirected_to shows_url
   end
 end

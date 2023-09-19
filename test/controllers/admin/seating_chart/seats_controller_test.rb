@@ -1,6 +1,6 @@
-require "test_helper"
+require "application_integration_test_case"
 
-class Admin::SeatingChart::SeatsControllerTest < ActionDispatch::IntegrationTest
+class Admin::SeatingChart::SeatsControllerTest < ApplicationIntegrationTestCase
   test "should get new" do
     get new_admin_seating_chart_url
     assert_response :success

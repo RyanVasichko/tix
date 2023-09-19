@@ -58,7 +58,7 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
-  
+
   config.assets.debug = true
 
   # Raises error for missing translations.
@@ -70,5 +70,7 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  config.web_console.whitelisted_ips = '172.23.0.1'
+  config.web_console.whitelisted_ips = '172.16.0.0/12'
+
+  config.hosts << "9002-73-166-40-112.ngrok-free.app"
 end

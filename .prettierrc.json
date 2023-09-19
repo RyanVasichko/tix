@@ -4,13 +4,15 @@
     {
       "files": "*.rb",
       "options": {
-        "printWidth": 100
+        "printWidth": 120,
+        "bracketSameLine": false
       }
     },
     {
       "files": "*.js",
       "options": {
-        "printWidth": 100
+        "printWidth": 120,
+        "trailingComma": "none"
       }
     }
   ]

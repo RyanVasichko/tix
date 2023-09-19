@@ -16,4 +16,4 @@ radiohead_image:
 lcd_soundsystem_image:
   name: image
   record: lcd_soundsystem (Artist)
-  blob: lcd_soundsystem_blob
+  blob: lcd_soundsystem_image_blob

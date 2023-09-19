@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_12_122934) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,41 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_122934) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "order_payments", force: :cascade do |t|
+    t.string "stripe_payment_intent_id", null: false
+    t.string "stripe_payment_method_id", null: false
+    t.string "card_brand", null: false
+    t.integer "card_exp_month", null: false
+    t.integer "card_exp_year", null: false
+    t.integer "card_last_4", null: false
+    t.integer "amount_in_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "order_tickets", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "show_seat_id", null: false
+    t.bigint "show_id", null: false
+    t.decimal "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_tickets_on_order_id"
+    t.index ["show_id"], name: "index_order_tickets_on_show_id"
+    t.index ["show_seat_id"], name: "index_order_tickets_on_show_seat_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.decimal "order_total"
+    t.string "order_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "order_payment_id"
+    t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "seating_chart_seats", force: :cascade do |t|
@@ -118,15 +153,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_122934) do
     t.string "phone"
     t.string "email"
     t.string "password_digest"
-    t.boolean "guest", default: false
-    t.boolean "admin", default: false
+    t.string "type"
+    t.string "stripe_customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "guest = false AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL OR guest = true", name: "check_guest_fields"
+    t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "order_tickets", "orders"
+  add_foreign_key "order_tickets", "show_seats"
+  add_foreign_key "order_tickets", "shows"
+  add_foreign_key "orders", "order_payments"
+  add_foreign_key "orders", "users"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "show_seats", "show_sections"

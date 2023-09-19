@@ -1,0 +1,15 @@
+# # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# one:
+#   stripe_payment_intent_id: MyString
+#   card_brand: MyString
+#   card_exp_month: 1
+#   card_exp_year: 1
+#   card_last_4: 1
+
+# two:
+#   stripe_payment_intent_id: MyString
+#   card_brand: MyString
+#   card_exp_month: 1
+#   card_exp_year: 1
+#   card_last_4: 1

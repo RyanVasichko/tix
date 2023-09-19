@@ -18,7 +18,7 @@
             <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart) %>
           </td>
           <td class="table-td text-gray-900 text-right sm:pr-6">
-            <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin)} do %>
+            <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
               <%= dropdown_link_to seating_chart.shows.any? ? "Deactivate" : "Delete", [:admin, seating_chart], data: { turbo_method: "DELETE" } %>
               <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
             <% end %>

@@ -1,0 +1,128 @@
+<div id="<%= dom_id order %>">
+  <div class="bg-white">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Order Details</h1>
+
+      <div class="mt-2 border-b border-gray-200 pb-5 text-sm sm:flex sm:justify-between">
+        <dl class="flex">
+          <dt class="text-gray-500">Order number&nbsp;</dt>
+          <dd class="font-medium text-gray-900"><%= @order.order_number %></dd>
+          <dt>
+            <span class="sr-only">Date</span>
+            <span class="mx-2 text-gray-400" aria-hidden="true">&middot;</span>
+          </dt>
+          <dd class="font-medium text-gray-900"><time datetime="<%= @order.created_at.strftime("%Y-%m-%d") %>"><%= @order.created_at.strftime("%B %d, %Y") %></time></dd>
+        </dl>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="sr-only">Products purchased</h2>
+
+        <% order.tickets.group_by { |t| t.show }.each do |show, tickets| %>
+          <div class="space-y-24">
+            <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
+              <div class="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
+                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-50">
+                  <%= link_to show, class: "object-cover object-center" do %>
+                    <%= image_tag url_for(show.artist.image), class: "" %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="mt-6 sm:col-span-7 sm:mt-0 md:row-end-1">
+                <h3 class="text-lg font-medium text-gray-900">
+                  <%= link_to show  do%>
+                    <span class="text-2xl"><%= show.artist.name %></span> <span class="mx-5 text-gray-400" aria-hidden="true">&middot;</span> <%= show.show_date.strftime("%B %d, %Y") %>
+                  <% end %>
+                </h3>
+                <% tickets.each do |ticket| %>
+                  <div class="my-2">
+                    <span class="text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="font-medium">$<%= ticket.price %></span>
+                  </div>
+                <% end %>
+                <p class="mt-1 font-medium text-gray-900">$<%= tickets.sum { |t| t.price } %></p>
+              </div>
+              <!-- BILLING/SHIPPING UPDATES SECTION
+                <div class="sm:col-span-12 md:col-span-7">
+                  <dl class="grid grid-cols-1 gap-y-8 border-b border-gray-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
+                    <div>
+                      <dt class="font-medium text-gray-900">Delivery address</dt>
+                      <dd class="mt-3 text-gray-500">
+                        <span class="block">Floyd Miles</span>
+                        <span class="block">7363 Cynthia Pass</span>
+                        <span class="block">Toronto, ON N3Y 4H8</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt class="font-medium text-gray-900">Shipping updates</dt>
+                      <dd class="mt-3 space-y-3 text-gray-500">
+                        <p>f•••@example.com</p>
+                        <p>1•••••••••40</p>
+                        <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+               -->
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Billing -->
+      <div class="mt-24">
+        <h2 class="sr-only">Billing Summary</h2>
+
+        <div class="rounded-lg bg-gray-50 px-6 py-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-0 lg:py-8">
+          <dl class="grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-5 lg:pl-8">
+            <div>
+              <dt class="font-medium text-gray-900">Billing address</dt>
+              <dd class="mt-3 text-gray-500">
+                <span class="block">Floyd Miles</span>
+                <span class="block">7363 Cynthia Pass</span>
+                <span class="block">Toronto, ON N3Y 4H8</span>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-medium text-gray-900">Payment information</dt>
+              <dd class="mt-3 flex">
+                <div>
+                <!--
+                  <svg aria-hidden="true" width="36" height="24" viewBox="0 0 36 24" class="h-6 w-auto">
+                    <rect width="36" height="24" rx="4" fill="#224DBA" />
+                    <path d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z" fill="#fff" />
+                  </svg>
+                  -->
+                  <%= image_tag "/card_brands/#{order.payment.card_brand}.png", class: "h-6 w-auto" %>
+                  <p class="sr-only">Visa</p>
+                </div>
+                <div class="ml-4">
+                  <p class="text-gray-900">Ending with <%= order.payment.card_last_4 %></p>
+                  <p class="text-gray-600">Expires <%= order.payment.card_exp_month %> / <%= order.payment.card_exp_year %></p>
+                </div>
+              </dd>
+            </div>
+          </dl>
+
+          <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-7 lg:mt-0 lg:pr-8">
+            <div class="flex items-center justify-between pb-4">
+              <dt class="text-gray-600">Subtotal</dt>
+              <dd class="font-medium text-gray-900">$<%= order.order_total %></dd>
+            </div>
+            <div class="flex items-center justify-between py-4">
+              <dt class="text-gray-600">Shipping</dt>
+              <dd class="font-medium text-gray-900">TODO</dd>
+            </div>
+            <div class="flex items-center justify-between py-4">
+              <dt class="text-gray-600">Tax</dt>
+              <dd class="font-medium text-gray-900">TODO</dd>
+            </div>
+            <div class="flex items-center justify-between pt-4">
+              <dt class="font-medium text-gray-900">Order total</dt>
+              <dd class="font-medium text-indigo-600">$<%= order.order_total %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,9 +5,6 @@ class Admin::ShowsController < Admin::AdminController
     @shows = Show.upcoming.includes(:artist)
   end
 
-  def show
-  end
-
   def new
     @show = Show.new do |show|
       seating_chart = SeatingChart.includes(:sections).first
@@ -51,13 +48,25 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def show_params
-    params.require(:show).permit(
-      :artist_id,
-      :seating_chart_id,
+    permitted_params = [
       :show_date,
       :start_time,
       :end_time,
-      sections_attributes: %i[seating_chart_section_id ticket_price]
-    )
+      sections_attributes: permitted_sections_attributes_for_action
+    ]
+    if action_name == "create"
+      permitted_params << :seating_chart_id
+      permitted_params << :artist_id
+    end
+
+    params.require(:show).permit(permitted_params)
+  end
+
+  def permitted_sections_attributes_for_action
+    if action_name == "create"
+      %i[seating_chart_section_id ticket_price]
+    elsif action_name == "update"
+      %i[id ticket_price]
+    end
   end
 end

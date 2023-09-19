@@ -37,3 +37,5 @@
 /test-screenshots
 
 capybara-*.html
+coverage/
+*:Zone.Identifier

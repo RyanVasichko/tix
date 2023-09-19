@@ -1,0 +1,11 @@
+<%= turbo_stream.replace @order do %>
+  <%= render "orders/form", order: @order %>
+<% end %>
+
+<%= turbo_stream.replace "shopping_cart_count" do %>
+  <%= render "shopping_cart/count", user: Current.user %>
+<% end %>
+
+<%= turbo_stream.replace "shopping_cart" do %>
+  <%= render "shopping_cart/shopping_cart", user: Current.user %>
+<% end %>

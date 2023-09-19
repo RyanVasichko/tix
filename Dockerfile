@@ -1,6 +1,6 @@
 FROM ruby:3.2.2-slim-bookworm
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs curl apt-transport-https libvips-dev
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs curl apt-transport-https libvips-dev nano
 
 # Add Yarn repository and install Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -21,4 +21,4 @@ RUN yarn install --check-files
 COPY . .
 EXPOSE 3000
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

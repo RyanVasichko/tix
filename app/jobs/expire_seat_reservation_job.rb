@@ -7,8 +7,8 @@ class ExpireSeatReservationJob < ApplicationJob
     return unless seat
 
     if seat.reserved_until && seat.reserved_until.past?
-      with_lock do
-        seat.update!(reserved_by: nil, reserved_until: nil)
+      seat.with_lock do
+        seat.update!(reserved_by_id: nil, reserved_until: nil)
       end
     elsif seat.reserved_until
       self.class.set(wait_until: seat.reserved_until).perform_later(seat_id)

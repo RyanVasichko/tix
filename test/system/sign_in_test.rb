@@ -14,7 +14,7 @@ class SignInTest < ApplicationSystemTestCase
     fill_in 'session[password]', with: 'password'
     click_button 'Sign In'
 
-    assert_text 'Seating Charts'
+    assert_text 'Upcoming Shows'
   end
 
   test 'signing in with invalid information' do

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
   <%= render "layouts/head" %>
-  <%= render "layouts/navbar" %>
 
   <body data-current-user-id="<%= @current_user_id %>">
-    <%= yield %>
+    <%= render "layouts/navbar" %>  
+    <div class="mx-auto max-w-7xl">
+      <%= yield %>
+    </div>
+
+    <%= render "shared/toast_messages/index" %>
   </body>
 </html>

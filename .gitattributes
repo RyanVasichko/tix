@@ -7,3 +7,7 @@ db/schema.rb linguist-generated
 vendor/* linguist-vendored
 
 * text eol=lf
+
+*.webp binary
+*.bmp binary
+*.png binary

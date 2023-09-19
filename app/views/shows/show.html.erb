@@ -1,15 +1,18 @@
-<div class="card max-w-full">
-  <div class="flex justify-center mt-10">
-    <% width = @show.seating_chart.venue_layout.metadata["width"] %>
-    <% height = @show.seating_chart.venue_layout.metadata["height"] %>
+<% width = @show.seating_chart.venue_layout.metadata["width"] %>
+<% height = @show.seating_chart.venue_layout.metadata["height"] %>
 
-    <%= turbo_stream_from [@show.id, "seating_chart"] %>
-    <% cache(@show) do %>
-      <svg data-controller="shows--seating-chart--svg" viewBox="0 0 <%= width %> <%= height %>">
-        <image href="<%= url_for(@show.seating_chart.venue_layout) %>" width="<%= width %>" height="<%= height %>">
-        </image>
-        <%= render partial: "shows/sections/section", collection: @show.sections, cached: true %>
-      </svg>
-    <% end %>
-  </div>
+<h1 class="text-center text-3xl mt-10">
+  <%= @show.artist.name %>
+</h1>
+
+<div class="mt-10">
+
+  <%= turbo_stream_from [@show, "seating_chart"] %>
+  <% cache(@show) do %>
+    <svg data-controller="shows--seating-chart--svg" viewBox="0 0 <%= width %> <%= height %>">
+      <image href="<%= url_for(@show.seating_chart.venue_layout) %>" width="<%= width %>" height="<%= height %>">
+      </image>
+      <%= render partial: "shows/sections/section", collection: @show.sections, cached: true %>
+    </svg>
+  <% end %>
 </div>

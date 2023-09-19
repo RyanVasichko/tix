@@ -9,10 +9,9 @@ namespace :db do
 
     desc "Populate show sections' seats"
     task :create_show_sections => :environment do
-      Show::Section.all.each do |section|
-        section.send :build_seats
-        # section.seats.each { |seat| seat.save! }
-        section.save!
+      Show.all.each do |show|
+        show.build_seats
+        show.save!
       end
     end
   end
