@@ -4,9 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
-    # if user = User.authenticate_by(login_params) TODO: Rails 7.1 upgrade
+    if user = User.authenticate_by(login_params)
       log_in user
       flash[:success] = "Welcome back, #{user.full_name}!"
       redirect_to root_url

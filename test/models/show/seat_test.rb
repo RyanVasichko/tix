@@ -2,10 +2,10 @@ require "test_helper"
 
 class Show::SeatTest < ActiveSupport::TestCase
   setup do
-    @section = show_sections(:radiohead_normal)
+    @section = show_sections(:radiohead_obstructed)
     @user = users(:larry_sellers)
 
-    @seat = Show::Seat.create!(x: 1, y: 2, seat_number: "A1", table_number: "T1", section: @section)
+    @seat = show_seats(:radiohead_obstructed_1_1)
   end
 
   test "reserves a seat" do

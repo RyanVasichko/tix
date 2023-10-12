@@ -39,3 +39,6 @@
 capybara-*.html
 coverage/
 *:Zone.Identifier
+*Zone.Identifier
+
+.idea/

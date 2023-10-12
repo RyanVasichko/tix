@@ -1,0 +1,4 @@
+<%= turbo_stream_replace_shopping_cart_count %>
+<%= turbo_stream.replace dom_id(@shopping_cart_merch) do %>
+  <%= render "shopping_cart/merch/merch", shopping_cart_merch: @shopping_cart_merch %>
+<% end %>

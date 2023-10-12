@@ -1,5 +1,5 @@
 class User::Guest < User
-  after_create_commit -> { DestroyGuestUserJob.set(wait: 1.week).perform_later(self.id) }
+  after_create_commit -> { DestroyGuestUserJob.set(wait: 1.week).perform_later(id) }
 
   def order_form_type
     Order::GuestOrderForm
@@ -7,16 +7,13 @@ class User::Guest < User
 
   def becomes_customer!(email, first_name, last_name, phone)
     password = SecureRandom.hex(32)
-    puts "*" * 90
-    puts "password: #{password}"
-    puts "*" * 90
 
     becomes!(User::Customer).update!(
-      email: email,
-      first_name: first_name,
-      last_name: last_name,
-      phone: phone,
-      password: password,
+      email:,
+      first_name:,
+      last_name:,
+      phone:,
+      password:,
       password_confirmation: password
     )
 
@@ -28,6 +25,6 @@ class User::Guest < User
   end
 
   def destroy_later
-    DestroyGuestUserJob.perform_later(self.id)
+    DestroyGuestUserJob.perform_later(id)
   end
 end

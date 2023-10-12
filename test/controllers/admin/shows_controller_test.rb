@@ -54,7 +54,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
       start_time: "7:45 PM",
       end_time: "9:30 PM",
       sections_attributes: [
-        { id: show_sections(:radiohead_normal).id, ticket_price: 99.50 },
+        { id: show_sections(:radiohead_premium).id, ticket_price: 99.50 },
         { id: show_sections(:radiohead_obstructed).id, ticket_price: 83.50 }
       ]
     }
@@ -68,7 +68,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     assert_equal "2025/04/05 7:45 PM".to_time, @show.start_time
     assert_equal "2025/04/05 9:30 PM".to_time, @show.end_time
 
-    assert_equal 99.50, show_sections(:radiohead_normal).reload.ticket_price
+    assert_equal 99.50, show_sections(:radiohead_premium).reload.ticket_price
     assert_equal 83.50, show_sections(:radiohead_obstructed).reload.ticket_price
   end
 

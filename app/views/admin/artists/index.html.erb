@@ -19,7 +19,7 @@
           </td>
           <td class="table-td text-gray-900 text-right sm:pr-6">
             <%= render "shared/dropdown", { id: dom_id(artist, :admin)} do %>
-              <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete", [:admin, artist], data: { turbo_method: "DELETE" } %>
+              <%= dropdown_link_to artist.has_shows? ? "Deactivate" : "Delete", [:admin, artist], data: { turbo_method: "DELETE" } %>
             <% end %>
           </td>
         </tr>

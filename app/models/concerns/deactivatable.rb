@@ -7,6 +7,10 @@ module Deactivatable
     scope :active, -> { where(active: true) }
   end
 
+  def activate
+    update(active: true)
+  end
+
   def deactivate
     update(active: false)
   end

@@ -1,0 +1,8 @@
+<%= form_with model: [:admin, Merch.new] do |form| %>
+  <%= turbo_stream.replace "new_merch_category" do %>
+    <%= form.fields_for :categories_attributes, index: SecureRandom.random_number(1_000_000) do |category_fields| %>
+      <%= render "admin/merch/category_fields/category_fields", category_fields: category_fields %>
+    <% end %>
+    <%= turbo_frame_tag "new_merch_category" %>
+  <% end %>
+<% end %>

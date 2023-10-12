@@ -5,3 +5,7 @@ test_limited_seating_seating_chart_blob: <%= ActiveStorage::FixtureSet.blob(file
 radiohead_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "radiohead.jpg") %>
 
 lcd_soundsystem_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "lcd_soundsystem.webp") %>
+
+bbq_sauce_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "bbq_sauce.png") %>
+
+tank_top_image_blob: <%= ActiveStorage::FixtureSet.blob(filename: "tank_top.jpg") %>

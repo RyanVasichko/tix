@@ -1,6 +1,6 @@
 class ShowsController < ApplicationController
   def index
-    @shows = Show.all
+    @shows = Show.all.includes(artist: { image_attachment: :blob })
   end
 
   def show

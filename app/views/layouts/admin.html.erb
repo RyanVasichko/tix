@@ -2,8 +2,8 @@
 <html class="h-full bg-white">
   <%= render "layouts/head" %>
 
-  <body class="h-full bg-slate-100">
-    <div class="bg-slate-100">
+  <body class="h-full bg-gray-100">
+    <div class="bg-gray-100">
       <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
       <div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
         <!--
@@ -134,6 +134,14 @@
                       Seating Charts
                     <% end %>
                   </li>
+                  <li>
+                    <%= link_to admin_merch_index_path, class: "text-slate-400 hover:text-white hover:bg-gray-800e group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold" do %>
+                      <svg class="h-6 w-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                      </svg>
+                      Merch
+                    <% end %>
+                  </li>
                 </ul>
               </li>
               <%# <li>
@@ -194,5 +202,6 @@
     </div>
 
     <%= render "shared/toast_messages/index" %>
+    <%= turbo_frame_tag "application_modal" %>
   </body>
 </html>

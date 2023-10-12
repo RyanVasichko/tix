@@ -6,7 +6,7 @@ class CreateShowSeats < ActiveRecord::Migration[7.0]
       t.integer :y
       t.integer :seat_number
       t.integer :table_number
-      t.integer :reserved_by_id
+      t.references :reserved_by, foreign_key: { to_table: :users }
       t.datetime :reserved_until
 
       t.timestamps

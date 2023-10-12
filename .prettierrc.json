@@ -2,7 +2,7 @@
   "plugins": ["@prettier/plugin-ruby", "prettier-plugin-tailwindcss"],
   "overrides": [
     {
-      "files": "*.rb",
+      "files": ["*.rb", "*.rake"],
       "options": {
         "printWidth": 120,
         "bracketSameLine": false

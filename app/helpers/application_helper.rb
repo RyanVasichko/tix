@@ -43,4 +43,8 @@ module ApplicationHelper
       }
     end
   end
+
+  def active_tab_from_params
+    params[:activeTab]
+  end
 end

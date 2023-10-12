@@ -1,0 +1,12 @@
+bbq_sauce:
+  name: Dosey Doe BBQ Sauce
+  description: Homemade Sweet & Smoky Texas Style BBQ Sauce
+  price: 4.99
+  categories: food
+
+tank_top:
+  name: Tank Top
+  price: 10.99
+  categories: apparel
+  option_label: Size
+  options: [XS, S, M, L, XL, XXL]

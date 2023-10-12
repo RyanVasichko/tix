@@ -7,8 +7,4 @@ class Order::Ticket < ApplicationRecord
 
   delegate :seat_number, to: :seat
   delegate :table_number, to: :seat
-
-  def self.build_for_seat(seat)
-    new(seat: seat, price: seat.section.ticket_price, show: seat.show)
-  end
 end

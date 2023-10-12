@@ -22,6 +22,9 @@ application.register("admin--shows-form--sections", Admin__ShowsForm__SectionsCo
 import ApplicationController from "./application_controller"
 application.register("application", ApplicationController)
 
+import Checkout__ShoppingCartMerchQuantityController from "./checkout/shopping_cart_merch_quantity_controller"
+application.register("checkout--shopping-cart-merch-quantity", Checkout__ShoppingCartMerchQuantityController)
+
 import CheckoutController from "./checkout_controller"
 application.register("checkout", CheckoutController)
 
@@ -37,6 +40,9 @@ application.register("ease-out", EaseOutController)
 import FileDropController from "./file_drop_controller"
 application.register("file-drop", FileDropController)
 
+import MerchSearchController from "./merch_search_controller"
+application.register("merch-search", MerchSearchController)
+
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
 
@@ -46,6 +52,9 @@ application.register("openable", OpenableController)
 import PreviewController from "./preview_controller"
 application.register("preview", PreviewController)
 
+import QuickFormController from "./quick_form_controller"
+application.register("quick-form", QuickFormController)
+
 import Shows__SeatingChart__SeatController from "./shows/seating_chart/seat_controller"
 application.register("shows--seating-chart--seat", Shows__SeatingChart__SeatController)
 
@@ -54,3 +63,6 @@ application.register("shows--seating-chart--svg", Shows__SeatingChart__SvgContro
 
 import SlideOverController from "./slide_over_controller"
 application.register("slide-over", SlideOverController)
+
+import TabsController from "./tabs_controller"
+application.register("tabs", TabsController)

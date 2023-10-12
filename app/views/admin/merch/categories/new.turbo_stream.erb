@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "application_modal" do %>
+  <%= render "shared/modal", title: "New Merch Category", body_class: "max-w-md" do %>
+    <%= render "admin/merch/categories/form", merch_category: @merch_category %>
+  <% end %>
+<% end %>

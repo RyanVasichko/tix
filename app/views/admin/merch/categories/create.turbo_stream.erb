@@ -1,0 +1,13 @@
+<% if @merch_category.persisted? %>
+  <%= turbo_stream.append "admin_merch_categories" do %>
+    <%= render "admin/merch/categories/category", merch_category: @merch_category %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.replace "application_modal_body" do %>
+    <%= turbo_frame_tag "application_modal_body" do %>
+      <%= render "admin/merch/categories/form", merch_category: @merch_category %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render "shared/turbo_append_toast_messages" %>

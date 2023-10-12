@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,44 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "merch", force: :cascade do |t|
+    t.decimal "price", null: false
+    t.string "name", null: false
+    t.string "description"
+    t.boolean "active", default: true, null: false
+    t.string "options", default: [], array: true
+    t.string "option_label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "merch_categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "merch_merch_categories", id: false, force: :cascade do |t|
+    t.bigint "merch_id", null: false
+    t.bigint "merch_category_id", null: false
+    t.index ["merch_category_id"], name: "index_merch_merch_categories_on_merch_category_id"
+    t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
+  end
+
+  create_table "order_merch", force: :cascade do |t|
+    t.bigint "merch_id", null: false
+    t.bigint "order_id", null: false
+    t.integer "quantity", null: false
+    t.decimal "unit_price", precision: 10, scale: 2, null: false
+    t.decimal "total_price", precision: 10, scale: 2, null: false
+    t.string "option"
+    t.string "option_label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["merch_id"], name: "index_order_merch_on_merch_id"
+    t.index ["order_id"], name: "index_order_merch_on_order_id"
+  end
+
   create_table "order_payments", force: :cascade do |t|
     t.string "stripe_payment_intent_id", null: false
     t.string "stripe_payment_method_id", null: false
@@ -59,6 +97,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
     t.integer "card_exp_year", null: false
     t.integer "card_last_4", null: false
     t.integer "amount_in_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "order_shipping_addresses", force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "address", null: false
+    t.string "address_2"
+    t.string "city", null: false
+    t.string "state", null: false
+    t.string "postal_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -82,7 +132,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "order_payment_id"
+    t.bigint "shipping_address_id"
     t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
+    t.index ["shipping_address_id"], name: "index_orders_on_shipping_address_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -118,10 +170,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
     t.integer "y"
     t.integer "seat_number"
     t.integer "table_number"
-    t.integer "reserved_by_id"
+    t.bigint "reserved_by_id"
     t.datetime "reserved_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["reserved_by_id"], name: "index_show_seats_on_reserved_by_id"
     t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
   end
 
@@ -147,6 +200,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
     t.index ["seating_chart_id"], name: "index_shows_on_seating_chart_id"
   end
 
+  create_table "user_shopping_cart_merch", force: :cascade do |t|
+    t.bigint "merch_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "quantity"
+    t.string "option"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["merch_id"], name: "index_user_shopping_cart_merch_on_merch_id"
+    t.index ["user_id"], name: "index_user_shopping_cart_merch_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -162,16 +226,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_031603) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "order_merch", "merch"
+  add_foreign_key "order_merch", "orders"
   add_foreign_key "order_tickets", "orders"
   add_foreign_key "order_tickets", "show_seats"
   add_foreign_key "order_tickets", "shows"
   add_foreign_key "orders", "order_payments"
+  add_foreign_key "orders", "order_shipping_addresses", column: "shipping_address_id"
   add_foreign_key "orders", "users"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "show_seats", "show_sections"
+  add_foreign_key "show_seats", "users", column: "reserved_by_id"
   add_foreign_key "show_sections", "seating_chart_sections"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "seating_charts"
+  add_foreign_key "user_shopping_cart_merch", "merch"
+  add_foreign_key "user_shopping_cart_merch", "users"
 end

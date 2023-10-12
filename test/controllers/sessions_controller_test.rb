@@ -48,8 +48,6 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
 
   test "should transfer seat reservations from a guest to the logged in user" do
     show = shows(:radiohead)
-    show.build_seats
-    show.save!
 
     get login_path # Just get a random endpoint so it will create the guest user
     guest = User::Guest.last

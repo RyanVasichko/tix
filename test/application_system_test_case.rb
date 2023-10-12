@@ -12,7 +12,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   Capybara.server_host = '0.0.0.0'
   Capybara.app_host = "http://#{ENV.fetch('HOSTNAME')}:#{Capybara.server_port}"
 
-
   teardown do
     logs = page.driver.browser.logs.get(:browser)
     error_logs = logs.select { |e| e.level == 'SEVERE' }

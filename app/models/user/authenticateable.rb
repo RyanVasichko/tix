@@ -6,5 +6,7 @@ module User::Authenticateable
 
     validates :first_name, :last_name, :email, presence: true
     validates :email, uniqueness: true, presence: true
+
+    normalizes :email, with: ->(email) { email.strip.downcase }
   end
 end

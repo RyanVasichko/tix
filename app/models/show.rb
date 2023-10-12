@@ -16,36 +16,22 @@ class Show < ApplicationRecord
   before_save :sync_start_and_end_time_with_show_date
 
   def build_seats
-    sections.each { |section| section.build_seats }
+    sections.each(&:build_seats)
   end
 
   private
 
   def sync_start_and_end_time_with_show_date
-    if show_date.present?
-      if start_time.present?
-        self.start_time =
-          DateTime.new(
-            show_date.year,
-            show_date.month,
-            show_date.day,
-            start_time.hour,
-            start_time.min,
-            start_time.sec
-          )
-      end
+    return unless show_date.present?
 
-      if end_time.present?
-        self.end_time =
-          DateTime.new(
-            show_date.year,
-            show_date.month,
-            show_date.day,
-            end_time.hour,
-            end_time.min,
-            end_time.sec
-          )
-      end
+    if start_time.present?
+      self.start_time =
+        DateTime.new(show_date.year, show_date.month, show_date.day, start_time.hour, start_time.min, start_time.sec)
+    end
+
+    if end_time.present?
+      self.end_time =
+        DateTime.new(show_date.year, show_date.month, show_date.day, end_time.hour, end_time.min, end_time.sec)
     end
   end
 end

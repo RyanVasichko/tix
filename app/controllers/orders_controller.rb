@@ -8,7 +8,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order::OrderForm.for_user(Current.user)
+    @form = Order::OrderForm.for_user(Current.user)
 
     if Current.user.shopping_cart.empty?
       redirect_to root_path,
@@ -23,10 +23,10 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Current.user.order_form_type.new(order_params)
+    @form = Current.user.order_form_type.new(order_params)
 
-    if @order.save
-      redirect_to @order, flash: { success: "Your order was successfully placed" }
+    if @form.save
+      redirect_to @form.order, flash: { success: "Your order was successfully placed" }
     else
       render :new, status: :unprocessable_entity
     end
@@ -46,7 +46,9 @@ class OrdersController < ApplicationController
         :first_name,
         :last_name,
         :phone,
-        { seat_ids: [] }
+        { seat_ids: [] },
+        { merch_ids: [] },
+        { shipping_address_attributes: %i[first_name last_name address address_2 city state postal_code] }
       )
       .merge(user: Current.user)
   end

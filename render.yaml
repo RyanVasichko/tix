@@ -1,21 +1,53 @@
 databases:
   - name: dosey_doe_tickets
+    ipAllowList: []
     databaseName: dosey_doe_tickets
     user: dosey_doe_tickets
     plan: free
+    region: oregon
 
 services:
   - type: web
-    plan: free
+    plan: starter
     name: dosey_doe_tickets
-    env: Docker
-    dockerfilePath: Dockerfile
-    dockerCommand: "bundle exec puma -C config/puma.rb"
-    numInstances: 1
+    runtime: ruby
+    region: oregon
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: dosey_doe_tickets
           property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - fromGroup: Dosey Doe Tickets
+
+  - type: redis
+    plan: free
+    name: redis
+    region: oregon
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
+
+  - type: worker
+    name: dosey_doe_tickets_worker
+    plan: starter
+    runtime: ruby
+    region: oregon
+    buildCommand: bundle install
+    startCommand: bundle exec sidekiq
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dosey_doe_tickets
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - fromGroup: Dosey Doe Tickets

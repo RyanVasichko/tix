@@ -1,0 +1,14 @@
+<%= form_with(model: [:admin, merch_category]) do |form| %>
+  <%= turbo_frame_tag "admin_merch_category_errors" do %>
+    <%= render "shared/error_messages", { model: merch_category } %>
+  <% end %>
+
+  <div class="mt-6">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control-text", tabindex: 1, autofocus: true %>
+  </div>
+
+  <div class="mt-10 flex items-center justify-end">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>

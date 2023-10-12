@@ -4,16 +4,14 @@ class Orders::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   test 'should destroy seat reservation' do
     @larry_sellers = users(:larry_sellers)
     @show = shows(:radiohead)
-    @show.build_seats
-    @show.save!
 
     @seat = @show.seats.first
     @seat.reserve_for(@larry_sellers)
 
     log_in_as(@larry_sellers, "password")
-    
+
     assert_difference -> { @larry_sellers.reserved_seats.count }, -1 do
-      delete order_seat_reservations_url(@seat), as: :turbo_stream
+      delete orders_seat_reservations_url(@seat), as: :turbo_stream
     end
   end
 end

@@ -2,7 +2,7 @@ class SeatingChart < ApplicationRecord
   include Deactivatable
 
   has_one_attached :venue_layout
-  has_many :sections, dependent: :destroy, class_name: 'SeatingChart::Section', inverse_of: :seating_chart
+  has_many :sections, dependent: :destroy, class_name: "SeatingChart::Section", inverse_of: :seating_chart
   has_many :seats, through: :sections, source: :seats
   has_many :shows
 
@@ -37,10 +37,12 @@ class SeatingChart < ApplicationRecord
 
     original_blob = seating_chart.venue_layout.blob
 
-    cloned_blob_attrs = original_blob.attributes.except('id', 'created_at', 'updated_at')
-    venue_layout.attach(io: StringIO.new(original_blob.download),
-                                             filename: cloned_blob_attrs['filename'],
-                                             content_type: cloned_blob_attrs['content_type'],
-                                             metadata: cloned_blob_attrs['metadata'])
+    cloned_blob_attrs = original_blob.attributes.except("id", "created_at", "updated_at")
+    venue_layout.attach(
+      io: StringIO.new(original_blob.download),
+      filename: cloned_blob_attrs["filename"],
+      content_type: cloned_blob_attrs["content_type"],
+      metadata: cloned_blob_attrs["metadata"]
+    )
   end
 end

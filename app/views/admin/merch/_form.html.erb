@@ -1,0 +1,61 @@
+<%= form_with(model: [:admin, merch]) do |form| %>
+  <%= turbo_frame_tag "admin_merch_errors" do %>
+    <%= render "shared/error_messages", { model: merch } %>
+  <% end %>
+
+  <div class="grid grid-cols-2 mt-6 gap-4">
+    <div>
+      <%= form.label :name, class: "form-label" %>
+      <%= form.text_field :name, class: "form-control-text", tabindex: 1, autofocus: true %>
+    </div>
+
+    <div>
+      <%= form.label :price, class: "form-label" %>
+      <%= form.number_field :price, class: "form-control-text", tabindex: 2, min: "0", step: "0.01" %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control-text", tabindex: 2 %>
+  </div>
+
+  <div class="mt-6">
+    <h3 class="text-md flex justify-between">
+      Categories
+
+      <%= link_to "Add Category", new_admin_merch_category_field_path, class: "btn-primary px-2.5 py-1.5 text-xs", data: { turbo_stream: true } %>
+    </h3>
+
+    <div class="grid grid-cols-3 gap-4 p-4 align-middle">
+      <%= form.collection_check_boxes :category_ids, Merch::Category.all, :id, :name do |b| %>
+        <div class="relative flex items-start">
+          <div class="flex h-6 items-center">
+            <%= b.check_box class: "form-control-check-box" %>
+          </div>
+          <div class="ml-3 text-sm leading-6">
+            <%= b.label class: "text-gray-900" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 p-4 align-middle">
+      <% merch.categories.select { |category| !category.persisted? }.each do |category| %>
+        <%= form.fields_for :categories_attributes, category, index: category.object_id do |category_fields| %>
+          <%= render "admin/merch/category_fields/category_fields", category_fields: category_fields %>
+        <% end %>
+      <% end %>
+      <%= turbo_frame_tag "new_merch_category" %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <label for="merch-image-upload" class="form-label">Image</label>
+    <%= render "shared/drag_and_drop_file_field", { form: form, attribute: :image } %>
+  </div>
+
+  <div class="mt-10 flex items-center justify-end">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>

@@ -45,7 +45,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   end
 
   test "should update Show" do
-    skip "Can "
+    skip
     visit admins_shows_url
     click_on @show.name
 

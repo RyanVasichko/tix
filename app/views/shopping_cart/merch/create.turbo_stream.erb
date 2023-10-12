@@ -1,0 +1,13 @@
+<% if @shopping_cart_merch.persisted? %>
+  <%= turbo_stream_replace_shopping_cart_count %>
+
+  <%= turbo_stream_replace_shopping_cart %>
+<% else %>
+  <%= turbo_stream.replace "application_modal_body" do %>
+    <%= turbo_frame_tag "application_modal_body" do %>
+      <%= render "admin/shopping_cart/merch/form", shopping_cart_merch: @shopping_cart_merch %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render "shared/turbo_append_toast_messages" %>

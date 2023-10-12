@@ -13,4 +13,6 @@
 # These inflection rules are supported but not enabled by default:
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular "was", "were"
+  inflect.irregular "merch", "merch"
+  inflect.irregular "order_merch", "order_merch"
 end

@@ -3,6 +3,15 @@ import ApplicationController from "./application_controller";
 
 class ModalController extends ApplicationController {
   static targets = ["body", "backdrop", "focus"];
+  static values = { 
+    openOnConnect: { type: Boolean, default: false }
+  }
+
+  connect() {
+    if (this.openOnConnectValue) {
+      this.open();
+    }
+  }
 
   async open() {
     this.element.classList.remove("hidden");
@@ -14,7 +23,13 @@ class ModalController extends ApplicationController {
       enter(this.backdropTarget)
     ]);
     this.isOpen = true;
+  }
 
+  async closeOnSuccessfulFormSubmit(event) {
+    if (event.detail.success) {
+      await this.close();
+      this.element.remove();
+    }
   }
 
   async close() {

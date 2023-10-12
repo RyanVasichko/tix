@@ -1,0 +1,27 @@
+<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 1 %>" class="card max-w-xl" data-action="turbo:frame-load->tabs#displayActiveTab">
+  <%= render "admin/merch/tabs" %>
+
+  <%= turbo_frame_tag "admin_merch_panel", src: admin_merch_index_path do %>
+    <div data-tabs-target="panel"></div>
+  <% end %>
+
+  <%= turbo_frame_tag "admin_merch_categories_panel" do %>
+    <div class="hidden" data-tabs-target="panel" data-turbo="false">
+      <div class="flex justify-end">
+        <%= link_to "New Category", new_admin_merch_category_path, class: "btn-primary px-2 py-1", data: { turbo: true, turbo_stream: true, turbo_method: "get" } %>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="table-th">Name</th>
+            <th scope="col" class="table-th"></th>
+          </tr>
+        </thead>
+        <tbody class="table-tbody" id="admin_merch_categories">
+          <%= render partial: "admin/merch/categories/category", collection: @merch_categories, as: :merch_category %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

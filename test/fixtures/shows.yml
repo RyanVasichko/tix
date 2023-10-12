@@ -1,9 +1,9 @@
 lcd_soundsystem:
   artist: lcd_soundsystem
   seating_chart: limited_seating
-  show_date: 2023-09-08 00:32:14
-  start_time: 2023-09-08 00:32:14
-  end_time: 2023-09-08 00:32:14
+  show_date: <%= Time.zone.now + 1.week %>
+  start_time: <%= Time.zone.now + 1.week %>
+  end_time: <%= Time.zone.now + 1.week %>
 
 radiohead:
   artist: radiohead
