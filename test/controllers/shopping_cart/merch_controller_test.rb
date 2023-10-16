@@ -1,4 +1,4 @@
-require "test_helper"
+require "application_integration_test_case"
 
 class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
   setup do
@@ -23,13 +23,14 @@ class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
              }
            }
     end
+
     assert_redirected_to merch_index_url
-    assert_equal "#{@merch.name} was added to your shopping cart.", flash[:notice]
+    assert_equal "#{@merch.name} was added to your shopping cart.", flash[:success]
   end
 
   test "should update shopping_cart_merch" do
     patch shopping_cart_merch_url(@shopping_cart_merch), params: { user_shopping_cart_merch: { quantity: 3 } }
 
-    assert_equal "Shopping cart updated.", flash[:notice]
+    assert_equal "Shopping cart was successfully updated.", flash[:success]
   end
 end

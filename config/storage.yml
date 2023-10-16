@@ -13,3 +13,5 @@ amazon:
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   region: us-east-1
   bucket: dosey-doe-tickets-<%= Rails.env %>
+  upload:
+    cache_control: 'private, max-age=31536000'

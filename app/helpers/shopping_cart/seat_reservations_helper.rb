@@ -1,0 +1,2 @@
+module ShoppingCart::SeatReservationsHelper
+end

@@ -4,17 +4,17 @@
   </div>
 
   <%= form_with(
-    model: order,
-    url: orders_path,
-    scope: :order,
-    data:
-    {
-      controller: "checkout",
-      action: "checkout#handlePaymentMethod",
-      checkout_amount_value: order.total_in_cents,
-      checkout_stripe_public_key_value: Rails.application.credentials.stripe.public_key
-    },
-    class: "lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16") do |form|
+        model: order,
+        url: orders_path,
+        scope: :order,
+        data:
+          {
+            controller: "checkout",
+            action: "checkout#handlePaymentMethod",
+            checkout_amount_value: order.total_in_cents,
+            checkout_stripe_public_key_value: Rails.application.credentials.stripe.public_key
+          },
+        class: "lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16") do |form|
   %>
     <%= form.hidden_field :new_payment_method, data: { checkout_target: "newPaymentMethodField" } %>
     <%= form.hidden_field :order_total_in_cents %>
@@ -24,7 +24,7 @@
     <% order.merch.each do |merch| %>
       <%= form.hidden_field :merch_ids, multiple: true, value: merch.merch_id %>
     <% end %>
-      <!-- Order summary -->
+    <!-- Order summary -->
     <div class="mt-10 lg:mt-0m lg:order-2">
       <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
 
@@ -46,9 +46,11 @@
                       <%= link_to show.artist.name, show, class: "font-medium text-gray-700 hover:text-gray-800" %>
                     </h4>
                     <% tickets.each do |ticket| %>
-                      <div class="flex justify-between items-baseline">
+                      <div class="flex items-baseline justify-between">
                         <div>
-                          <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.price) %></span>
+                          <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %>
+                            Seat <%= ticket.seat_number %></span> -
+                          <span class="text-sm font-medium"><%= number_to_currency(ticket.price) %></span>
                         </div>
                         <%= link_to orders_seat_reservations_path(ticket.seat), data: { turbo_method: "DELETE" }, class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
                           <span class="sr-only">Remove</span>
@@ -82,12 +84,13 @@
                       <%= merch.name %>
                     </h4>
                     <% order_merch.each do |om| %>
-                      <div class="flex justify-between items-baseline">
+                      <div class="flex items-baseline justify-between">
                         <div class="grow">
                           <span class="text-sm text-gray-500">
-                            Quantity: <%= select_tag(:quantity, options_from_collection_for_select(1..10, :to_i, :to_i, om.quantity), data: { controller: "checkout--shopping-cart-merch-quantity", action: "checkout--shopping-cart-merch-quantity#updateQuantity", checkout__shopping_cart_merch_quantity_new_order_url_value: new_order_path, checkout__shopping_cart_merch_quantity_update_url_value: orders_shopping_cart_merch_path(om.shopping_cart_merch_id) }, class: "form-control-select inline max-w-[40px] p-0 mr-1") %> <%= "#{merch.option_label}: #{om.option}" unless om.option.blank? %> -
+                            Quantity: <%= select_tag(:quantity, options_from_collection_for_select(1..10, :to_i, :to_i, om.quantity), data: { controller: "checkout--shopping-cart-merch-quantity", action: "checkout--shopping-cart-merch-quantity#updateQuantity", checkout__shopping_cart_merch_quantity_new_order_url_value: new_order_path, checkout__shopping_cart_merch_quantity_update_url_value: orders_shopping_cart_merch_path(om.shopping_cart_merch_id) }, class: "form-control-select inline max-w-[40px] p-0 mr-1") %> <%= "#{merch.option_label}: #{om.option}" unless om.option.blank? %>
+                            -
                           </span>
-                          <span class="text-sm text-gray-900 font-medium"><%= number_to_currency(om.total_price) %></span>
+                          <span class="text-sm font-medium text-gray-900"><%= number_to_currency(om.total_price) %></span>
                         </div>
                         <%= link_to orders_shopping_cart_merch_path(om.shopping_cart_merch_id), data: { turbo_method: "DELETE", turbo_frame: :_top }, class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
                           <span class="sr-only">Remove</span>
@@ -109,7 +112,7 @@
             </li>
           <% end %>
         </ul>
-        <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
+        <dl class="border-t border-gray-200 px-4 py-6 space-y-6 sm:px-6">
           <div class="flex items-center justify-between">
             <dt class="text-sm">Subtotal</dt>
             <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
@@ -128,16 +131,16 @@
           </div>
         </dl>
 
-        <div class="hidden border-t border-gray-200 px-4 py-6 sm:px-6 lg:block hover:pointer">
+        <div class="hidden border-t border-gray-200 px-4 py-6 hover:pointer sm:px-6 lg:block">
           <%= button_tag type: "submit", data: { checkout_target: "btnSubmit" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
-            <div class="hidden loader h-4 w-4 mr-2 group-disabled:block"></div>
+            <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
             <span class="group-disabled:hidden">Place Order</span>
-            <span class="hidden group-disabled:block">Placing Order...</span>
+            <span class="group-disabled:block hidden">Placing Order...</span>
           <% end %>
         </div>
       </div>
     </div>
-    <div class="lg:order-1 mt-10 border-t border-gray-200 lg:border-none pt-5 lg:pt-0">
+    <div class="mt-10 border-t border-gray-200 pt-5 lg:order-1 lg:border-none lg:pt-0">
       <!-- CONTACT INFORMATION -->
       <% if order.collect_contact_information? %>
         <div id="order_contact_information">
@@ -145,20 +148,20 @@
 
           <div class="mt-4 md:grid md:grid-cols-2 md:gap-4">
             <div class="mt-2 md:mt-0">
-              <%= form.label :first_name, class: "form-label" %>
-              <%= form.text_field :first_name, class: "form-control-text mt-1" %>
+              <%= form.label :first_name %>
+              <%= form.text_field :first_name %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :last_name, class: "form-label" %>
-              <%= form.text_field :last_name, class: "form-control-text mt-1" %>
+              <%= form.label :last_name %>
+              <%= form.text_field :last_name %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :email, class: "form-label" %>
-              <%= form.email_field :email, class: "form-control-text mt-1" %>
+              <%= form.label :email %>
+              <%= form.email_field :email %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :phone_number, class: "form-label" %>
-              <%= form.telephone_field :phone_number, class: "form-control-text mt-1" %>
+              <%= form.label :phone_number %>
+              <%= form.telephone_field :phone_number %>
             </div>
           </div>
         </div>
@@ -171,38 +174,40 @@
 
           <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
             <div>
-              <%= shipping_address_fields.label :first_name, class: "form-label" %>
-              <%= shipping_address_fields.text_field :first_name, class: "form-control-text mt-1", autocomplete: "given-name" %>
+              <%= shipping_address_fields.label :first_name %>
+              <%= shipping_address_fields.text_field :first_name, autocomplete: "given-name" %>
             </div>
             <div>
-              <%= shipping_address_fields.label :last_name, class: "form-label" %>
-              <%= shipping_address_fields.text_field :last_name, class: "form-control-text mt-1", autocomplete: "family-name" %>
+              <%= shipping_address_fields.label :last_name %>
+              <%= shipping_address_fields.text_field :last_name, autocomplete: "family-name" %>
             </div>
 
-            <div class="sm:col-span-2">
-              <%= shipping_address_fields.label :address, class: "form-label" %>
-              <%= shipping_address_fields.text_field :address, class: "form-control-text mt-1", autocomplete: "street-address" %>
-            </div>
+            <%= shipping_address_fields.fields_for :address do |address_fields| %>
+              <div class="sm:col-span-2">
+                <%= address_fields.label :address_1, "Address" %>
+                <%= address_fields.text_field :address_1, autocomplete: "street-address" %>
+              </div>
 
-            <div class="sm:col-span-2">
-              <%= shipping_address_fields.label :address_2, "Apartment, suite, etc.", class: "form-label" %>
-              <%= shipping_address_fields.text_field :address_2, class: "form-control-text mt-1", autocomplete: "address-line2" %>
-            </div>
+              <div class="sm:col-span-2">
+                <%= address_fields.label :address_2, "Apartment, suite, etc." %>
+                <%= address_fields.text_field :address_2, autocomplete: "address-line2" %>
+              </div>
 
-            <div>
-              <%= shipping_address_fields.label :city, class: "form-label" %>
-              <%= shipping_address_fields.text_field :city, class: "form-control-text mt-1", autocomplete: "address-level2" %>
-            </div>
+              <div>
+                <%= address_fields.label :city %>
+                <%= address_fields.text_field :city, autocomplete: "address-level2" %>
+              </div>
 
-            <div>
-              <%= shipping_address_fields.label :state, class: "form-label" %>
-              <%= shipping_address_fields.select :state, us_states, { include_blank: true }, class: "form-control-select mt-1", autocomplete: "address-level1" %>
-            </div>
+              <div>
+                <%= address_fields.label :state %>
+                <%= address_fields.select :state, us_states, { include_blank: true }, class: "form-control-select mt-1", autocomplete: "address-level1" %>
+              </div>
 
-            <div>
-              <%= shipping_address_fields.label :postal_code, class: "form-label" %>
-              <%= shipping_address_fields.text_field :postal_code, class: "form-control-text mt-1", autocomplete: "postal-code" %>
-            </div>
+              <div>
+                <%= address_fields.label :zip_code %>
+                <%= address_fields.text_field :zip_code, autocomplete: "postal-code" %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
@@ -212,16 +217,16 @@
         <h2 class="text-lg font-medium text-gray-900">Payment</h2>
 
         <% if order.errors.added?(:payment_method_id, :blank) %>
-          <p class="text-sm text-red-600 text-center">Please select a payment method</p>
+          <p class="text-center text-sm text-red-600">Please select a payment method</p>
         <% end %>
 
         <% order.payment_methods.each do |payment_method| %>
           <div class="flex items-center py-2">
-            <%= form.radio_button :payment_method_id, payment_method.id, class: "form-control-radio-button" %>
+            <%= form.radio_button :payment_method_id, payment_method.id %>
             <%= form.label :payment_method_id, value: payment_method.id, class: "flex grow justify-between text-sm border border-gray-200 bg-white shadow-sm rounded-md p-4" do %>
               <div class="flex">
-                  <%= image_tag "/card_brands/#{payment_method.card.brand}.png", class: "h-6 w-auto mr-3" %>
-                  &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; <%= payment_method.card.last4 %>
+                <%= image_tag "/card_brands/#{payment_method.card.brand}.png", class: "h-6 w-auto mr-3" %>
+                &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; <%= payment_method.card.last4 %>
               </div>
               <div>
                 <%= payment_method.card.exp_month %>/<%= payment_method.card.exp_year %>
@@ -231,14 +236,14 @@
         <% end %>
 
         <div class="flex py-2">
-          <%= form.radio_button :payment_method_id, "new", class: "form-control-radio-button", data: { checkout_target: "paymentMethodIdField" } %>
+          <%= form.radio_button :payment_method_id, "new", data: { checkout_target: "paymentMethodIdField" } %>
           <%= form.label :payment_method_id, value: "new", class: "w-full text-sm border border-gray-200 bg-white shadow-sm rounded-md p-4" do %>
             <div class="font-medium">
               New Card
             </div>
 
-            <div id="payment-element" data-checkout-target="payment-element" class="mt-4"  turbo-replace="false"></div>
-            <div class="relative flex items-start mt-3">
+            <div id="payment-element" data-checkout-target="payment-element" class="mt-4" turbo-replace="false"></div>
+            <div class="relative mt-3 flex items-start">
               <div class="flex h-6 items-center">
                 <%= form.check_box :save_payment_method, class: "form-control-check-box" %>
               </div>
@@ -252,9 +257,9 @@
 
       <div class="px-4 py-6 sm:px-6 lg:hidden">
         <%= button_tag type: "submit", data: { checkout_target: "btnSubmit" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
-          <div class="hidden loader h-4 w-4 mr-2 group-disabled:block"></div>
+          <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
           <span class="group-disabled:hidden">Place Order</span>
-          <span class="hidden group-disabled:block">Placing Order...</span>
+          <span class="group-disabled:block hidden">Placing Order...</span>
         <% end %>
       </div>
     </div>

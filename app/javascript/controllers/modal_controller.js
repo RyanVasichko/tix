@@ -8,6 +8,8 @@ class ModalController extends ApplicationController {
   }
 
   connect() {
+    super.connect();
+
     if (this.openOnConnectValue) {
       this.open();
     }

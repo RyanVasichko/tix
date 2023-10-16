@@ -1,0 +1,7 @@
+<%= form_with(model: Show.new) do |form| %>
+  <%= turbo_stream.append "show_upsales_fields" do %>
+    <%= form.fields_for :upsales_attributes, @upsale, index: SecureRandom.random_number(1_000_000) do |upsale_fields| %>
+      <%= render "form", upsale_fields: upsale_fields %>
+    <% end %>
+  <% end %>
+<% end %> %>

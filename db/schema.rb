@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.string "address_1", null: false
+    t.string "address_2"
+    t.string "city", null: false
+    t.string "state", null: false
+    t.string "zip_code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "artists", force: :cascade do |t|
     t.string "name", null: false
     t.string "bio"
@@ -49,6 +59,20 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "customer_questions", force: :cascade do |t|
+    t.text "question"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "customer_questions_shows", id: false, force: :cascade do |t|
+    t.bigint "show_id", null: false
+    t.bigint "customer_question_id", null: false
+    t.index ["customer_question_id"], name: "index_customer_questions_shows_on_customer_question_id"
+    t.index ["show_id"], name: "index_customer_questions_shows_on_show_id"
   end
 
   create_table "merch", force: :cascade do |t|
@@ -104,13 +128,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
   create_table "order_shipping_addresses", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.string "address", null: false
-    t.string "address_2"
-    t.string "city", null: false
-    t.string "state", null: false
-    t.string "postal_code", null: false
+    t.bigint "address_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_order_shipping_addresses_on_address_id"
   end
 
   create_table "order_tickets", force: :cascade do |t|
@@ -188,12 +209,32 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
     t.index ["show_id"], name: "index_show_sections_on_show_id"
   end
 
+  create_table "show_upsales", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.bigint "show_id", null: false
+    t.decimal "price", precision: 8, scale: 2, null: false
+    t.integer "quantity", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "show_id"], name: "index_show_upsales_on_name_and_show_id", unique: true
+    t.index ["show_id"], name: "index_show_upsales_on_show_id"
+  end
+
   create_table "shows", force: :cascade do |t|
     t.bigint "artist_id", null: false
     t.bigint "seating_chart_id", null: false
-    t.datetime "show_date"
-    t.datetime "start_time"
-    t.datetime "end_time"
+    t.datetime "show_date", null: false
+    t.datetime "doors_open_at", null: false
+    t.datetime "show_starts_at", null: false
+    t.datetime "dinner_starts_at", null: false
+    t.datetime "dinner_ends_at", null: false
+    t.datetime "front_end_on_sale_at", null: false
+    t.datetime "front_end_off_sale_at", null: false
+    t.datetime "back_end_on_sale_at", null: false
+    t.datetime "back_end_off_sale_at", null: false
+    t.text "additional_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_shows_on_artist_id"
@@ -240,6 +281,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_08_192855) do
   add_foreign_key "show_seats", "users", column: "reserved_by_id"
   add_foreign_key "show_sections", "seating_chart_sections"
   add_foreign_key "show_sections", "shows"
+  add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "seating_charts"
   add_foreign_key "user_shopping_cart_merch", "merch"

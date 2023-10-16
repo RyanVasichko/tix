@@ -31,7 +31,7 @@ export default class extends Controller {
 
     const url = new URL(window.location.href);
     url.searchParams.set("activeTab", this.activeTabValue);
-    window.history.pushState({}, "", url);
+    window.history.replaceState({}, "", url);
   }
 
   displayActiveTab() {

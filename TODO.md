@@ -1,8 +1,43 @@
+# Show Form 
+- [ ] Additional Questions Fields
+- Refactor other create templates to use helper methods so we don't have to generate a form
+Shopping Cart Refactoring
+- Create table and point references for tickets and merch to it
+- Create Order::GuestOrderer, dont automatically make a guest a customer, just create a GuestOrderer
+- Order should reference orderer, polymorphic
+
+# Shows Index
+- [ ] Finish
+
+# Shows#show
+- [ ] Add general information
+- [ ] Add upsales
+
+- [ ] Create shopping_carts table
+- [ ] Add upsales to shopping cart
+- [ ] Add upsales to order form
+- [ ] Add customer questions to order form
+
+Shopping Cart Refactoring
+- Create table and point references for tickets and merch to it
+- Create Order::GuestOrderer, dont automatically make a guest a customer, just create a GuestOrderer
+- Order should reference orderer, polymorphic
+
+# Shows Index
+- [ ] Finish
+
+# Shows#show
+- [ ] Add general information
+- [ ] Add upsales
+
+- [ ] Create shopping_carts table
+- [ ] Add upsales to shopping cart
+- [ ] Add upsales to order form
+- [ ] Add customer questions to order form
+
 # Next steps:
-- [ ] Add merch to order summary
 - [ ] Omniauth?
 - [ ] Refunds
-- [ ] Cancelling a seat reservation from the shopping cart doesn't remove the turbo frame???
 - [ ] System tests for placing an order
 - [ ] System tests for trying to reserve a seat reserved by another user
 - [ ] System tests for trying to reserve a seat sold another user
@@ -12,7 +47,6 @@
 - [ ] Edit user screen
 - [ ] Convenience fees, deposits, billing
 - [ ] Test stripe webhook refunds payments
-- [ ] Use faker for fixture data?
 - [ ] Stimulus controller to remove required message when the field is focused
 
 # Seating Charts
@@ -43,9 +77,15 @@
 - [ ] See if there's a way to use peer-empty to display a "nothing in your cart" message
 
 # Merch
-- [ ] BUG: Update merch, add category but don't fill anything in then save. Should pass validation but doesn't
-- [ ] BUG: You can uncheck the "All" chip
 - [ ] Add ordering of merch
+
+
+# Bugs
+- [ ] Adding "required" field to errored fields makes the fields look weird when they have the "$" and "USD" stuff in them. (see new show form, submit a section with no pricing)
+- [ ] Update merch, add category but don't fill anything in then save. Should pass validation but doesn't
+- [ ] You can uncheck the "All" chip
+- [ ] Cancelling a seat reservation from the shopping cart doesn't remove the seat from the shopping cart, but it does update the count and the circle color
+- [ ] Order form not validating address properly
 
 - Outstanding merch orders screen
 - Shipped button on Merch

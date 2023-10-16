@@ -1,58 +1,146 @@
-<%= form_with(model: [:admin, show]) do |form| %>
-  <%= turbo_frame_tag "admin_show_errors" do %>
-    <%= render "shared/error_messages", { model: show } %>
-  <% end %>
-
-  <div class="mt-6">
-    <%= form.label :artist_id, class: "form-label" %>
-    <%= form.collection_select :artist_id, Artist.active.select(:id, :name), :id, :name, {}, class: "form-control-select", disabled: show.persisted? %>
-  </div>
-
-  <div data-controller="admin--shows-form--sections">
-    <div class="mt-6">
-      <%= form.label :seating_chart_id, class: "form-label" %>
-      <%= form.collection_select(
-        :seating_chart_id,
-        SeatingChart.active.select(:id, :name),
-        :id,
-        :name,
-        {},
-        class: "form-control-select",
-        disabled: show.persisted?,
-        data: { action: "admin--shows-form--sections#loadSections" })
-      %>
+<%= turbo_frame_tag :admin, show, target: :_top do %>
+  <%= form_with(model: [:admin, show], class: "mt-12") do |form| %>
+    <div class="my-6 flex justify-center" data-controller="clear-errors">
+      <div class="w-full max-w-md">
+        <%= render "shared/error_messages", { model: show } %>
+      </div>
     </div>
 
-    <div class="mt-4">
-      <div class="form-label">Sections</div>
-      <%= turbo_frame_tag "show_sections" do %>
-        <% show.sections.each do |section| %>
-          <%= form.fields_for :sections, section do |section_fields| %>
-            <%= render "admin/shows/sections/form", section_fields: section_fields %>
+    <div class="grid gap-x-12 gap-y-6 md:grid-cols-2">
+      <!-- SHOW DETAILS -->
+      <div class="border-b border-gray-300/75 pb-12">
+        <h3 class="mb-6 font-medium text-gray-900 text-md">
+          Show Details
+        </h3>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <%= render "artist_fields", form: form %>
+          </div>
+
+          <div>
+            <%= form.label :show_date %>
+            <%= form.date_field :show_date %>
+          </div>
+
+          <div>
+            <%= form.label :doors_open_at %>
+            <%= form.time_field :doors_open_at %>
+          </div>
+
+          <div>
+            <%= form.label :show_starts_at %>
+            <%= form.time_field :show_starts_at %>
+          </div>
+
+          <div>
+            <%= form.label :dinner_starts_at %>
+            <%= form.time_field :dinner_starts_at %>
+          </div>
+
+          <div>
+            <%= form.label :dinner_ends_at %>
+            <%= form.time_field :dinner_ends_at %>
+          </div>
+        </div>
+      </div>
+
+      <!-- SALE TIMES -->
+      <div class="border-b border-gray-300/75 pb-12">
+        <h3 class="mb-6 font-medium text-gray-900 text-md">
+          Sale Times
+        </h3>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <%= form.label :back_end_on_sale_at %>
+            <%= form.datetime_field :back_end_on_sale_at %>
+          </div>
+
+          <div>
+            <%= form.label :back_end_off_sale_at %>
+            <%= form.datetime_field :back_end_off_sale_at %>
+          </div>
+
+          <div>
+            <%= form.label :front_end_on_sale_at %>
+            <%= form.datetime_field :front_end_on_sale_at %>
+          </div>
+
+          <div>
+            <%= form.label :front_end_off_sale_at %>
+            <%= form.datetime_field :front_end_off_sale_at %>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIONS -->
+      <div class="border-b border-gray-300/75 pb-12">
+        <h3 class="mb-6 font-medium text-gray-900 text-md">
+          Sections
+        </h3>
+        <div data-controller="admin--shows-form--sections">
+          <div>
+            <%= form.label :seating_chart_id %>
+            <%= form.collection_select(
+                  :seating_chart_id,
+                  SeatingChart.active.select(:id, :name),
+                  :id,
+                  :name,
+                  {},
+                  class: "form-control-select",
+                  disabled: show.persisted?,
+                  data: { action: "admin--shows-form--sections#loadSections" })
+            %>
+          </div>
+
+          <div class="mt-6">
+            <%= turbo_frame_tag "show_sections" do %>
+              <% show.sections.each do |section| %>
+                <%= form.fields_for :sections, section do |section_fields| %>
+                  <%= render "admin/shows/sections/form", section_fields: section_fields %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADDITIONAL TEXT -->
+      <div class="border-b border-gray-300/75 pb-12">
+        <%= form.label :additional_text, class: "mb-6 font-medium text-gray-900 text-md", skip_class: true %>
+        <%= form.text_area :additional_text, class: "mt-6", rows: 5 %>
+      </div>
+
+      <!-- UPSALES -->
+      <div class="pb-12">
+        <h3 class="mb-6 font-medium text-gray-900 text-md">
+          Upsales
+        </h3>
+
+        <%= link_to "Add Upsale", new_admin_shows_upsale_fields_path, class: "btn-primary text-xs px-1.5 py-1.5", data: { turbo_stream: true } %>
+
+        <div id="show_upsales_fields">
+          <% show.upsales.each do |upsale| %>
+            <%= form.fields_for :upsales, upsale do |upsale_fields| %>
+              <%= render "admin/shows/upsale_fields/form", upsale_fields: upsale_fields %>
+            <% end %>
           <% end %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <div class="mt-6 grid grid-cols-3 gap-x-2">
-    <div>
-      <%= form.label :show_date, class: "form-label" %>
-      <%= form.date_field :show_date, class: "form-control-text" %>
-    </div>
+      <!-- CUSTOMER QUESTIONS-->
+      <div class="pb-12">
+        <h3 class="mb-6 font-medium text-gray-900 text-md">
+          Customer Questions
+        </h3>
 
-    <div>
-      <%= form.label :start_time, class: "form-label" %>
-      <%= form.time_field :start_time, class: "form-control-text" %>
+        <%= form.collection_check_boxes :customer_question_ids, CustomerQuestion.active.select(:id, :question), :id, :question %>
+      </div>
     </div>
 
-    <div>
-      <%= form.label :end_time, class: "form-label" %>
-      <%= form.time_field :end_time, class: "form-control-text" %>
+    <div class="mt-10 flex items-center justify-end">
+      <%= form.submit %>
     </div>
-  </div>
-
-  <div class="mt-10 flex items-center justify-end">
-    <%= form.submit class: "btn-primary" %>
-  </div>
+  <% end %>
 <% end %>

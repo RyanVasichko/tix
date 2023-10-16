@@ -1,8 +1,8 @@
-import { Controller } from "@hotwired/stimulus"
 import { post, destroy } from "@rails/request.js"
+import ApplicationController from "../../application_controller";
 
 // Connects to data-controller="shows--seating-chart--seat"
-export default class extends Controller {
+export default class extends ApplicationController {
   static values = {
     reservedById: Number,
     reservationPath: String,
@@ -47,18 +47,26 @@ export default class extends Controller {
   }
 
   connect() {
+    super.connect();
     this.element.setAttribute("fill", this.fillColor);
     this.element.setAttribute("fill-opacity", 1);
+    this.clickHandler = this.debounce(this.clickHandler.bind(this), 1000);
   }
 
   async clickHandler() {
+    Turbo.cache.exemptPageFromPreview();
+
     if (this.reservedByCurrentUser) {
-      await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
+      this.element.setAttribute("fill", "green");
+      await destroy(this.reservationPathValue);
+      Turbo.visit(window.location.href, { action: "replace" });
       return;
     }
 
     if (this.notReserved && this.notSold) {
-      await post(this.reservationPathValue, { responseKind: "turbo-stream" });
+      this.element.setAttribute("fill", "yellow");
+      await post(this.reservationPathValue);
+      Turbo.visit(window.location.href, { action: "replace" });
     }
   }
 }

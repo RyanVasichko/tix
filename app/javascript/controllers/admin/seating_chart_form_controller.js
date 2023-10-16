@@ -15,6 +15,10 @@ export default class extends ApplicationController {
     removedSections: Array
   };
 
+  connect() {
+    super.connect();
+  }
+
   get sections() {
     return this.sectionNameInputTargets
       .filter(i => !this.removedSectionsValue.includes(+i.dataset.sectionId))

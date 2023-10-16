@@ -4,5 +4,5 @@ class Artist < ApplicationRecord
   has_one_attached :image
   has_many :shows
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 end

@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "application_modal" do %>
+  <%= render "shared/modal", title: "New Customer Question", body_class: "max-w-md" do %>
+    <%= render "form", customer_question: @customer_question %>
+  <% end %>
+<% end %>

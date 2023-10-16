@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(merch, :admin) %>" class="<%= "bg-red-50" unless merch.active? %>">
+<tr id="<%= dom_id(merch, :admin) %>">
   <td class="table-td text-indigo-600">
     <%= link_to merch.name, edit_admin_merch_path(merch) %>
   </td>
@@ -7,15 +7,11 @@
   </td>
   <% if on_sale_column %>
     <td class="table-td">
-      <% if merch.active? %>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-        </svg>
-      <% end %>
+      <%= svg_check if merch.active? %>
     </td>
   <% end %>
   <td class="table-td text-gray-900 text-right sm:pr-6">
-    <%= render "shared/dropdown", { id: dom_id(merch, :admin)} do %>
+    <%= render "shared/dropdown", { id: dom_id(merch, :admin) } do %>
       <%= dropdown_link_to "Take off sale", [:admin, merch], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } if merch.active? %>
       <%= dropdown_link_to "Put on sale", admin_merch_on_sale_path(merch), data: { turbo_method: "post", turbo: true, turbo_frame: :_top } unless merch.active? %>
     <% end %>

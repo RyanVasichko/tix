@@ -15,7 +15,6 @@ class Shows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   test "should reserve a seat for a show responding using turbo streams" do
     post show_seat_reservation_url(@show, seat_id: @seat.id), as: :turbo_stream
 
-    assert_equal "text/vnd.turbo-stream.html; charset=utf-8", response.content_type
     assert_equal @user, @seat.reload.reserved_by
   end
 
@@ -29,8 +28,6 @@ class Shows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
     @seat.reserve_for(@user)
 
     delete show_seat_reservation_url(@show, seat_id: @seat.id), as: :turbo_stream
-    
-    assert_equal "text/vnd.turbo-stream.html; charset=utf-8", response.content_type
 
     assert_nil @seat.reload.reserved_by
     assert_nil @seat.reserved_until

@@ -8,7 +8,7 @@ class SeatingChart < ApplicationRecord
 
   accepts_nested_attributes_for :sections, allow_destroy: true
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :venue_layout, presence: true
   validates :sections, presence: true
 

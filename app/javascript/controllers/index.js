@@ -28,6 +28,12 @@ application.register("checkout--shopping-cart-merch-quantity", Checkout__Shoppin
 import CheckoutController from "./checkout_controller"
 application.register("checkout", CheckoutController)
 
+import ClearErrorsController from "./clear_errors_controller"
+application.register("clear-errors", ClearErrorsController)
+
+import ComboboxController from "./combobox_controller"
+application.register("combobox", ComboboxController)
+
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
 

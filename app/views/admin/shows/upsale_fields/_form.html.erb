@@ -1,0 +1,23 @@
+<%= upsale_fields.hidden_field :id if upsale_fields.object.persisted? %>
+
+<div class="mt-4 columns-2">
+  <div class="mt-2">
+    <%= upsale_fields.label :name %>
+    <%= upsale_fields.text_field :name %>
+  </div>
+
+  <div class="mt-2">
+    <%= upsale_fields.label :description %>
+    <%= upsale_fields.text_area :description, rows: 2 %>
+  </div>
+
+  <div class="mt-2">
+    <%= upsale_fields.label :price %>
+    <%= upsale_fields.currency_field :price %>
+  </div>
+
+  <div class="mt-2">
+    <%= upsale_fields.label :quantity %>
+    <%= upsale_fields.number_field :quantity %>
+  </div>
+</div>

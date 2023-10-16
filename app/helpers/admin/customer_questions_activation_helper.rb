@@ -1,0 +1,2 @@
+module Admin::CustomerQuestionsActivationHelper
+end

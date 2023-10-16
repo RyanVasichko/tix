@@ -36,7 +36,7 @@ class OrdersController < ApplicationController
 
   def order_params
     params
-      .require(:order)
+      .fetch(:order, {})
       .permit(
         :order_total_in_cents,
         :payment_method_id,
@@ -48,7 +48,7 @@ class OrdersController < ApplicationController
         :phone,
         { seat_ids: [] },
         { merch_ids: [] },
-        { shipping_address_attributes: %i[first_name last_name address address_2 city state postal_code] }
+        { shipping_address_attributes: [:first_name, :last_name, { address_attributes: %i[address_1 address_2 city state zip_code] }] }
       )
       .merge(user: Current.user)
   end

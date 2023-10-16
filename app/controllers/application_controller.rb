@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_user
 
+  default_form_builder DoseyDoeTicketsFormBuilder::FormBuilder
+
   private
 
   def set_current_user

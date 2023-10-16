@@ -1,0 +1,4 @@
+class ShoppingCart::TicketReservationsController < ApplicationController
+  def destroy
+  end
+end

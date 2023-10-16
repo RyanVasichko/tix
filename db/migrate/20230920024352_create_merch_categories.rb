@@ -1,7 +1,7 @@
 class CreateMerchCategories < ActiveRecord::Migration[7.0]
   def change
     create_table :merch_categories do |t|
-      t.string :name, unique: true
+      t.string :name, null: false, unique: true
 
       t.timestamps
     end

@@ -1,5 +1,5 @@
 class Admin::ShowsController < Admin::AdminController
-  before_action :set_admin_show, only: %i[show edit update destroy]
+  before_action :set_admin_show, only: %i[edit update destroy]
 
   def index
     @shows = Show.upcoming.includes(:artist)
@@ -20,6 +20,8 @@ class Admin::ShowsController < Admin::AdminController
 
   def create
     @show = Show.new(show_params)
+
+    # binding.irb
 
     if @show.save
       redirect_to admin_shows_url, flash: { success: "Show was successfully created." }
@@ -50,9 +52,18 @@ class Admin::ShowsController < Admin::AdminController
   def show_params
     permitted_params = [
       :show_date,
-      :start_time,
-      :end_time,
-      sections_attributes: permitted_sections_attributes_for_action
+      :show_starts_at,
+      :doors_open_at,
+      :dinner_starts_at,
+      :dinner_ends_at,
+      :front_end_on_sale_at,
+      :front_end_off_sale_at,
+      :back_end_on_sale_at,
+      :back_end_off_sale_at,
+      :additional_text,
+      customer_question_ids: [],
+      sections_attributes: permitted_sections_attributes_for_action,
+      upsales_attributes: permitted_upsales_attributes
     ]
     if action_name == "create"
       permitted_params << :seating_chart_id
@@ -60,6 +71,10 @@ class Admin::ShowsController < Admin::AdminController
     end
 
     params.require(:show).permit(permitted_params)
+  end
+
+  def permitted_upsales_attributes
+    %i[name description quantity price].tap { |a| a << :id if action_name == "update" }
   end
 
   def permitted_sections_attributes_for_action

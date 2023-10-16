@@ -1,3 +1,0 @@
-<%= turbo_stream_replace_shopping_cart_count %>
-<%= turbo_stream.remove dom_id(@shopping_cart_merch) %>
-<%= turbo_stream.remove "merch_#{@shopping_cart_merch.merch_id}_shopping_cart_merch" unless @user_has_shopping_cart_merch_for_merch %>

@@ -5,8 +5,8 @@
     <div class="hidden" data-tabs-target="panel" data-turbo="false">
       <div class="flex justify-between">
         <%= form_with url: admin_merch_index_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
-          <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, data: { action: "quick-form#submit" }, class: "form-control-check-box mr-1" %>
-          <%= form.label :include_off_sale, "Show off sale", class: "form-label text-sm" %>
+          <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, data: { action: "quick-form#submit" }, class: "mr-1" %>
+          <%= form.label :include_off_sale, "Show off sale", class: "text-sm" %>
         <% end %>
         <%= link_to "New Merch", new_admin_merch_path, class: "btn-primary px-2 py-1" %>
       </div>

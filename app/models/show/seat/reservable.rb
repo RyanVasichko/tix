@@ -8,23 +8,14 @@ module Show::Seat::Reservable
                foreign_key: "reserved_by_id",
                optional: true
 
-    after_update_commit :queue_expiration_job,
-                        if: -> { saved_change_to_reserved_until? || saved_change_to_reserved_by_id? }
+    after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_reserved_by_id? }
 
-    after_update_commit -> { broadcast_replace_to [show, "seating_chart"], partial: "shows/seats/seat" },
-                        if: -> { saved_change_to_reserved_by_id? }
+    after_touch -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
 
-    after_touch -> { broadcast_replace_to [show, "seating_chart"], partial: "shows/seats/seat" }
-
-    after_update_commit :broadcast_shopping_cart_count,
-                        if: -> { saved_change_to_reserved_by_id? && reserved_by_id_previously_was }
+    after_update_commit :broadcast_shopping_cart_count, if: :broadcast_reserved_by_shopping_cart?
 
     attr_accessor :skip_broadcasting_shopping_cart
-    after_update_commit :broadcast_shopping_cart,
-                        if: -> {
-                          saved_change_to_reserved_by_id? && reserved_by_id_previously_was &&
-                            !skip_broadcasting_shopping_cart
-                        }
+    after_update_commit :broadcast_shopping_cart, if: :broadcast_reserved_by_shopping_cart?
   end
 
   def transfer_reservation(from:, to:)
@@ -69,5 +60,9 @@ module Show::Seat::Reservable
                                locals: {
                                  user: user
                                }
+  end
+
+  def broadcast_reserved_by_shopping_cart?
+    saved_change_to_reserved_by_id? && reserved_by_id_previously_was && !skip_broadcasting_shopping_cart
   end
 end

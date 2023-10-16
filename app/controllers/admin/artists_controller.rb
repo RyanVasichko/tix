@@ -1,5 +1,5 @@
 class Admin::ArtistsController < Admin::AdminController
-  before_action :set_artist, only: %i[show edit update destroy]
+  before_action :set_artist, only: %i[edit update destroy]
 
   def index
     @artists =

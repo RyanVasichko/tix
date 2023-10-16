@@ -4,13 +4,19 @@ class ShowTest < ActiveSupport::TestCase
   test 'should sync start and end time with show date' do
     show = shows(:lcd_soundsystem)
 
-    show.show_date = Date.new(2026, 9, 19)
-    show.start_time = Time.new(2000, 1, 1, 15, 0, 0)
-    show.end_time = Time.new(2000, 1, 1, 17, 0, 0)
+    next_year = Time.current.year + 1
+
+    show.show_date = Date.new(next_year, 9, 19)
+    show.show_starts_at = Time.zone.local(2000, 1, 1, 15, 0, 0)
+    show.doors_open_at = Time.zone.local(2000, 1, 1, 14, 0, 0)
+    show.dinner_starts_at = Time.zone.local(2000, 1, 1, 14, 0, 0)
+    show.dinner_ends_at = Time.zone.local(2000, 1, 1, 15, 0, 0)
+
     show.save
 
-    assert_equal DateTime.new(2026, 9, 19, 15, 0, 0), show.start_time
-    assert_equal DateTime.new(2026, 9, 19, 17, 0, 0), show.end_time
+    assert_equal Time.zone.local(next_year, 9, 19, 15, 0, 0), show.show_starts_at
+    assert_equal Time.zone.local(next_year, 9, 19, 14, 0, 0), show.doors_open_at
+    assert_equal Time.zone.local(next_year, 9, 19, 14, 0, 0), show.dinner_starts_at
+    assert_equal Time.zone.local(next_year, 9, 19, 15, 0, 0), show.dinner_ends_at
   end
-
 end

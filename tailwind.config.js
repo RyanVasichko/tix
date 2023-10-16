@@ -9,6 +9,7 @@ module.exports = {
     "./app/views/**/*.html.erb",
     "./app/views/**/*.turbo_stream.erb",
     "./app/helpers/**/*.rb",
+    "./lib/dosey_doe_tickets_form_builder/**/*.rb",
     "./app/assets/stylesheets/**/*.css",
     "./app/javascript/**/*.js",
     "./config/application.rb"

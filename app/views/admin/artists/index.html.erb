@@ -1,4 +1,4 @@
-<div class="card max-w-xl">
+<div class="max-w-xl card">
   <h1 class="text-center text-3xl font-semibold">Artists</h1>
 
   <div class="flex justify-end">
@@ -14,10 +14,10 @@
     <tbody class="table-tbody">
       <% @artists.each do |artist| %>
         <tr id="<%= dom_id(artist, :admin) %>">
-          <td class="table-td text-indigo-600">
+          <td class="text-indigo-600 table-td">
             <%= link_to artist.name, edit_admin_artist_path(artist) %>
           </td>
-          <td class="table-td text-gray-900 text-right sm:pr-6">
+          <td class="text-right text-gray-900 table-td sm:pr-6">
             <%= render "shared/dropdown", { id: dom_id(artist, :admin)} do %>
               <%= dropdown_link_to artist.has_shows? ? "Deactivate" : "Delete", [:admin, artist], data: { turbo_method: "DELETE" } %>
             <% end %>

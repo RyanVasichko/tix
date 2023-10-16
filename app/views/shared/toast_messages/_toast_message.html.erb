@@ -1,4 +1,4 @@
-<div data-controller="dismissable ease-out" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg [&:not(:first-child)]:mt-2 transform ease-out duration-300 transition translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2">
+<div data-controller="dismissable ease-out" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg [&:not(:first-child)]:mt-2 transform ease-out duration-300 transition translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2" data-turbo-permanent>
   <div class="rounded-md border-b bg-<%= color_for_flash_message_type(message_type) %>-50 p-4">
     <div class="flex">
       <div class="flex-shrink-0">
@@ -19,24 +19,24 @@
           <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
           </svg>
-      <% end %>
-    </div>
-    <div class="ml-3">
-      <p class="text-sm font-medium text-<%= color_for_flash_message_type(message_type) %>-800">
-        <%= message %>
-      </p>
-    </div>
-    <div class="ml-auto pl-3">
-      <div class="-mx-1.5 -my-1.5">
-        <button 
+        <% end %>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm font-medium text-<%= color_for_flash_message_type(message_type) %>-800">
+          <%= message %>
+        </p>
+      </div>
+      <div class="ml-auto pl-3">
+        <div class="-mx-1.5 -my-1.5">
+          <button
             data-action="dismissable#dismiss" type="button" class="inline-flex rounded-md bg-<%= color_for_flash_message_type(message_type) %>-50 p-1.5 text-<%= color_for_flash_message_type(message_type) %>-500 hover:bg-<%= color_for_flash_message_type(message_type) %>-100 focus:outline-none focus:ring-2 focus:ring-<%= color_for_flash_message_type(message_type) %>-600 focus:ring-offset-2 focus:ring-offset-<%= color_for_flash_message_type(message_type) %>-50">
-          <span class="sr-only">Dismiss</span>
-          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-          </svg>
-        </button>
+            <span class="sr-only">Dismiss</span>
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>

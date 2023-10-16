@@ -1,29 +1,29 @@
-<%= form_with(model: [:admin, artist]) do |form| %>
-  <%= turbo_frame_tag "admin_artist_errors" do %>
+<%= turbo_frame_tag "#{dom_id(artist, :admin)}_form", target: :_top do %>
+  <%= form_with(model: [:admin, artist], url: local_assigns[:url]) do |form| %>
     <%= render "shared/error_messages", { model: artist } %>
+
+    <div class="mt-6">
+      <%= form.label :name %>
+      <%= form.text_field :name, tabindex: 1, autofocus: true %>
+    </div>
+
+    <div class="mt-6">
+      <%= form.label :url %>
+      <%= form.text_field :url, tabindex: 2 %>
+    </div>
+
+    <div class="mt-6">
+      <%= form.label :bio %>
+      <%= form.text_area :bio, tabindex: 3 %>
+    </div>
+
+    <div class="mt-6">
+      <label for="artist-image-upload" class="form-label">Image</label>
+      <%= form.image_field_with_preview :image %>
+    </div>
+
+    <div class="mt-10 flex items-center justify-end">
+      <%= form.submit %>
+    </div>
   <% end %>
-
-  <div class="mt-6">
-    <%= form.label :name, class: "form-label" %>
-    <%= form.text_field :name, class: "form-control-text", tabindex: 1, autofocus: true %>
-  </div>
-
-  <div class="mt-6">
-    <%= form.label :url, class: "form-label" %>
-    <%= form.text_field :url, class: "form-control-text", tabindex: 2 %>
-  </div>
-
-  <div class="mt-6">
-    <%= form.label :bio, class: "form-label" %>
-    <%= form.text_area :bio, class: "form-control-text", tabindex: 3 %>
-  </div>
-
-  <div class="mt-6">
-    <label for="artist-image-upload" class="form-label">Image</label>
-    <%= render "shared/drag_and_drop_file_field", { form: form, attribute: :image } %>
-  </div>
-
-  <div class="mt-10 flex items-center justify-end">
-    <%= form.submit class: "btn-primary" %>
-  </div>
 <% end %>

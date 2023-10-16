@@ -19,11 +19,11 @@ class OrdersTest < ApplicationSystemTestCase
 
     created_order = users(:larry_sellers).orders.last
 
-    assert_equal "1214 Test St.", created_order.shipping_address.address
+    assert_equal "1214 Test St.", created_order.shipping_address.address_1
     assert_equal "APT 7203", created_order.shipping_address.address_2
     assert_equal "Houston", created_order.shipping_address.city
     assert_equal "TX", created_order.shipping_address.state
-    assert_equal "77019", created_order.shipping_address.postal_code
+    assert_equal "77019", created_order.shipping_address.zip_code
 
     assert_equal 2, created_order.merch.count
     assert created_order
@@ -100,7 +100,7 @@ class OrdersTest < ApplicationSystemTestCase
       fill_in "Apartment, suite, etc.", with: "APT 7203"
       fill_in "City", with: "Houston"
       select "Texas", from: "State"
-      fill_in "Postal code", with: "77019"
+      fill_in "Zip code", with: "77019"
     end
   end
 end

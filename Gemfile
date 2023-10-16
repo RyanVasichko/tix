@@ -32,6 +32,7 @@ group :development, :test do
   gem "htmlbeautifier"
   gem "rubocop"
   gem 'awesome_print'
+  gem "faker"
 end
 
 group :development do

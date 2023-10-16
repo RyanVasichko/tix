@@ -9,7 +9,7 @@
         <h3 class="text-lg text-center">
           <%= link_to show.artist.name, show %>
         </h3>
-        <%= image_tag(url_for(show.artist.image)) %>
+        <%= image_tag(url_for(show.artist.image), id: "#{dom_id(show)}_#{dom_id(show.artist.image)}", data: { turbo_permanent: true }) %>
       </div>
     <% end %>
   </div>

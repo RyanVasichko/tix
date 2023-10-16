@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(shopping_cart_merch) do %>
+<%= turbo_frame_tag dom_id(shopping_cart_merch), target: :_top do %>
   <div class="flex justify-between mt-3 items-baseline">
     <%= form_with model: shopping_cart_merch, url: shopping_cart_merch_path(shopping_cart_merch), data: { controller: "quick-form" }, class: "text-gray-500 flex items-baseline" do |form| %>
       Quantity: <%= form.collection_select :quantity, 1..10, :to_i, :to_i, {}, data: { action: "quick-form#submit" }, class: "form-control-select p-0 mx-2" %> <%= "(#{shopping_cart_merch.option})" unless shopping_cart_merch.option.blank? %>
