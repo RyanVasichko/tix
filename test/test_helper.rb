@@ -7,7 +7,7 @@ class ActiveSupport::TestCase
 
   # parallelize(workers: :number_of_processors)
 
-  fixtures :all
+  # fixtures :all
 
   Time::DATE_FORMATS[:datetime_field] = "%m%d%Y\t%I%M%P"
   Time::DATE_FORMATS[:time_field] = "%I:%M%P"

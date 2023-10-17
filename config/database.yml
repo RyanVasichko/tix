@@ -20,4 +20,3 @@ test:
 production:
   <<: *default
   database: dosey_doe_tickets
-  url: postgres://dosey_doe_tickets:nkcRUbOyOrtQWQQ2s25XxX94oXRBbY92@dpg-ckiqahcl4vmc73ftf4bg-a.oregon-postgres.render.com/dosey_doe_tickets_a3h5

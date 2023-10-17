@@ -11,11 +11,8 @@ module Show::Seat::Reservable
     after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_reserved_by_id? }
 
     after_touch -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
-
-    after_update_commit :broadcast_shopping_cart_count, if: :broadcast_reserved_by_shopping_cart?
-
-    attr_accessor :skip_broadcasting_shopping_cart
-    after_update_commit :broadcast_shopping_cart, if: :broadcast_reserved_by_shopping_cart?
+    after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
+    after_update_commit :broadcast_shopping_cart
   end
 
   def transfer_reservation(from:, to:)
@@ -42,27 +39,23 @@ module Show::Seat::Reservable
     ExpireSeatReservationJob.set(wait_until: self.reserved_until).perform_later(self.id)
   end
 
-  def broadcast_shopping_cart_count
-    user = User.includes(reserved_seats: [{ section: { show: :artist } }]).find(reserved_by_id_previously_was)
-    broadcast_replace_later_to [user, "shopping_cart"],
-                               target: "shopping_cart_count",
-                               partial: "shopping_cart/count",
-                               locals: {
-                                 user: user
-                               }
-  end
-
   def broadcast_shopping_cart
+    return unless saved_change_to_reserved_by_id? && reserved_by_id_previously_was
+
     user = User.includes(reserved_seats: [{ section: { show: :artist } }]).find(reserved_by_id_previously_was)
+
     broadcast_replace_later_to [user, "shopping_cart"],
                                target: "shopping_cart",
                                partial: "shopping_cart/shopping_cart",
                                locals: {
                                  user: user
                                }
-  end
 
-  def broadcast_reserved_by_shopping_cart?
-    saved_change_to_reserved_by_id? && reserved_by_id_previously_was && !skip_broadcasting_shopping_cart
+    broadcast_replace_later_to [user, "shopping_cart"],
+                               target: "shopping_cart_count",
+                               partial: "shopping_cart/count",
+                               locals: {
+                                 user: user
+                               }
   end
 end
