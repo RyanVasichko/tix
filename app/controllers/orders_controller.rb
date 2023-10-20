@@ -15,7 +15,6 @@ class OrdersController < ApplicationController
                   flash: {
                     notice: "Your shopping cart is empty, add some items to your shopping cart to check out"
                   }
-      return
     end
   end
 

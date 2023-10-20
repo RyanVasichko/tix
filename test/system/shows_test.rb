@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class ShowsTest < ApplicationSystemTestCase
   setup do
-    @show = shows(:radiohead)
+    @show = FactoryBot.create(:show)
     @show.seating_chart.venue_layout.analyze unless @show.seating_chart.venue_layout.analyzed?
   end
 
@@ -15,24 +15,24 @@ class ShowsTest < ApplicationSystemTestCase
     @show.seating_chart.venue_layout.analyze unless @show.seating_chart.venue_layout.analyzed?
     visit show_url(@show)
 
-    assert_selector "h1", text: "Radiohead"
+    assert_selector "h1", text: @show.artist_name
   end
 
   test "reserving a seat" do
-    larry_sellers = users(:larry_sellers)
-    log_in_as larry_sellers, "password"
+    customer = FactoryBot.create(:customer)
+    log_in_as customer, "password"
 
-    seat = @show.seats.where(reserved_by: nil).first
+    seat = @show.seats.where(shopping_cart: nil).first
 
-    assert_difference "larry_sellers.reserved_seats.reload.count", 1 do
+    assert_difference "customer.reserved_seats.reload.count", 1 do
       visit show_url(@show)
       find("##{dom_id(seat)}").click
 
       assert_selector "##{dom_id(seat)}[fill=yellow]"
     end
 
-    within("#shopping_cart_count") { assert_text "6" }
-    assert_equal seat.reload.reserved_by, larry_sellers
+    within("#shopping_cart_count") { assert_text "1" }
+    assert_equal seat.reload.reserved_by, customer
 
     sleep 0.25
     find("#shopping_cart_toggle").click
@@ -42,20 +42,20 @@ class ShowsTest < ApplicationSystemTestCase
   end
 
   test "cancelling a seat reservation" do
-    larry_sellers = users(:larry_sellers)
-    log_in_as larry_sellers, "password"
+    customer = FactoryBot.create(:customer)
+    log_in_as customer, "password"
 
-    seat = @show.seats.where(reserved_by: nil).first
-    seat.reserve_for(larry_sellers)
+    seat = @show.seats.where(shopping_cart: nil).first
+    seat.reserve_for(customer)
 
-    assert_difference "larry_sellers.reserved_seats.reload.count", -1 do
+    assert_difference "customer.reserved_seats.reload.count", -1 do
       visit show_url(@show)
       find("##{dom_id(seat)}").click
 
       assert_selector "##{dom_id(seat)}[fill=green]"
     end
 
-    within("#shopping_cart_count") { assert_text "5" }
+    within("#shopping_cart_count") { assert_text "0" }
     assert_nil seat.reload.reserved_by
 
     sleep 0.25

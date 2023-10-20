@@ -63,7 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
 
   create_table "customer_questions", force: :cascade do |t|
     t.text "question"
-    t.boolean "active"
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   end
 
   create_table "merch_categories", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -171,32 +171,33 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   end
 
   create_table "seating_chart_sections", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.bigint "seating_chart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name", "seating_chart_id"], name: "index_seating_chart_sections_on_name_and_seating_chart_id", unique: true
     t.index ["seating_chart_id"], name: "index_seating_chart_sections_on_seating_chart_id"
   end
 
   create_table "seating_charts", force: :cascade do |t|
-    t.string "name"
-    t.boolean "active", default: true
+    t.string "name", null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "show_seats", force: :cascade do |t|
     t.bigint "show_section_id", null: false
-    t.integer "x"
-    t.integer "y"
-    t.integer "seat_number"
+    t.integer "x", null: false
+    t.integer "y", null: false
+    t.integer "seat_number", null: false
     t.integer "table_number"
-    t.bigint "reserved_by_id"
+    t.bigint "user_shopping_cart_id"
     t.datetime "reserved_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["reserved_by_id"], name: "index_show_seats_on_reserved_by_id"
     t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
+    t.index ["user_shopping_cart_id"], name: "index_show_seats_on_user_shopping_cart_id"
   end
 
   create_table "show_sections", force: :cascade do |t|
@@ -243,13 +244,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
 
   create_table "user_shopping_cart_merch", force: :cascade do |t|
     t.bigint "merch_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "quantity"
+    t.bigint "user_shopping_cart_id", null: false
+    t.integer "quantity", null: false
     t.string "option"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["merch_id"], name: "index_user_shopping_cart_merch_on_merch_id"
-    t.index ["user_id"], name: "index_user_shopping_cart_merch_on_user_id"
+    t.index ["user_shopping_cart_id"], name: "index_user_shopping_cart_merch_on_user_shopping_cart_id"
+  end
+
+  create_table "user_shopping_carts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -260,8 +266,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
     t.string "password_digest"
     t.string "type"
     t.string "stripe_customer_id"
+    t.bigint "user_shopping_cart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_shopping_cart_id"], name: "index_users_on_user_shopping_cart_id"
     t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
   end
 
@@ -278,12 +286,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "show_seats", "show_sections"
-  add_foreign_key "show_seats", "users", column: "reserved_by_id"
+  add_foreign_key "show_seats", "user_shopping_carts"
   add_foreign_key "show_sections", "seating_chart_sections"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "seating_charts"
   add_foreign_key "user_shopping_cart_merch", "merch"
-  add_foreign_key "user_shopping_cart_merch", "users"
+  add_foreign_key "user_shopping_cart_merch", "user_shopping_carts"
+  add_foreign_key "users", "user_shopping_carts"
 end

@@ -2,7 +2,7 @@
 <html>
   <%= render "layouts/head" %>
 
-  <body data-current-user-id="<%= @current_user_id %>">
+  <body data-current-user-id="<%= Current.user.id %>">
     <%= render "layouts/navbar" %>  
     <div class="mx-auto max-w-7xl">
       <%= yield %>

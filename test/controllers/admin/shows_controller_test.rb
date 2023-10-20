@@ -1,7 +1,7 @@
 require "application_integration_test_case"
 
 class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
-  setup { @show = shows(:radiohead) }
+  setup { @show = FactoryBot.create(:show) }
 
   test "should get index" do
     get admin_shows_path
@@ -23,13 +23,18 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     dinner_starts_at = show_date.change(hour: 18, min: 15)
     dinner_ends_at = show_date.change(hour: 19, min: 30)
     show_starts_at = show_date.change(hour: 20)
-    additional_artists_question = customer_questions(:additional_artists)
+
+    customer_question = FactoryBot.create(:customer_question)
+    artist = FactoryBot.create(:artist)
+    seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    section_1 = seating_chart.sections.first
+    section_2 = seating_chart.sections.second
 
     assert_difference("Show.count") do
       assert_difference("Show::Section.count", 2) do
         params = {
-          artist_id: artists(:radiohead).id,
-          seating_chart_id: seating_charts(:full_house).id,
+          artist_id: artist.id,
+          seating_chart_id: seating_chart.id,
           show_date: show_date.strftime("%Y/%m/%d"),
           doors_open_at: doors_open_at.strftime("%l:%M%p"),
           dinner_starts_at: dinner_starts_at.strftime("%l:%M%p"),
@@ -41,10 +46,10 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
           back_end_off_sale_at: back_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
           additional_text: "Test additional text",
           sections_attributes: [
-            { seating_chart_section_id: seating_chart_sections(:normal).id, ticket_price: 65.99 },
-            { seating_chart_section_id: seating_chart_sections(:obstructed).id, ticket_price: 49.50 }
+            { seating_chart_section_id: section_1.id, ticket_price: 65.99 },
+            { seating_chart_section_id: section_2.id, ticket_price: 49.50 }
           ],
-          customer_question_ids: [additional_artists_question.id]
+          customer_question_ids: [customer_question.id]
         }
         post admin_shows_path, params: { show: params }
       end
@@ -53,8 +58,8 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     show = Show.last
 
     refute_nil show
-    assert_equal artists(:radiohead), show.artist
-    assert_equal seating_charts(:full_house), show.seating_chart
+    assert_equal artist, show.artist
+    assert_equal seating_chart, show.seating_chart
     assert_equal show_date, show.show_date
     assert_equal front_end_on_sale_at, show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, show.front_end_off_sale_at
@@ -65,11 +70,11 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     assert_equal dinner_ends_at, show.dinner_ends_at
     assert_equal show_starts_at, show.show_starts_at
 
-    assert_equal 65.99, show.sections.find_by(seating_chart_section: seating_chart_sections(:normal)).ticket_price
-    assert_equal 49.50, show.sections.find_by(seating_chart_section: seating_chart_sections(:obstructed)).ticket_price
+    assert_equal 65.99, show.sections.find_by(seating_chart_section: section_1).ticket_price
+    assert_equal 49.50, show.sections.find_by(seating_chart_section: section_2).ticket_price
 
     assert_equal "Test additional text", show.additional_text
-    assert_equal [additional_artists_question], show.customer_questions
+    assert_equal [customer_question], show.customer_questions
   end
 
   test "should get edit" do

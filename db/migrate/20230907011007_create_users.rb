@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :password_digest
       t.string :type
       t.string :stripe_customer_id
+      t.references :user_shopping_cart, null: false, foreign_key: true
 
       t.timestamps
     end

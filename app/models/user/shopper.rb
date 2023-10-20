@@ -2,23 +2,10 @@ module User::Shopper
   extend ActiveSupport::Concern
 
   included do
-    has_many :reserved_seats,
-             -> { where(reserved_until: Time.current..) },
-             class_name: "Show::Seat",
-             inverse_of: :reserved_by,
-             foreign_key: "reserved_by_id"
-
-    scope :includes_shopping_cart,
-          -> {
-            includes(
-              shopping_cart_merch: {
-                merch: [{ image_attachment: :blob }]
-              },
-              reserved_seats: [{ section: [{ show: :artist }, :seating_chart_section] }]
-            )
-          }
-
-    has_many :shopping_cart_merch, class_name: "User::ShoppingCartMerch", inverse_of: :user
+    after_initialize :build_shopping_cart, if: :new_record?
+    belongs_to :shopping_cart, class_name: "User::ShoppingCart", foreign_key: :user_shopping_cart_id, inverse_of: :user, dependent: :destroy
+    has_many :reserved_seats, class_name: "Show::Seat", through: :shopping_cart, source: :seats
+    has_many :shopping_cart_merch, class_name: "User::ShoppingCart::Merch", through: :shopping_cart, source: :merch
 
     has_many :orders do
       def build_for_user(user)
@@ -33,7 +20,7 @@ module User::Shopper
 
         build do |order|
           order.tickets.build_for_seats(user.shopping_cart.seats)
-          order.merch.build_for_shopping_cart_merch(user.shopping_cart.merch)
+          order.merch.build_from_shopping_cart_merch(user.shopping_cart_merch)
 
           set_shipping_address.call(order) if order.merch.any?
           order.calculate_order_total
@@ -42,10 +29,6 @@ module User::Shopper
     end
 
     has_many :shipping_addresses, class_name: "Order::ShippingAddress", through: :orders, source: :shipping_address
-  end
-
-  def shopping_cart
-    @shopping_cart ||= User::ShoppingCart.new(self)
   end
 
   def ticket_reservation_time

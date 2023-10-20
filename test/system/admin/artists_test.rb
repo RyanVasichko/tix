@@ -2,12 +2,13 @@ require "application_system_test_case"
 
 class Admin::ArtistsTest < ApplicationSystemTestCase
   setup do
-    @artist = artists(:radiohead)
+    @artist = FactoryBot.create(:artist, :with_show)
   end
 
   test "visiting the index" do
     visit admin_artists_url
     assert_selector "h1", text: "Artists"
+    assert_text @artist.name
   end
 
   test "should create artist" do

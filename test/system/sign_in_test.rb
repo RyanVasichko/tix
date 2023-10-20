@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class SignInTest < ApplicationSystemTestCase
   def setup
-    @user = users(:larry_sellers)
+    @user = FactoryBot.create(:customer)
   end
 
   test 'signing in with valid information' do

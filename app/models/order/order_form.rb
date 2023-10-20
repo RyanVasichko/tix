@@ -40,7 +40,7 @@ class Order::OrderForm
       self.order.tickets.build_for_seats(seats)
 
       merch = user.shopping_cart.merch.includes(:merch).where(merch_id: merch_ids)
-      self.order.merch.build_for_shopping_cart_merch(merch)
+      self.order.merch.build_from_shopping_cart_merch(merch)
 
       self.order.calculate_order_total
 

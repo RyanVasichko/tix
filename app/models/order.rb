@@ -12,7 +12,7 @@ class Order < ApplicationRecord
   has_many :seats, class_name: "Show::Seat", through: :tickets
 
   has_many :merch, class_name: "Order::Merch", inverse_of: :order do
-    def build_for_shopping_cart_merch(shopping_cart_merch)
+    def build_from_shopping_cart_merch(shopping_cart_merch)
       shopping_cart_merch.each do |scm|
         build(
           merch: scm.merch,

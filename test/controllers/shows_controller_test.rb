@@ -2,7 +2,7 @@ require "application_integration_test_case"
 
 class ShowsControllerTest < ApplicationIntegrationTestCase
   setup do
-    @show = shows(:radiohead)
+    @show = FactoryBot.create(:show)
   end
 
   test "should get index" do

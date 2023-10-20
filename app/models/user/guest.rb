@@ -21,7 +21,7 @@ class User::Guest < User
   end
 
   def transfer_shopping_cart_to(user)
-    reserved_seats.each { |s| s.transfer_reservation(from: self, to: user) }
+    shopping_cart.transfer_from(self, to: user)
   end
 
   def destroy_later

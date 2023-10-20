@@ -25,6 +25,8 @@ RUN yarn install --check-files
 
 COPY . .
 
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 3000
 
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

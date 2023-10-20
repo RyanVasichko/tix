@@ -20,8 +20,7 @@ class Admin::ShowsController < Admin::AdminController
 
   def create
     @show = Show.new(show_params)
-
-    # binding.irb
+    @show.build_seats
 
     if @show.save
       redirect_to admin_shows_url, flash: { success: "Show was successfully created." }

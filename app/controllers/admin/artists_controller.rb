@@ -2,8 +2,7 @@ class Admin::ArtistsController < Admin::AdminController
   before_action :set_artist, only: %i[edit update destroy]
 
   def index
-    @artists =
-      Artist.select("artists.*, EXISTS(SELECT 1 FROM shows WHERE shows.artist_id = artists.id) AS has_shows").active
+    @artists = Artist.select("artists.*, EXISTS(SELECT 1 FROM shows WHERE shows.artist_id = artists.id) AS has_shows").active
   end
 
   def new

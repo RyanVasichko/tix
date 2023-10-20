@@ -2,9 +2,10 @@ require "application_integration_test_case"
 
 class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
   setup do
-    @merch = merch(:tank_top)
-    @shopping_cart_merch = user_shopping_cart_merch(:larry_sellers_bbq_sauce)
-    log_in_as(users(:larry_sellers), "password")
+    @merch = FactoryBot.create(:merch)
+    @shopping_cart_merch = FactoryBot.create(:shopping_cart_merch, merch: @merch)
+    @user = FactoryBot.create(:customer)
+    log_in_as(@user, "password")
   end
 
   test "should get new" do
@@ -13,7 +14,7 @@ class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should create shopping_cart_merch" do
-    assert_difference("User::ShoppingCartMerch.count") do
+    assert_difference("User::ShoppingCart::Merch.count") do
       post shopping_cart_merch_index_url,
            params: {
              user_shopping_cart_merch: {
@@ -23,7 +24,6 @@ class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
              }
            }
     end
-
     assert_redirected_to merch_index_url
     assert_equal "#{@merch.name} was added to your shopping cart.", flash[:success]
   end

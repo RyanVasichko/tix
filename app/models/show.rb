@@ -2,6 +2,8 @@ class Show < ApplicationRecord
   include GoesOnSale, Agenda
 
   belongs_to :artist
+  delegate :name, to: :artist, prefix: true
+
   belongs_to :seating_chart
   has_many :sections, class_name: "Show::Section", inverse_of: :show
   has_many :seats, through: :sections

@@ -5,9 +5,5 @@ FactoryBot.define do
     seat_number { Faker::Number.between(from: 1, to: 100).to_s }
     table_number { Faker::Number.between(from: 1, to: 100).to_s }
     association :section, factory: :seating_chart_section
-
-    trait :skip_section do
-      association :section, strategy: :null
-    end
   end
 end

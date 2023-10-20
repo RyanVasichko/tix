@@ -1,7 +1,7 @@
 require "application_integration_test_case"
 
 class SessionsControllerTest < ApplicationIntegrationTestCase
-  setup { @larry_sellers = users(:larry_sellers) }
+  setup { @user = FactoryBot.create(:customer) }
 
   test "should get new if not logged in" do
     get login_url
@@ -9,14 +9,14 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should redirect to root if already logged in" do
-    log_in_as(@larry_sellers, "password")
+    log_in_as(@user, "password")
     get login_url
     assert_redirected_to root_url
     assert_equal "You are already logged in!", flash[:notice]
   end
 
   test "should log in with valid credentials" do
-    post login_url, params: { session: { email: @larry_sellers.email, password: 'password' } }
+    post login_url, params: { session: { email: @user.email, password: 'password' } }
     assert_redirected_to root_url
     follow_redirect!
 
@@ -26,7 +26,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "shouldn't log in with invalid credentials" do
-    post login_url, params: { session: { email: @larry_sellers.email, password: 'wrongpassword' } }
+    post login_url, params: { session: { email: @user.email, password: 'wrongpassword' } }
     assert_response :success
     assert flash[:error], 'Invalid email/password combination'
 
@@ -36,7 +36,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should log out" do
-    log_in_as(@larry_sellers, "password")
+    log_in_as(@user, "password")
     delete logout_url
     assert_redirected_to root_url
     follow_redirect!
@@ -47,18 +47,18 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should transfer seat reservations from a guest to the logged in user" do
-    show = shows(:radiohead)
+    show = FactoryBot.create(:show)
 
     get login_path # Just get a random endpoint so it will create the guest user
     guest = User::Guest.last
 
-    seat = show.seats.where(reserved_by: nil, reserved_until: nil).first
+    seat = show.seats.where(shopping_cart: nil, reserved_until: nil).first
     seat.reserve_for(guest)
 
-    log_in_as(@larry_sellers, "password")
+    log_in_as(@user, "password")
 
     seat.reload
-    assert_equal @larry_sellers, seat.reserved_by
+    assert_equal @user, seat.reserved_by
 
     perform_enqueued_jobs
 

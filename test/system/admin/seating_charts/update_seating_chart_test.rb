@@ -5,10 +5,10 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   include Admin::SeatingCharts::SeatingChartFormTestHelpers
 
   setup do
-    @seating_chart = seating_charts(:full_house)
-    @normal_section = seating_chart_sections(:normal)
-    @obstructed_section = seating_chart_sections(:obstructed)
-    @seat_to_delete = seating_chart_seats(:normal_two)
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    @section_1 = @seating_chart.sections.first
+    @section_2 = @seating_chart.sections.second
+    @seat_to_delete = @section_1.seats.first
     @seating_chart.venue_layout.attachment.analyze
     visit edit_admin_seating_chart_path(@seating_chart)
   end
@@ -23,20 +23,21 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
 
   test 'adding a new seat to a section' do
     close_slide_over
-    new_seat = add_seat(seat_number: 5, table_number: 6, section_name: @normal_section.name)
+    new_seat = add_seat(seat_number: 5, table_number: 6, section_name: @section_1.name)
     drag_to(new_seat, 678, 732)
     open_slide_over
-    click_on 'Save'
-    assert_text 'Seating chart was successfully updated.'
-    @normal_section.reload
 
-    @normal_section.reload
-    assert_equal 3, @normal_section.seats.count
+    assert_difference "@section_1.seats.reload.count", 1 do
+      click_on 'Save'
+      assert_text 'Seating chart was successfully updated.'
+    end
 
-    assert_in_delta 678, @normal_section.seats.last.x, 2
-    assert_in_delta 732, @normal_section.seats.last.y, 2
-    assert_equal '5', @normal_section.seats.last.seat_number
-    assert_equal '6', @normal_section.seats.last.table_number
+    @section_1.reload
+
+    assert_in_delta 678, @section_1.seats.last.x, 2
+    assert_in_delta 732, @section_1.seats.last.y, 2
+    assert_equal '5', @section_1.seats.last.seat_number
+    assert_equal '6', @section_1.seats.last.table_number
   end
 
   test 'adding a new section and a seat' do
@@ -44,8 +45,10 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
     close_slide_over
     add_seat(seat_number: 13, table_number: 14, section_name: 'New Section')
     open_slide_over
-    click_on 'Save'
-    assert_text 'Seating chart was successfully updated.'
+    assert_difference '@seating_chart.sections.reload.count', 1 do
+      click_on 'Save'
+      assert_text 'Seating chart was successfully updated.'
+    end
 
     new_section = SeatingChart::Section.find_by_name('New Section')
     refute_nil new_section
@@ -58,12 +61,12 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
 
   test 'removing a section' do
     skip "for now"
-    within "#admin_seating_chart_section_#{@obstructed_section.id}" do
+    within "#admin_seating_chart_section_#{@section_2.id}" do
       find('.btn-remove-section').click
     end
     click_on 'Save'
     assert_text 'Seating chart was successfully updated.'
-    refute SeatingChart::Section.exists?(@obstructed_section.id)
+    refute SeatingChart::Section.exists?(@section_2.id)
   end
 
   test 'deleting a seat' do

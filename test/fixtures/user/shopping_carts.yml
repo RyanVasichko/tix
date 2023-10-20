@@ -1,0 +1,6 @@
+_fixture:
+  model_class: User::ShoppingCart
+
+larry_sellers_shopping_cart: {}
+
+ryan_vasichko_shopping_cart: {}

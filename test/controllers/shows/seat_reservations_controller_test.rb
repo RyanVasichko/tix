@@ -2,11 +2,8 @@ require "application_integration_test_case"
 
 class Shows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   setup do
-    @show = shows(:radiohead)
-    @user = users(:larry_sellers)
-    @show.build_seats
-    @show.save!
-
+    @show = FactoryBot.create(:show)
+    @user = FactoryBot.create(:customer)
     @seat = @show.seats.first
 
     log_in_as(@user, "password")
@@ -25,7 +22,7 @@ class Shows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should cancel a seat reservation using turbo streams" do
-    @seat.reserve_for(@user)
+    @seat.reserve_for!(@user)
 
     delete show_seat_reservation_url(@show, seat_id: @seat.id), as: :turbo_stream
 
@@ -34,11 +31,11 @@ class Shows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should cancel a seat reservation even if turbo streams aren't working" do
-    @seat.reserve_for(@user)
+    @seat.reserve_for!(@user)
 
     delete show_seat_reservation_url(@show, seat_id: @seat.id)
 
-    assert_nil @seat.reload.reserved_by
+    assert_nil @seat.reload.shopping_cart
     assert_nil @seat.reserved_until
   end
 end

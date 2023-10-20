@@ -12,13 +12,9 @@ class ApplicationController < ActionController::Base
       else
         create_guest
       end
-
-    @current_user_id = Current.user.id
   end
 
   def create_guest
-    guest = User::Guest.create!
-    session[:user_id] = guest.id
-    guest
+    User::Guest.create!.tap { |guest| session[:user_id] = guest.id }
   end
 end

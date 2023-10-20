@@ -22,7 +22,7 @@ class ShoppingCart::MerchController < ApplicationController
     if @shopping_cart_merch
       @shopping_cart_merch.quantity = @shopping_cart_merch.quantity + shopping_cart_merch_params[:quantity].to_i
     else
-      @shopping_cart_merch = Current.user.shopping_cart_merch.build(shopping_cart_merch_params)
+      @shopping_cart_merch = Current.user.shopping_cart.merch.build(shopping_cart_merch_params)
     end
 
     @merch = Merch.find(params[:user_shopping_cart_merch][:merch_id])
@@ -56,7 +56,7 @@ class ShoppingCart::MerchController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_shopping_cart_merch
-    @shopping_cart_merch = User::ShoppingCartMerch.find(params[:id])
+    @shopping_cart_merch = User::ShoppingCart::Merch.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

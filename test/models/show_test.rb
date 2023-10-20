@@ -2,7 +2,7 @@ require "test_helper"
 
 class ShowTest < ActiveSupport::TestCase
   test 'should sync start and end time with show date' do
-    show = shows(:lcd_soundsystem)
+    show = FactoryBot.build(:show)
 
     next_year = Time.current.year + 1
 

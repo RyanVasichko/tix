@@ -2,7 +2,7 @@ require "test_helper"
 
 class MerchControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @merch = merch(:bbq_sauce)
+    @merch = FactoryBot.create(:merch)
   end
 
   test "should get index" do

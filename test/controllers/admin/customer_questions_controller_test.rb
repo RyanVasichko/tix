@@ -2,7 +2,7 @@ require "test_helper"
 
 class Admin::CustomerQuestionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @additional_artists_question = customer_questions(:additional_artists)
+    @customer_question = FactoryBot.create(:customer_question)
   end
 
   test "should get index" do
@@ -27,23 +27,23 @@ class Admin::CustomerQuestionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    get edit_admin_customer_question_url(@additional_artists_question)
+    get edit_admin_customer_question_url(@customer_question)
     assert_response :success
   end
 
   test "should update customer_question" do
-    patch admin_customer_question_url(@additional_artists_question), params: { customer_question: { question: "What is your favorite Radiohead song?" } }
+    patch admin_customer_question_url(@customer_question), params: { customer_question: { question: "What is your favorite Radiohead song?" } }
     assert_redirected_to admin_customer_questions_url
 
-    assert_equal "What is your favorite Radiohead song?", @additional_artists_question.reload.question
+    assert_equal "What is your favorite Radiohead song?", @customer_question.reload.question
   end
 
   test "should deactivate customer_question" do
     assert_difference("CustomerQuestion.count", 0) do
-      delete admin_customer_question_url(@additional_artists_question)
+      delete admin_customer_question_url(@customer_question)
     end
 
-    refute @additional_artists_question.reload.active?
+    refute @customer_question.reload.active?
 
     assert_redirected_to admin_customer_questions_url
   end

@@ -2,13 +2,14 @@ module Show::Seat::Reservable
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :reserved_by,
-               class_name: "User",
-               inverse_of: :reserved_seats,
-               foreign_key: "reserved_by_id",
-               optional: true
+    belongs_to :shopping_cart,
+               optional: true,
+               class_name: "User::ShoppingCart",
+               foreign_key: :user_shopping_cart_id,
+               inverse_of: :seats
+    has_one :reserved_by, through: :shopping_cart, source: :user
 
-    after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_reserved_by_id? }
+    after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_user_shopping_cart_id? }
 
     after_touch -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
     after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
@@ -18,44 +19,55 @@ module Show::Seat::Reservable
   def transfer_reservation(from:, to:)
     return unless reserved_by == from
 
-    with_lock { update(reserved_by: to, reserved_until: Time.current + to.ticket_reservation_time) }
+    with_lock { update(reservation_params_for_user(to)) }
   end
 
   def reserve_for(user)
-    return unless reserved_by.nil? || reserved_by == user || reserved_until.past?
+    with_lock { update(reservation_params_for_user(user)) } if reservable_by?(user)
+  end
 
-    with_lock { update(reserved_by: user, reserved_until: Time.current + user.ticket_reservation_time) }
+  def reserve_for!(user)
+    with_lock { update!(reservation_params_for_user(user)) } if reservable_by?(user)
   end
 
   def cancel_reservation!
-    with_lock { update!(reserved_by: nil, reserved_until: nil) }
+    with_lock { update!(shopping_cart: nil, reserved_until: nil) }
   end
 
   private
 
+  def reservable_by?(user)
+    shopping_cart.nil? || shopping_cart == user.shopping_cart || reserved_until.past?
+  end
+
+  def reservation_params_for_user(user)
+    { shopping_cart: user.shopping_cart, reserved_until: Time.current + user.ticket_reservation_time }
+  end
+
   def queue_expiration_job
-    return unless reserved_by_id || reserved_until
+    return unless shopping_cart || reserved_until
 
     ExpireSeatReservationJob.set(wait_until: self.reserved_until).perform_later(self.id)
   end
 
   def broadcast_shopping_cart
-    return unless saved_change_to_reserved_by_id? && reserved_by_id_previously_was
+    broadcast_shopping_cart_replacement(User::ShoppingCart.find(user_shopping_cart_id_previously_was)) if user_shopping_cart_id_previously_was.present?
+    broadcast_shopping_cart_replacement(shopping_cart) if shopping_cart.present?
+  end
 
-    user = User.includes(reserved_seats: [{ section: { show: :artist } }]).find(reserved_by_id_previously_was)
-
-    broadcast_replace_later_to [user, "shopping_cart"],
+  def broadcast_shopping_cart_replacement(shopping_cart)
+    broadcast_replace_later_to shopping_cart,
                                target: "shopping_cart",
                                partial: "shopping_cart/shopping_cart",
                                locals: {
-                                 user: user
+                                 shopping_cart: shopping_cart
                                }
 
-    broadcast_replace_later_to [user, "shopping_cart"],
+    broadcast_replace_later_to shopping_cart,
                                target: "shopping_cart_count",
                                partial: "shopping_cart/count",
                                locals: {
-                                 user: user
+                                 shopping_cart: shopping_cart
                                }
   end
 end

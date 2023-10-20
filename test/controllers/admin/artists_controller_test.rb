@@ -2,7 +2,7 @@ require "application_integration_test_case"
 
 class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
   setup do
-    @artist = artists(:radiohead)
+    @artist = FactoryBot.create(:artist)
   end
 
   test "should get index" do
@@ -53,11 +53,12 @@ class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should deactivate an artist that has shows" do
-    delete admin_artist_url(@artist)
+    artist_with_shows = FactoryBot.create(:artist, :with_show)
+    delete admin_artist_url(artist_with_shows)
 
-    @artist.reload
+    artist_with_shows.reload
 
-    refute @artist.active?
+    refute artist_with_shows.active?
 
     assert_redirected_to admin_artists_url
   end

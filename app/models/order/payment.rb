@@ -7,7 +7,7 @@ class Order::Payment < ApplicationRecord
   validates :card_exp_year, presence: true
   validates :card_last_4, presence: true
 
-  has_one :order
+  has_one :order, class_name: "Order", inverse_of: :payment, foreign_key: :order_payment_id
   has_one :user, through: :order
 
   def process(save_payment_method = false)

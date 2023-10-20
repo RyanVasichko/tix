@@ -2,8 +2,10 @@ require "application_integration_test_case"
 
 class Admin::MerchControllerTest < ApplicationIntegrationTestCase
   setup do
-    log_in_as(users(:larry_sellers), "password")
-    @bbq_sauce_merch = merch(:bbq_sauce)
+    log_in_as(FactoryBot.create(:customer), "password")
+    @merch = FactoryBot.create(:merch)
+    @merch_category_1 = FactoryBot.create(:merch_category)
+    @merch_category_2 = FactoryBot.create(:merch_category)
   end
 
   test "should get index" do
@@ -26,7 +28,7 @@ class Admin::MerchControllerTest < ApplicationIntegrationTestCase
                description: "Specialty coffee",
                price: 13.37,
                image: image,
-               category_ids: [merch_categories(:coffee).id, merch_categories(:food).id],
+               category_ids: [@merch_category_1.id, @merch_category_2.id],
                categories_attributes: {
                 "0" => { name: "Gift Cards" },
                 "1" => { name: "" }
@@ -45,43 +47,43 @@ class Admin::MerchControllerTest < ApplicationIntegrationTestCase
     assert_equal 13.37, @merch.price
     assert_equal 3, @merch.categories.length
 
-    assert @merch.categories.include?(merch_categories(:coffee))
-    assert @merch.categories.include?(merch_categories(:food))
+    assert @merch.categories.include?(@merch_category_1)
+    assert @merch.categories.include?(@merch_category_2)
     assert @merch.categories.include?(@gift_card_category)
 
   end
 
   test "should get edit" do
-    get edit_admin_merch_url(@bbq_sauce_merch)
+    get edit_admin_merch_url(@merch)
     assert_response :success
   end
 
   test "should update merch" do
     image = fixture_file_upload(Rails.root.join("test", "fixtures", "files", "coffee.jpg"), "image/jpg")
-    patch admin_merch_url(@bbq_sauce_merch),
+    patch admin_merch_url(@merch),
           params: {
             merch: {
               name: "Updated name",
               description: "Updated description",
               price: 0.01,
               image: image,
-              category_ids: [merch_categories(:coffee).id]
+              category_ids: [@merch_category_1.id]
             }
           }
 
-    assert_equal "Updated name", @bbq_sauce_merch.reload.name
-    assert_equal "Updated description", @bbq_sauce_merch.description
-    assert_equal 0.01, @bbq_sauce_merch.price
-    assert @bbq_sauce_merch.image.attached?
-    assert_equal "coffee.jpg", @bbq_sauce_merch.image.filename.to_s
+    assert_equal "Updated name", @merch.reload.name
+    assert_equal "Updated description", @merch.description
+    assert_equal 0.01, @merch.price
+    assert @merch.image.attached?
+    assert_equal "coffee.jpg", @merch.image.filename.to_s
 
-    assert_equal 1, @bbq_sauce_merch.categories.length
-    assert_equal merch_categories(:coffee), @bbq_sauce_merch.categories.first
+    assert_equal 1, @merch.categories.length
+    assert_equal @merch_category_1, @merch.categories.first
   end
 
   test "should destroy merch" do
     skip "How to handle destroying merch?"
-    assert_difference("Merch.count", -1) { delete admin_merch_url(@bbq_sauce_merch) }
+    assert_difference("Merch.count", -1) { delete admin_merch_url(@merch) }
 
     assert_redirected_to admin_merch_index_url
   end

@@ -5,6 +5,7 @@ services:
     build: .
     command: bin/dev
     tty: true
+    entrypoint: /app/entrypoint.sh
     volumes:
       - .:/app
       - bundle_cache:/bundle/vendor
@@ -38,7 +39,7 @@ services:
 
 
   db:
-    image: postgres
+    image: postgres:16
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password

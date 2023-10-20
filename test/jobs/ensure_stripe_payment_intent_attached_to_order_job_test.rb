@@ -2,7 +2,6 @@ require 'test_helper'
 require 'minitest/mock'
 
 class EnsureStripePaymentIntentAttachedToOrderJobTest < ActiveJob::TestCase
-
   test 'refund should be initiated when order does not exist with given payment intent' do
     Order.delete_all
 
@@ -18,7 +17,7 @@ class EnsureStripePaymentIntentAttachedToOrderJobTest < ActiveJob::TestCase
 
   test 'refund should not be initiated when order exists with given payment intent' do
     skip "Not working"
-    order = Order.create!(user: users(:larry_sellers))
+    order = Order.create!(user: users(:user))
     order.create_payment!(stripe_payment_intent_id: 'pi_67890')
 
     mock = Minitest::Mock.new

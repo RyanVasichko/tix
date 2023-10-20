@@ -2,9 +2,10 @@ require "application_system_test_case"
 
 class Admin::ShowsTest < ApplicationSystemTestCase
   setup do
-    @show = shows(:lcd_soundsystem)
-    @normal_section = seating_chart_sections(:normal)
-    @obstructed_section = seating_chart_sections(:obstructed)
+    @show = FactoryBot.create(:show)
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    @section_1 = @seating_chart.sections.first
+    @section_2 = @seating_chart.sections.second
   end
 
   test "visiting the index" do
@@ -13,6 +14,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   end
 
   test "should create show" do
+    artist = FactoryBot.create(:artist)
     show_date = Time.current.change(month: 4, day: 5, hour: 0, min: 0, sec: 0) + 1.year
     front_end_on_sale_at = show_date.change(month: 3, day: 5, hour: 8, min: 0, sec: 0)
     front_end_off_sale_at = show_date.change(month: 4, day: 20, hour: 21, min: 0, sec: 0)
@@ -22,19 +24,19 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     dinner_starts_at = show_date.change(hour: 18, min: 15)
     dinner_ends_at = show_date.change(hour: 19, min: 30)
     show_starts_at = show_date.change(hour: 20)
-    additional_artists_question = customer_questions(:additional_artists)
+    customer_question = FactoryBot.create(:customer_question)
 
     assert_difference "Show.count" do
       assert_difference "Show::Section.count", 2 do
         visit admin_shows_url
         click_on "New Show"
 
-        fill_in "Artist", with: "Radi"
-        find("li[data-combobox-option-label-param='Radiohead']").click
+        fill_in "Artist", with: "#{artist.name[0..2]}"
+        find("li[data-combobox-option-label-param='#{artist.name}']").click
 
-        select "Full House", from: "Seating chart"
-        fill_in "show_sections_attributes_#{@obstructed_section.id}_ticket_price", with: "23.50"
-        fill_in "show_sections_attributes_#{@normal_section.id}_ticket_price", with: "45"
+        select @seating_chart.name, from: "Seating chart"
+        fill_in "show_sections_attributes_#{@section_2.id}_ticket_price", with: "23.50"
+        fill_in "show_sections_attributes_#{@section_1.id}_ticket_price", with: "45"
 
         fill_in "Show date", with: show_date.to_formatted_s(:date_field)
         fill_in "Doors open at", with: doors_open_at.to_formatted_s(:time_field)
@@ -48,7 +50,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         fill_in "Front end off sale at", with: front_end_off_sale_at.to_formatted_s(:datetime_field)
 
         fill_in "Additional text", with: "This is some additional text"
-        check additional_artists_question.question
+        check customer_question.question
 
         click_on "Add Upsale"
         within "#show_upsales_fields" do
@@ -66,8 +68,8 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
     created_show = Show.last
 
-    assert_equal artists(:radiohead), created_show.artist
-    assert_equal seating_charts(:full_house), created_show.seating_chart
+    assert_equal artist, created_show.artist
+    assert_equal @seating_chart, created_show.seating_chart
     assert_equal "This is some additional text", created_show.additional_text
 
     assert_equal show_date, created_show.show_date
@@ -81,8 +83,8 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_equal front_end_on_sale_at, created_show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, created_show.front_end_off_sale_at
 
-    assert_equal 23.50, created_show.sections.find_by(seating_chart_section: @obstructed_section).ticket_price
-    assert_equal 45, created_show.sections.find_by(seating_chart_section: @normal_section).ticket_price
+    assert_equal 23.50, created_show.sections.find_by(seating_chart_section: @section_2).ticket_price
+    assert_equal 45, created_show.sections.find_by(seating_chart_section: @section_1).ticket_price
 
     assert_equal 1, created_show.upsales.count
     created_upsale = created_show.upsales.first
@@ -92,7 +94,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_equal 10, created_upsale.price
 
     assert_equal 1, created_show.customer_questions.count
-    assert_equal additional_artists_question, created_show.customer_questions.first
+    assert_equal customer_question, created_show.customer_questions.first
   end
 
   test "should update Show" do
