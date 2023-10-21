@@ -19,7 +19,6 @@ export default class extends ApplicationController {
   }
 
   get reservedByCurrentUser() {
-    console.log(this.currentUserId, this.reservedByIdValue, this.reservedUntilDate)
     return this.currentUserId === this.reservedByIdValue && this.reservedUntilDate > new Date();
   }
 

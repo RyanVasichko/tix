@@ -4,7 +4,6 @@ class Order::Ticket < ApplicationRecord
   belongs_to :show, inverse_of: :tickets
   has_one :user, through: :order
 
-
   delegate :seat_number, to: :seat
   delegate :table_number, to: :seat
 end

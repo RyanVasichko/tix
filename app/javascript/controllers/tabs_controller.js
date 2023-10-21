@@ -15,8 +15,6 @@ export default class extends Controller {
   };
 
   connect() {
-    console.log(this.dataset);
-    console.log(this.activeTabValue);
     this.displayActiveTab(this.activeTabValue);
   }
 
@@ -36,7 +34,7 @@ export default class extends Controller {
 
   displayActiveTab() {
     this.panelTargets.forEach((el, i) => {
-      if (this.activeTabValue == i) {
+      if (this.activeTabValue === i) {
         el.classList.remove("hidden");
       } else {
         el.classList.add("hidden");
@@ -44,7 +42,7 @@ export default class extends Controller {
     });
 
     this.tabTargets.forEach((el, i) => {
-      if (this.activeTabValue == i) {
+      if (this.activeTabValue === i) {
         el.classList.add("border-indigo-500", "text-indigo-600");
         el.classList.remove(...this.inactiveTabClassesValue);
         el.classList.add(...this.activeTabClassesValue);
@@ -55,7 +53,7 @@ export default class extends Controller {
     });
 
     this.iconTargets.forEach((el, i) => {
-      if (this.activeTabValue == i) {
+      if (this.activeTabValue === i) {
         el.classList.add(...this.activeIconClassesValue);
         el.classList.remove(...this.inactiveIconClassesValue);
       } else {
