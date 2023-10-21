@@ -8,17 +8,16 @@ class Order::Payment < ApplicationRecord
   validates :card_last_4, presence: true
 
   has_one :order, class_name: "Order", inverse_of: :payment, foreign_key: :order_payment_id
-  has_one :user, through: :order
 
   def process(save_payment_method = false)
-    stripe_customer = order.user.stripe_customer
+    stripe_customer = order.orderer.stripe_customer
     payment_method = Stripe::PaymentMethod.retrieve(self.stripe_payment_method_id)
     payment_intent_params = {
       amount: amount_in_cents,
       currency: :usd,
       payment_method: self.stripe_payment_method_id,
       confirm: true,
-      customer: stripe_customer.id,
+      customer: stripe_customer&.id,
       automatic_payment_methods: {
         enabled: true,
         allow_redirects: "never"
@@ -41,6 +40,6 @@ class Order::Payment < ApplicationRecord
       )
     end
 
-    return payment_intent["status"] == "succeeded"
+    payment_intent["status"] == "succeeded"
   end
 end

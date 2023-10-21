@@ -6,4 +6,16 @@ class User < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}"
   end
+
+  def guest?
+    false
+  end
+
+  def customer?
+    false
+  end
+
+  def admin?
+    false
+  end
 end

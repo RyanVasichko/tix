@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,6 +99,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
     t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
   end
 
+  create_table "order_guest_orderers", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "phone"
+    t.uuid "shopper_uuid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "order_merch", force: :cascade do |t|
     t.bigint "merch_id", null: false
     t.bigint "order_id", null: false
@@ -147,16 +157,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.decimal "order_total"
+    t.decimal "order_total", null: false
     t.string "order_number"
+    t.string "orderer_type", null: false
+    t.bigint "orderer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "order_payment_id"
     t.bigint "shipping_address_id"
     t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
+    t.index ["orderer_type", "orderer_id"], name: "index_orders_on_orderer"
     t.index ["shipping_address_id"], name: "index_orders_on_shipping_address_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "seating_chart_seats", force: :cascade do |t|
@@ -262,13 +273,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
     t.string "phone"
     t.string "email"
     t.string "password_digest"
-    t.string "type"
+    t.string "type", null: false
     t.string "stripe_customer_id"
     t.bigint "user_shopping_cart_id", null: false
+    t.uuid "shopper_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_shopping_cart_id"], name: "index_users_on_user_shopping_cart_id"
-    t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
+    t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL AND password_digest IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -280,7 +292,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   add_foreign_key "order_tickets", "shows"
   add_foreign_key "orders", "order_payments"
   add_foreign_key "orders", "order_shipping_addresses", column: "shipping_address_id"
-  add_foreign_key "orders", "users"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "show_seats", "show_sections"

@@ -1,11 +1,15 @@
 FactoryBot.define do
   factory :order do
-    association :user, factory: :customer
     order_total { Faker::Commerce.price }
     association :shipping_address, factory: :order_shipping_address
+    association :orderer, factory: :customer
 
     transient do
       tickets_count { 1 }
+    end
+
+    factory :guest_order do
+      association :orderer, factory: :guest_orderer
     end
 
     after(:build) do |order, evaluator|

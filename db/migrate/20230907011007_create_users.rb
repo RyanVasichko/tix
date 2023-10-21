@@ -6,16 +6,26 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :phone
       t.string :email, unique: true
       t.string :password_digest
-      t.string :type
+      t.string :type, null: false
       t.string :stripe_customer_id
       t.references :user_shopping_cart, null: false, foreign_key: true
+      t.uuid :shopper_uuid, null: false
 
       t.timestamps
     end
 
     execute <<-SQL
     ALTER TABLE users ADD CONSTRAINT check_guest_fields#{' '}
-    CHECK ((type != 'User::Guest' AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL) OR type = 'User::Guest');
+    CHECK (
+      (
+        type != 'User::Guest' 
+        AND first_name IS NOT NULL 
+        AND last_name IS NOT NULL 
+        AND email IS NOT NULL 
+        AND password_digest IS NOT NULL
+      ) 
+      OR type = 'User::Guest'
+    );
     SQL
   end
 end

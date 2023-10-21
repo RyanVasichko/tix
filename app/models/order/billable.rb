@@ -1,8 +1,12 @@
 module Order::Billable
   extend ActiveSupport::Concern
 
+  included do
+    validates :order_total, presence: true
+  end
+
   def total_in_cents
-    return (order_total * 100).to_i
+    (order_total * 100).to_i
   end
 
   def calculate_order_total

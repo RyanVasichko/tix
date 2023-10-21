@@ -1,5 +1,5 @@
 class User::Customer < User
-  include Authenticateable
+  include Authenticateable, Orderer
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -7,5 +7,9 @@ class User::Customer < User
 
   def order_form_type
     Order::CustomerOrderForm
+  end
+
+  def customer?
+    true
   end
 end

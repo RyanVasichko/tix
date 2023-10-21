@@ -4,22 +4,22 @@ import ApplicationController from "../../application_controller";
 // Connects to data-controller="shows--seating-chart--seat"
 export default class extends ApplicationController {
   static values = {
-    reservedById: Number,
+    reservedByUserId: String,
     reservationPath: String,
     reservedUntil: Number,
-    soldToUserId: Number
+    soldToUserId: String
   };
 
   get reservedUntilDate() {
     if (!this.reservedUntilValue) {
-      return null;
+      return undefined;
     }
 
     return new Date(this.reservedUntilValue * 1000);
   }
 
   get reservedByCurrentUser() {
-    return this.currentUserId === this.reservedByIdValue && this.reservedUntilDate > new Date();
+    return this.currentUserId === this.reservedByUserIdValue && this.reservedUntilDate > new Date();
   }
 
   get soldToCurrentUser() {
@@ -27,11 +27,11 @@ export default class extends ApplicationController {
   }
 
   get notReserved() {
-    return this.reservedByIdValue === 0 || this.reservedUntilDate < new Date();
+    return !this.reservedByUserIdValue || this.reservedUntilDate < new Date();
   }
 
   get notSold() {
-    return this.soldToUserIdValue === 0;
+    return !this.soldToUserIdValue;
   }
 
   get fillColor() {
@@ -43,7 +43,7 @@ export default class extends ApplicationController {
   }
 
   get currentUserId() {
-    return +document.body.dataset.currentUserId;
+    return document.body.dataset.currentUserId;
   }
 
   connect() {

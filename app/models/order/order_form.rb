@@ -18,7 +18,7 @@ class Order::OrderForm
   validate :shipping_address_valid?, if: -> { merch.any? }
 
   def self.for_user(user)
-    order = user.orders.build_for_user(user)
+    order = Order.build_for_user(user)
 
     user
       .order_form_type

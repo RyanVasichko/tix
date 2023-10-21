@@ -2,7 +2,7 @@ require "application_integration_test_case"
 
 class ShoppingCart::SeatReservationsControllerTest < ApplicationIntegrationTestCase
   test "should destroy a seat reservation" do
-    user = FactoryBot.create(:user, password: "password", password_confirmation: "password")
+    user = FactoryBot.create(:customer, password: "password", password_confirmation: "password")
     log_in_as(user, "password")
 
     seat = FactoryBot.build(:show_seat)

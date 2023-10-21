@@ -1,5 +1,5 @@
 class Order::GuestOrderForm < Order::OrderForm
-  before_create :guest_becomes_customer
+  before_create :set_guest_orderer
   attr_accessor :email, :first_name, :last_name, :phone
 
   validates_presence_of :email, :first_name, :last_name
@@ -8,7 +8,12 @@ class Order::GuestOrderForm < Order::OrderForm
     true
   end
 
-  def guest_becomes_customer
-    user.becomes_customer!(email, first_name, last_name, phone)
+  def set_guest_orderer
+    self.order.orderer = Order::GuestOrderer.new(
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      phone: phone,
+      shopper_uuid: Current.user.shopper_uuid)
   end
 end

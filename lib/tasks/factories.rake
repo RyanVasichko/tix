@@ -20,20 +20,26 @@ namespace :db do
 
         puts "Artists created"
 
-        seating_charts = FactoryBot.create_list(:seating_chart, 4, sections_count: 4, section_seats_count: 20)
+        4.times do
+          FactoryBot.create(:seating_chart, sections_count: 4, section_seats_count: 20)
+          Faker::SeatingChart.unique.clear
+        end
 
         puts "Seating charts created"
 
         shows_count.times do
           FactoryBot.create(
             :show,
-            seating_chart: seating_charts.sample,
             artist: artists.sample)
+          Faker::SeatingChart.unique.clear
         end
       end
 
       SeatingChart.all.each do |seating_chart|
         seating_chart.venue_layout.analyze unless seating_chart.venue_layout.analyzed?
+      end
+      Show.all.each do |show|
+        show.venue_layout.analyze unless show.venue_layout.analyzed?
       end
 
       puts "Shows created"
