@@ -96,10 +96,8 @@
 
           <div class="mt-6">
             <%= turbo_frame_tag "show_sections" do %>
-              <% show.sections.each do |section| %>
-                <%= form.fields_for :sections, section do |section_fields| %>
-                  <%= render "admin/shows/sections/form", section_fields: section_fields %>
-                <% end %>
+              <%= form.fields_for :sections do |section_fields| %>
+                <%= render "admin/shows/sections/form", section_fields: section_fields %>
               <% end %>
             <% end %>
           </div>

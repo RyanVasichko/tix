@@ -8,9 +8,9 @@ class Admin::ShowsController < Admin::AdminController
   def new
     @show = Show.new do |show|
       seating_chart = SeatingChart.includes(:sections).first
-      show.seating_chart = seating_chart
-      seating_chart.sections.each do |section|
-        show.sections.build(seating_chart_section: section)
+      show.seating_chart_id = seating_chart&.id
+      seating_chart&.sections&.each do |section|
+        show.sections.build(name: section.name, seating_chart_section_id: section.id)
       end
     end
   end
@@ -20,7 +20,6 @@ class Admin::ShowsController < Admin::AdminController
 
   def create
     @show = Show.new(show_params)
-    @show.build_seats
 
     if @show.save
       redirect_to admin_shows_url, flash: { success: "Show was successfully created." }
@@ -78,7 +77,7 @@ class Admin::ShowsController < Admin::AdminController
 
   def permitted_sections_attributes_for_action
     if action_name == "create"
-      %i[seating_chart_section_id ticket_price]
+      %i[name seating_chart_section_id ticket_price]
     elsif action_name == "update"
       %i[id ticket_price]
     end

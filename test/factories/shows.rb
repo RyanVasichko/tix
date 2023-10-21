@@ -10,22 +10,32 @@ FactoryBot.define do
     back_end_on_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
     back_end_off_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
     additional_text { Faker::Lorem.paragraph }
+    seating_chart_name { Faker::Lorem.word }
 
     association :artist
-    association :seating_chart
 
-    after(:build) do |show|
+    transient do
+      sections_count { 2 }
+      section_seats_count { 5 }
+    end
+
+    after(:build) do |show, evaluator|
       # Build an upsale for 10% of shows
       show.upsales << FactoryBot.build(:show_upsale) if Faker::Boolean.boolean(true_ratio: 0.1)
 
-      if show.seating_chart && !show.sections.any?
-        show.seating_chart.sections.each do |seating_chart_section|
-          show.sections << FactoryBot.build(
-            :show_section,
-            show: show,
-            seating_chart_section: seating_chart_section)
-        end
+      if show.sections.empty?
+        show.sections = FactoryBot.build_list(
+          :show_section,
+          evaluator.sections_count,
+          show: show,
+          seats_count: evaluator.section_seats_count)
       end
+
+      show.venue_layout.attach(
+        io: File.open(Rails.root.join('test', 'fixtures', 'files', 'seating_chart.bmp')),
+        filename: 'seating_chart.bmp',
+        content_type: 'image/bmp'
+      )
     end
   end
 end

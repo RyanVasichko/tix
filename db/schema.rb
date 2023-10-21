@@ -203,10 +203,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   create_table "show_sections", force: :cascade do |t|
     t.bigint "show_id", null: false
     t.decimal "ticket_price", precision: 10, scale: 2, null: false
-    t.bigint "seating_chart_section_id", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["seating_chart_section_id"], name: "index_show_sections_on_seating_chart_section_id"
     t.index ["show_id"], name: "index_show_sections_on_show_id"
   end
 
@@ -225,7 +224,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
 
   create_table "shows", force: :cascade do |t|
     t.bigint "artist_id", null: false
-    t.bigint "seating_chart_id", null: false
+    t.string "seating_chart_name", null: false
     t.datetime "show_date", null: false
     t.datetime "doors_open_at", null: false
     t.datetime "show_starts_at", null: false
@@ -239,7 +238,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_shows_on_artist_id"
-    t.index ["seating_chart_id"], name: "index_shows_on_seating_chart_id"
   end
 
   create_table "user_shopping_cart_merch", force: :cascade do |t|
@@ -287,11 +285,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_15_044858) do
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "show_seats", "show_sections"
   add_foreign_key "show_seats", "user_shopping_carts"
-  add_foreign_key "show_sections", "seating_chart_sections"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
-  add_foreign_key "shows", "seating_charts"
   add_foreign_key "user_shopping_cart_merch", "merch"
   add_foreign_key "user_shopping_cart_merch", "user_shopping_carts"
   add_foreign_key "users", "user_shopping_carts"

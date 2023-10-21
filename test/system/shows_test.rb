@@ -3,7 +3,7 @@ require "application_system_test_case"
 class ShowsTest < ApplicationSystemTestCase
   setup do
     @show = FactoryBot.create(:show)
-    @show.seating_chart.venue_layout.analyze unless @show.seating_chart.venue_layout.analyzed?
+    @show.venue_layout.analyze unless @show.venue_layout.analyzed?
   end
 
   test "visiting the index" do
@@ -12,7 +12,6 @@ class ShowsTest < ApplicationSystemTestCase
   end
 
   test "visiting a show" do
-    @show.seating_chart.venue_layout.analyze unless @show.seating_chart.venue_layout.analyzed?
     visit show_url(@show)
 
     assert_selector "h1", text: @show.artist_name

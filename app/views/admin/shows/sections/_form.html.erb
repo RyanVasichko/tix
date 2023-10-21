@@ -1,8 +1,9 @@
-<div class="mt-2 grid md:grid-cols-2 gap-x-4">
-  <%= section_fields.hidden_field :seating_chart_section_id %>
-
+<div id="show_section_<%= section_fields.object.persisted? ? section_fields.object.id : section_fields.object.seating_chart_section_id %>_fields" class="mt-2 grid md:grid-cols-2 gap-x-4">
+  <% if section_fields.object.new_record? %>
+    <%= section_fields.hidden_field :seating_chart_section_id %>
+  <% end %>
   <div>
-    <%= text_field_tag :seating_chart_section_name, section_fields.object.seating_chart_section.name, class: "form-control-text mt-2", disabled: true %>
+    <%= section_fields.text_field :name, class: "mt-2", disabled: true %>
   </div>
   <div>
     <%= section_fields.currency_field :ticket_price %>

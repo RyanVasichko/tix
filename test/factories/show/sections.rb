@@ -1,13 +1,20 @@
 FactoryBot.define do
   factory :show_section, class: 'Show::Section' do
     ticket_price { Faker::Commerce.price(range: 25..100.0) }
-    association :seating_chart_section
+    name { Faker::Lorem.word }
+    association :show
 
-    after(:build) do |show_section|
-      show_section.show = FactoryBot.build(:show, sections: [show_section]) unless show_section.show.present?
+    transient do
+      seats_count { 5 }
+    end
 
-      show_section.build_seats
-      show_section.seats.each { |seat| seat.show = show_section.show }
+    after(:build) do |show_section, evaluator|
+      if show_section.seats.empty?
+        show_section.seats = FactoryBot.build_list(
+          :show_seat,
+          evaluator.seats_count,
+          section: show_section)
+      end
     end
   end
 end

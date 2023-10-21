@@ -21,7 +21,7 @@ class User::Guest < User
   end
 
   def transfer_shopping_cart_to(user)
-    shopping_cart.transfer_from(self, to: user)
+    shopping_cart.transfer_to(user)
   end
 
   def destroy_later

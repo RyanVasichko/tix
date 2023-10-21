@@ -1,5 +1,5 @@
-<% width = @show.seating_chart.venue_layout.metadata["width"] %>
-<% height = @show.seating_chart.venue_layout.metadata["height"] %>
+<% width = @show.venue_layout.metadata["width"] %>
+<% height = @show.venue_layout.metadata["height"] %>
 
 <h1 class="text-center text-3xl mt-10">
   <%= @show.artist.name %>
@@ -8,7 +8,7 @@
 <div class="mt-10">
   <%= turbo_stream_from [@show, "seating_chart"] %>
   <svg data-controller="shows--seating-chart--svg" viewBox="0 0 <%= width %> <%= height %>">
-    <image href="<%= url_for(@show.seating_chart.venue_layout) %>" id="<%= dom_id(@show.seating_chart.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
+    <image href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
     </image>
     <%= render partial: "shows/sections/section", collection: @show.sections %>
   </svg>

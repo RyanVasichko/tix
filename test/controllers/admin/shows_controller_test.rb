@@ -30,36 +30,40 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     section_1 = seating_chart.sections.first
     section_2 = seating_chart.sections.second
 
-    assert_difference("Show.count") do
-      assert_difference("Show::Section.count", 2) do
-        params = {
-          artist_id: artist.id,
-          seating_chart_id: seating_chart.id,
-          show_date: show_date.strftime("%Y/%m/%d"),
-          doors_open_at: doors_open_at.strftime("%l:%M%p"),
-          dinner_starts_at: dinner_starts_at.strftime("%l:%M%p"),
-          dinner_ends_at: dinner_ends_at.strftime("%l:%M%p"),
-          show_starts_at: show_starts_at.strftime("%l:%M%p"),
-          front_end_on_sale_at: front_end_on_sale_at.strftime("%Y-%m-%dT%H:%M"),
-          front_end_off_sale_at: front_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
-          back_end_on_sale_at: back_end_on_sale_at.strftime("%Y-%m-%dT%H:%M"),
-          back_end_off_sale_at: back_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
-          additional_text: "Test additional text",
-          sections_attributes: [
-            { seating_chart_section_id: section_1.id, ticket_price: 65.99 },
-            { seating_chart_section_id: section_2.id, ticket_price: 49.50 }
-          ],
-          customer_question_ids: [customer_question.id]
-        }
-        post admin_shows_path, params: { show: params }
-      end
+    expected_differences = {
+      "Show.count" => 1,
+      "Show::Section.count" => 2
+    }
+    assert_difference(expected_differences) do
+      params = {
+        artist_id: artist.id,
+        seating_chart_id: seating_chart.id,
+        show_date: show_date.strftime("%Y/%m/%d"),
+        doors_open_at: doors_open_at.strftime("%l:%M%p"),
+        dinner_starts_at: dinner_starts_at.strftime("%l:%M%p"),
+        dinner_ends_at: dinner_ends_at.strftime("%l:%M%p"),
+        show_starts_at: show_starts_at.strftime("%l:%M%p"),
+        front_end_on_sale_at: front_end_on_sale_at.strftime("%Y-%m-%dT%H:%M"),
+        front_end_off_sale_at: front_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
+        back_end_on_sale_at: back_end_on_sale_at.strftime("%Y-%m-%dT%H:%M"),
+        back_end_off_sale_at: back_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
+        additional_text: "Test additional text",
+        sections_attributes: [
+          { seating_chart_section_id: section_1.id, ticket_price: 65.99 },
+          { seating_chart_section_id: section_2.id, ticket_price: 49.50 }
+        ],
+        customer_question_ids: [customer_question.id]
+      }
+      post admin_shows_path, params: { show: params }
+
+      assert_redirected_to admin_shows_path
     end
 
     show = Show.last
 
     refute_nil show
     assert_equal artist, show.artist
-    assert_equal seating_chart, show.seating_chart
+    assert_equal seating_chart.name, show.seating_chart_name
     assert_equal show_date, show.show_date
     assert_equal front_end_on_sale_at, show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, show.front_end_off_sale_at
@@ -70,14 +74,16 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     assert_equal dinner_ends_at, show.dinner_ends_at
     assert_equal show_starts_at, show.show_starts_at
 
-    assert_equal 65.99, show.sections.find_by(seating_chart_section: section_1).ticket_price
-    assert_equal 49.50, show.sections.find_by(seating_chart_section: section_2).ticket_price
+    assert_equal 65.99, show.sections.find_by(name: section_1.name).ticket_price
+    assert_equal 49.50, show.sections.find_by(name: section_2.name).ticket_price
 
     assert_equal "Test additional text", show.additional_text
     assert_equal [customer_question], show.customer_questions
   end
 
   test "should get edit" do
+    FactoryBot.create(:seating_chart)
+
     get edit_admin_show_path(@show)
     assert_response :success
   end

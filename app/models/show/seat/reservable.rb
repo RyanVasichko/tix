@@ -16,10 +16,10 @@ module Show::Seat::Reservable
     after_update_commit :broadcast_shopping_cart
   end
 
-  def transfer_reservation(from:, to:)
+  def transfer_reservation!(from:, to:)
     return unless reserved_by == from
 
-    with_lock { update(reservation_params_for_user(to)) }
+    with_lock { update!(reservation_params_for_user(to)) }
   end
 
   def reserve_for(user)

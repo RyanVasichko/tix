@@ -17,15 +17,23 @@ FactoryBot.define do
       reserved_seats_count { 0 }
     end
 
-    after(:build) do |user, evaluator|
-      if user.shopping_cart.empty?
-        user.shopping_cart = FactoryBot.build(
-          :shopping_cart,
-          merch_count: evaluator.shopping_cart_merch_count,
-          reserved_seats_count: evaluator.reserved_seats_count,
-          user: user)
-      end
+    shopping_cart do |evaluator|
+      FactoryBot.build(
+        :shopping_cart,
+        merch_count: evaluator.shopping_cart_merch_count,
+        reserved_seats_count: evaluator.reserved_seats_count,
+        user: nil)
     end
+
+    # after(:build) do |user, evaluator|
+    #   if user.shopping_cart.empty?
+    #     user.shopping_cart = FactoryBot.build(
+    #       :shopping_cart,
+    #       merch_count: evaluator.shopping_cart_merch_count,
+    #       reserved_seats_count: evaluator.reserved_seats_count,
+    #       user: user)
+    #   end
+    # end
 
     factory :guest, class: 'User::Guest' do
     end

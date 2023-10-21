@@ -12,10 +12,8 @@ class FactoriesTest < ActiveSupport::TestCase
       "SeatingChart::Seat.count" => 240
     }
 
-    seating_charts = nil
-
     assert_difference(expected_seating_chart_count_differences) do
-      seating_charts = FactoryBot.create_list(:seating_chart, 3, sections_count: 4, section_seats_count: 20)
+      FactoryBot.create_list(:seating_chart, 3, sections_count: 4, section_seats_count: 20)
     end
 
     artists = FactoryBot.create_list(:artist, 3)
@@ -25,18 +23,18 @@ class FactoriesTest < ActiveSupport::TestCase
       "SeatingChart::Section.count" => 0,
       "SeatingChart::Seat.count" => 0,
       "Show.count" => 5,
-      "Show::Section.count" => 20,
-      "Show::Seat.count" => 400,
+      "Show::Section.count" => 10,
+      "Show::Seat.count" => 50,
       "Artist.count" => 2
     }
 
     assert_difference(expected_show_count_differences) do
       2.times do
-        FactoryBot.create(:show, seating_chart: seating_charts.sample)
+        FactoryBot.create(:show)
       end
 
       3.times do
-        FactoryBot.create(:show, artist: artists.sample, seating_chart: seating_charts.sample)
+        FactoryBot.create(:show, artist: artists.sample)
       end
     end
 

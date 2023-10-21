@@ -3,7 +3,7 @@ require "application_system_test_case"
 class Admin::ShowsTest < ApplicationSystemTestCase
   setup do
     @show = FactoryBot.create(:show)
-    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2)
     @section_1 = @seating_chart.sections.first
     @section_2 = @seating_chart.sections.second
   end
@@ -35,8 +35,9 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         find("li[data-combobox-option-label-param='#{artist.name}']").click
 
         select @seating_chart.name, from: "Seating chart"
-        fill_in "show_sections_attributes_#{@section_2.id}_ticket_price", with: "23.50"
-        fill_in "show_sections_attributes_#{@section_1.id}_ticket_price", with: "45"
+
+        fill_ticket_price_for_section(@section_1.id, 45)
+        fill_ticket_price_for_section(@section_2.id, 23.50)
 
         fill_in "Show date", with: show_date.to_formatted_s(:date_field)
         fill_in "Doors open at", with: doors_open_at.to_formatted_s(:time_field)
@@ -69,7 +70,8 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     created_show = Show.last
 
     assert_equal artist, created_show.artist
-    assert_equal @seating_chart, created_show.seating_chart
+    assert_equal @seating_chart.name, created_show.seating_chart_name
+    assert_equal @seating_chart.venue_layout.blob, created_show.venue_layout.blob
     assert_equal "This is some additional text", created_show.additional_text
 
     assert_equal show_date, created_show.show_date
@@ -83,8 +85,22 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_equal front_end_on_sale_at, created_show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, created_show.front_end_off_sale_at
 
-    assert_equal 23.50, created_show.sections.find_by(seating_chart_section: @section_2).ticket_price
-    assert_equal 45, created_show.sections.find_by(seating_chart_section: @section_1).ticket_price
+    assert_equal 23.50, created_show.sections.find_by(name: @section_2.name).ticket_price
+    assert_equal 45, created_show.sections.find_by(name: @section_1.name).ticket_price
+
+    assert_equal 4, created_show.seats.count
+    @seating_chart.seats.group_by(&:section).each do |section, seats|
+      seats.each do |seat|
+        expected_seat = created_show.seats.joins(:section).where(
+          section: { name: section.name },
+          x: seat.x,
+          y: seat.y,
+          seat_number: seat.seat_number,
+          table_number: seat.table_number)
+
+        assert expected_seat.exists?
+      end
+    end
 
     assert_equal 1, created_show.upsales.count
     created_upsale = created_show.upsales.first
@@ -148,5 +164,15 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     click_on "Destroy this show", match: :first
 
     assert_text "Show was successfully destroyed"
+  end
+
+  private
+
+  def fill_ticket_price_for_section(div_id_suffix, price)
+    within("#show_section_#{div_id_suffix}_fields") do
+      # Using find with XPath to locate the desired input field based on ending substring
+      xpath_expression = %Q{.//input[substring(@name, string-length(@name) - string-length('][ticket_price]') +1) = '][ticket_price]']}
+      find(:xpath, xpath_expression).set(price)
+    end
   end
 end

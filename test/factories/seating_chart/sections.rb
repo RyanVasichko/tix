@@ -7,10 +7,10 @@ FactoryBot.define do
     end
 
     after(:build) do |section, evaluator|
-      section.seating_chart = FactoryBot.build(:seating_chart, sections: [section]) unless section.seating_chart.present?
+      section.seating_chart ||= FactoryBot.build(:seating_chart, sections: [section])
 
       if section.seats.empty?
-        section.seats << FactoryBot.build_list(
+        section.seats = FactoryBot.build_list(
           :seating_chart_seat,
           evaluator.seats_count,
           section: section)

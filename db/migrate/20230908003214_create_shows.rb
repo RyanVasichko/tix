@@ -2,7 +2,7 @@ class CreateShows < ActiveRecord::Migration[7.0]
   def change
     create_table :shows do |t|
       t.references :artist, null: false, foreign_key: true
-      t.references :seating_chart, null: false, foreign_key: true
+      t.string :seating_chart_name, null: false
       t.datetime :show_date, null: false
       t.datetime :doors_open_at, null: false
       t.datetime :show_starts_at, null: false

@@ -36,7 +36,7 @@ class OrdersTest < ApplicationSystemTestCase
     merch_2 = FactoryBot.create(:merch)
     show = FactoryBot.create(:show)
 
-    show.seating_chart.venue_layout.analyze
+    show.venue_layout.analyze
 
     visit merch_index_url
 

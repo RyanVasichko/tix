@@ -13,7 +13,6 @@ FactoryBot.define do
 
       if evaluator.tickets_count > 0 && order.tickets.empty?
         show = FactoryBot.build(:show)
-        show.build_seats
         seats = show.sections.map { |s| s.seats }.flatten.sample(evaluator.tickets_count)
         seats.each { |seat| seat.show = show }
         order.tickets.build_for_seats(seats)

@@ -10,13 +10,4 @@ class Show::Seat < ApplicationRecord
   validates :y, presence: true
   validates :seat_number, presence: true
   validates :table_number, presence: true
-
-  def self.build_from_seating_chart_seat(seating_chart_seat)
-    return new do |seat|
-      seat.x = seating_chart_seat.x
-      seat.y = seating_chart_seat.y
-      seat.seat_number = seating_chart_seat.seat_number
-      seat.table_number = seating_chart_seat.table_number
-    end
-  end
 end
