@@ -31,6 +31,10 @@ module User::Shopper
     has_many :shipping_addresses, class_name: "Order::ShippingAddress", through: :orders, source: :shipping_address
   end
 
+  def shopping_cart_with_items
+    User::ShoppingCart.includes_items.find(user_shopping_cart_id)
+  end
+
   def ticket_reservation_time
     15.minutes
   end

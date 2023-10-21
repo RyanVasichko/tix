@@ -3,12 +3,12 @@ class User::ShoppingCart < ApplicationRecord
   has_many :merch, dependent: :destroy, class_name: "User::ShoppingCart::Merch", foreign_key: :user_shopping_cart_id
   has_one :user, inverse_of: :shopping_cart
 
-  default_scope do
+  scope :includes_items, -> {
     includes(
       seats: [section: [{ show: :artist }]],
       merch: [merch: [{ image_attachment: :blob }]]
     )
-  end
+  }
 
   def total_items
     seats.count + merch.sum(:quantity)

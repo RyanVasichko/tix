@@ -1,8 +1,4 @@
-# Show Form 
-- [ ] Additional Questions Fields
-- Refactor other create templates to use helper methods so we don't have to generate a form
-Shopping Cart Refactoring
-- Create table and point references for tickets and merch to it
+# Orders
 - Create Order::GuestOrderer, dont automatically make a guest a customer, just create a GuestOrderer
 - Order should reference orderer, polymorphic
 
@@ -13,24 +9,6 @@ Shopping Cart Refactoring
 - [ ] Add general information
 - [ ] Add upsales
 
-- [ ] Create shopping_carts table
-- [ ] Add upsales to shopping cart
-- [ ] Add upsales to order form
-- [ ] Add customer questions to order form
-
-Shopping Cart Refactoring
-- Create table and point references for tickets and merch to it
-- Create Order::GuestOrderer, dont automatically make a guest a customer, just create a GuestOrderer
-- Order should reference orderer, polymorphic
-
-# Shows Index
-- [ ] Finish
-
-# Shows#show
-- [ ] Add general information
-- [ ] Add upsales
-
-- [ ] Create shopping_carts table
 - [ ] Add upsales to shopping cart
 - [ ] Add upsales to order form
 - [ ] Add customer questions to order form
@@ -53,8 +31,8 @@ Shopping Cart Refactoring
 - [ ] Have destroy method just deactivate a seating chart if it has shows
 - [ ] Convert slide over component to use el-transition
 
-  ## Sections
-  - [ ] Autofocus section when a new section is rendered
+## Sections
+- [ ] Autofocus section when a new section is rendered
 
 # Users
 - [ ] Add password requirements
@@ -79,13 +57,13 @@ Shopping Cart Refactoring
 # Merch
 - [ ] Add ordering of merch
 
-
 # Bugs
 - [ ] Adding "required" field to errored fields makes the fields look weird when they have the "$" and "USD" stuff in them. (see new show form, submit a section with no pricing)
 - [ ] Update merch, add category but don't fill anything in then save. Should pass validation but doesn't
 - [ ] You can uncheck the "All" chip
 - [ ] Cancelling a seat reservation from the shopping cart doesn't remove the seat from the shopping cart, but it does update the count and the circle color
 - [ ] Order form not validating address properly
+- - [ ] Deleting an existing seat on an existing seating chart does nothing
 
 - Outstanding merch orders screen
 - Shipped button on Merch
