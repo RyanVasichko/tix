@@ -1,0 +1,73 @@
+service: dosey_doe_tickets
+image: rvasichko/dosey_doe_tickets
+
+servers:
+  web:
+    hosts:
+      - 5.78.75.60
+    cmd: "./bin/rails server"
+    labels:
+      traefik.http.routers.dosey_doe_tickets.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.dosey_doe_tickets_secure.entrypoints: websecure
+      traefik.http.routers.dosey_doe_tickets_secure.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.dosey_doe_tickets_secure.tls: true
+      traefik.http.routers.dosey_doe_tickets_secure.tls.certresolver: letsencrypt
+  job:
+    hosts:
+      - 5.78.75.60
+    cmd: bundle exec sidekiq -C config/sidekiq.yml
+
+registry:
+  username: rvasichko
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    DB_HOST: 5.78.75.60
+    REDIS_URL: redis://5.78.75.60:6379/0
+    RAILS_SERVE_STATIC_FILES: 1
+    RUBY_ENABLE_YJIT: 1
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+
+builder:
+  multiarch: false
+
+accessories:
+  db:
+    image: postgres:16
+    host: 5.78.75.60
+    port: 5432
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+      clear:
+        POSTGRES_USER: 'dosey_doe_tickets'
+        POSTGRES_DB: 'my_app_production'
+    directories:
+      - data:/var/lib/postgresql/data
+  redis:
+    image: redis:7.0
+    host: 5.78.75.60
+    port: 6379
+    directories:
+      - data:/data
+
+traefik:
+  options:
+    publish:
+      - "443:443"
+    volume:
+      - "/letsencrypt/acme.json:/letsencrypt/acme.json"
+  args:
+    entryPoints.web.address: ":80"
+    entryPoints.websecure.address: ":443"
+    entryPoints.web.http.redirections.entryPoint.to: websecure
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+    certificatesResolvers.letsencrypt.acme.email: "ryanvasichko@gmail.com"
+    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
+    certificatesResolvers.letsencrypt.acme.httpchallenge: true
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web

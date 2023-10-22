@@ -19,4 +19,7 @@ test:
 
 production:
   <<: *default
+  host: <%= ENV["DB_HOST"] %>
+  username: dosey_doe_tickets
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
   database: dosey_doe_tickets

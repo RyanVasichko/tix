@@ -10,4 +10,5 @@ namespace :storage do
 end
 
 Rake::Task["db:fixtures:load"].enhance(["storage:clear"])
+Rake::Task["db:factories:load"].enhance(["storage:clear"])
 Rake::Task["db:create"].enhance(["storage:clear"])

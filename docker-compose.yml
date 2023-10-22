@@ -1,17 +1,20 @@
-version: '3'
+version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
     command: bin/dev
     tty: true
-    entrypoint: /app/entrypoint.sh
+    entrypoint: /rails/entrypoint.sh
     volumes:
-      - .:/app
+      - .:/rails
       - bundle_cache:/bundle/vendor
       - bundle_bin:/bundle/bin
-      - node_modules:/app/node_modules
-      - storage:/app/storage
+      - node_modules:/rails/node_modules
+      - storage:/rails/storage
     environment:
       - BUNDLE_PATH=/bundle/vendor
       - BUNDLE_BIN=/bundle/bin
@@ -23,20 +26,22 @@ services:
       - redis
 
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
     command: bundle exec sidekiq -C config/sidekiq.yml
     volumes:
-      - .:/app
+      - .:/rails
       - bundle_cache:/bundle/vendor
       - bundle_bin:/bundle/bin
-      - storage:/app/storage
+      - storage:/rails/storage
     environment:
       - BUNDLE_PATH=/bundle/vendor
       - BUNDLE_BIN=/bundle/bin
     depends_on:
       - db
       - redis
-
 
   db:
     image: postgres:16
