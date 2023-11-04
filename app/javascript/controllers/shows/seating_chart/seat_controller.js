@@ -59,14 +59,12 @@ export default class extends ApplicationController {
     if (this.reservedByCurrentUser) {
       this.element.setAttribute("fill", "green");
       await destroy(this.reservationPathValue);
-      Turbo.visit(window.location.href, { action: "replace" });
       return;
     }
 
     if (this.notReserved && this.notSold) {
       this.element.setAttribute("fill", "yellow");
       await post(this.reservationPathValue);
-      Turbo.visit(window.location.href, { action: "replace" });
     }
   }
 }

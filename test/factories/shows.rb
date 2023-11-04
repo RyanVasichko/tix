@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :show do
     show_date { Faker::Date.forward(days: 60) }
-    doors_open_at { Faker::Time.between(from: DateTime.now - 2, to: DateTime.now) }
+    doors_open_at { Faker::Time.between(from: DateTime.now.change(hour: 17), to: DateTime.now.change(hour: 19)) }
     show_starts_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
     dinner_starts_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
     dinner_ends_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
@@ -17,6 +17,13 @@ FactoryBot.define do
     transient do
       sections_count { 2 }
       section_seats_count { 5 }
+      venue_layout_blob do
+        ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
+          filename: "seating_chart.bmp",
+          content_type: "image/bmp"
+        )
+      end
     end
 
     after(:build) do |show, evaluator|
@@ -31,11 +38,7 @@ FactoryBot.define do
           seats_count: evaluator.section_seats_count)
       end
 
-      show.venue_layout.attach(
-        io: File.open(Rails.root.join('test', 'fixtures', 'files', 'seating_chart.bmp')),
-        filename: 'seating_chart.bmp',
-        content_type: 'image/bmp'
-      )
+      show.venue_layout.attach(evaluator.venue_layout_blob)
     end
   end
 end

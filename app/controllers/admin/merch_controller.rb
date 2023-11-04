@@ -4,7 +4,7 @@ class Admin::MerchController < Admin::AdminController
   def index
     @include_off_sale = params[:include_off_sale] == "1"
     @merch = Merch.includes(:categories)
-    @merch = @include_off_sale ? @merch.order(active: :desc) : @merch.active
+    @pagy, @merch = pagy(@include_off_sale ? @merch.order(active: :desc) : @merch.active)
   end
 
   def show

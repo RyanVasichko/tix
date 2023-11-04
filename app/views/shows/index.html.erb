@@ -1,16 +1,41 @@
-<div class="card max-w-md">
-  <h1 class="text-center text-xl">
+<div class="max-w-5xl card">
+  <h1 class="mb-5 text-center text-3xl font-semibold">
     Upcoming Shows
   </h1>
 
-  <div class="grid grid-cols-3 gap-4">
-    <% @shows.each do |show| %>
+  <% @shows.each do |show| %>
+    <div class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 md:grid-cols-2 last:border-b-0">
       <div>
-        <h3 class="text-lg text-center">
-          <%= link_to show.artist.name, show %>
-        </h3>
-        <%= image_tag(url_for(show.artist.image), id: "#{dom_id(show)}_#{dom_id(show.artist.image)}", data: { turbo_permanent: true }) %>
+        <%= image_tag url_for(show.artist.image), class: "md:max-h-48 rounded-md" %>
       </div>
-    <% end %>
-  </div>
+      <div class="grow">
+        <div class="text-xl font-semibold text-gray-800">
+          <%= show.artist.name %> - <%= show.show_date.strftime('%A, %B %e, %Y') %>
+        </div>
+
+        <div class="mb-5">
+          <p class="text-sm">Doors open at <%= show.doors_open_at.strftime('%l:%M %p') %></p>
+          <p class="text-sm">Dinner <%= show.dinner_starts_at.strftime('%l:%M %p') %> to <%= show.dinner_ends_at.strftime('%l:%M %p') %></p>
+          <% show.sections.each do |show_section| %>
+            <p class="text-sm"><%= show_section.name %> - <%= number_to_currency(show_section.ticket_price) %></p>
+          <% end %>
+        </div>
+        <%= link_to "Order Tickets", show, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50" %>
+<!--        - if show.class == ReservedSeatingShow-->
+<!--        - if show.seating_chart_contains_deposit_sections?-->
+<!--        div style="margin-top: 0.5em"-->
+<!--        strong Ticket Price Includes Three Course Meal-->
+<!--        div class="hideshowinfo" style="color: red" #{number_to_currency(show.deposit_amount)} Deposit Per Ticket Required At Time Of Purchase-->
+<!--        div class="hideshowinfo" style="color: red" The Remaining Balance Will Be Settled The Night Of The Show-->
+<!--        - else-->
+<!--        div style="color: #AE6940; font-family: 'Lato', sans-serif; font-weight: bold;"-->
+<!--        strong Come In Early, The Kitchen Is Open!-->
+<!--        - if show.class == GeneralAdmissionShow-->
+<!--        div style="color: #AE6940; font-family: 'Lato', sans-serif; font-weight: bold;"-->
+<!--        strong Come In Early, The Kitchen Is Open!-->
+      </div>
+    </div>
+  <% end %>
+
+  <%= custom_pagy_nav(@pagy) %>
 </div>

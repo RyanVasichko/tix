@@ -1,4 +1,4 @@
-<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 0 %>" class="card max-w-xl" data-action="turbo:frame-load->tabs#displayActiveTab">
+<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 0 %>" class="max-w-xl card" data-action="turbo:frame-load->tabs#displayActiveTab">
   <%= render "admin/merch/tabs" %>
 
   <%= turbo_frame_tag "admin_merch_panel" do %>
@@ -25,6 +25,11 @@
         <tbody class="table-tbody">
           <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { on_sale_column: @include_off_sale } %>
         </tbody>
+        <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+          <tr>
+            <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   <% end %>

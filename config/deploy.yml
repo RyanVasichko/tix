@@ -7,15 +7,21 @@ servers:
       - 5.78.75.60
     cmd: "./bin/rails server"
     labels:
-      traefik.http.routers.dosey_doe_tickets.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
-      traefik.http.routers.dosey_doe_tickets_secure.entrypoints: websecure
-      traefik.http.routers.dosey_doe_tickets_secure.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
-      traefik.http.routers.dosey_doe_tickets_secure.tls: true
-      traefik.http.routers.dosey_doe_tickets_secure.tls.certresolver: letsencrypt
+      traefik.http.routers.dosey_doe_tickets_v2.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.dosey_doe_tickets_v2_secure.entrypoints: websecure
+      traefik.http.routers.dosey_doe_tickets_v2_secure.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.dosey_doe_tickets_v2_secure.tls: true
+      traefik.http.routers.dosey_doe_tickets_v2_secure.tls.certresolver: letsencrypt
+    options:
+      volume:
+        - "/web_storage:/rails/storage"
   job:
     hosts:
       - 5.78.75.60
     cmd: bundle exec sidekiq -C config/sidekiq.yml
+    options:
+      volume:
+        - "/web_storage:/rails/storage"
 
 registry:
   username: rvasichko
@@ -24,8 +30,8 @@ registry:
 
 env:
   clear:
-    DB_HOST: 5.78.75.60
-    REDIS_URL: redis://5.78.75.60:6379/0
+    DB_HOST: 10.0.0.3
+    REDIS_URL: redis://10.0.0.3:6379/0
     RAILS_SERVE_STATIC_FILES: 1
     RUBY_ENABLE_YJIT: 1
   secret:
@@ -38,7 +44,7 @@ builder:
 accessories:
   db:
     image: postgres:16
-    host: 5.78.75.60
+    host: 5.78.84.126
     port: 5432
     env:
       secret:
@@ -50,7 +56,7 @@ accessories:
       - data:/var/lib/postgresql/data
   redis:
     image: redis:7.0
-    host: 5.78.75.60
+    host: 5.78.84.126
     port: 6379
     directories:
       - data:/data
@@ -64,10 +70,7 @@ traefik:
   args:
     entryPoints.web.address: ":80"
     entryPoints.websecure.address: ":443"
-    entryPoints.web.http.redirections.entryPoint.to: websecure
-    entryPoints.web.http.redirections.entryPoint.scheme: https
-    entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "ryanvasichko@gmail.com"
+    certificatesResolvers.letsencrypt.acme.email: "please@dont.spam"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web

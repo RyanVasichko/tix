@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   def color_for_flash_message_type(message_type)
     case message_type.to_sym
     when :success

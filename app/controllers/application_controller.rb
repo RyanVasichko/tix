@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
+
   before_action :set_current_user
 
   default_form_builder DoseyDoeTicketsFormBuilder::FormBuilder

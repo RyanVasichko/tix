@@ -11,3 +11,4 @@ vendor/* linguist-vendored
 *.webp binary
 *.bmp binary
 *.png binary
+*.jpg binary

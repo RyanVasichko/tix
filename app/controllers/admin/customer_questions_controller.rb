@@ -5,7 +5,7 @@ class Admin::CustomerQuestionsController < Admin::AdminController
   def index
     @show_inactive = params[:show_inactive] == "1"
     @customer_questions = @show_inactive ? CustomerQuestion.all : CustomerQuestion.active
-    @customer_questions = @customer_questions.order(active: :desc, created_at: :desc)
+    @pagy, @customer_questions = pagy(@customer_questions.order(active: :desc, created_at: :desc))
   end
 
   # GET /admin/customer_questions/new

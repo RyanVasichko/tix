@@ -3,7 +3,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
 
   # GET /admin/merch/categories
   def index
-    @merch_categories = Merch::Category.all
+    @pagy, @merch_categories = pagy(Merch::Category.all)
   end
 
   # GET /admin/merch/categories/new

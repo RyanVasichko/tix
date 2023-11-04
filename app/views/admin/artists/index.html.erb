@@ -18,12 +18,17 @@
             <%= link_to artist.name, edit_admin_artist_path(artist) %>
           </td>
           <td class="text-right text-gray-900 table-td sm:pr-6">
-            <%= render "shared/dropdown", { id: dom_id(artist, :admin)} do %>
+            <%= render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
               <%= dropdown_link_to artist.has_shows? ? "Deactivate" : "Delete", [:admin, artist], data: { turbo_method: "DELETE" } %>
             <% end %>
           </td>
         </tr>
       <% end %>
     </tbody>
+    <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+      <tr>
+        <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+      </tr>
+    </tfoot>
   </table>
 </div>

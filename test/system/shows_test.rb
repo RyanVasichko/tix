@@ -30,6 +30,8 @@ class ShowsTest < ApplicationSystemTestCase
       assert_selector "##{dom_id(seat)}[fill=yellow]"
     end
 
+    perform_enqueued_jobs
+
     within("#shopping_cart_count") { assert_text "1" }
     assert_equal seat.reload.reserved_by, customer
 
@@ -54,6 +56,7 @@ class ShowsTest < ApplicationSystemTestCase
       assert_selector "##{dom_id(seat)}[fill=green]"
     end
 
+    perform_enqueued_jobs
     within("#shopping_cart_count") { assert_text "0" }
     assert_nil seat.reload.reserved_by
 

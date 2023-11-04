@@ -9,7 +9,7 @@ class ShoppingCart::SeatReservationsControllerTest < ApplicationIntegrationTestC
     seat.reserve_for(user)
 
     delete shopping_cart_seat_reservation_url(seat)
-    assert_response :see_other
+    assert_response :no_content
 
     assert seat.reload.shopping_cart.nil?
   end

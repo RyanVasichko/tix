@@ -2,7 +2,7 @@ class Admin::SeatingChartsController < Admin::AdminController
   before_action :set_seating_chart, only: %i[show edit update destroy]
 
   def index
-    @seating_charts = SeatingChart.active
+    @pagy, @seating_charts = pagy(SeatingChart.active)
   end
 
   def show

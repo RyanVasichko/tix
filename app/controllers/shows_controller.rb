@@ -1,6 +1,6 @@
 class ShowsController < ApplicationController
   def index
-    @shows = Show.all.includes(artist: { image_attachment: :blob })
+    @pagy, @shows = pagy(Show.upcoming.includes(artist: { image_attachment: :blob }).order(:show_date),  items: 20)
   end
 
   def show

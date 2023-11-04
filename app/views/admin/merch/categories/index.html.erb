@@ -1,4 +1,4 @@
-<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 1 %>" class="card max-w-xl" data-action="turbo:frame-load->tabs#displayActiveTab">
+<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 1 %>" class="max-w-xl card" data-action="turbo:frame-load->tabs#displayActiveTab">
   <%= render "admin/merch/tabs" %>
 
   <%= turbo_frame_tag "admin_merch_panel", src: admin_merch_index_path do %>
@@ -21,10 +21,10 @@
         <tbody class="table-tbody" id="admin_merch_categories">
           <% @merch_categories.each do |merch_category| %>
             <tr id="<%= dom_id(merch_category, :admin) %>">
-              <td class="table-td text-indigo-600">
-                <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true } %>
+              <td class="text-indigo-600 table-td">
+                <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true, turbo: true } %>
               </td>
-              <td class="table-td text-gray-900 text-right sm:pr-6">
+              <td class="text-right text-gray-900 table-td sm:pr-6">
                 <%= render "shared/dropdown", { id: dom_id(merch_category, :admin) } do %>
                   <%= dropdown_link_to "Delete", [:admin, merch_category], data: { turbo_method: "delete", turbo: true } %>
                 <% end %>
@@ -32,6 +32,11 @@
             </tr>
           <% end %>
         </tbody>
+        <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+          <tr>
+            <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   <% end %>

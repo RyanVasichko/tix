@@ -2,7 +2,7 @@ class Admin::ShowsController < Admin::AdminController
   before_action :set_admin_show, only: %i[edit update destroy]
 
   def index
-    @shows = Show.upcoming.includes(:artist)
+    @pagy, @shows = pagy(Show.upcoming.includes(:artist).order(:show_date), items: 10)
   end
 
   def new

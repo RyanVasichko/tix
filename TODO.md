@@ -1,7 +1,3 @@
-# Orders
-- Create Order::GuestOrderer, dont automatically make a guest a customer, just create a GuestOrderer
-- Order should reference orderer, polymorphic
-
 # Shows Index
 - [ ] Finish
 

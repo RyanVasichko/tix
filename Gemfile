@@ -15,6 +15,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem "redis", "~> 5.0"
 gem "sidekiq"
 gem "stripe"
+gem "pagy"
 
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false

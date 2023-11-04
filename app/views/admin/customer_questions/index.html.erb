@@ -1,7 +1,7 @@
 <div class="max-w-xl card">
-  <h1 class="text-center text-3xl font-semibold mb-4">Customer Questions</h1>
+  <h1 class="mb-4 text-center text-3xl font-semibold">Customer Questions</h1>
 
-  <div class="flex justify-between items-baseline">
+  <div class="flex items-baseline justify-between">
     <%= form_with url: admin_customer_questions_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
       <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
       <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
@@ -40,6 +40,11 @@
           </tr>
         <% end %>
       </tbody>
+      <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+        <tr>
+          <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+        </tr>
+      </tfoot>
     </table>
   <% end %>
 </div>
