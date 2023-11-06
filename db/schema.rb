@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_06_004146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -195,6 +195,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "venue_id"
+    t.index ["venue_id"], name: "index_seating_charts_on_venue_id"
   end
 
   create_table "show_seats", force: :cascade do |t|
@@ -248,7 +250,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
     t.text "additional_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "venue_id"
     t.index ["artist_id"], name: "index_shows_on_artist_id"
+    t.index ["venue_id"], name: "index_shows_on_venue_id"
   end
 
   create_table "user_shopping_cart_merch", force: :cascade do |t|
@@ -283,6 +287,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
     t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL AND password_digest IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
   end
 
+  create_table "venues", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "order_merch", "merch"
@@ -294,11 +305,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_21_130854) do
   add_foreign_key "orders", "order_shipping_addresses", column: "shipping_address_id"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
+  add_foreign_key "seating_charts", "venues"
   add_foreign_key "show_seats", "show_sections"
   add_foreign_key "show_seats", "user_shopping_carts"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
+  add_foreign_key "shows", "venues"
   add_foreign_key "user_shopping_cart_merch", "merch"
   add_foreign_key "user_shopping_cart_merch", "user_shopping_carts"
   add_foreign_key "users", "user_shopping_carts"

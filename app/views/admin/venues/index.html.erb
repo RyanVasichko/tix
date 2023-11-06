@@ -1,0 +1,52 @@
+<%= turbo_frame_tag "admin_venues" do %>
+  <div class="max-w-xl card">
+    <h1 class="text-center text-3xl font-semibold">Venues</h1>
+
+    <div class="flex items-baseline justify-between">
+      <%= form_with url: admin_venues_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
+        <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
+        <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
+      <% end %>
+      <%= link_to "New Venue", new_admin_venue_path, class: "btn-primary px-2 py-1", data: { turbo_stream: true } %>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="table-th">Name</th>
+          <th scope="col" class="table-th">Active</th>
+          <th scope="col" class="table-th"></th>
+        </tr>
+      </thead>
+
+      <tbody class="table-tbody">
+        <% @venues.each do |venue| %>
+          <tr id="<%= dom_id(venue, :admin) %>">
+            <td class="text-indigo-600 table-td">
+              <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true } %>
+            </td>
+            <td class="table-td">
+              <%= svg_check if venue.active? %>
+            </td>
+            <td class="text-right text-gray-900 table-td sm:pr-6">
+              <%= render "shared/dropdown", { id: dom_id(venue, :admin) } do %>
+                <% if venue.active? -%>
+                  <%= dropdown_link_to "Deactivate", [:admin, venue], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
+                <% else %>
+                  <%= dropdown_link_to "Activate", [:admin, venue, { venue: { active: true } }], data: { turbo_method: "patch", turbo: true, turbo_frame: :_top } %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+
+      <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+        <tr>
+          <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+<% end %>

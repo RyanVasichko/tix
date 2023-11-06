@@ -5,49 +5,44 @@ module Deactivatable
     attribute :active, default: true
 
     scope :active, -> { where(active: true) }
+
+    before_save :clean_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && active}
+    before_save :add_suffix_to_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && !active }
   end
 
   def activate
-    update(activate_params)
+    update(active: true)
   end
 
   def activate!
-    update!(activate_params)
+    update!(active: true)
   end
 
   def deactivate
-    update(deactivate_params)
+    update(active: false)
   end
 
   def deactivate!
-    update!(deactivate_params)
+    update!(active: false)
+  end
+
+  def inactive?
+    !active?
   end
 
   private
 
-  def activate_params
-    { active: true }.tap do |params|
-      if respond_to?(:name)
-        # Strip off the (deactivated) part if present, and strip ending whitespace
-        clean_name = name.sub(/ \(Deactivated(\ \d+)?\)\z/, '').strip
-
-        record_with_name_already_exists = self.class.where(name: clean_name).exists?
-        params[:name] = record_with_name_already_exists ? name : clean_name
-      end
-    end
+  def clean_name
+    clean_name = name.sub(/ \(Deactivated(\ \d+)?\)\z/, '').strip
+    self.name = clean_name unless self.class.where(name: clean_name).exists?
   end
 
+  def add_suffix_to_name
+    base_name = "#{name} (Deactivated"
+    similar_name_count = self.class.where("name LIKE ?", "#{base_name}%").count
 
-  def deactivate_params
-    { active: false }.tap do |params|
-      if respond_to?(:name)
-        base_name = "#{name} (Deactivated"
-        similar_name_count = self.class.where("name LIKE ?", "#{base_name}%").count
-
-        # Add a count to the name only if there are other similar names.
-        suffix = similar_name_count.positive? ? "#{base_name} #{similar_name_count + 1})" : "#{base_name})"
-        params[:name] = suffix
-      end
-    end
+    # Add a count to the name only if there are other similar names.
+    suffix = similar_name_count.positive? ? "#{base_name} #{similar_name_count + 1})" : "#{base_name})"
+    self.name = suffix
   end
 end

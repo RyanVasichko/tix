@@ -1,9 +1,0 @@
-<%= turbo_stream.replace "show_sections" do %>
-  <%= turbo_frame_tag "show_sections" do %>
-    <% @show_sections.each do |show_section| %>
-      <%= fields_for "show[sections_attributes]", show_section, index: show_section.seating_chart_section_id do |section_fields| %>
-        <%= render "form", section_fields: section_fields %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>

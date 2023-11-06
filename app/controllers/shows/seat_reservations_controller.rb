@@ -1,17 +1,23 @@
 class Shows::SeatReservationsController < ApplicationController
+  before_action :set_show
   def create
-    @show = Show.find(params[:show_id])
     @seat = @show.seats.find(params[:seat_id])
 
     @seat.reserve_for(Current.user)
 
-    head :no_content
+    redirect_back_or_to @show, status: :see_other
   end
 
   def destroy
     @seat = Current.user.reserved_seats.find(params[:seat_id])
     @seat.cancel_reservation!
 
-    head :no_content
+    redirect_back_or_to @show, status: :see_other
+  end
+
+  private
+
+  def set_show
+    @show = Show.find(params[:show_id])
   end
 end

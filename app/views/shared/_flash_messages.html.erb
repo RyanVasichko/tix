@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "flash_messages" do %>
   <% flash.each do |message_type, message| %>
-    <div data-controller="dismissable" data-dismissable-auto-dismiss-value="false" class="rounded-md bg-<%= color_for_flash_message_type(message_type) %>-50 p-4">
+    <div data-controller="dismissable" data-dismissable-auto-dismiss-value="false" class="rounded-md bg-<%= color_for_toast_message_type(message_type) %>-50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">
           <% case message_type.to_sym %>
@@ -23,11 +23,11 @@
           <% end %>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-<%= color_for_flash_message_type(message_type) %>-800"><%= message %></p>
+          <p class="text-sm font-medium text-<%= color_for_toast_message_type(message_type) %>-800"><%= message %></p>
         </div>
         <div class="ml-auto pl-3">
           <div class="-mx-1.5 -my-1.5">
-            <button data-action="dismissable#dismiss" type="button" class="inline-flex rounded-md bg-<%= color_for_flash_message_type(message_type) %>-50 p-1.5 text-<%= color_for_flash_message_type(message_type) %>-500 hover:bg-<%= color_for_flash_message_type(message_type) %>-100 focus:outline-none focus:ring-2 focus:ring-<%= color_for_flash_message_type(message_type) %>-600 focus:ring-offset-2 focus:ring-offset-<%= color_for_flash_message_type(message_type) %>-50">
+            <button data-action="dismissable#dismiss" type="button" class="inline-flex rounded-md bg-<%= color_for_toast_message_type(message_type) %>-50 p-1.5 text-<%= color_for_toast_message_type(message_type) %>-500 hover:bg-<%= color_for_toast_message_type(message_type) %>-100 focus:outline-none focus:ring-2 focus:ring-<%= color_for_toast_message_type(message_type) %>-600 focus:ring-offset-2 focus:ring-offset-<%= color_for_toast_message_type(message_type) %>-50">
               <span class="sr-only">Dismiss</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />

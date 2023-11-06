@@ -4,7 +4,7 @@
       <% shopping_cart.seats.group_by(&:show).each do |show, seats| %>
         <li class="flex items-center py-6" id="show_<%= show.id %>_seat_reservations">
           <%= link_to show, data: { turbo: false } do %>
-            <%= image_tag url_for(show.artist.image), id: dom_id(show.artist.image), data: { turbo_permanent: true }, class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
+            <%= image_tag url_for(show.artist.image), id: "shopping_cart_#{dom_id(show.artist.image)}", data: { turbo_permanent: true }, class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
           <% end %>
           <div class="ml-4 flex-auto">
             <h3 class="font-medium text-gray-900">

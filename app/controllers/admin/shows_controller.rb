@@ -6,8 +6,10 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def new
-    @show = Show.new do |show|
-      seating_chart = SeatingChart.includes(:sections).first
+    venue = Venue.first
+    @seating_charts = venue.seating_charts.active
+    seating_chart = @seating_charts&.first
+    @show = Show.new(venue_id: venue&.id, seating_chart_id: seating_chart&.id) do |show|
       show.seating_chart_id = seating_chart&.id
       seating_chart&.sections&.each do |section|
         show.sections.build(name: section.name, seating_chart_section_id: section.id)
@@ -16,6 +18,7 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def edit
+    @seating_charts = @show.venue.seating_charts.active
   end
 
   def create
@@ -24,6 +27,8 @@ class Admin::ShowsController < Admin::AdminController
     if @show.save
       redirect_to admin_shows_url, flash: { success: "Show was successfully created." }
     else
+      venue = @show.venue_id.present? ? Venue.find(@show.venue_id) : Venue.first
+      @seating_charts = venue.seating_charts.active
       render :new, status: :unprocessable_entity
     end
   end
@@ -61,11 +66,12 @@ class Admin::ShowsController < Admin::AdminController
       :additional_text,
       customer_question_ids: [],
       sections_attributes: permitted_sections_attributes_for_action,
-      upsales_attributes: permitted_upsales_attributes
+      upsales_attributes: permitted_upsales_attributes,
     ]
     if action_name == "create"
       permitted_params << :seating_chart_id
       permitted_params << :artist_id
+      permitted_params << :venue_id
     end
 
     params.require(:show).permit(permitted_params)

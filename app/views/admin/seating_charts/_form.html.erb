@@ -87,6 +87,11 @@
                         </div>
                       <% end %>
 
+                      <div>
+                        <%= form.label :venue_id %>
+                        <%= form.collection_select :venue_id, Venue.active.select(:id, :name), :id, :name, {} %>
+                      </div>
+
                       <div class="flex items-end justify-between">
                         <h6 class="form-label mr-2">Sections</h6>
                         <%= link_to(

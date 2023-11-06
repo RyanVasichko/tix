@@ -1,0 +1,11 @@
+<% form = DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, @show, self, {})  %>
+
+<%= turbo_stream.update "show_seating_chart_fields" do %>
+  <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: @show.persisted?, seating_charts: @seating_charts %>
+<% end %> %>
+
+<%= turbo_stream.update "show_sections_fields" do %>
+  <%= form.fields_for :sections do |section_fields| %>
+    <%= render "admin/shows/sections_fields/section_fields", section_fields: section_fields %>
+  <% end %>
+<% end %>

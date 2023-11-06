@@ -1,0 +1,7 @@
+<%= turbo_stream.update "show_sections_fields" do %>
+  <% @show_sections.each do |show_section| %>
+    <%= fields_for "show[sections_attributes]", show_section, index: show_section.seating_chart_section_id do |section_fields| %>
+      <%= render "section_fields", section_fields: section_fields %>
+    <% end %>
+  <% end %>
+<% end %>

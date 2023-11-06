@@ -14,5 +14,5 @@ module.exports = {
     "./app/javascript/**/*.js",
     "./config/application.rb"
   ],
-  plugins: ["postcss-import", "@tailwindcss/forms", "@tailwindcss/aspect-ratio"]
+  plugins: [require("postcss-import"), require("@tailwindcss/forms"), require("@tailwindcss/aspect-ratio")]
 };

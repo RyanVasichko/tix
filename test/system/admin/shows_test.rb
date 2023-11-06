@@ -3,7 +3,8 @@ require "application_system_test_case"
 class Admin::ShowsTest < ApplicationSystemTestCase
   setup do
     @show = FactoryBot.create(:show)
-    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2)
+    FactoryBot.create_list(:venue, 3).tap { |venues| @venue = venues.sample }
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2, venue: @venue)
     @section_1 = @seating_chart.sections.first
     @section_2 = @seating_chart.sections.second
   end
@@ -34,6 +35,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         fill_in "Artist", with: "#{artist.name[0..2]}"
         find("li[data-combobox-option-label-param='#{artist.name}']").click
 
+        select @venue.name, from: "Venue"
         select @seating_chart.name, from: "Seating chart"
 
         fill_ticket_price_for_section(@section_1.id, 45)

@@ -26,7 +26,8 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
 
     customer_question = FactoryBot.create(:customer_question)
     artist = FactoryBot.create(:artist)
-    seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    venue = FactoryBot.create(:venue)
+    seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, venue: venue)
     section_1 = seating_chart.sections.first
     section_2 = seating_chart.sections.second
 
@@ -48,6 +49,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
         back_end_on_sale_at: back_end_on_sale_at.strftime("%Y-%m-%dT%H:%M"),
         back_end_off_sale_at: back_end_off_sale_at.strftime("%Y-%m-%dT%H:%M"),
         additional_text: "Test additional text",
+        venue_id: venue.id,
         sections_attributes: [
           { seating_chart_section_id: section_1.id, ticket_price: 65.99 },
           { seating_chart_section_id: section_2.id, ticket_price: 49.50 }
@@ -74,6 +76,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
     assert_equal dinner_ends_at, show.dinner_ends_at
     assert_equal show_starts_at, show.show_starts_at
 
+    assert_equal venue, show.venue
     assert_equal 65.99, show.sections.find_by(name: section_1.name).ticket_price
     assert_equal 49.50, show.sections.find_by(name: section_2.name).ticket_price
 

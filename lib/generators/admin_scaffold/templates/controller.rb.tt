@@ -9,7 +9,7 @@ class Admin::<%= controller_class_name %>Controller < Admin::AdminController
     @<%= plural_table_name %> = @show_inactive ? <%= class_name %>.all : <%= class_name %>.active
     @pagy, @<%= plural_table_name %> = pagy(@<%= plural_table_name %>.order(active: :desc, created_at: :desc))
     <%- else -%>
-    @pagy, @<%= plural_table_name %> = page(<%= orm_class.all(class_name) %>)
+    @pagy, @<%= plural_table_name %> = pagy(<%= orm_class.all(class_name) %>)
     <%- end -%>
   end
 

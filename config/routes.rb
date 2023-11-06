@@ -60,7 +60,11 @@ Rails.application.routes.draw do
       resources :artists, only: %i[new create]
 
       resources :seating_charts, only: [] do
-        resources :sections, only: %i[new]
+        resources :sections_fields, only: %i[index]
+      end
+
+      resources :venues, only: [] do
+        resources :seating_chart_fields, only: %i[index]
       end
     end
 
@@ -74,5 +78,7 @@ Rails.application.routes.draw do
       resources :sections, only: %i[new]
       resources :seats, only: %i[new]
     end
+
+    resources :venues, except: %i[show]
   end
 end

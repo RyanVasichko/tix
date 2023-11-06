@@ -2,10 +2,12 @@ require "application_integration_test_case"
 
 class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
   test 'should create seating chart with two sections and two seats in each' do
+    venue = FactoryBot.create(:venue)
     params = {
       seating_chart: {
         name: 'Test Seating Chart',
         venue_layout: fixture_file_upload(Rails.root.join('test', 'fixtures', 'files', 'seating_chart.bmp'), 'image/bmp'),
+        venue_id: venue.id,
         sections_attributes: {
           '0' => {
             name: 'Section 1',
@@ -25,7 +27,7 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
       }
     }
 
-    post('/admin/seating_charts', params:)
+    post('/admin/seating_charts', params: params, as: :turbo_stream)
 
     assert_response :redirect
 
@@ -37,5 +39,10 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
 
     assert_redirected_to admin_seating_charts_url
     assert_equal 'Seating chart was successfully created.', flash[:success]
+  end
+
+  test 'should gracefully handle invalid records' do
+    post('/admin/seating_charts', params: { seating_chart: { name: '' } })
+    assert_response :unprocessable_entity
   end
 end

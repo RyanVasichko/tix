@@ -1,0 +1,11 @@
+<%= form.label :seating_chart_id %>
+<%= form.collection_select(
+      :seating_chart_id,
+      seating_charts,
+      :id,
+      :name,
+      {},
+      class: "form-control-select",
+      disabled: disabled,
+      data: { action: "admin--shows-form#loadSeatingChartSections" })
+%>

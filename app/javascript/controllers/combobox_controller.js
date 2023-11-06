@@ -6,6 +6,13 @@ export default class extends ApplicationController {
 
   connect() {
     super.connect();
+    if (this.hiddenFieldTarget.value) {
+      const comboboxParams = {
+        optionValue: this.hiddenFieldTarget.value,
+        optionLabel: this.optionLabelTargets.find((ol) => ol.dataset.optionValue == this.hiddenFieldTarget.value).innerText
+      };
+      this.optionSelected({ params: comboboxParams });
+    }
   }
 
   filter() {

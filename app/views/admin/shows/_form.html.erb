@@ -1,5 +1,5 @@
 <%= turbo_frame_tag :admin, show, target: :_top do %>
-  <%= form_with(model: [:admin, show], class: "mt-12") do |form| %>
+  <%= form_with(model: [:admin, show], class: "mt-12", data: { controller: "admin--shows-form" }) do |form| %>
     <div class="my-6 flex justify-center" data-controller="clear-errors">
       <div class="w-full max-w-md">
         <%= render "shared/error_messages", { model: show } %>
@@ -14,13 +14,26 @@
         </h3>
 
         <div class="grid gap-6 md:grid-cols-2">
-          <div>
+          <div id="show_artist_fields">
             <%= render "artist_fields", form: form %>
           </div>
 
           <div>
             <%= form.label :show_date %>
             <%= form.date_field :show_date %>
+          </div>
+
+          <div>
+            <%= form.label :venue_id %>
+            <%= form.collection_select(
+                  :venue_id,
+                  Venue.active.select(:id, :name),
+                  :id,
+                  :name,
+                  {},
+                  disabled: show.persisted?,
+                  data: { action: "admin--shows-form#loadVenueSeatingCharts" })
+            %>
           </div>
 
           <div>
@@ -79,26 +92,13 @@
         <h3 class="mb-6 font-medium text-gray-900 text-md">
           Sections
         </h3>
-        <div data-controller="admin--shows-form--sections">
-          <div>
-            <%= form.label :seating_chart_id %>
-            <%= form.collection_select(
-                  :seating_chart_id,
-                  SeatingChart.active.select(:id, :name),
-                  :id,
-                  :name,
-                  {},
-                  class: "form-control-select",
-                  disabled: show.persisted?,
-                  data: { action: "admin--shows-form--sections#loadSections" })
-            %>
+        <div>
+          <div id="show_seating_chart_fields">
+            <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: show.persisted?, seating_charts: @seating_charts %>
           </div>
-
-          <div class="mt-6">
-            <%= turbo_frame_tag "show_sections" do %>
-              <%= form.fields_for :sections do |section_fields| %>
-                <%= render "admin/shows/sections/form", section_fields: section_fields %>
-              <% end %>
+          <div class="mt-6" id="show_sections_fields">
+            <%= form.fields_for :sections do |section_fields| %>
+              <%= render "admin/shows/sections_fields/section_fields", section_fields: section_fields %>
             <% end %>
           </div>
         </div>

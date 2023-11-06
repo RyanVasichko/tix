@@ -13,6 +13,7 @@ FactoryBot.define do
     seating_chart_name { Faker::Lorem.word }
 
     association :artist
+    association :venue
 
     transient do
       sections_count { 2 }

@@ -1,4 +1,4 @@
-<%= turbo_stream.replace "show_artist_fields" do %>
+<%= turbo_stream.update "show_artist_fields" do %>
   <%= render "admin/shows/artist_fields", form: DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, Show.new.tap { |s| s.build_artist }, self, {}) %>
 <% end %> %>
 

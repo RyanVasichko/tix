@@ -8,12 +8,12 @@
         <%= @show.artist.name %>
       </h1>
       <div>
-        <%= image_tag url_for(@show.artist.image), class: "rounded-md" %>
+        <%= image_tag url_for(@show.artist.image), id: "show_#{dom_id(@show.artist.image)}", class: "rounded-md", data: { turbo_permanent: "" } %>
       </div>
       <div>
         <p><%= @show.show_date.strftime('%A, %B %e, %Y') %></p>
         <p>Doors open at <%= @show.doors_open_at.strftime('%l:%M %p') %></p>
-        <% @show.sections.each do |show_section| %>
+        <% @show.sections.order(:name).each do |show_section| %>
           <p class="text-sm"><%= show_section.name %> - <%= number_to_currency(show_section.ticket_price) %></p>
         <% end %>
       </div>
@@ -21,9 +21,9 @@
     <div class="col-span-6 mt-10">
       <%= turbo_stream_from [@show, "seating_chart"] %>
       <svg data-controller="shows--seating-chart--svg" data-loader-target="content" viewBox="0 0 <%= width %> <%= height %>">
-        <image data-loader-target="loadable" data-action="load->loader#showContent" href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>">
+        <image data-loader-target="loadable" data-action="load->loader#showContent" href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
         </image>
-        <%= render partial: "shows/sections/section", collection: @show.sections %>
+        <%= render partial: "shows/sections/section", collection: @show.sections, cached: true %>
       </svg>
     </div>
   </div>

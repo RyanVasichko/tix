@@ -12,9 +12,13 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
   TOLERANCE = 2
 
   test 'creating a seating chart' do
+    venues = FactoryBot.create_list(:venue, 3)
+    selected_venue = venues.sample
+
     visit new_admin_seating_chart_path
 
     fill_in 'Name', with: 'Test Seating Chart'
+    select selected_venue.name, from: 'Venue'
 
     create_test_sections
     click_on "btn-slide-over-close"
@@ -32,6 +36,7 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
     assert_equal 'Test Seating Chart', seating_chart.name
     assert_equal 3, seating_chart.sections.count
     assert seating_chart.venue_layout.attached?
+    assert_equal selected_venue, seating_chart.venue
 
     3.times do |i|
       assert seating_chart.sections.where(name: "Test Section #{i + 1}").exists?

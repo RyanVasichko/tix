@@ -6,4 +6,19 @@ module ToastMessagesHelper
       end
     end
   end
+
+  def color_for_toast_message_type(message_type)
+    case message_type.to_sym
+    when :success
+      "green"
+    when :error
+      "red"
+    when :alert
+      "yellow"
+    when :notice
+      "indigo"
+    else
+      message_type.to_s
+    end
+  end
 end

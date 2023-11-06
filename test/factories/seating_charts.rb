@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :seating_chart do
     name { Faker::Lorem.unique.word }
     active { true }
+    association :venue
 
     transient do
       sections_count { 2 }

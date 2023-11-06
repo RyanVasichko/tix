@@ -4,10 +4,6 @@ class ShowsController < ApplicationController
   end
 
   def show
-    @show = Show.includes(
-      {
-        sections: [seats: [:show, ticket: { order: :orderer }]]
-      },
-      :artist).find(params[:id])
+    @show = Show.includes(:sections, :artist).find(params[:id])
   end
 end

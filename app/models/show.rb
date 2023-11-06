@@ -12,6 +12,8 @@ class Show < ApplicationRecord
   belongs_to :artist
   delegate :name, to: :artist, prefix: true
 
+  belongs_to :venue
+
   has_many :sections, class_name: "Show::Section", inverse_of: :show
   has_many :seats, through: :sections
   has_many :tickets, class_name: "Order::Ticket", inverse_of: :show

@@ -33,8 +33,8 @@ class Admin::SeatingChartsController < Admin::AdminController
       redirect_to admin_seating_charts_url, flash: { success: "Seating chart was successfully created." }
     else
       respond_to do |format|
-        format.turbo_stream
-        format.html { render :new }
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -72,6 +72,7 @@ class Admin::SeatingChartsController < Admin::AdminController
     params.require(:seating_chart).permit(
       :name,
       :venue_layout,
+      :venue_id,
       sections_attributes: [:id, :name, :_destroy, { seats_attributes: %i[id seat_number table_number x y _destroy] }]
     )
   end

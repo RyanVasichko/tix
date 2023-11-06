@@ -59,7 +59,7 @@
 - [ ] You can uncheck the "All" chip
 - [ ] Cancelling a seat reservation from the shopping cart doesn't remove the seat from the shopping cart, but it does update the count and the circle color
 - [ ] Order form not validating address properly
-- - [ ] Deleting an existing seat on an existing seating chart does nothing
+- [ ] Deleting an existing seat on an existing seating chart does nothing
 
 - Outstanding merch orders screen
 - Shipped button on Merch
