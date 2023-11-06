@@ -1,0 +1,29 @@
+<%%= turbo_frame_tag "#{dom_id(<%= model_resource_name %>, :admin)}_form", target: :_top do %>
+<%%= form_with(model: [:admin, <%= model_resource_name %>]) do |form| %>
+  <%%= render "shared/error_messages", { model: <%= model_resource_name %> } %>
+
+<% attributes.each_with_index do |attribute, index| -%>
+  <div class="mt-6">
+<% if attribute.password_digest? -%>
+    <%%= form.label :password, style: "display: block" %>
+    <%%= form.password_field :password %>
+  </div>
+
+  <div class="mt-6">
+    <%%= form.label :password_confirmation %>
+    <%%= form.password_field :password_confirmation %>
+<% elsif attribute.attachments? -%>
+    <%%= form.label :<%= attribute.column_name %> %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, multiple: true %>
+<% elsif attribute.name != "active" -%>
+    <%%= form.label :<%= attribute.column_name %> %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, tabindex: <%= index + 1 %><%= ", autofocus: true" if index == 0 %> %>
+<% end -%>
+  </div>
+
+<% end -%>
+  <div class="mt-10 flex items-center justify-end">
+    <%%= form.submit %>
+  </div>
+<%% end %>
+<%% end %>
