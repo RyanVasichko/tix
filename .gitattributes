@@ -12,3 +12,6 @@ vendor/* linguist-vendored
 *.bmp binary
 *.png binary
 *.jpg binary
+
+# See https://bun.sh/docs/install/lockfile
+*.lockb diff=lockb

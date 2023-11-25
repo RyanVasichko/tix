@@ -1,0 +1,18 @@
+input[type=submit] {
+    cursor: pointer;
+}
+
+input[type='number'].no-spin::-webkit-outer-spin-button,
+input[type='number'].no-spin::-webkit-inner-spin-button,
+input[type='number'].no-spin {
+    -webkit-appearance: none;
+    -moz-appearance: textfield !important;
+}
+
+input[type=submit]:disabled {
+    cursor: not-allowed;
+}
+
+button[type=submit]:disabled {
+    cursor: not-allowed;
+}

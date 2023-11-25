@@ -3,12 +3,7 @@ class Order < ApplicationRecord
 
   belongs_to :orderer, polymorphic: true
 
-  has_many :tickets, class_name: "Order::Ticket", inverse_of: :order do
-    def build_for_seats(seats)
-      seats.each { |seat| build(seat: seat, price: seat.section.ticket_price, show: seat.show) }
-    end
-  end
-
+  has_many :tickets, class_name: "Order::Ticket", inverse_of: :order
   has_many :seats, class_name: "Show::Seat", through: :tickets
 
   has_many :merch, class_name: "Order::Merch", inverse_of: :order do
@@ -40,7 +35,7 @@ class Order < ApplicationRecord
     end
 
     build do |order|
-      order.tickets.build_for_seats(user.shopping_cart.seats)
+      order.tickets << Order::Ticket.build_for_seats(user.shopping_cart.seats)
       order.merch.build_from_shopping_cart_merch(user.shopping_cart_merch)
 
       set_shipping_address.call(order) if order.merch.any?

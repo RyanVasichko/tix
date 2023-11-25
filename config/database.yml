@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i + ENV.fetch("GOOD_JOB_MAX_THREADS") { 5 }.to_i %>
 
 local: &local
   <<: *default
@@ -19,7 +19,7 @@ test:
 
 production:
   <<: *default
-  host: <%= ENV["DB_HOST"] %>
   username: dosey_doe_tickets
-  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV['DB_HOST'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
   database: dosey_doe_tickets

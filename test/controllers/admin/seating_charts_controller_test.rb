@@ -2,7 +2,7 @@ require "application_integration_test_case"
 
 class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
   test 'should create seating chart with two sections and two seats in each' do
-    venue = FactoryBot.create(:venue)
+    venue = FactoryBot.create(:venue, ticket_types_count: 2)
     params = {
       seating_chart: {
         name: 'Test Seating Chart',
@@ -11,6 +11,7 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
         sections_attributes: {
           '0' => {
             name: 'Section 1',
+            ticket_type_id: venue.ticket_types.first.id,
             seats_attributes: {
               '0' => { seat_number: '1', table_number: '1', x: 10, y: 10 },
               '1' => { seat_number: '2', table_number: '1', x: 20, y: 20 }
@@ -18,6 +19,7 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
           },
           '1' => {
             name: 'Section 2',
+            ticket_type_id: venue.ticket_types.second.id,
             seats_attributes: {
               '0' => { seat_number: '1', table_number: '2', x: 30, y: 30 },
               '1' => { seat_number: '2', table_number: '2', x: 40, y: 40 }

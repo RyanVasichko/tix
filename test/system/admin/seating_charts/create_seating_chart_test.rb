@@ -12,15 +12,20 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
   TOLERANCE = 2
 
   test 'creating a seating chart' do
-    venues = FactoryBot.create_list(:venue, 3)
+    venues = FactoryBot.create_list(:venue, 3, ticket_types_count: 4)
     selected_venue = venues.sample
+    sections_params = [
+      { name: 'Test Section 1', ticket_type_name: selected_venue.ticket_types.first.name },
+      { name: 'Test Section 2', ticket_type_name: selected_venue.ticket_types.second.name },
+      { name: 'Test Section 3', ticket_type_name: selected_venue.ticket_types.third.name }
+    ]
 
     visit new_admin_seating_chart_path
 
-    fill_in 'Name', with: 'Test Seating Chart'
+    find('#seating_chart_name').set('Test Seating Chart')
     select selected_venue.name, from: 'Venue'
 
-    create_test_sections
+    create_test_sections(sections_params)
     click_on "btn-slide-over-close"
     create_test_seats
     click_on "btn-slide-over-toggle"
@@ -38,8 +43,11 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
     assert seating_chart.venue_layout.attached?
     assert_equal selected_venue, seating_chart.venue
 
-    3.times do |i|
-      assert seating_chart.sections.where(name: "Test Section #{i + 1}").exists?
+    sections_params.each do |section_params|
+      assert seating_chart.sections.joins(:ticket_type).where(
+        name: section_params[:name],
+        ticket_types: { name: section_params[:ticket_type_name] }
+      ).exists?
     end
 
     assert_equal 3, seating_chart.seats.count
@@ -50,7 +58,7 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
 
       target_x = DRAG_TO_COORDINATES[i][:x]
       target_y = DRAG_TO_COORDINATES[i][:y]
-    
+
       seat_within_tolerance = seating_chart.seats.where(
         x: (target_x - TOLERANCE)..(target_x + TOLERANCE),
         y: (target_y - TOLERANCE)..(target_y + TOLERANCE)
@@ -60,9 +68,9 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
     end
   end
 
-  def create_test_sections
-    3.times do |i|
-      add_section("Test Section #{i + 1}", use_existing_input: i == 0)
+  def create_test_sections(sections_params)
+    sections_params.each_with_index do |section_params, i|
+      add_section(section_params[:name], section_params[:ticket_type_name], use_existing_input: i == 0)
     end
   end
 

@@ -1,11 +1,8 @@
-require "sidekiq/web"
-
 Rails.application.routes.draw do
   # Root route
   root to: "shows#index"
 
-  # Third-party routes
-  mount Sidekiq::Web => "/sidekiq"
+  mount GoodJob::Engine => 'good_job'
 
   # Sessions
   get "login", to: "sessions#new"
@@ -77,8 +74,14 @@ Rails.application.routes.draw do
     namespace :seating_charts do
       resources :sections, only: %i[new]
       resources :seats, only: %i[new]
+
+      resources :venues, only: [] do
+        resource :ticket_type_options, only: %i[show]
+      end
     end
 
     resources :venues, except: %i[show]
+
+    resources :ticket_types, except: %i[show]
   end
 end

@@ -1,0 +1,57 @@
+<%= turbo_frame_tag "admin_ticket_types", target: :_top do %>
+  <div class="max-w-4xl card">
+    <h1 class="text-center text-3xl font-semibold">Ticket Types</h1>
+
+    <div class="flex items-baseline justify-between">
+      <%= form_with url: admin_ticket_types_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
+        <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
+        <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
+      <% end %>
+      <%= link_to "New Ticket Type", new_admin_ticket_type_path, class: "btn-primary px-2 py-1" %>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="table-th">Name</th>
+          <th scope="col" class="table-th">Venue</th>
+          <th scope="col" class="table-th">Convenience fee type</th>
+          <th scope="col" class="table-th">Payment method</th>
+          <th scope="col" class="table-th">Active</th>
+          <th scope="col" class="table-th"></th>
+        </tr>
+      </thead>
+
+      <tbody class="table-tbody">
+        <% @ticket_types.each do |ticket_type| %>
+          <tr id="<%= dom_id(ticket_type, :admin) %>">
+            <td class="text-indigo-600 table-td">
+              <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type) %>
+            </td>
+            <td class="table-td"><%= ticket_type.venue.name %></td>
+            <td class="table-td"><%= ticket_type.convenience_fee_type.humanize %></td>
+            <td class="table-td"><%= ticket_type.payment_method.humanize %></td>
+            <td class="table-td">
+              <%= svg_check if ticket_type.active? %>
+            </td>
+            <td class="text-right text-gray-900 table-td sm:pr-6">
+              <%= render "shared/dropdown", { id: dom_id(ticket_type, :admin) } do %>
+                <% if ticket_type.active? -%>
+                  <%= dropdown_link_to "Deactivate", [:admin, ticket_type], data: { turbo_method: "delete" } %>
+                <% else %>
+                  <%= dropdown_link_to "Activate", [:admin, ticket_type, { ticket_type: { active: true } }], data: { turbo_method: "patch" } %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+
+      <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
+        <tr>
+          <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+<% end %>

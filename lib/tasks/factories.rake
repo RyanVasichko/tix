@@ -4,7 +4,7 @@ namespace :db do
   namespace :factories do
     task load: [:environment, "db:schema:load"] do
       artist_image_blobs = [
-          ActiveStorage::Blob.create_and_upload!(
+        ActiveStorage::Blob.create_and_upload!(
           io: File.open(Rails.root.join("test", "fixtures", "files", "radiohead.jpg")),
           filename: "radiohead.jpg",
           content_type: "image/jpeg"
@@ -22,52 +22,43 @@ namespace :db do
       venues_count = ENV.fetch("VENUES_COUNT") { 3 }.to_i
       puts "Creating #{artists_count} artists, #{shows_count} shows, #{venues_count} venues, and #{venue_seating_charts_count} seating charts per venue"
 
-      NullQueueAdapter.suppress_queues do
-        artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
-        puts "Artists created"
+      # NullQueueAdapter.suppress_queues do
+      artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
+      puts "Artists created"
 
-        venues = (1..venues_count).map { FactoryBot.create(:venue) }
-        puts "Venues created"
+      venues = (1..venues_count).map { FactoryBot.create(:venue) }
+      puts "Venues created"
 
-        venue_layout_blob = ActiveStorage::Blob.create_and_upload!(
-          io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
-          filename: "seating_chart.bmp",
-          content_type: "image/bmp"
-        )
+      venue_layout_blob = ActiveStorage::Blob.create_and_upload!(
+        io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
+        filename: "seating_chart.bmp",
+        content_type: "image/bmp"
+      )
 
-        venues.each do |venue|
-          venue_seating_charts_count.times do
-            FactoryBot.create(
-              :seating_chart,
-              sections_count: 4,
-              section_seats_count: 20,
-              venue_layout_blob: venue_layout_blob,
-              venue: venue)
-            Faker::SeatingChart.unique.clear
-          end
-        end
-        puts "Seating charts created"
-
-        shows_count.times do
+      venues.each do |venue|
+        venue_seating_charts_count.times do
           FactoryBot.create(
-            :show,
-            artist: artists.sample,
+            :seating_chart,
             sections_count: 4,
             section_seats_count: 90,
-            venue: venues.sample,
-            venue_layout_blob: venue_layout_blob)
+            venue_layout_blob: venue_layout_blob,
+            venue: venue)
           Faker::SeatingChart.unique.clear
         end
       end
+      puts "Seating charts created"
 
-      SeatingChart.all.each do |seating_chart|
-        seating_chart.venue_layout.analyze unless seating_chart.venue_layout.analyzed?
+      shows_count.times do
+        FactoryBot.create(
+          :show,
+          artist: artists.sample,
+          sections_count: 4,
+          section_seats_count: 90,
+          venue: venues.sample,
+          venue_layout_blob: venue_layout_blob)
+        Faker::SeatingChart.unique.clear
       end
-
-      Show.all.each do |show|
-        show.venue_layout.analyze unless show.venue_layout.analyzed?
-      end
-
+      # end
       puts "Shows created"
     end
   end

@@ -16,7 +16,6 @@ class <%= class_name.pluralize %>Test < ApplicationSystemTestCase
     click_on "New <%= human_name.downcase %>"
 
     <%- attributes_hash.each do |attr, value| -%>
-    <% puts( "********", attr, value) %>
     <%- if boolean?(attr) -%>
     check "<%= attr.humanize %>" if <%= value %>
     <%- else -%>

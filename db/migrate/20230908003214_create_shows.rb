@@ -13,6 +13,7 @@ class CreateShows < ActiveRecord::Migration[7.0]
       t.datetime :back_end_on_sale_at, null: false
       t.datetime :back_end_off_sale_at, null: false
       t.text :additional_text
+      t.decimal :deposit_amount, precision: 8, scale: 2, null: false, default: 0
 
       t.timestamps
     end

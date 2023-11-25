@@ -1,0 +1,90 @@
+<%= turbo_frame_tag "#{dom_id(ticket_type, :admin)}_form", target: :_top do %>
+  <%= form_with(model: [:admin, ticket_type], data: { controller: "admin--ticket-type-form" }) do |form| %>
+    <%= render "shared/error_messages", { model: ticket_type } %>
+
+    <div class="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name, tabindex: 2 %>
+      </div>
+
+      <div>
+        <%= form.label :venue_id %>
+        <%= form.collection_select :venue_id, Venue.active.select(:id, :name), :id, :name, {}, tabindex: 1, autofocus: true, disabled: ticket_type.persisted? %>
+      </div>
+
+      <div>
+        <%= form.label :convenience_fee %>
+        <div class="relative mt-2 rounded-md shadow-sm">
+          <div data-admin--ticket-type-form-target="flatRateConvenienceFeeLabel" class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 <%= "hidden" if ticket_type.convenience_fee_type == "percentage" %>">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+          </div>
+          <%= form.number_field(
+                :convenience_fee,
+                value: number_with_precision(ticket_type.convenience_fee, precision: ticket_type.convenience_fee_type == "percentage" ? 0 : 2),
+                tabindex: 3,
+                step: "0.01",
+                class: "form-control-text no-spin#{" pl-6" unless ticket_type.convenience_fee_type == "percentage"}",
+                min: 0,
+                data: { admin__ticket_type_form_target: "convenienceFeeInput" })
+          %>
+          <div data-admin--ticket-type-form-target="percentageConvenienceFeeLabel" class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 <%= "hidden" unless ticket_type.convenience_fee_type == "percentage" %>">
+            <span class="text-gray-500 sm:text-sm" id="price-currency">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :convenience_fee_type %>
+        <%= form.select(
+              :convenience_fee_type,
+              options_for_select(TicketType.convenience_fee_types.map { |k, v| [k.humanize, k] }, ticket_type.convenience_fee_type),
+              {},
+              tabindex: 4,
+              data: { admin__ticket_type_form_target: "convenienceFeeTypeSelect", action: "admin--ticket-type-form#customizeInputsForConvenienceFeeType" }) %>
+      </div>
+
+      <div>
+        <%= form.label :default_price %>
+        <div class="relative mt-2 rounded-md shadow-sm">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+          </div>
+          <%= form.currency_field :default_price, tabindex: 5 %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :venue_commission %>
+        <div class="relative mt-2 rounded-md shadow-sm">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+          </div>
+          <%= form.currency_field :venue_commission, tabindex: 6 %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :payment_method %>
+        <%= form.select :payment_method, options_for_select(TicketType.payment_methods.map { |k, v| [k.humanize, k] }), {}, tabindex: 9 %>
+      </div>
+
+      <div class="flex h-full flex-col">
+        <%= form.label :dinner_included %>
+        <div class="flex grow items-center">
+          <%= form.check_box :dinner_included, tabindex: 7 %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 flex items-center justify-end">
+      <%= form.submit %>
+    </div>
+  <% end %>
+<% end %>

@@ -10,7 +10,20 @@ class Show::Seat < ApplicationRecord
   validates :seat_number, presence: true
   validates :table_number, presence: true
 
-  def sold_to_orderer
+  def self.build_from_seating_chart_seat(seating_chart_seat)
+    build(
+      x: seating_chart_seat.x,
+      y: seating_chart_seat.y,
+      seat_number: seating_chart_seat.seat_number,
+      table_number: seating_chart_seat.table_number
+    )
+  end
+
+  def orderer
     ticket&.orderer
+  end
+
+  def sold?
+    orderer.present?
   end
 end

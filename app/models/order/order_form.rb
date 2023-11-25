@@ -36,9 +36,11 @@ class Order::OrderForm
       self.order = initializer[:user].orders.build
       super(initializer)
 
+      # TODO: Validate that seat ids match user's reserved seats
       seats = user.reserved_seats.includes(section: :show).where(id: seat_ids)
-      self.order.tickets.build_for_seats(seats)
+      self.order.tickets = Order::Ticket.build_for_seats(seats)
 
+      # TODO: Validate that merch ids match user's shopping cart merch
       merch = user.shopping_cart.merch.includes(:merch).where(merch_id: merch_ids)
       self.order.merch.build_from_shopping_cart_merch(merch)
 

@@ -8,91 +8,55 @@
 @import "tailwindcss/utilities";
 /* @import "./custom-utilities.css"; */
 
+@import "pagination";
+@import "inputs";
+
 @layer base {
-  .btn-primary {
-    @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
-  }
-  .card {
-    @apply mx-auto overflow-visible rounded-lg border-b border-slate-300 bg-white px-4 py-5 shadow sm:px-6;
-  }
+    .btn-primary {
+        @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+    }
 
-  .form-label {
-    @apply block leading-6 text-gray-900 font-medium
-  }
+    .card {
+        @apply mx-auto overflow-visible rounded-lg border-b border-slate-300 bg-white px-4 py-5 shadow sm:px-6;
+    }
 
-  .form-control-text {
-    @apply mt-2 block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  }
+    .form-label {
+        @apply block leading-6 text-gray-900 font-medium;
+    }
 
-  .form-control-select {
-    @apply mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6;
-  }
+    .form-control-text {
+        @apply mt-2 block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
+    }
 
-  .form-control-check-box {
-    @apply h-4 w-4 rounded border-gray-300 text-indigo-600 accent-indigo-600;
-  }
+    .form-control-select {
+        @apply mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6;
+    }
 
-  .form-control-radio-button {
-    @apply mt-5 mr-4 h-4 w-4 border-gray-300 text-indigo-600 accent-indigo-500;
-  }
+    .form-control-check-box {
+        @apply h-4 w-4 rounded border-gray-300 text-indigo-600 accent-indigo-600;
+    }
 
-  .table {
-    @apply min-w-full divide-y divide-gray-300;
-  }
+    .form-control-radio-button {
+        @apply mt-5 mr-4 h-4 w-4 border-gray-300 text-indigo-600 accent-indigo-500;
+    }
 
-  .table-th {
-    @apply pr-3 pl-4 text-left text-sm font-semibold text-gray-900 py-3.5;
-  }
+    .table {
+        @apply min-w-full divide-y divide-gray-300;
+    }
 
-  .table-tbody {
-    @apply divide-y divide-gray-200;
-  }
+    .table-th {
+        @apply pr-3 pl-4 text-left text-sm font-semibold text-gray-900 py-3.5;
+    }
 
-  .table-td {
-    @apply whitespace-nowrap py-4 pr-3 pl-4 text-sm font-medium;
-  }
+    .table-tbody {
+        @apply divide-y divide-gray-200;
+    }
 
-  .errors {
-    @apply border border-red-500;
-  }
-}
+    .table-td {
+        @apply whitespace-nowrap py-4 pr-3 pl-4 text-sm font-medium;
+    }
 
-input[type=submit] {
-  cursor: pointer;
-}
-
-input[type=submit]:disabled {
-  cursor: not-allowed;
-}
-
-button[type=submit]:disabled {
-  cursor: not-allowed;
-}
-
-.pagy-nav.pagination {
-  @apply isolate inline-flex -space-x-px rounded-md shadow-sm;
-}
-
-.page.next a {
-  @apply relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
-}
-
-.page.prev a {
-  @apply relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
-}
-
-.page.next.disabled {
-  @apply relative inline-flex items-center rounded-r-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
-}
-
-.page.prev.disabled {
-  @apply relative inline-flex items-center rounded-l-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
-}
-
-.page a, .page.gap {
-  @apply bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20;
-}
-
-.page.active {
-  @apply z-10 border-indigo-500 bg-indigo-50 text-indigo-600 relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20;
+    .errors {
+        @apply border border-red-500;
+    }
 }

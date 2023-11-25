@@ -40,7 +40,12 @@ class Admin::<%= controller_class_name %>Controller < Admin::AdminController
   # PATCH/PUT /admin<%= route_url %>/1
   def update
     if @<%= orm_instance.update("#{singular_table_name}_params") %>
-      redirect_to admin_<%= index_helper %>_url, notice: <%= %("#{human_name} was successfully updated.") %>, status: :see_other
+      <%- if attribute_names.include?("active") -%>
+        message = <%= "#{singular_table_name}_params" %> == "true" ? "<%= human_name %> was successfully activated." : "<%= human_name %> was successfully updated."
+        redirect_to admin_<%= index_helper %>_url, notice: message, status: :see_other
+      <%- else -%>
+        redirect_to admin_<%= index_helper %>_url, notice: <%= %("#{human_name} was successfully updated.") %>, status: :see_other
+      <%- end -%>
     else
       render :edit, status: :unprocessable_entity
     end

@@ -19,6 +19,9 @@ application.register("admin--seating-chart-form", Admin__SeatingChartFormControl
 import Admin__ShowsFormController from "./admin/shows_form_controller"
 application.register("admin--shows-form", Admin__ShowsFormController)
 
+import Admin__TicketTypeFormController from "./admin/ticket_type_form_controller"
+application.register("admin--ticket-type-form", Admin__TicketTypeFormController)
+
 import ApplicationController from "./application_controller"
 application.register("application", ApplicationController)
 

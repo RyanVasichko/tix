@@ -25,10 +25,16 @@ module DoseyDoeTicketsFormBuilder
       super(method, collection, value_method, text_method, options, html_options)
     end
 
+    def select(method, choices = nil, options = {}, html_options = {}, &block)
+      add_class_to_options(html_options, "form-control-select")
+      add_error_fields_to_options(options, method)
+      super(method, choices, options, html_options, &block)
+    end
+
     FIELD_METHODS = %i[date_field time_field datetime_field number_field text_area text_field email_field telephone_field].freeze
     FIELD_METHODS.each do |method_name|
       define_method(method_name) do |method, options = {}|
-        add_class_to_options(options, "form-control-text mt-1")
+        add_class_to_options(options, "form-control-text")
         add_error_fields_to_options(options, method)
         @template.safe_join([super(method, options), error_message_for(method)])
       end

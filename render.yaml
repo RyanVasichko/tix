@@ -4,50 +4,30 @@ databases:
     databaseName: dosey_doe_tickets
     user: dosey_doe_tickets
     plan: free
-    region: oregon
+    region: ohio
 
 services:
   - type: web
-    plan: starter
+    plan: standard
     name: dosey_doe_tickets
-    runtime: ruby
-    region: oregon
-    buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec puma -C config/puma.rb"
+    runtime: docker
+    region: ohio
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: dosey_doe_tickets
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: redis
-          property: connectionString
-      - fromGroup: Dosey Doe Tickets
-
-  - type: redis
-    plan: free
-    name: redis
-    region: oregon
-    maxmemoryPolicy: noeviction
-    ipAllowList: []
-
-  - type: worker
-    name: dosey_doe_tickets_worker
-    plan: starter
-    runtime: ruby
-    region: oregon
-    buildCommand: bundle install
-    startCommand: bundle exec sidekiq
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: dosey_doe_tickets
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: redis
-          property: connectionString
-      - fromGroup: Dosey Doe Tickets
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_MAX_THREADS
+        value: 2
+      - key: RAILS_MIN_THREADS
+        value: 1
+      - key: WEB_CONCURRENCY
+        value: 0
+      - key: GOOD_JOB_MAX_THREADS
+        value: 1
+      - key: RAILS_STORAGE_PATH
+        value: /app/data/storage
+      - key: RUBY_YJIT_ENABLE
+        value: 1
+    disk:
+      name: storage
+      mountPath: /app/data/storage
+      sizeGB: 1

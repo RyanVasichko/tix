@@ -1,10 +1,5 @@
 class Show < ApplicationRecord
-  include GoesOnSale, Agenda
-  attr_accessor :seating_chart_id
-
-  has_one_attached :venue_layout
-
-  validates :seating_chart_name, presence: true
+  include GoesOnSale, Agenda, SeatingChartable
 
   validates :show_date, presence: true
   scope :upcoming, -> { where(show_date: Time.current..) }
@@ -23,16 +18,7 @@ class Show < ApplicationRecord
   accepts_nested_attributes_for :sections, allow_destroy: true
   accepts_nested_attributes_for :upsales, reject_if: :all_blank
 
-  after_initialize :set_seating_chart_name, if: :seating_chart_id
-  after_initialize :set_venue_layout, if: :seating_chart_id
-
-  private
-
-  def set_seating_chart_name
-    self.seating_chart_name = SeatingChart.find(seating_chart_id).name
-  end
-
-  def set_venue_layout
-    self.venue_layout.attach(SeatingChart.includes(:venue_layout_blob).find(seating_chart_id).venue_layout.blob)
+  def contains_deposit_section?
+    sections.any?(&:deposit?)
   end
 end

@@ -1,5 +1,6 @@
 class SeatingChart::Section < ApplicationRecord
   belongs_to :seating_chart, inverse_of: :sections
+  belongs_to :ticket_type
 
   has_many :seats,
            inverse_of: :section,

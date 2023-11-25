@@ -37,7 +37,7 @@ module Show::Seat::Reservable
   private
 
   def reservable_by?(user)
-    shopping_cart.nil? || shopping_cart == user.shopping_cart || reserved_until.past?
+    (shopping_cart.nil? || shopping_cart == user.shopping_cart || reserved_until.past?) && !sold?
   end
 
   def reservation_params_for_user(user)

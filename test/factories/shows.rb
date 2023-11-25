@@ -27,6 +27,8 @@ FactoryBot.define do
       end
     end
 
+    trait(:past) { show_date { Faker::Date.backward(days: 60) } }
+
     after(:build) do |show, evaluator|
       # Build an upsale for 10% of shows
       show.upsales << FactoryBot.build(:show_upsale) if Faker::Boolean.boolean(true_ratio: 0.1)

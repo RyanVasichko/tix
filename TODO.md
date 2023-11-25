@@ -1,3 +1,7 @@
+# Ticket Types
+- [ ] Add fees to order form
+- [ ] Add fees to order summary
+
 # Shows Index
 - [ ] Finish
 
@@ -60,6 +64,9 @@
 - [ ] Cancelling a seat reservation from the shopping cart doesn't remove the seat from the shopping cart, but it does update the count and the circle color
 - [ ] Order form not validating address properly
 - [ ] Deleting an existing seat on an existing seating chart does nothing
+- [ ] Ticket types form - convenience fee error messages are not styled properly
+- [ ] Shopping cart is weird
+- [ ] Removing a section on the seating chart form closes the slideout
 
 - Outstanding merch orders screen
 - Shipped button on Merch

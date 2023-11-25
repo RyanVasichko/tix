@@ -23,14 +23,13 @@ services:
     depends_on:
       - db
       - selenium
-      - redis
 
   worker:
     build:
       context: .
       dockerfile: Dockerfile
       target: development
-    command: bundle exec sidekiq -C config/sidekiq.yml
+    command: bundle exec good_job start
     volumes:
       - .:/rails
       - bundle_cache:/bundle/vendor
@@ -41,7 +40,6 @@ services:
       - BUNDLE_BIN=/bundle/bin
     depends_on:
       - db
-      - redis
 
   db:
     image: postgres:16
@@ -50,7 +48,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=dosey-doe-tickets
     ports:
-        - "5433:5432"
+      - "5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
 
@@ -63,11 +61,6 @@ services:
     environment:
       - SCREEN_WIDTH=1920
       - SCREEN_HEIGHT=1080
-
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
 
 
 volumes:

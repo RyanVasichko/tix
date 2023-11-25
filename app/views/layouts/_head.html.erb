@@ -11,4 +11,8 @@
   <% if skip_turbo_caching? %>
     <meta name="turbo-cache-control" content="no-cache">
   <% end %>
+
+  <% cache('venue_layout_images_preload') do %>
+    <%= preload_venue_layout_images %>
+  <% end %>
 </head>

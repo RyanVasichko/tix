@@ -7,12 +7,16 @@ export default class extends ApplicationController {
     "seatsContainer",
     "sectionNameInput",
     "modal",
-    "seat"
+    "seat",
+    "ticketTypeSelect",
+    "venueSelect"
   ];
 
   static values = {
     newSeatUrl: String,
-    removedSections: Array
+    removedSections: Array,
+    ticketTypeOptionsUrl: String,
+    newSectionUrl: String
   };
 
   connect() {
@@ -43,7 +47,7 @@ export default class extends ApplicationController {
     this.seatsContainerTarget.innerHTML = "";
 
     this.seatTargets.forEach((seat, i) => {
-      const seatController = this.application.getControllerForElementAndIdentifier(seat, 'admin--seating-chart-form--seat');
+      const seatController = this.application.getControllerForElementAndIdentifier(seat, "admin--seating-chart-form--seat");
       const namePrefix = `seating_chart[sections_attributes][${seatController.sectionIdValue}][seats_attributes][${i}]`;
       this.appendHiddenField(`${namePrefix}[seat_number]`, seatController.seatNumberValue);
       this.appendHiddenField(`${namePrefix}[table_number]`, seatController.tableNumberValue);
@@ -57,8 +61,8 @@ export default class extends ApplicationController {
   }
 
   appendHiddenField(name, value) {
-    const inputField = document.createElement('input');
-    inputField.type = 'hidden';
+    const inputField = document.createElement("input");
+    inputField.type = "hidden";
     inputField.name = name;
     inputField.value = value;
     this.seatsContainerTarget.appendChild(inputField);
@@ -68,5 +72,19 @@ export default class extends ApplicationController {
     const removedSectionId = e.currentTarget.dataset.sectionId;
     this.removedSectionsValue = [...this.removedSectionsValue, +removedSectionId];
     this.seatTargets.filter(c => c.dataset.seatSectionIdValue === removedSectionId).forEach(c => c.remove());
+  }
+
+  async loadTicketTypeOptionsForVenue(e) {
+    const selectedVenue = e.currentTarget.value;
+    const ticketTypeOptionsResponse = await get(this.ticketTypeOptionsUrlValue.replace("venue_id", selectedVenue));
+    const ticketTypeOptionsHtml = await ticketTypeOptionsResponse.text
+    this.ticketTypeSelectTargets.forEach((s) => {
+      s.innerHTML = ticketTypeOptionsHtml;
+    });
+  }
+
+  async loadNewSectionForm() {
+    const venueSeatsUrl = this.newSectionUrlValue.replace("_venue_id_", this.venueSelectTarget.value);
+    await get(venueSeatsUrl, { responseKind: "turbo-stream" });
   }
 }

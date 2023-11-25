@@ -19,4 +19,12 @@ class ShowTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(next_year, 9, 19, 14, 0, 0), show.dinner_starts_at
     assert_equal Time.zone.local(next_year, 9, 19, 15, 0, 0), show.dinner_ends_at
   end
+
+  test "should bust the venue layout cache when a show is created" do
+    Rails.cache.write('venue_layout_images_preload', 'old_data', expires_in: 1.day)
+
+    FactoryBot.create(:show)
+    perform_enqueued_jobs
+    assert_nil Rails.cache.read('venue_layout_images_preload')
+  end
 end

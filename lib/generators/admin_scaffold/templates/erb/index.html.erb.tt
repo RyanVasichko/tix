@@ -1,4 +1,4 @@
-<%%= turbo_frame_tag "admin_<% plural_table_name %>" do %>
+<%%= turbo_frame_tag "admin_<%= plural_table_name %>", target: :_top do %>
   <div class="max-w-xl card">
     <h1 class="text-center text-3xl font-semibold"><%= class_name.pluralize %></h1>
 

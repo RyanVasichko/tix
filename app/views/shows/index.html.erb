@@ -6,7 +6,7 @@
   <% @shows.each do |show| %>
     <div class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 md:grid-cols-2 last:border-b-0">
       <div>
-        <%= image_tag url_for(show.artist.image), class: "md:max-h-48 rounded-md" %>
+        <%= image_tag show.artist.image, id: "shows_#{dom_id(show.artist.image)}", class: "md:max-h-48 rounded-md", data: { turbo_permanent: "" } %>
       </div>
       <div class="grow">
         <div class="text-xl font-semibold text-gray-800">

@@ -5,7 +5,8 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   include Admin::SeatingCharts::SeatingChartFormTestHelpers
 
   setup do
-    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2)
+    @venue = FactoryBot.create(:venue, ticket_types_count: 3)
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, venue: @venue)
     @section_1 = @seating_chart.sections.first
     @section_2 = @seating_chart.sections.second
     @seat_to_delete = @section_1.seats.first
@@ -14,7 +15,7 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   end
 
   test 'updating seating chart name' do
-    fill_in 'Name', with: 'Updated name'
+    find('#seating_chart_name').set('Updated name')
     click_on 'Save'
     assert_text 'Seating chart was successfully updated.'
     @seating_chart.reload
@@ -41,7 +42,8 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   end
 
   test 'adding a new section and a seat' do
-    add_section 'New Section'
+    ticket_type = @venue.ticket_types.third
+    add_section 'New Section', ticket_type.name
     close_slide_over
     add_seat(seat_number: 13, table_number: 14, section_name: 'New Section')
     open_slide_over
@@ -50,7 +52,7 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
       assert_text 'Seating chart was successfully updated.'
     end
 
-    new_section = SeatingChart::Section.find_by_name('New Section')
+    new_section = SeatingChart::Section.find_by(name: 'New Section', ticket_type: ticket_type)
     refute_nil new_section
     assert_equal 1, new_section.seats.count
 

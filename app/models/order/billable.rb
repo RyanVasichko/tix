@@ -10,6 +10,6 @@ module Order::Billable
   end
 
   def calculate_order_total
-    self.order_total = tickets.sum(&:price) + merch.sum(&:total_price)
+    self.order_total = tickets.sum(&:total_price) + merch.sum(&:total_price)
   end
 end

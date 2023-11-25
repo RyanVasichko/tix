@@ -12,11 +12,15 @@ class Admin::SeatingChartsController < Admin::AdminController
     if params[:clone_from]
       # TODO: Should we be dup'ing the sections and seats as well?
       @seating_chart = SeatingChart.includes(sections: :seats).find(params[:clone_from]).dup
+      @seating_chart.venue = Venue.find(@seating_chart.venue_id)
       @dup_venue_layout_from = SeatingChart.find(params[:clone_from])
     else
       @seating_chart = SeatingChart.new
       @seating_chart.sections.build.id = SecureRandom.random_number(1_000_000) + 100_000_000_000
+      @seating_chart.venue = Venue.active.first
     end
+
+    @ticket_types = @seating_chart.venue.ticket_types
   end
 
   def create
@@ -73,7 +77,7 @@ class Admin::SeatingChartsController < Admin::AdminController
       :name,
       :venue_layout,
       :venue_id,
-      sections_attributes: [:id, :name, :_destroy, { seats_attributes: %i[id seat_number table_number x y _destroy] }]
+      sections_attributes: [:id, :name, :ticket_type_id, :_destroy, { seats_attributes: %i[id seat_number table_number x y _destroy] }]
     )
   end
 end
