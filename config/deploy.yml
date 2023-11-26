@@ -27,12 +27,11 @@ env:
     RUBY_YJIT_ENABLE: 1
     WEB_CONCURRENCY: 0
     GOOD_JOB_MAX_THREADS: 1
-  secret:
-    - RAILS_MASTER_KEY
-    - POSTGRES_PASSWORD
 
 builder:
   multiarch: false
+  args:
+    RAILS_MASTER_KEY: <%= ENV["RAILS_MASTER_KEY"] %>
 
 accessories:
   db:
