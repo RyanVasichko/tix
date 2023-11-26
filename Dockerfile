@@ -8,9 +8,8 @@ ENV BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_BIN="/usr/local/bundle/bin" \
     PATH="/rails/bin:${PATH}"
 
-# Install packages including jemalloc and cleanup
 RUN apt-get update -qq -o Acquire::http::Timeout=30 && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev npm curl apt-transport-https libvips-dev nano git pkg-config unzip libjemalloc2 -o Acquire::http::Timeout=30 && \
+    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev git pkg-config libjemalloc2 -o Acquire::http::Timeout=30 && \
     apt-get update -qq -o Acquire::http::Timeout=30 && \
     npm install -g bun && \
     rm -rf /var/lib/apt/lists/* # Clean up the apt cache
@@ -23,7 +22,6 @@ RUN bun install --check-files && \
 # Development stage
 FROM base as development
 
-# Repeat jemalloc configuration
 ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"
 
 COPY . .
@@ -32,9 +30,8 @@ CMD ["./bin/rails", "server"]
 
 # Production build stage
 FROM base as build-production
-ARG RAILS_MASTER_KEY
 
-# Repeat jemalloc configuration
+ARG RAILS_MASTER_KEY
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_WITHOUT="development" \
@@ -49,7 +46,6 @@ RUN chmod +x ./bin/rails && \
 # Final production stage
 FROM base as production
 
-# Repeat jemalloc configuration
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_WITHOUT="development" \

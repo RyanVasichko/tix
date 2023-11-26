@@ -81,8 +81,6 @@ Rails.application.configure do
   #   }
   # }
 
-  config.good_job.execution_mode = :async
-
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.

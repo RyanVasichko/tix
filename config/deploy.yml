@@ -1,5 +1,5 @@
 service: dosey_doe_tickets
-image: rvasichko/dosey_doe_tickets
+image: ryanvasichko/dosey-doe-tickets
 
 servers:
   web:
@@ -10,13 +10,14 @@ servers:
       traefik.http.routers.blog.entrypoints: websecure
       traefik.http.routers.blog.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
       traefik.http.routers.blog.tls.certresolver: letsencrypt
-#  job:
-#    hosts:
-#      - 137.184.44.229
-#    cmd: bundle exec good_job start
+  job:
+    hosts:
+      - 137.184.44.229
+    cmd: bundle exec good_job start
 
 registry:
-  username: rvasichko
+  server: ghcr.io
+  username: ryanvasichko@gmail.com
   password:
     - KAMAL_REGISTRY_PASSWORD
 
@@ -26,7 +27,9 @@ env:
     RAILS_SERVE_STATIC_FILES: 1
     RUBY_YJIT_ENABLE: 1
     WEB_CONCURRENCY: 0
-    GOOD_JOB_MAX_THREADS: 1
+  secret:
+    - POSTGRES_PASSWORD
+    - RAILS_MASTER_KEY
 
 builder:
   multiarch: false
