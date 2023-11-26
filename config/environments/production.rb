@@ -81,6 +81,14 @@ Rails.application.configure do
   #   }
   # }
 
+  config.good_job.enable_cron = true
+  config.good_job.cron = {
+    another_task: {
+      cron: "0 2 * * *",
+      class: "DatabaseBackupJob",
+    }
+  }
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.

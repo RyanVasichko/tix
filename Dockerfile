@@ -8,10 +8,14 @@ ENV BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_BIN="/usr/local/bundle/bin" \
     PATH="/rails/bin:${PATH}"
 
-RUN apt-get update -qq -o Acquire::http::Timeout=30 && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev git pkg-config libjemalloc2 -o Acquire::http::Timeout=30 && \
-    apt-get update -qq -o Acquire::http::Timeout=30 && \
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev libjemalloc2 wget gnupg && \
+    apt-get update -qq && \
     npm install -g bun && \
+    # Add the PostgreSQL repository for the latest versions
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(. /etc/os-release; echo $VERSION_CODENAME)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+    apt-get update && apt-get install -y postgresql-client-16 && \
     rm -rf /var/lib/apt/lists/* # Clean up the apt cache
 
 COPY Gemfile Gemfile.lock package.json bun.lockb ./
@@ -55,8 +59,8 @@ ENV RAILS_ENV="production" \
 COPY --from=build-production /usr/local/bundle /usr/local/bundle
 COPY --from=build-production /rails /rails
 
-RUN apt-get update -qq -o Acquire::http::Timeout=30 && \
-    apt-get install --no-install-recommends -y libvips -o Acquire::http::Timeout=30 && \
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y libvips && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* && \
     useradd rails --create-home --shell /bin/bash && \
     mkdir -p log storage && \
