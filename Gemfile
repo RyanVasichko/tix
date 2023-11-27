@@ -13,6 +13,7 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 gem 'bcrypt', '~> 3.1.7'
 gem "good_job"
+gem "redis"
 gem "solid_cache"
 gem "stripe"
 gem "pagy"

@@ -1,11 +1,11 @@
 development:
-  adapter: postgresql
-  url: postgresql://postgres:password@localhost:5432/dosey-doe-tickets_development
+  adapter: redis
+  url: redis://redis:6379/1
 
 test:
   adapter: test
 
 production:
-  adapter: postgresql
-  url: postgresql://dosey_doe_tickets:<%= ENV["POSTGRES_PASSWORD"] %>@<%= ENV["DB_HOST"] %>:5432/dosey_doe_tickets
+  adapter: redis
+  url: redis://@<%= ENV["DB_HOST"] %>:6379/0
   channel_prefix: dosey_doe_tickets_production
