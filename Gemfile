@@ -21,6 +21,7 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 gem "ruby-vips"
 gem 'aws-sdk-s3', require: false
+gem 'appsignal'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
