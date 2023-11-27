@@ -1,7 +1,4 @@
 <%= turbo_stream.replace @order do %>
   <%= render "orders/form", order: @order %>
 <% end %>
-
-<%= turbo_stream_replace_shopping_cart_count %>
-
-<%= turbo_stream_replace_shopping_cart %>
+<%= morph_shopping_cart %>

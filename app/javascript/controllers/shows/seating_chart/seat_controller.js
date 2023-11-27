@@ -58,13 +58,13 @@ export default class extends ApplicationController {
 
     if (this.reservedByCurrentUser) {
       this.element.setAttribute("fill", "green");
-      await destroy(this.reservationPathValue);
+      await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
       return;
     }
 
     if (this.notReserved && this.notSold) {
       this.element.setAttribute("fill", "yellow");
-      await post(this.reservationPathValue);
+      await post(this.reservationPathValue, { responseKind: "turbo-stream" });
     }
   }
 }

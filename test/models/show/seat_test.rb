@@ -63,4 +63,17 @@ class Show::SeatTest < ActiveSupport::TestCase
       perform_enqueued_jobs
     end
   end
+
+  test "should touch ShoppingCart when shopping_cart_id is set to nil" do
+    @seat.reserve_for!(@user)
+    shopping_cart = @seat.shopping_cart
+    original_updated_at = shopping_cart.updated_at
+
+    travel 1.minute do
+      @seat.cancel_reservation!
+      shopping_cart.reload
+
+      assert_operator shopping_cart.updated_at, :>, original_updated_at + 59.seconds
+    end
+  end
 end
