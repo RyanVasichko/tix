@@ -4,15 +4,16 @@ image: ryanvasichko/dosey-doe-tickets
 servers:
   web:
     hosts:
-      - 137.184.44.229
+      - 24.199.102.17
     cmd: "./bin/rails server"
     labels:
-      traefik.http.routers.blog.entrypoints: websecure
-      traefik.http.routers.blog.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
-      traefik.http.routers.blog.tls.certresolver: letsencrypt
+      traefik.http.routers.web.entrypoints: websecure
+      traefik.http.routers.web.rule: Host(`dd-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.web.tls.certresolver: letsencrypt
+      traefik.http.routers.web.middlewares: compression
   job:
     hosts:
-      - 137.184.44.229
+      - 24.199.118.95
     cmd: bundle exec good_job start
 
 registry:
@@ -23,7 +24,7 @@ registry:
 
 env:
   clear:
-    DB_HOST: 137.184.44.229
+    DB_HOST: 137.184.40.18
     RAILS_SERVE_STATIC_FILES: 1
     RUBY_YJIT_ENABLE: 1
     WEB_CONCURRENCY: 0
@@ -39,7 +40,7 @@ builder:
 accessories:
   db:
     image: postgres:16
-    host: 137.184.44.229
+    host: 137.184.40.18
     port: 5432
     env:
       secret:
@@ -51,7 +52,7 @@ accessories:
       - "/mnt/postgres/data:/var/lib/postgresql/data"
   redis:
     image: redis:latest
-    host: 137.184.44.229
+    host: 137.184.40.18
     port: 6379
     volumes:
       - "/mnt/redis/data:/data"
@@ -60,8 +61,12 @@ traefik:
   options:
     publish:
       - "443:443"
+      - "8080:8080"
     volume:
       - "/letsencrypt/acme.json:/letsencrypt/acme.json" # To save the configuration file.
+  labels:
+    traefik.http.middlewares.compression.compress: true
+    
   args:
     entryPoints.web.address: ":80"
     entryPoints.websecure.address: ":443"
@@ -69,7 +74,7 @@ traefik:
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
     entrypoints.websecure.http.tls: true
-    entrypoints.websecure.http.tls.domains[0].main: "dosey-doe-tickets-v2.ryanvasichko.com"
+    entrypoints.websecure.http.tls.domains[0].main: "dd-tickets-v2.ryanvasichko.com"
     certificatesResolvers.letsencrypt.acme.email: "fake_email@pleasedontspammepleaseplease.com"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
