@@ -23,9 +23,7 @@
       <svg data-controller="shows--seating-chart--svg" data-loader-target="content" viewBox="0 0 <%= width %> <%= height %>">
         <image data-loader-target="loadable" data-action="load->loader#showContent" href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
         </image>
-        <%#= cache @show do %>
           <%= render partial: "shows/sections/section", collection: @show.sections, cached: true %>
-        <%# end %>
       </svg>
     </div>
   </div>

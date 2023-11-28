@@ -12,10 +12,17 @@ local: &local
 cache: &cache
   migrations_paths: "db/cache/migrate"
 
+jobs: &jobs
+  migrations_paths: "db/jobs/migrate"
+
 development:
   primary:
     <<: *local
     database: dosey-doe-tickets_development
+  jobs:
+    <<: *local
+    <<: *jobs
+    database: dosey-doe-tickets-jobs_development
   cache:
     <<: *local
     <<: *cache
@@ -40,3 +47,7 @@ production:
     <<: *production_default
     <<: *cache
     database: dosey_doe_tickets_cache
+  jobs:
+    <<: *production_default
+    <<: *jobs
+    database: dosey_doe_tickets_jobs
