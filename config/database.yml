@@ -9,17 +9,34 @@ local: &local
   username: postgres
   password: password
 
+cache: &cache
+  migrations_paths: "db/cache/migrate"
+
 development:
-  <<: *local
-  database: dosey-doe-tickets_development
+  primary:
+    <<: *local
+    database: dosey-doe-tickets_development
+  cache:
+    <<: *local
+    <<: *cache
+    database: dosey-doe-tickets-cache_development
 
 test:
-  <<: *local
-  database: dosey-doe-tickets_test
+  primary:
+    <<: *local
+    database: dosey-doe-tickets_test
 
-production:
+production_default: &production_default
   <<: *default
   username: dosey_doe_tickets
   host: <%= ENV['DB_HOST'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
-  database: dosey_doe_tickets
+
+production:
+  primary:
+    <<: *production_default
+    database: dosey_doe_tickets
+  cache:
+    <<: *production_default
+    <<: *cache
+    database: dosey_doe_tickets_cache

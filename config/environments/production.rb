@@ -24,6 +24,7 @@ Rails.application.configure do
   config.action_controller.enable_fragment_cache_logging = true
 
   config.cache_store = :solid_cache_store
+  config.solid_cache.connects_to = { database: { writing: :cache } }
 
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
   config.public_file_server.headers = {
