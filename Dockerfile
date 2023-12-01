@@ -9,7 +9,7 @@ ENV BUNDLE_PATH="/usr/local/bundle" \
     PATH="/rails/bin:${PATH}"
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev libjemalloc2 wget gnupg && \
+    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev wget gnupg && \
     apt-get update -qq && \
     npm install -g bun && \
     # Add the PostgreSQL repository for the latest versions
@@ -26,10 +26,9 @@ RUN bun install --check-files && \
 # Development stage
 FROM base as development
 
-ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"
-
 COPY . .
-RUN chmod +x entrypoint.sh
+RUN chmod +x /rails/entrypoint.sh && \
+    chmod +x /rails/bin/bundle
 CMD ["./bin/rails", "server"]
 
 # Production build stage
@@ -39,11 +38,11 @@ ARG RAILS_MASTER_KEY
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_WITHOUT="development" \
-    RAILS_MASTER_KEY=${RAILS_MASTER_KEY} \
-    LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"
+    RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
 
 COPY . .
-RUN chmod +x ./bin/rails && \
+RUN apt-get install libjemalloc2 && \
+    chmod +x ./bin/rails && \
     bundle exec bootsnap precompile app/ lib/ && \
     ./bin/rails assets:precompile
 

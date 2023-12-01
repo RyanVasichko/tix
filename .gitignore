@@ -46,3 +46,4 @@ coverage/
 *Zone.Identifier
 
 .idea/
+*.DS_Store

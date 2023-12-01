@@ -5,7 +5,7 @@ default: &default
 
 local: &local
   <<: *default
-  host: db
+  host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
   username: postgres
   password: password
 
