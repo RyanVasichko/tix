@@ -24,9 +24,9 @@ class Order::OrderForm
       .order_form_type
       .new(order)
       .tap do |order_form|
-        order_form.user = user
-        order_form.payment_method_id = "new"
-      end
+      order_form.user = user
+      order_form.payment_method_id = "new"
+    end
   end
 
   def initialize(initializer = {})
@@ -38,17 +38,19 @@ class Order::OrderForm
 
       # TODO: Validate that seat ids match user's reserved seats
       seats = user.reserved_seats.includes(section: :show).where(id: seat_ids)
-      self.order.tickets = Order::Ticket.build_for_seats(seats)
+      order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
+
+      # TODO: Validate that ticket ids match user's shopping cart tickets
+      tickets = user.shopping_cart.tickets
+      order.tickets << Order::GeneralAdmissionTicket.build_from_shopping_cart_tickets(tickets)
 
       # TODO: Validate that merch ids match user's shopping cart merch
       merch = user.shopping_cart.merch.includes(:merch).where(merch_id: merch_ids)
-      self.order.merch.build_from_shopping_cart_merch(merch)
+      order.merch.build_from_shopping_cart_merch(merch)
 
-      self.order.calculate_order_total
+      order.calculate_order_total
 
-      if self.order.total_in_cents != order_total_in_cents.to_d
-        self.order.errors.add(:base, "One or more of your ticket reservations have expired")
-      end
+      order.errors.add(:base, "One or more of your ticket reservations have expired") if order.total_in_cents != order_total_in_cents.to_d
     end
   end
 
@@ -58,14 +60,11 @@ class Order::OrderForm
     ApplicationRecord.transaction do
       run_callbacks :create do
         @order.save!
-        unless @order.process_payment(
-                 payment_method_id,
-                 save_payment_method: new_payment_method == "1" && save_payment_method
-               )
-          raise ActiveRecord::Rollback
-        end
-        @order.seats.each { |s| s.cancel_reservation! }
+        raise ActiveRecord::Rollback unless @order.process_payment(payment_method_id, save_payment_method: new_payment_method == "1" && save_payment_method)
+
+        @order.seats.each { |s| s.cancel_reservation_for!(@user) }
         @user.shopping_cart.merch.each(&:destroy!)
+        @user.shopping_cart.tickets.each(&:destroy!)
       end
     end
 

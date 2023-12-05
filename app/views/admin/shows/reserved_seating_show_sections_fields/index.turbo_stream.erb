@@ -1,0 +1,12 @@
+<% form = DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, @show, self, {}) %>
+
+<%= turbo_stream.update "show_sections_fields" do %>
+  <%= form.fields_for :sections do |section_fields| %>
+    <%= render "section_fields", section_fields: section_fields %>
+  <% end %>
+
+  <% if @show.contains_deposit_section? %>
+    <%= form.label :deposit_amount %>
+    <%= form.currency_field :deposit_amount %>
+  <% end %>
+<% end %>

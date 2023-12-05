@@ -1,16 +1,23 @@
 <%= turbo_frame_tag :shopping_cart do %>
   <div class="mx-auto max-w-2xl px-4">
     <ul role="list" class="divide-y divide-gray-200">
-      <% shopping_cart.seats.group_by(&:show).sort_by { |show, _| show.show_date }.each do |show, seats| %>
+      <% shopping_cart.shows.sort_by(&:show_date).each do |show| %>
         <li class="flex items-center py-6" id="show_<%= show.id %>_seat_reservations">
-          <%= link_to show, data: { turbo: false } do %>
-            <%= image_tag url_for(show.artist.image), class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
+          <%= link_to show_path(show), data: { turbo: false } do %>
+            <%= image_tag url_for(show.artist.image), id: "show_#{show.id}_artist_image", class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
           <% end %>
           <div class="ml-4 flex-auto">
             <h3 class="font-medium text-gray-900">
-              <%= link_to show.artist.name, show, data: { turbo: false } %>
+              <%= link_to show.artist.name, show_path(show), data: { turbo: false } %>
             </h3>
-            <%= render partial: "shopping_cart/seat_reservations/seat_reservation", collection: seats, as: :seat %>
+            <% case show %>
+            <% when Show::ReservedSeatingShow %>
+              <%= render partial: "shopping_cart/seat_reservations/seat_reservation", collection: shopping_cart.seats_for(show), as: :seat %>
+            <% when Show::GeneralAdmissionShow %>
+              <%= render partial: "shopping_cart/general_admission_tickets/general_admission_ticket", collection: shopping_cart.tickets_for(show), as: :ticket %>
+            <% else
+                 nil %>
+            <% end %>
           </div>
         </li>
       <% end %>
@@ -27,10 +34,10 @@
       <% end %>
     </ul>
     <%= link_to(
-      "Checkout",
-      new_order_path,
-      data: { turbo: false },
-      class: "block text-center rounded-md border border-transparent bg-indigo-600 mt-4 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50")
+          "Checkout",
+          new_order_path,
+          data: { turbo: false },
+          class: "block text-center rounded-md border border-transparent bg-indigo-600 mt-4 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50")
     %>
   </div>
 <% end %>

@@ -1,8 +1,9 @@
 class Show < ApplicationRecord
-  include GoesOnSale, Agenda, SeatingChartable
+  include GoesOnSale, Agenda
 
   validates :show_date, presence: true
   scope :upcoming, -> { where(show_date: Time.current..) }
+  validates :type, presence: true
 
   belongs_to :artist
   delegate :name, to: :artist, prefix: true
@@ -10,7 +11,6 @@ class Show < ApplicationRecord
   belongs_to :venue
 
   has_many :sections, class_name: "Show::Section", inverse_of: :show
-  has_many :seats, through: :sections
   has_many :tickets, class_name: "Order::Ticket", inverse_of: :show
   has_and_belongs_to_many :customer_questions
   has_many :upsales, class_name: "Show::Upsale", inverse_of: :show

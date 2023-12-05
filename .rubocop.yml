@@ -24,3 +24,22 @@ Naming/PredicateName:
 
 Metrics/AbcSize:
   Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Layout/SpaceInLambdaLiteral:
+  Enabled: false
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never
+
+AllCops:
+  Exclude:
+    - 'db/**/*.rb'

@@ -6,12 +6,12 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def new
-    venue = Venue.first
+    venue = Venue.joins(:seating_charts).where(seating_charts: SeatingChart.active).first
     @seating_charts = venue.seating_charts.active
-    seating_chart = @seating_charts&.first
-    @show = Show.new(venue_id: venue&.id, seating_chart_id: seating_chart&.id) do |show|
-      show.seating_chart_id = seating_chart&.id
-      seating_chart&.sections&.each do |section|
+    seating_chart = @seating_charts.first
+    @show = Show::ReservedSeatingShow.new(venue_id: venue.id, seating_chart_id: seating_chart.id) do |show|
+      show.seating_chart_id = seating_chart.id
+      seating_chart.sections.each do |section|
         show.sections.build(name: section.name, seating_chart_section_id: section.id)
       end
     end
@@ -22,7 +22,15 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def create
-    @show = Show.new(show_params)
+    show_type = case show_params[:type]
+                when "Show::ReservedSeatingShow"
+                  Show::ReservedSeatingShow
+                when "Show::GeneralAdmissionShow"
+                  Show::GeneralAdmissionShow
+                else
+                  raise "Invalid show type"
+                end
+    @show = show_type.new(show_params)
 
     if @show.save
       redirect_to admin_shows_url, flash: { success: "Show was successfully created." }
@@ -65,13 +73,14 @@ class Admin::ShowsController < Admin::AdminController
       :back_end_off_sale_at,
       :additional_text,
       customer_question_ids: [],
-      sections_attributes: permitted_sections_attributes_for_action,
-      upsales_attributes: permitted_upsales_attributes,
+      sections_attributes: permitted_sections_attributes,
+      upsales_attributes: permitted_upsales_attributes
     ]
     if action_name == "create"
-      permitted_params << :seating_chart_id
+      permitted_params << :seating_chart_id if params[:show][:type] == Show::ReservedSeatingShow.to_s
       permitted_params << :artist_id
       permitted_params << :venue_id
+      permitted_params << :type
     end
 
     params.require(:show).permit(permitted_params)
@@ -81,9 +90,12 @@ class Admin::ShowsController < Admin::AdminController
     %i[name description quantity price].tap { |a| a << :id if action_name == "update" }
   end
 
-  def permitted_sections_attributes_for_action
+  def permitted_sections_attributes
     if action_name == "create"
-      %i[name seating_chart_section_id ticket_price]
+      %i[name seating_chart_section_id ticket_price].tap do |a|
+        a << :ticket_quantity if params[:show][:type] == Show::GeneralAdmissionShow.to_s
+        a << :convenience_fee if params[:show][:type] == Show::GeneralAdmissionShow.to_s
+      end
     elsif action_name == "update"
       %i[id ticket_price]
     end

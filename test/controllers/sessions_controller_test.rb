@@ -16,7 +16,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should log in with valid credentials" do
-    post login_url, params: { session: { email: @user.email, password: 'password' } }
+    post login_url, params: { session: { email: @user.email, password: "password" } }
     assert_redirected_to root_url
     follow_redirect!
 
@@ -26,9 +26,9 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "shouldn't log in with invalid credentials" do
-    post login_url, params: { session: { email: @user.email, password: 'wrongpassword' } }
+    post login_url, params: { session: { email: @user.email, password: "wrongpassword" } }
     assert_response :success
-    assert flash[:error], 'Invalid email/password combination'
+    assert flash[:error], "Invalid email/password combination"
 
     skip "need some UI indication that they're logged in"
     # Assert that the user is not logged in. Maybe look for the absence of a logout link.
@@ -47,7 +47,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should transfer seat reservations from a guest to the logged in user" do
-    show = FactoryBot.create(:show)
+    show = FactoryBot.create(:reserved_seating_show)
 
     get login_path # Just get a random endpoint so it will create the guest user
     guest = User::Guest.last

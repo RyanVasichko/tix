@@ -2,7 +2,7 @@ require "test_helper"
 
 class ShowTest < ActiveSupport::TestCase
   test 'should sync start and end time with show date' do
-    show = FactoryBot.build(:show)
+    show = FactoryBot.build(:reserved_seating_show)
 
     next_year = Time.current.year + 1
 
@@ -23,7 +23,7 @@ class ShowTest < ActiveSupport::TestCase
   test "should bust the venue layout cache when a show is created" do
     Rails.cache.write('venue_layout_images_preload', 'old_data', expires_in: 1.day)
 
-    FactoryBot.create(:show)
+    FactoryBot.create(:reserved_seating_show)
     perform_enqueued_jobs
     assert_nil Rails.cache.read('venue_layout_images_preload')
   end

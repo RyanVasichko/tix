@@ -1,4 +1,4 @@
-<%= turbo_frame_tag order do %>
+<%= turbo_frame_tag order, target: :_top do %>
   <div class="max-w-lg text-center">
     <%= render "shared/error_messages", { model: order } %>
   </div>
@@ -18,7 +18,7 @@
   %>
     <%= form.hidden_field :new_payment_method, data: { checkout_target: "newPaymentMethodField" } %>
     <%= form.hidden_field :order_total_in_cents %>
-    <% order.tickets.each do |ticket| %>
+    <% order.tickets.filter { |t| t.is_a? Order::ReservedSeatingTicket }.each do |ticket| %>
       <%= form.hidden_field :seat_ids, multiple: true, value: ticket.seat.id %>
     <% end %>
     <% order.merch.each do |merch| %>
@@ -32,9 +32,9 @@
         <h3 class="sr-only">Items in your cart</h3>
         <ul role="list" class="divide-y divide-gray-200">
           <% order.tickets.group_by { |ticket| ticket.show }.each do |show, tickets| %>
-            <li class="flex px-4 py-6 sm:px-6">
+            <li id="<%= dom_id(show) %>_order_tickets" class="flex px-4 py-6 sm:px-6">
               <div class="flex-shrink-0">
-                <%= link_to show do %>
+                <%= link_to shows_path(show) do %>
                   <%= image_tag url_for(show.artist.image), class: "w-20 rounded-md" %>
                 <% end %>
               </div>
@@ -43,20 +43,27 @@
                 <div class="flex">
                   <div class="min-w-0 flex-1">
                     <h4 class="text-sm">
-                      <%= link_to show.artist.name, show, class: "font-medium text-gray-700 hover:text-gray-800" %>
+                      <%= link_to show.artist.name, shows_path(show), class: "font-medium text-gray-700 hover:text-gray-800" %>
                     </h4>
                     <% tickets.each do |ticket| %>
                       <div class="flex items-baseline justify-between">
                         <div>
-                          <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %>
-                            Seat <%= ticket.seat_number %></span> -
+                          <span class="mt-1 text-sm text-gray-500">
+                            <% case ticket %>
+                            <% when Order::ReservedSeatingTicket %>
+                              Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
+                            <% when Order::GeneralAdmissionTicket %>
+                              <%= ticket.show_section.name %> x <%= ticket.quantity %>
+                            <% end %>
+                          </span> -
                           <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
                         </div>
-                        <%= link_to orders_seat_reservations_path(ticket.seat), data: { turbo_method: "DELETE" }, class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
+                        <%= link_to ticket.is_a?(Order::ReservedSeatingTicket) ? orders_seat_reservations_path(ticket.seat) : orders_shopping_cart_ticket_path(ticket.shopping_cart_ticket),
+                                    data: { turbo_method: "DELETE" },
+                                    id: ticket.is_a?(Order::ReservedSeatingTicket) ? "destroy_#{dom_id(ticket.seat)}_reservation" : "destroy_#{dom_id(ticket.shopping_cart_ticket)}",
+                                    class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
                           <span class="sr-only">Remove</span>
-                          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-                          </svg>
+                          <%= svg_trash_can %>
                         <% end %>
                       </div>
                     <% end %>
@@ -87,16 +94,27 @@
                       <div class="flex items-baseline justify-between">
                         <div class="grow">
                           <span class="text-sm text-gray-500">
-                            Quantity: <%= select_tag(:quantity, options_from_collection_for_select(1..10, :to_i, :to_i, om.quantity), data: { controller: "checkout--shopping-cart-merch-quantity", action: "checkout--shopping-cart-merch-quantity#updateQuantity", checkout__shopping_cart_merch_quantity_new_order_url_value: new_order_path, checkout__shopping_cart_merch_quantity_update_url_value: orders_shopping_cart_merch_path(om.shopping_cart_merch_id) }, class: "form-control-select inline max-w-[40px] p-0 mr-1") %> <%= "#{merch.option_label}: #{om.option}" unless om.option.blank? %>
+                            Quantity: <%= select_tag(:quantity,
+                                                     options_from_collection_for_select(1..10, :to_i, :to_i, om.quantity),
+                                                     data: {
+                                                       controller: "checkout--shopping-cart-merch-quantity",
+                                                       action: "checkout--shopping-cart-merch-quantity#updateQuantity",
+                                                       checkout__shopping_cart_merch_quantity_new_order_url_value: new_order_path,
+                                                       checkout__shopping_cart_merch_quantity_update_url_value: shopping_cart_merch_path(om.shopping_cart_merch.id)
+                                                     },
+                                                     class: "form-control-select inline max-w-[40px] p-0 mr-1") %>
+                            <%= "#{merch.option_label}: #{om.option}" unless om.option.blank? %>
                             -
                           </span>
                           <span class="text-sm font-medium text-gray-900"><%= number_to_currency(om.total_price) %></span>
                         </div>
-                        <%= link_to orders_shopping_cart_merch_path(om.shopping_cart_merch_id), data: { turbo_method: "DELETE", turbo_frame: :_top }, class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
+                        <%= link_to shopping_cart_merch_path(om.shopping_cart_merch.id),
+                                    id: "destroy_#{dom_id(om.shopping_cart_merch)}",
+                                    data: { turbo_method: "DELETE", turbo_frame: :_top },
+                                    class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do
+                        %>
                           <span class="sr-only">Remove</span>
-                          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-                          </svg>
+                          <%= svg_trash_can %>
                         <% end %>
                       </div>
                     <% end %>
@@ -160,8 +178,8 @@
               <%= form.email_field :email %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :phone_number %>
-              <%= form.telephone_field :phone_number %>
+              <%= form.label :phone, "Phone number" %>
+              <%= form.telephone_field :phone %>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ local: &local
   host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
   username: postgres
   password: password
+  gssencmode: disable # https://github.com/ged/ruby-pg/issues/311 - fixes an error on macOS
 
 cache: &cache
   migrations_paths: "db/cache/migrate"

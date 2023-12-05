@@ -17,14 +17,14 @@ class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
 
   test "should create an artist" do
     assert_difference("Artist.count") do
-      params = { 
-        artist: 
-        { 
-          name: "New artist name", 
-          bio: "New artist bio", 
+      params = {
+        artist:
+        {
+          name: "New artist name",
+          bio: "New artist bio",
           url: "New artist url",
-          image: fixture_file_upload(Rails.root.join('test', 'fixtures', 'files', 'lcd_soundsystem.webp'), 'image/webp')
-        } 
+          image: fixture_file_upload(Rails.root.join("test", "fixtures", "files", "lcd_soundsystem.webp"), "image/webp")
+        }
       }
       post admin_artists_url, params: params
     end
@@ -38,14 +38,14 @@ class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should update artists" do
-    params = { 
-      artist: 
-      { 
-        name: "Updated artist name", 
-        bio: "Updated artist bio", 
+    params = {
+      artist:
+      {
+        name: "Updated artist name",
+        bio: "Updated artist bio",
         url: "Updated artist url",
-        image: fixture_file_upload(Rails.root.join('test', 'fixtures', 'files', 'lcd_soundsystem.webp'), 'image/webp')
-      } 
+        image: fixture_file_upload(Rails.root.join("test", "fixtures", "files", "lcd_soundsystem.webp"), "image/webp")
+      }
     }
 
     patch admin_artist_url(@artist), params: params
@@ -65,7 +65,7 @@ class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
 
   test "should destroy an artist without any shows" do
     artist = Artist.create!(name: "Test Artist", bio: "Test Bio", url: "Test URL")
-    
+
     assert_difference("Artist.count", -1) do
       delete admin_artist_url(artist)
     end

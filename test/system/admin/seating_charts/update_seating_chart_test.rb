@@ -15,7 +15,8 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   end
 
   test 'updating seating chart name' do
-    find('#seating_chart_name').set('Updated name')
+    # I have no clue why, but for some reason this fails if I don't do .set("") before setting the name
+    find('#seating_chart_name').set("").set('Updated name')
     click_on 'Save'
     assert_text 'Seating chart was successfully updated.'
     @seating_chart.reload

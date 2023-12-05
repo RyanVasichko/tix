@@ -2,7 +2,7 @@ class CreateShows < ActiveRecord::Migration[7.0]
   def change
     create_table :shows do |t|
       t.references :artist, null: false, foreign_key: true
-      t.string :seating_chart_name, null: false
+      t.string :seating_chart_name
       t.datetime :show_date, null: false
       t.datetime :doors_open_at, null: false
       t.datetime :show_starts_at, null: false
@@ -13,6 +13,7 @@ class CreateShows < ActiveRecord::Migration[7.0]
       t.datetime :back_end_on_sale_at, null: false
       t.datetime :back_end_off_sale_at, null: false
       t.text :additional_text
+      t.string :type, null: false
       t.decimal :deposit_amount, precision: 8, scale: 2, null: false, default: 0
 
       t.timestamps

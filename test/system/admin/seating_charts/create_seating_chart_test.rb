@@ -1,5 +1,5 @@
-require 'application_system_test_case'
-require 'system/admin/seating_charts/seating_chart_form_test_helpers'
+require "application_system_test_case"
+require "system/admin/seating_charts/seating_chart_form_test_helpers"
 
 class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
   include Admin::SeatingCharts::SeatingChartFormTestHelpers
@@ -11,34 +11,34 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
   ]
   TOLERANCE = 2
 
-  test 'creating a seating chart' do
+  test "creating a seating chart" do
     venues = FactoryBot.create_list(:venue, 3, ticket_types_count: 4)
     selected_venue = venues.sample
     sections_params = [
-      { name: 'Test Section 1', ticket_type_name: selected_venue.ticket_types.first.name },
-      { name: 'Test Section 2', ticket_type_name: selected_venue.ticket_types.second.name },
-      { name: 'Test Section 3', ticket_type_name: selected_venue.ticket_types.third.name }
+      { name: "Test Section 1", ticket_type_name: selected_venue.ticket_types.first.name },
+      { name: "Test Section 2", ticket_type_name: selected_venue.ticket_types.second.name },
+      { name: "Test Section 3", ticket_type_name: selected_venue.ticket_types.third.name }
     ]
 
     visit new_admin_seating_chart_path
 
-    find('#seating_chart_name').set('Test Seating Chart')
-    select selected_venue.name, from: 'Venue'
+    find("#seating_chart_name").set("Test Seating Chart")
+    select selected_venue.name, from: "Venue"
 
     create_test_sections(sections_params)
     click_on "btn-slide-over-close"
     create_test_seats
     click_on "btn-slide-over-toggle"
 
-    find("input[type='file']", visible: false).set(Rails.root.join('test/fixtures/files/seating_chart.bmp'))
+    find("input[type='file']", visible: false).set(Rails.root.join("test/fixtures/files/seating_chart.bmp"))
 
-    click_on 'Save'
+    click_on "Save"
 
-    assert_text 'Seating chart was successfully created.'
+    assert_text "Seating chart was successfully created."
 
     seating_chart = SeatingChart.includes(sections: [:seats]).last
 
-    assert_equal 'Test Seating Chart', seating_chart.name
+    assert_equal "Test Seating Chart", seating_chart.name
     assert_equal 3, seating_chart.sections.count
     assert seating_chart.venue_layout.attached?
     assert_equal selected_venue, seating_chart.venue

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :order_payment, class: 'Order::Payment' do
+  factory :order_payment, class: "Order::Payment" do
     association :order
 
     stripe_payment_intent_id { Faker::Alphanumeric.unique.alphanumeric(number: 24) }

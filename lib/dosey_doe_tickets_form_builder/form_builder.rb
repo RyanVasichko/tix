@@ -50,9 +50,9 @@ module DoseyDoeTicketsFormBuilder
         if @object.errors.details[actual_attribute].any? { |error| error[:error] == :blank }
           message = "Required"
         else
-          message = @object.errors.full_messages_for(actual_attribute).join(', ')
+          message = @object.errors.full_messages_for(actual_attribute).join(", ")
         end
-        @template.content_tag :p, message, class: 'ml-2 mt-2 text-red-500 text-xs italic'
+        @template.content_tag :p, message, class: "ml-2 mt-2 text-red-500 text-xs italic"
       end
     end
 
@@ -75,7 +75,7 @@ module DoseyDoeTicketsFormBuilder
 
     def attribute_to_check_for_errors(attribute)
       # Try to infer the association name from the foreign key attribute.
-      association_name = attribute.to_s.gsub(/_id$/, '').to_sym if attribute.to_s.ends_with?('_id')
+      association_name = attribute.to_s.gsub(/_id$/, "").to_sym if attribute.to_s.ends_with?("_id")
       return association_name if association_name && @object.errors.include?(association_name)
       attribute
     end

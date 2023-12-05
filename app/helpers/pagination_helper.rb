@@ -7,7 +7,7 @@ module PaginationHelper
         link = pagy_url_for(pagy, pagy.prev)
         concat(render_previous_link(link))
       else
-        concat(render_previous_link('#', 'text-gray-300 cursor-not-allowed'))
+        concat(render_previous_link("#", "text-gray-300 cursor-not-allowed"))
       end
 
       concat(content_tag(:div, class: "hidden md:-mt-px md:flex") do
@@ -30,14 +30,14 @@ module PaginationHelper
         link = pagy_url_for(pagy, pagy.next)
         concat(render_next_link(link))
       else
-        concat(render_next_link('#', 'text-gray-300 cursor-not-allowed'))
+        concat(render_next_link("#", "text-gray-300 cursor-not-allowed"))
       end
     end
   end
 
   private
 
-  def render_previous_link(link, classes = 'text-gray-500 hover:border-gray-300 hover:text-gray-700')
+  def render_previous_link(link, classes = "text-gray-500 hover:border-gray-300 hover:text-gray-700")
     content_tag(:div, class: "-mt-px w-0 flex-1 flex") do
       link_to link, class: "inline-flex items-center border-t-2 border-transparent pr-4 pt-4 text-sm font-medium #{classes}" do
         svg_tag = content_tag(:svg, class: "mr-3 h-5 w-5 text-gray-400", viewBox: "0 0 20 20", fill: "currentColor", aria_hidden: true) do
@@ -49,7 +49,7 @@ module PaginationHelper
     end
   end
 
-  def render_next_link(link, classes = 'text-gray-500 hover:border-gray-300 hover:text-gray-700')
+  def render_next_link(link, classes = "text-gray-500 hover:border-gray-300 hover:text-gray-700")
     content_tag(:div, class: "-mt-px flex w-0 flex-1 justify-end") do
       link_to link, class: "inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium #{classes}" do \
           next_tag = content_tag(:span, "Next")
@@ -63,7 +63,7 @@ module PaginationHelper
 
   def render_page_link(link, text, current = false)
     classes = current ? "border-indigo-500 text-indigo-600" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-    link_to(text, link, aria_current: current ? 'page' : nil, class: "inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium #{classes}")
+    link_to(text, link, aria_current: current ? "page" : nil, class: "inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium #{classes}")
   end
 
   def render_ellipsis

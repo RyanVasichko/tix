@@ -16,10 +16,10 @@ FactoryBot.define do
       order.payment = FactoryBot.build(:order_payment, order: order) unless order.payment.present?
 
       if evaluator.tickets_count > 0 && order.tickets.empty?
-        show = FactoryBot.build(:show)
+        show = FactoryBot.build(:reserved_seating_show)
         seats = show.sections.map { |s| s.seats }.flatten.sample(evaluator.tickets_count)
         seats.each { |seat| seat.show = show }
-        order.tickets.build_for_seats(seats)
+        order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
         order.tickets.each { |ticket| ticket.order = order }
       end
     end

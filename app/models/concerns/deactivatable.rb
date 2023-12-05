@@ -33,7 +33,7 @@ module Deactivatable
   private
 
   def clean_name
-    clean_name = name.sub(/ \(Deactivated(\ \d+)?\)\z/, '').strip
+    clean_name = name.sub(/ \(Deactivated(\ \d+)?\)\z/, "").strip
     self.name = clean_name unless self.class.where(name: clean_name).exists?
   end
 

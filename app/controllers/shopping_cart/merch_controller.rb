@@ -28,7 +28,7 @@ class ShoppingCart::MerchController < ApplicationController
     @merch = Merch.find(params[:user_shopping_cart_merch][:merch_id])
 
     if @shopping_cart_merch.save
-      redirect_back fallback_location: merch_index_url, flash: { success: "#{@merch.name} was added to your shopping cart." }, status: :see_other
+      redirect_back_or_to merch_index_url, flash: { success: "#{@merch.name} was added to your shopping cart." }, status: :see_other
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class ShoppingCart::MerchController < ApplicationController
   # PATCH/PUT /shopping_cart/merch/1
   def update
     if @shopping_cart_merch.update(shopping_cart_merch_params)
-      redirect_back fallback_location: root_path, flash: { success: "Shopping cart was successfully updated." }, status: :see_other
+      redirect_back_or_to root_path, flash: { success: "Shopping cart was successfully updated." }, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,10 +46,9 @@ class ShoppingCart::MerchController < ApplicationController
   # DELETE /shopping_cart/merch/1
   def destroy
     @shopping_cart_merch.destroy
-    @user_has_shopping_cart_merch_for_merch =
-      Current.user.shopping_cart_merch.where(merch: @shopping_cart_merch.merch).exists?
+    @user_has_shopping_cart_merch_for_merch = Current.user.shopping_cart_merch.where(merch: @shopping_cart_merch.merch).exists?
 
-    redirect_back fallback_location: root_path, flash: { success: "Merch was successfully removed from your shopping cart." }, status: :see_other
+    redirect_back_or_to root_path, flash: { success: "Merch was successfully removed from your shopping cart." }, status: :see_other
   end
 
   private

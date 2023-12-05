@@ -1,0 +1,11 @@
+<div id="show_section_<%= section_fields.object.persisted? ? section_fields.object.id : section_fields.object.seating_chart_section_id %>_fields" class="mt-2 grid md:grid-cols-2 gap-x-4">
+  <% if section_fields.object.new_record? %>
+    <%= section_fields.hidden_field :seating_chart_section_id, data: { admin__shows_form_target: "reservedSeatingSectionFields" } %>
+  <% end %>
+  <div>
+    <%= section_fields.text_field :name, class: "mt-2", disabled: true, data: { admin__shows_form_target: "reservedSeatingSectionFields" } %>
+  </div>
+  <div>
+    <%= section_fields.currency_field :ticket_price, data: { admin__shows_form_target: "reservedSeatingSectionFields" } %>
+  </div>
+</div>

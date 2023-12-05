@@ -4,7 +4,7 @@
   </h1>
 
   <% @shows.each do |show| %>
-    <div class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 md:grid-cols-2 last:border-b-0">
+    <div id="<%= dom_id(show) %>" class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 md:grid-cols-2 last:border-b-0">
       <div>
         <%= image_tag show.artist.image, id: "shows_#{dom_id(show.artist.image)}", class: "md:max-h-48 rounded-md", data: { turbo_permanent: "" } %>
       </div>
@@ -20,7 +20,7 @@
             <p class="text-sm"><%= show_section.name %> - <%= number_to_currency(show_section.ticket_price) %></p>
           <% end %>
         </div>
-        <%= link_to "Order Tickets", show, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50" %>
+        <%= link_to_order_tickets(show) %>
 <!--        - if show.class == ReservedSeatingShow-->
 <!--        - if show.seating_chart_contains_deposit_sections?-->
 <!--        div style="margin-top: 0.5em"-->

@@ -21,4 +21,8 @@ module ApplicationHelper
   def active_tab_from_params
     params[:activeTab]
   end
+
+  def random_index
+    SecureRandom.random_number(1_000_000) + 100_000_000_000
+  end
 end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :seating_chart_section, class: 'SeatingChart::Section' do
+  factory :seating_chart_section, class: "SeatingChart::Section" do
     sequence(:name) { |n| "Section #{n}" }
 
     transient do

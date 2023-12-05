@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :order_merch, class: 'Order::Merch' do
+  factory :order_merch, class: "Order::Merch" do
     association :merch
     association :order
     quantity { Faker::Number.between(from: 1, to: 10) }

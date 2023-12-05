@@ -3,14 +3,15 @@ FactoryBot.define do
     transient do
       shopping_cart_merch_count { 0 }
       reserved_seats_count { 0 }
+      general_admission_tickets_count { 0 }
     end
 
     shopping_cart do |evaluator|
-      FactoryBot.build(
-        :shopping_cart,
-        merch_count: evaluator.shopping_cart_merch_count,
-        reserved_seats_count: evaluator.reserved_seats_count,
-        user: nil)
+      FactoryBot.build(:shopping_cart,
+                       merch_count: evaluator.shopping_cart_merch_count,
+                       reserved_seats_count: evaluator.reserved_seats_count,
+                       general_admission_tickets_count: evaluator.general_admission_tickets_count,
+                       user: nil)
     end
   end
 
@@ -26,15 +27,15 @@ FactoryBot.define do
     password_confirmation { "password" }
   end
 
-  factory :guest, traits: %i[user], class: 'User::Guest' do
+  factory :guest, traits: %i[user], class: "User::Guest" do
   end
 
-  factory :customer, traits: %i[user registered with_password], class: 'User::Customer' do
+  factory :customer, traits: %i[user registered with_password], class: "User::Customer" do
     registered
     with_password
   end
 
-  factory :admin, traits: %i[user registered with_password], class: 'User::Admin' do
+  factory :admin, traits: %i[user registered with_password], class: "User::Admin" do
     registered
     with_password
   end

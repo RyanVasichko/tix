@@ -3,26 +3,26 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.2.2"
 
-gem "rails",  "~> 7.1.0"
-gem "sprockets-rails"
+gem "bcrypt", "~> 3.1.7"
+gem "cssbundling-rails"
+gem "good_job"
+gem "jsbundling-rails"
+gem "pagy"
 gem "pg", "~> 1.1"
 gem "puma", "~> 6.0"
-gem "jsbundling-rails"
-gem "turbo-rails"
-gem "stimulus-rails"
-gem "cssbundling-rails"
-gem 'bcrypt', '~> 3.1.7'
-gem "good_job"
+gem "rails", "~> 7.1.2"
 gem "redis"
 gem "solid_cache"
+gem "sprockets-rails"
+gem "stimulus-rails"
 gem "stripe"
-gem "pagy"
+gem "turbo-rails"
 
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "appsignal"
+gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
 gem "ruby-vips"
-gem 'aws-sdk-s3', require: false
-gem 'appsignal'
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 # Use Sass to process CSS
 # gem "sassc-rails"
@@ -34,24 +34,21 @@ gem "factory_bot_rails"
 gem "faker"
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "awesome_print"
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "htmlbeautifier"
   gem "rubocop"
-  gem 'awesome_print'
 end
 
 group :development do
-  gem "web-console"
-  gem "rack-mini-profiler"
   gem "bullet"
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
-
-  gem "solargraph"
+  gem "rack-mini-profiler"
+  gem "web-console"
 end
 
 group :test do
   gem "capybara"
-  gem "selenium-webdriver"
   gem "launchy"
+  gem "selenium-webdriver"
+  gem "simplecov"
 end

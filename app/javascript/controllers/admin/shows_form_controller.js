@@ -3,20 +3,66 @@ import { get } from "@rails/request.js";
 
 // Connects to data-controller="admin--shows-form"
 export default class extends Controller {
+  static targets = [
+    "generalAdmissionShowFields",
+    "reservedSeatingShowFields",
+    "generalAdmissionSectionFields",
+    "reservedSeatingSectionFields",
+    "showTypeSelect",
+    "seatingChartSelect",
+    "venueSelect"
+  ];
+
+  get #showType() {
+    return this.showTypeSelectTarget.value;
+  }
+
   connect() {
   }
 
-  async loadSeatingChartSections(event) {
-    const selectedSeatingChartId = event.currentTarget.value;
-    await get(`/admin/shows/seating_charts/${selectedSeatingChartId}/sections_fields/`, {
+  async showFieldsForShowType() {
+    this.#hideAndDisableAllShowTypeSpecificFields();
+
+    if (this.#showType === "Show::ReservedSeatingShow") {
+      await this.loadVenueSeatingCharts()
+      this.#showReservedSeatingShowFields();
+    } else if (this.#showType === "Show::GeneralAdmissionShow") {
+      this.#showGeneralAdmissionShowFields();
+    }
+  }
+
+  async loadSeatingChartSections() {
+    const seatingChartId = this.seatingChartSelectTarget.value;
+    await get(`/admin/shows/seating_charts/${seatingChartId}/reserved_seating_show_sections_fields`, {
       responseKind: "turbo-stream"
     });
   }
 
-  async loadVenueSeatingCharts(event) {
-    const selectedVenueId = event.currentTarget.value;
-    await get(`/admin/shows/venues/${selectedVenueId}/seating_chart_fields/`, {
+  async loadVenueSeatingCharts() {
+    if (this.#showType !== "Show::ReservedSeatingShow") {
+      return;
+    }
+
+    const venueId = this.venueSelectTarget.value;
+    await get(`/admin/shows/venues/${venueId}/seating_chart_fields`, {
       responseKind: "turbo-stream"
     });
+  }
+
+  #hideAndDisableAllShowTypeSpecificFields() {
+    this.generalAdmissionShowFieldsTarget.classList.add("hidden");
+    this.reservedSeatingShowFieldsTarget.classList.add("hidden");
+    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Show::GeneralAdmissionShow");
+    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Show::ReservedSeatingShow");
+  }
+
+  #showGeneralAdmissionShowFields() {
+    this.generalAdmissionShowFieldsTarget.classList.remove("hidden");
+    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = false);
+  }
+
+  #showReservedSeatingShowFields() {
+    this.reservedSeatingShowFieldsTarget.classList.remove("hidden");
+    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = false);
   }
 }

@@ -1,9 +1,9 @@
 require "application_integration_test_case"
 
 class Orders::SeatReservationsControllerTest < ApplicationIntegrationTestCase
-  test 'should destroy seat reservation' do
+  test "should destroy seat reservation" do
     @user = FactoryBot.create(:customer)
-    @show = FactoryBot.create(:show)
+    @show = FactoryBot.create(:reserved_seating_show)
 
     @seat = @show.seats.first
     @seat.reserve_for(@user)

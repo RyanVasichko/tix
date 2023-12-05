@@ -4,7 +4,7 @@ class Show::SeatTest < ActiveSupport::TestCase
   include ActionCable::TestHelper
 
   setup do
-    @section = FactoryBot.create(:show_section)
+    @section = FactoryBot.create(:reserved_seating_show_section)
     @user = FactoryBot.create(:customer)
     @seat = @section.seats.first
   end
@@ -24,7 +24,7 @@ class Show::SeatTest < ActiveSupport::TestCase
 
     assert_equal @user, @seat.reserved_by
 
-    @seat.cancel_reservation!
+    @seat.cancel_reservation_for!(@user)
 
     assert_nil @seat.shopping_cart
     assert_nil @seat.reserved_until
@@ -59,7 +59,7 @@ class Show::SeatTest < ActiveSupport::TestCase
     @seat.reserve_for!(@user)
 
     assert_broadcasts([@section.show, "seating_chart"], 1) do
-      @seat.cancel_reservation!
+      @seat.cancel_reservation_for!(@user)
       perform_enqueued_jobs
     end
   end
@@ -70,7 +70,7 @@ class Show::SeatTest < ActiveSupport::TestCase
     original_updated_at = shopping_cart.updated_at
 
     travel 1.minute do
-      @seat.cancel_reservation!
+      @seat.cancel_reservation_for!(@user)
       shopping_cart.reload
 
       assert_operator shopping_cart.updated_at, :>, original_updated_at + 59.seconds

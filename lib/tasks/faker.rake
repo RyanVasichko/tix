@@ -1,11 +1,11 @@
 namespace :faker do
   desc "Generate Faker locale with unique x, y positions"
   task generate_locale: :environment do
-    require 'yaml'
-    require 'set'
+    require "yaml"
+    require "set"
 
     # Load the YAML content
-    data = YAML.load(File.read(Rails.root.join('test/fixtures/show/seats.yml')))
+    data = YAML.load(File.read(Rails.root.join("test/fixtures/show/seats.yml")))
 
     # Initialize a set to store unique positions
     unique_positions = Set.new
@@ -18,12 +18,12 @@ namespace :faker do
 
     # Create a new YAML content for the Faker locale
     faker_content = {
-      'en' => {
-        'faker' => {
+      "en" => {
+        "faker" => {
           faker: {
 
-            'seating_chart' => { # Use seating_chart instead of coordinates for clarity
-                                 'seat_positions' => unique_positions.to_a
+            "seating_chart" => { # Use seating_chart instead of coordinates for clarity
+                                 "seat_positions" => unique_positions.to_a
             }
           }
         }
@@ -31,7 +31,7 @@ namespace :faker do
     }
 
     # Write the content to the Faker locale file in config/locales
-    File.open(Rails.root.join('config', 'locales', 'faker_locale_en.yml'), 'w') do |file|
+    File.open(Rails.root.join("config", "locales", "faker_locale_en.yml"), "w") do |file|
       file.write(faker_content.to_yaml)
     end
 

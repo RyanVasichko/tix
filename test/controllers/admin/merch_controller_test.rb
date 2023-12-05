@@ -36,7 +36,7 @@ class Admin::MerchControllerTest < ApplicationIntegrationTestCase
              }
            }
     end
-    
+
     assert_redirected_to admin_merch_index_url
 
     @merch = Merch.last

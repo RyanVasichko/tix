@@ -1,5 +1,10 @@
 <%= turbo_frame_tag :admin, show, target: :_top do %>
-  <%= form_with(model: [:admin, show], class: "mt-12", data: { controller: "admin--shows-form" }) do |form| %>
+  <%= form_with model: [:admin, show],
+                scope: "show",
+                url: admin_shows_path,
+                class: "mt-12",
+                data: { controller: "admin--shows-form" } do |form|
+  %>
     <div class="my-6 flex justify-center" data-controller="clear-errors">
       <div class="w-full max-w-md">
         <%= render "shared/error_messages", { model: show } %>
@@ -32,7 +37,21 @@
                   :name,
                   {},
                   disabled: show.persisted?,
-                  data: { action: "admin--shows-form#loadVenueSeatingCharts" })
+                  data: { action: "admin--shows-form#loadVenueSeatingCharts", admin__shows_form_target: "venueSelect" })
+            %>
+          </div>
+
+          <div>
+            <%= form.label :type %>
+            <%= form.select(
+                  :type,
+                  [
+                    ["Reserved Seating", Show::ReservedSeatingShow.to_s],
+                    ["General Admission", Show::GeneralAdmissionShow.to_s]
+                  ],
+                  {},
+                  disabled: show.persisted?,
+                  data: { admin__shows_form_target: "showTypeSelect", action: "admin--shows-form#showFieldsForShowType" })
             %>
           </div>
 
@@ -92,15 +111,44 @@
         <h3 class="mb-6 font-medium text-gray-900 text-md">
           Sections
         </h3>
-        <div>
+        <div data-admin--shows-form-target="reservedSeatingShowFields">
           <div id="show_seating_chart_fields">
             <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: show.persisted?, seating_charts: @seating_charts %>
           </div>
           <div class="mt-6" id="show_sections_fields">
-            <%= form.fields_for :sections do |section_fields| %>
-              <%= render "admin/shows/sections_fields/section_fields", section_fields: section_fields %>
+            <% if form.object.type == Show::ReservedSeatingShow.to_s %>
+              <%= form.fields_for :sections do |section_fields| %>
+                <%= render "admin/shows/reserved_seating_show_sections_fields/section_fields", section_fields: section_fields %>
+              <% end %>
             <% end %>
           </div>
+        </div>
+        <div data-admin--shows-form-target="generalAdmissionShowFields" class="<%= "hidden" if form.object.type != Show::GeneralAdmissionShow.to_s %>">
+          <div class="w-full flex justify-end">
+            <%= link_to "Add Section",
+                        new_admin_shows_general_admission_show_section_field_path,
+                        class: "btn-primary text-xs px-1.5 py-1.5",
+                        data: { turbo: true, turbo_stream: true }
+            %>
+          </div>
+          <table class="table table-auto">
+            <thead>
+              <tr>
+                <th scope="col" class="table-th">Name</th>
+                <th scope="col" class="table-th">Fees</th>
+                <th scope="col" class="table-th">Price</th>
+                <th scope="col" class="table-th">Quantity</th>
+                <th scope="col" class="table-th">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody class="table-tbody" id="general_admission_show_sections">
+              <% if form.object.type == Show::GeneralAdmissionShow.to_s %>
+                <%= form.fields_for :sections do |section_fields| %>
+                  <%= render "admin/shows/general_admission_show_section_fields/section_fields", section_fields: section_fields %>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -138,7 +186,7 @@
     </div>
 
     <div class="mt-10 flex items-center justify-end">
-      <%= form.submit %>
+      <%= form.submit show.persisted? ? "Update Show" : "Create Show" %>
     </div>
   <% end %>
 <% end %>

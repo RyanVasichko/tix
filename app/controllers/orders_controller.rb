@@ -18,8 +18,7 @@ class OrdersController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @form = Current.user.order_form_type.new(order_params)

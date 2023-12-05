@@ -1,5 +1,5 @@
-require 'aws-sdk-s3'
-require 'open3'
+require "aws-sdk-s3"
+require "open3"
 
 class DatabaseBackupJob < ApplicationJob
   queue_as :default
@@ -30,9 +30,9 @@ class DatabaseBackupJob < ApplicationJob
     db_config = ActiveRecord::Base.connection_db_config.configuration_hash
     command = "pg_dump -h #{db_config[:host]} -U #{db_config[:username]} -d #{db_config[:database]} > #{@backup_file_path}"
 
-    ENV['PGPASSWORD'] = db_config[:password]
+    ENV["PGPASSWORD"] = db_config[:password]
     stdout, stderr, status = Open3.capture3(command)
-    ENV['PGPASSWORD'] = nil
+    ENV["PGPASSWORD"] = nil
 
     raise "Command failed with error: #{stderr}" unless status.success?
   end
@@ -49,8 +49,8 @@ class DatabaseBackupJob < ApplicationJob
   end
 
   def cleanup_remote_backups
-    backup_objects = s3_resource.bucket(BACKUPS_BUCKET).objects(prefix: 'backup_').collect(&:key)
-    sorted_backup_objects = backup_objects.sort_by { |obj| obj.split('_').last }.reverse
+    backup_objects = s3_resource.bucket(BACKUPS_BUCKET).objects(prefix: "backup_").collect(&:key)
+    sorted_backup_objects = backup_objects.sort_by { |obj| obj.split("_").last }.reverse
 
     backups_to_delete = sorted_backup_objects.drop(BACKUPS_TO_KEEP)
     backups_to_delete.each { |backup| s3_resource.bucket(BACKUPS_BUCKET).object(backup).delete }

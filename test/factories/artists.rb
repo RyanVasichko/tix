@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :with_show do
       after(:build) do |artist|
-        artist.shows << FactoryBot.build(:show, artist: artist)
+        artist.shows << FactoryBot.build(:reserved_seating_show, artist: artist)
       end
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -146,8 +146,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
 
   create_table "order_tickets", force: :cascade do |t|
     t.bigint "order_id", null: false
-    t.bigint "show_seat_id", null: false
+    t.bigint "show_seat_id"
     t.bigint "show_id", null: false
+    t.bigint "show_section_id"
+    t.integer "quantity", default: 1, null: false
+    t.string "type", null: false
     t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "venue_commission", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "ticket_price", precision: 8, scale: 2, default: "0.0", null: false
@@ -157,6 +160,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
     t.index ["order_id"], name: "index_order_tickets_on_order_id"
     t.index ["show_id"], name: "index_order_tickets_on_show_id"
     t.index ["show_seat_id"], name: "index_order_tickets_on_show_seat_id"
+    t.index ["show_section_id"], name: "index_order_tickets_on_show_section_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -224,8 +228,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
     t.integer "convenience_fee_type", null: false
     t.integer "payment_method", null: false
     t.decimal "convenience_fee", precision: 10, scale: 2, null: false
-    t.decimal "venue_commission", precision: 10, scale: 2, null: false
+    t.decimal "venue_commission", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "ticket_quantity"
     t.string "name", null: false
+    t.string "type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["show_id"], name: "index_show_sections_on_show_id"
@@ -246,7 +252,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
 
   create_table "shows", force: :cascade do |t|
     t.bigint "artist_id", null: false
-    t.string "seating_chart_name", null: false
+    t.string "seating_chart_name"
     t.datetime "show_date", null: false
     t.datetime "doors_open_at", null: false
     t.datetime "show_starts_at", null: false
@@ -257,6 +263,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
     t.datetime "back_end_on_sale_at", null: false
     t.datetime "back_end_off_sale_at", null: false
     t.text "additional_text"
+    t.string "type", null: false
     t.decimal "deposit_amount", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -289,6 +296,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
     t.datetime "updated_at", null: false
     t.index ["merch_id"], name: "index_user_shopping_cart_merch_on_merch_id"
     t.index ["user_shopping_cart_id"], name: "index_user_shopping_cart_merch_on_user_shopping_cart_id"
+  end
+
+  create_table "user_shopping_cart_tickets", force: :cascade do |t|
+    t.bigint "show_section_id", null: false
+    t.integer "quantity", null: false
+    t.bigint "user_shopping_cart_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["show_section_id"], name: "index_user_shopping_cart_tickets_on_show_section_id"
+    t.index ["user_shopping_cart_id"], name: "index_user_shopping_cart_tickets_on_user_shopping_cart_id"
   end
 
   create_table "user_shopping_carts", force: :cascade do |t|
@@ -325,6 +342,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
   add_foreign_key "order_merch", "orders"
   add_foreign_key "order_tickets", "orders"
   add_foreign_key "order_tickets", "show_seats"
+  add_foreign_key "order_tickets", "show_sections"
   add_foreign_key "order_tickets", "shows"
   add_foreign_key "orders", "order_payments"
   add_foreign_key "orders", "order_shipping_addresses", column: "shipping_address_id"
@@ -341,5 +359,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_06_201404) do
   add_foreign_key "ticket_types", "venues"
   add_foreign_key "user_shopping_cart_merch", "merch"
   add_foreign_key "user_shopping_cart_merch", "user_shopping_carts"
+  add_foreign_key "user_shopping_cart_tickets", "show_sections"
+  add_foreign_key "user_shopping_cart_tickets", "user_shopping_carts"
   add_foreign_key "users", "user_shopping_carts"
 end

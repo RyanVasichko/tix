@@ -2,6 +2,7 @@ class User::ShoppingCart < ApplicationRecord
   after_update_commit :broadcast_updates
 
   has_many :seats, -> { where(reserved_until: Time.current..) }, dependent: :nullify, class_name: "Show::Seat", foreign_key: :user_shopping_cart_id
+  has_many :tickets, dependent: :destroy, class_name: "User::ShoppingCart::Ticket", foreign_key: :user_shopping_cart_id
   has_many :merch, dependent: :destroy, class_name: "User::ShoppingCart::Merch", foreign_key: :user_shopping_cart_id
   has_one :user, inverse_of: :shopping_cart
 
@@ -12,12 +13,24 @@ class User::ShoppingCart < ApplicationRecord
     )
   }
 
+  def shows
+    Show.where(id: seats.joins(:show).select("DISTINCT shows.id")).or(Show.where(id: tickets.joins(:show).select("DISTINCT shows.id")))
+  end
+
+  def seats_for(show)
+    seats.joins(:show).where(show_sections: { show_id: show.id })
+  end
+
+  def tickets_for(show)
+    tickets.joins(:show).where(show_sections: { show_id: show.id })
+  end
+
   def total_items
-    seats.count + merch.sum(:quantity)
+    seats.count + merch.sum(:quantity) + tickets.sum(:quantity)
   end
 
   def empty?
-    seats.empty? && merch.empty?
+    seats.empty? && merch.empty? && tickets.empty?
   end
 
   def transfer_to(to)

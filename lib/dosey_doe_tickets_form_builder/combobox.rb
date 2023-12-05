@@ -64,7 +64,7 @@ module DoseyDoeTicketsFormBuilder
     def combobox_text_field_id(method)
       method_name = method.to_s
       object_name = object_name().to_s
-      "#{object_name}_#{method_name}_combobox]".gsub(/\[|\]|\]\[/, '_')
+      "#{object_name}_#{method_name}_combobox]".gsub(/\[|\]|\]\[/, "_")
     end
   end
 end

@@ -1,0 +1,2 @@
+module Orders::ShoppingCartTicketsHelper
+end

@@ -79,11 +79,11 @@
                         <div class="ml-6 flex-1 text-sm">
                           <div class="font-medium text-gray-900 sm:flex sm:justify-between">
                             <h5 class="text-xl"><%= show.artist.name %></h5>
-                            <p class="mt-2 sm:mt-0"><%= number_to_currency(tickets.sum(&:price)) %></p>
+                            <p class="mt-2 sm:mt-0"><%= number_to_currency(tickets.sum(&:total_price)) %></p>
                           </div>
                           <% tickets.each do |ticket| %>
                             <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.price) %></span>
+                              <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
                             </p>
                           <% end %>
                         </div>

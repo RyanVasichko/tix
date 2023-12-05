@@ -15,16 +15,16 @@ class Admin::ArtistsTest < ApplicationSystemTestCase
     assert_difference "Artist.count" do
       visit admin_artists_url
       click_on "New Artist"
-  
+
       fill_in "Name", with: "New artist name"
       fill_in "Url", with: "New artist URL"
       fill_in "Bio", with: "New artist bio"
-      attach_file('artist_image', Rails.root.join('test/fixtures/files/radiohead.jpg'))
-  
+      attach_file("artist_image", Rails.root.join("test/fixtures/files/radiohead.jpg"))
+
       click_on "Create Artist"
-  
+
       assert_text "Artist was successfully created"
-  
+
       created_artist = Artist.last
       assert "New artist name", created_artist.name
       assert "New artist URL", created_artist.url

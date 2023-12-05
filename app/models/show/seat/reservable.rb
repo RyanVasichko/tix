@@ -14,7 +14,7 @@ module Show::Seat::Reservable
     has_one :reserved_by, through: :shopping_cart, source: :user
 
     after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_user_shopping_cart_id? }
-    after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "shows/seats/seat" }
+    after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "reserved_seating_shows/seats/seat" }
   end
 
   def transfer_reservation!(from:, to:)
@@ -31,8 +31,12 @@ module Show::Seat::Reservable
     with_lock { update!(reservation_params_for_user(user)) } if reservable_by?(user)
   end
 
-  def cancel_reservation!
-    with_lock { update!(shopping_cart: nil, reserved_until: nil) }
+  def cancel_reservation_for!(user)
+    with_lock { update!(cancel_reservation_params) } if reserved_by == user
+  end
+
+  def cancel_reservation_for(user)
+    with_lock { update(cancel_reservation_params) } if reserved_by == user
   end
 
   private
@@ -43,6 +47,10 @@ module Show::Seat::Reservable
 
   def reservation_params_for_user(user)
     { shopping_cart: user.shopping_cart, reserved_until: Time.current + user.ticket_reservation_time }
+  end
+
+  def cancel_reservation_params
+    { shopping_cart: nil, reserved_until: nil }
   end
 
   def queue_expiration_job

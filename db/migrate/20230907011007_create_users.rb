@@ -18,12 +18,12 @@ class CreateUsers < ActiveRecord::Migration[7.0]
     ALTER TABLE users ADD CONSTRAINT check_guest_fields#{' '}
     CHECK (
       (
-        type != 'User::Guest' 
-        AND first_name IS NOT NULL 
-        AND last_name IS NOT NULL 
-        AND email IS NOT NULL 
+        type != 'User::Guest'#{' '}
+        AND first_name IS NOT NULL#{' '}
+        AND last_name IS NOT NULL#{' '}
+        AND email IS NOT NULL#{' '}
         AND password_digest IS NOT NULL
-      ) 
+      )#{' '}
       OR type = 'User::Guest'
     );
     SQL

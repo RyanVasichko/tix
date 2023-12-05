@@ -30,11 +30,11 @@ class FactoriesTest < ActiveSupport::TestCase
 
     assert_difference(expected_show_count_differences) do
       2.times do
-        FactoryBot.create(:show)
+        FactoryBot.create(:reserved_seating_show)
       end
 
       3.times do
-        FactoryBot.create(:show, artist: artists.sample)
+        FactoryBot.create(:reserved_seating_show, artist: artists.sample)
       end
     end
 

@@ -5,8 +5,8 @@ class RepopulateVenueLayoutCacheJob < ApplicationJob
   queue_as :default
 
   def perform
-    Rails.cache.delete('venue_layout_images_preload')
-    Rails.cache.write('venue_layout_images_preload', preload_venue_layout_images)
+    Rails.cache.delete("venue_layout_images_preload")
+    Rails.cache.write("venue_layout_images_preload", preload_venue_layout_images)
   end
 
   private

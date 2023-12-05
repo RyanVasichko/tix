@@ -12,6 +12,12 @@ FactoryBot.define do
     transient do
       categories_count { 0 }
       categories { [] }
+      image_blob do
+        ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("test/fixtures/files/bbq_sauce.png")),
+          filename: "bbq_sauce.png",
+          content_type: "image/png")
+      end
     end
 
     trait :inactive do

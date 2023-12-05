@@ -1,0 +1,13 @@
+<div id="shopping_cart_<%= dom_id(ticket) %>">
+  <div class="flex justify-between mt-3">
+    <p class="text-gray-500">
+      <%= form_with model: ticket, url: shopping_cart_general_admission_show_ticket_path(ticket.show, ticket), data: { controller: "quick-form", turbo_frame: :_top }, class: "text-gray-500 flex items-baseline" do |form| %>
+        <%= ticket.show_section.name %>: <%= form.collection_select :quantity, 1..[10, ticket.quantity].max, :to_i, :to_i, {}, data: { action: "quick-form#submit" }, class: "form-control-select p-0 mx-2" %>
+      <% end %>
+    </p>
+    <%= button_to shopping_cart_general_admission_show_ticket_path(ticket.show, ticket), method: :delete, data: { turbo_frame: :_top }, class: "-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
+      <span class="sr-only">Remove</span>
+      <%= svg_trash_can %>
+    <% end %>
+  </div>
+</div>

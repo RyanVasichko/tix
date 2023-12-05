@@ -1,3 +1,8 @@
+# General Admission Shows
+- [ ] Auto-adjust reservable ticket quantity based on available seats for section
+- [ ] Add GA tickets to order form
+- [ ] Add GA tickets to order total calculation
+
 # Ticket Types
 - [ ] Add fees to order form
 - [ ] Add fees to order summary
@@ -14,7 +19,6 @@
 - [ ] Add customer questions to order form
 
 # Seating Charts
-- [ ] Have destroy method just deactivate a seating chart if it has shows
 - [ ] Convert slide over component to use el-transition
 
 ## Sections
@@ -47,6 +51,7 @@
 - [ ] Update merch, add category but don't fill anything in then save. Should pass validation but doesn't
 - [ ] You can uncheck the "All" chip
 - [ ] Order form not validating address properly
+- [ ] Add a bunch of merch to the shopping cart from the merch index, then open the shopping cart. The z-index is messed up or something
 - [ ] Deleting an existing seat on an existing seating chart does nothing
 - [ ] Ticket types form - convenience fee error messages are not styled properly
 - [ ] Removing a section on the seating chart form closes the slideout

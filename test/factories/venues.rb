@@ -8,9 +8,7 @@ FactoryBot.define do
     end
 
     after(:build) do |venue, evaluator|
-      if venue.ticket_types.empty?
-        venue.ticket_types = build_list(:ticket_type, evaluator.ticket_types_count, venue: venue)
-      end
+      venue.ticket_types = build_list(:ticket_type, evaluator.ticket_types_count, venue: venue) if venue.ticket_types.empty?
     end
   end
 end

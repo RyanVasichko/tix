@@ -1,6 +1,6 @@
 <%= turbo_stream.update "show_artist_fields" do %>
   <%= render "admin/shows/artist_fields", form: DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, Show.new.tap { |s| s.build_artist }, self, {}) %>
-<% end %> %>
+<% end %>
 
 <%= turbo_stream.replace "application_modal_body" do %>
   <%= turbo_frame_tag "application_modal_body" do %>

@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class Admin::ShowsTest < ApplicationSystemTestCase
   setup do
-    @show = FactoryBot.create(:show)
+    @show = FactoryBot.create(:reserved_seating_show)
     FactoryBot.create_list(:venue, 3).tap { |venues| @venue = venues.sample }
     @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2, venue: @venue)
     @section_1 = @seating_chart.sections.first
@@ -14,78 +14,36 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Shows"
   end
 
-  test "should create show" do
-    artist = FactoryBot.create(:artist)
-    show_date = Time.current.change(month: 4, day: 5, hour: 0, min: 0, sec: 0) + 1.year
-    front_end_on_sale_at = show_date.change(month: 3, day: 5, hour: 8, min: 0, sec: 0)
-    front_end_off_sale_at = show_date.change(month: 4, day: 20, hour: 21, min: 0, sec: 0)
-    back_end_on_sale_at = show_date.change(month: 3, day: 19, hour: 9, min: 0, sec: 0)
-    back_end_off_sale_at = show_date.change(month: 4, day: 20, hour: 22, min: 0, sec: 0)
-    doors_open_at = show_date.change(hour: 18)
-    dinner_starts_at = show_date.change(hour: 18, min: 15)
-    dinner_ends_at = show_date.change(hour: 19, min: 30)
-    show_starts_at = show_date.change(hour: 20)
-    customer_question = FactoryBot.create(:customer_question)
+  test "should create a reserved seating show" do
+    set_up_common_fields_for_show_create
 
-    assert_difference "Show.count" do
-      assert_difference "Show::Section.count", 2 do
-        visit admin_shows_url
-        click_on "New Show"
+    expected_differences = {
+      "Show.count" => 1,
+      "Show::Section.count" => 2,
+      "Show::Seat.count" => 4
+    }
+    assert_difference expected_differences do
+      visit admin_shows_url
+      click_on "New Show"
 
-        fill_in "Artist", with: "#{artist.name[0..2]}"
-        find("li[data-combobox-option-label-param='#{artist.name}']").click
+      fill_in_common_fields_for_show_create
 
-        select @venue.name, from: "Venue"
-        select @seating_chart.name, from: "Seating chart"
+      select @seating_chart.name, from: "Seating chart"
+      select "Reserved Seating", from: "Type"
 
-        fill_ticket_price_for_section(@section_1.id, 45)
-        fill_ticket_price_for_section(@section_2.id, 23.50)
+      fill_ticket_price_for_section(@section_1.id, 45)
+      fill_ticket_price_for_section(@section_2.id, 23.50)
 
-        fill_in "Show date", with: show_date.to_formatted_s(:date_field)
-        fill_in "Doors open at", with: doors_open_at.to_formatted_s(:time_field)
-        fill_in "Dinner starts at", with: dinner_starts_at.to_formatted_s(:time_field)
-        fill_in "Dinner ends at", with: dinner_ends_at.to_formatted_s(:time_field)
-        fill_in "Show starts at", with: show_starts_at.to_formatted_s(:time_field)
+      click_on "Create Show"
 
-        fill_in "Back end on sale at", with: back_end_on_sale_at.to_formatted_s(:datetime_field)
-        fill_in "Back end off sale at", with: back_end_off_sale_at.to_formatted_s(:datetime_field)
-        fill_in "Front end on sale at", with: front_end_on_sale_at.to_formatted_s(:datetime_field)
-        fill_in "Front end off sale at", with: front_end_off_sale_at.to_formatted_s(:datetime_field)
-
-        fill_in "Additional text", with: "This is some additional text"
-        check customer_question.question
-
-        click_on "Add Upsale"
-        within "#show_upsales_fields" do
-          fill_in "Name", with: "VIP Parking"
-          fill_in "Description", with: "Park closer to the venue"
-          fill_in "Quantity", with: "10"
-          fill_in "Price", with: "10"
-        end
-
-        click_on "Create Show"
-
-        assert_text "Show was successfully created"
-      end
+      assert_text "Show was successfully created"
     end
 
-    created_show = Show.last
+    created_show = Show::ReservedSeatingShow.last
+    execute_common_assertions_for_show_create(created_show)
 
-    assert_equal artist, created_show.artist
     assert_equal @seating_chart.name, created_show.seating_chart_name
     assert_equal @seating_chart.venue_layout.blob, created_show.venue_layout.blob
-    assert_equal "This is some additional text", created_show.additional_text
-
-    assert_equal show_date, created_show.show_date
-    assert_equal show_starts_at, created_show.show_starts_at
-    assert_equal doors_open_at, created_show.doors_open_at
-    assert_equal dinner_starts_at, created_show.dinner_starts_at
-    assert_equal dinner_ends_at, created_show.dinner_ends_at
-
-    assert_equal back_end_on_sale_at, created_show.back_end_on_sale_at
-    assert_equal back_end_off_sale_at, created_show.back_end_off_sale_at
-    assert_equal front_end_on_sale_at, created_show.front_end_on_sale_at
-    assert_equal front_end_off_sale_at, created_show.front_end_off_sale_at
 
     assert_equal 23.50, created_show.sections.find_by(name: @section_2.name).ticket_price
     assert_equal 45, created_show.sections.find_by(name: @section_1.name).ticket_price
@@ -103,16 +61,60 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         assert expected_seat.exists?
       end
     end
+  end
 
-    assert_equal 1, created_show.upsales.count
-    created_upsale = created_show.upsales.first
-    assert_equal "VIP Parking", created_upsale.name
-    assert_equal "Park closer to the venue", created_upsale.description
-    assert_equal 10, created_upsale.quantity
-    assert_equal 10, created_upsale.price
+  test "should create a general admission show" do
+    set_up_common_fields_for_show_create
 
-    assert_equal 1, created_show.customer_questions.count
-    assert_equal customer_question, created_show.customer_questions.first
+    expected_differences = {
+      "Show.count" => 1,
+      "Show::Section.count" => 2,
+      "Show::Seat.count" => 0
+    }
+    assert_difference expected_differences do
+      visit admin_shows_url
+      click_on "New Show"
+
+      select "General Admission", from: "Type"
+      fill_in_common_fields_for_show_create
+
+      click_on "Add Section"
+      sleep 0.25
+      within all(".general_admission_show_section_fields").last do
+        find(".show_section_name_field").set("Section 1")
+        find(".show_section_convenience_fee_field").set("2.50")
+        find(".show_section_ticket_price_field").set("45")
+        find(".show_section_ticket_quantity_field").set("100")
+      end
+
+      click_on "Add Section"
+      sleep 0.25
+      within all(".general_admission_show_section_fields").last do
+        find(".show_section_name_field").set("Section 2")
+        find(".show_section_convenience_fee_field").set("3.50")
+        find(".show_section_ticket_price_field").set("23.50")
+        find(".show_section_ticket_quantity_field").set("75")
+      end
+
+      click_on "Create Show"
+
+      assert_text "Show was successfully created"
+    end
+
+    created_show = Show::GeneralAdmissionShow.last
+    execute_common_assertions_for_show_create(created_show)
+
+    assert_equal 2, created_show.sections.count
+
+    section_1 = created_show.sections.find_by(name: "Section 1")
+    assert_equal 2.50, section_1.convenience_fee
+    assert_equal 45, section_1.ticket_price
+    assert_equal 100, section_1.ticket_quantity
+
+    section_2 = created_show.sections.find_by(name: "Section 2")
+    assert_equal 3.50, section_2.convenience_fee
+    assert_equal 23.50, section_2.ticket_price
+    assert_equal 75, section_2.ticket_quantity
   end
 
   test "should update Show" do
@@ -143,7 +145,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
         fill_in "Name", with: "The Beatles"
         fill_in "Bio", with: "The Beatles were an English rock band formed in Liverpool in 1960."
         fill_in "Url", with: "https://www.thebeatles.com/"
-        attach_file('artist_image', Rails.root.join('test/fixtures/files/radiohead.jpg'))
+        attach_file("artist_image", Rails.root.join("test/fixtures/files/radiohead.jpg"))
         click_on "Create Artist"
       end
 
@@ -170,10 +172,80 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
   private
 
+  def set_up_common_fields_for_show_create
+    @artist = FactoryBot.create(:artist)
+    @show_date = Time.current.change(month: 4, day: 5, hour: 0, min: 0, sec: 0) + 1.year
+    @front_end_on_sale_at = @show_date.change(month: 3, day: 5, hour: 8, min: 0, sec: 0)
+    @front_end_off_sale_at = @show_date.change(month: 4, day: 20, hour: 21, min: 0, sec: 0)
+    @back_end_on_sale_at = @show_date.change(month: 3, day: 19, hour: 9, min: 0, sec: 0)
+    @back_end_off_sale_at = @show_date.change(month: 4, day: 20, hour: 22, min: 0, sec: 0)
+    @doors_open_at = @show_date.change(hour: 18)
+    @dinner_starts_at = @show_date.change(hour: 18, min: 15)
+    @dinner_ends_at = @show_date.change(hour: 19, min: 30)
+    @show_starts_at = @show_date.change(hour: 20)
+    @customer_question = FactoryBot.create(:customer_question)
+  end
+
+  def fill_in_common_fields_for_show_create
+    fill_in "Artist", with: "#{@artist.name[0..2]}"
+    sleep 0.1
+    find("li[data-combobox-option-label-param='#{@artist.name}']").click
+
+    select @venue.name, from: "Venue"
+
+    fill_in "Show date", with: @show_date.to_formatted_s(:date_field)
+    fill_in "Doors open at", with: @doors_open_at.to_formatted_s(:time_field)
+    fill_in "Dinner starts at", with: @dinner_starts_at.to_formatted_s(:time_field)
+    fill_in "Dinner ends at", with: @dinner_ends_at.to_formatted_s(:time_field)
+    fill_in "Show starts at", with: @show_starts_at.to_formatted_s(:time_field)
+
+    fill_in "Back end on sale at", with: @back_end_on_sale_at.to_formatted_s(:datetime_field)
+    fill_in "Back end off sale at", with: @back_end_off_sale_at.to_formatted_s(:datetime_field)
+    fill_in "Front end on sale at", with: @front_end_on_sale_at.to_formatted_s(:datetime_field)
+    fill_in "Front end off sale at", with: @front_end_off_sale_at.to_formatted_s(:datetime_field)
+
+    fill_in "Additional text", with: "This is some additional text"
+    check @customer_question.question
+
+    click_on "Add Upsale"
+    within "#show_upsales_fields" do
+      fill_in "Name", with: "VIP Parking"
+      fill_in "Description", with: "Park closer to the venue"
+      fill_in "Quantity", with: "10"
+      fill_in "Price", with: "10"
+    end
+  end
+
+  def execute_common_assertions_for_show_create(created_show)
+    assert_equal @artist, created_show.artist
+    assert_equal "This is some additional text", created_show.additional_text
+
+    assert_equal @show_date, created_show.show_date
+    assert_equal @show_starts_at, created_show.show_starts_at
+    assert_equal @doors_open_at, created_show.doors_open_at
+    assert_equal @dinner_starts_at, created_show.dinner_starts_at
+    assert_equal @dinner_ends_at, created_show.dinner_ends_at
+
+    assert_equal @back_end_on_sale_at, created_show.back_end_on_sale_at
+    assert_equal @back_end_off_sale_at, created_show.back_end_off_sale_at
+    assert_equal @front_end_on_sale_at, created_show.front_end_on_sale_at
+    assert_equal @front_end_off_sale_at, created_show.front_end_off_sale_at
+
+    assert_equal 1, created_show.upsales.count
+    created_upsale = created_show.upsales.first
+    assert_equal "VIP Parking", created_upsale.name
+    assert_equal "Park closer to the venue", created_upsale.description
+    assert_equal 10, created_upsale.quantity
+    assert_equal 10, created_upsale.price
+
+    assert_equal 1, created_show.customer_questions.count
+    assert_equal @customer_question, created_show.customer_questions.first
+  end
+
   def fill_ticket_price_for_section(div_id_suffix, price)
     within("#show_section_#{div_id_suffix}_fields") do
       # Using find with XPath to locate the desired input field based on ending substring
-      xpath_expression = %Q{.//input[substring(@name, string-length(@name) - string-length('][ticket_price]') +1) = '][ticket_price]']}
+      xpath_expression = %{.//input[substring(@name, string-length(@name) - string-length('][ticket_price]') +1) = '][ticket_price]']}
       find(:xpath, xpath_expression).set(price)
     end
   end
