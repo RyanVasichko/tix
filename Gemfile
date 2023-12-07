@@ -37,6 +37,7 @@ group :development, :test do
   gem "awesome_print"
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "htmlbeautifier"
+  gem "byebug"
   gem "rubocop"
 end
 
