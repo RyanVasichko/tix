@@ -48,3 +48,6 @@ coverage/
 .idea/
 *.DS_Store
 .byebug_history
+*.sqlite3
+*.sqlite
+dosey-doe-tickets*.sqlite3*

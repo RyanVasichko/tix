@@ -11,9 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -69,8 +66,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "customer_questions_shows", id: false, force: :cascade do |t|
-    t.bigint "show_id", null: false
-    t.bigint "customer_question_id", null: false
+    t.integer "show_id", null: false
+    t.integer "customer_question_id", null: false
     t.index ["customer_question_id"], name: "index_customer_questions_shows_on_customer_question_id"
     t.index ["show_id"], name: "index_customer_questions_shows_on_show_id"
   end
@@ -80,7 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.string "name", null: false
     t.string "description"
     t.boolean "active", default: true, null: false
-    t.string "options", default: [], array: true
+    t.string "options"
     t.string "option_label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -93,8 +90,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "merch_merch_categories", id: false, force: :cascade do |t|
-    t.bigint "merch_id", null: false
-    t.bigint "merch_category_id", null: false
+    t.integer "merch_id", null: false
+    t.integer "merch_category_id", null: false
     t.index ["merch_category_id"], name: "index_merch_merch_categories_on_merch_category_id"
     t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
   end
@@ -104,14 +101,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "phone"
-    t.uuid "shopper_uuid", null: false
+    t.string "shopper_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "order_merch", force: :cascade do |t|
-    t.bigint "merch_id", null: false
-    t.bigint "order_id", null: false
+    t.integer "merch_id", null: false
+    t.integer "order_id", null: false
     t.integer "quantity", null: false
     t.decimal "unit_price", precision: 10, scale: 2, null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
@@ -138,17 +135,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   create_table "order_shipping_addresses", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.bigint "address_id", null: false
+    t.integer "address_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["address_id"], name: "index_order_shipping_addresses_on_address_id"
   end
 
   create_table "order_tickets", force: :cascade do |t|
-    t.bigint "order_id", null: false
-    t.bigint "show_seat_id"
-    t.bigint "show_id", null: false
-    t.bigint "show_section_id"
+    t.integer "order_id", null: false
+    t.integer "show_seat_id"
+    t.integer "show_id", null: false
+    t.integer "show_section_id"
     t.integer "quantity", default: 1, null: false
     t.string "type", null: false
     t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
@@ -167,11 +164,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.decimal "order_total", null: false
     t.string "order_number"
     t.string "orderer_type", null: false
-    t.bigint "orderer_id", null: false
+    t.integer "orderer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "order_payment_id"
-    t.bigint "shipping_address_id"
+    t.integer "order_payment_id"
+    t.integer "shipping_address_id"
     t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
     t.index ["orderer_type", "orderer_id"], name: "index_orders_on_orderer"
     t.index ["shipping_address_id"], name: "index_orders_on_shipping_address_id"
@@ -184,16 +181,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.string "table_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "seating_chart_section_id", null: false
+    t.integer "seating_chart_section_id", null: false
     t.index ["seating_chart_section_id"], name: "index_seating_chart_seats_on_seating_chart_section_id"
   end
 
   create_table "seating_chart_sections", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "seating_chart_id", null: false
+    t.integer "seating_chart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "ticket_type_id", null: false
+    t.integer "ticket_type_id", null: false
     t.index ["name", "seating_chart_id"], name: "index_seating_chart_sections_on_name_and_seating_chart_id", unique: true
     t.index ["seating_chart_id"], name: "index_seating_chart_sections_on_seating_chart_id"
     t.index ["ticket_type_id"], name: "index_seating_chart_sections_on_ticket_type_id"
@@ -204,17 +201,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "venue_id"
+    t.integer "venue_id"
     t.index ["venue_id"], name: "index_seating_charts_on_venue_id"
   end
 
   create_table "show_seats", force: :cascade do |t|
-    t.bigint "show_section_id", null: false
+    t.integer "show_section_id", null: false
     t.integer "x", null: false
     t.integer "y", null: false
     t.integer "seat_number", null: false
     t.integer "table_number"
-    t.bigint "user_shopping_cart_id"
+    t.integer "user_shopping_cart_id"
     t.datetime "reserved_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -223,7 +220,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "show_sections", force: :cascade do |t|
-    t.bigint "show_id", null: false
+    t.integer "show_id", null: false
     t.decimal "ticket_price", precision: 10, scale: 2, null: false
     t.integer "convenience_fee_type", null: false
     t.integer "payment_method", null: false
@@ -240,7 +237,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   create_table "show_upsales", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.bigint "show_id", null: false
+    t.integer "show_id", null: false
     t.decimal "price", precision: 8, scale: 2, null: false
     t.integer "quantity", null: false
     t.boolean "active", default: true, null: false
@@ -251,7 +248,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "shows", force: :cascade do |t|
-    t.bigint "artist_id", null: false
+    t.integer "artist_id", null: false
     t.string "seating_chart_name"
     t.datetime "show_date", null: false
     t.datetime "doors_open_at", null: false
@@ -267,13 +264,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.decimal "deposit_amount", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "venue_id"
+    t.integer "venue_id"
     t.index ["artist_id"], name: "index_shows_on_artist_id"
     t.index ["venue_id"], name: "index_shows_on_venue_id"
   end
 
   create_table "ticket_types", force: :cascade do |t|
-    t.bigint "venue_id", null: false
+    t.integer "venue_id", null: false
     t.string "name", null: false
     t.decimal "convenience_fee", precision: 8, scale: 2
     t.integer "convenience_fee_type", null: false
@@ -288,8 +285,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "user_shopping_cart_merch", force: :cascade do |t|
-    t.bigint "merch_id", null: false
-    t.bigint "user_shopping_cart_id", null: false
+    t.integer "merch_id", null: false
+    t.integer "user_shopping_cart_id", null: false
     t.integer "quantity", null: false
     t.string "option"
     t.datetime "created_at", null: false
@@ -299,9 +296,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   end
 
   create_table "user_shopping_cart_tickets", force: :cascade do |t|
-    t.bigint "show_section_id", null: false
+    t.integer "show_section_id", null: false
     t.integer "quantity", null: false
-    t.bigint "user_shopping_cart_id", null: false
+    t.integer "user_shopping_cart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["show_section_id"], name: "index_user_shopping_cart_tickets_on_show_section_id"
@@ -321,12 +318,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.string "password_digest"
     t.string "type", null: false
     t.string "stripe_customer_id"
-    t.bigint "user_shopping_cart_id", null: false
-    t.uuid "shopper_uuid", null: false
+    t.integer "user_shopping_cart_id", null: false
+    t.string "shopper_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_shopping_cart_id"], name: "index_users_on_user_shopping_cart_id"
-    t.check_constraint "type::text <> 'User::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL AND password_digest IS NOT NULL OR type::text = 'User::Guest'::text", name: "check_guest_fields"
+    t.check_constraint "        (\n           type != 'User::Guest' \n           AND first_name IS NOT NULL \n           AND last_name IS NOT NULL \n           AND email IS NOT NULL \n           AND password_digest IS NOT NULL\n        ) \n        OR type = 'User::Guest'\n", name: "check_guest_fields"
   end
 
   create_table "venues", force: :cascade do |t|

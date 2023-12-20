@@ -5,7 +5,7 @@ class CreateOrderGuestOrderers < ActiveRecord::Migration[7.1]
       t.string :first_name, null: false
       t.string :last_name, null: false
       t.string :phone
-      t.uuid :shopper_uuid, null: false
+      t.string :shopper_uuid, null: false
 
       t.timestamps
     end

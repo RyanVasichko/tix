@@ -20,12 +20,14 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
 
   teardown do
-    logs = page.driver.browser.logs.get(:browser)
-    error_logs = logs.select { |e| e.level == "SEVERE" }.filter { |e| !e.message.include?("Failed to fetch") }
+    if defined?(page.driver.browser.logs)
+      logs = page.driver.browser.logs.get(:browser)
+      error_logs = logs.select { |e| e.level == "SEVERE" }.filter { |e| !e.message.include?("Failed to fetch") }
 
-    error_logs.each do |log|
-      puts ""
-      puts "[CONSOLE ERROR - #{log.timestamp}] #{log.message}"
+      error_logs.each do |log|
+        puts ""
+        puts "[CONSOLE ERROR - #{log.timestamp}] #{log.message}"
+      end
     end
   end
 

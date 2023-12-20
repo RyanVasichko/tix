@@ -1,6 +1,6 @@
 namespace :db do
   namespace :factories do
-    task load: [:environment, "db:schema:load"] do
+    task load: [:environment, "db:drop", "db:prepare"] do
       artist_image_blobs = [
         ActiveStorage::Blob.create_and_upload!(
           io: File.open(Rails.root.join("test", "fixtures", "files", "radiohead.jpg")),

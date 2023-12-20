@@ -1,4 +1,6 @@
 class ReservedSeatingShows::SeatReservationsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_back_or_to root_path, status: :see_other }
+
   def create
     @seat = Show::Seat.find(params[:seat_id])
     @seat.reserve_for!(Current.user)

@@ -13,9 +13,9 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       RAILS_ENV: production
+      MULTIARCH: false
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.2
+          ruby-version: 3.3.0-rc1
           bundler-cache: true
 
       - name: Install dependencies

@@ -1,14 +1,11 @@
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i %>
+  timeout: 5000
 
 local: &local
   <<: *default
-  host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
-  username: postgres
-  password: password
-  gssencmode: disable # https://github.com/ged/ruby-pg/issues/311 - fixes an error on macOS
 
 cache: &cache
   migrations_paths: "db/cache/migrate"
@@ -19,36 +16,33 @@ jobs: &jobs
 development:
   primary:
     <<: *local
-    database: dosey-doe-tickets_development
+    database: db/data/dosey-doe-tickets_development.sqlite3
   jobs:
     <<: *local
     <<: *jobs
-    database: dosey-doe-tickets-jobs_development
+    database: db/data/dosey-doe-tickets-jobs_development.sqlite3
   cache:
     <<: *local
     <<: *cache
-    database: dosey-doe-tickets-cache_development
+    database: db/data/dosey-doe-tickets-cache_development.sqlite3
 
 test:
   primary:
     <<: *local
-    database: dosey-doe-tickets_test
+    database: db/data/dosey-doe-tickets_test.sqlite3
 
 production_default: &production_default
   <<: *default
-  username: dosey_doe_tickets
-  host: <%= ENV['DB_HOST'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
 
 production:
   primary:
     <<: *production_default
-    database: dosey_doe_tickets
+    database: data/dosey_doe_tickets.sqlite3
   cache:
     <<: *production_default
     <<: *cache
-    database: dosey_doe_tickets_cache
+    database: data/dosey_doe_tickets_cache.sqlite3
   jobs:
     <<: *production_default
     <<: *jobs
-    database: dosey_doe_tickets_jobs
+    database: data/dosey_doe_tickets_jobs.sqlite3

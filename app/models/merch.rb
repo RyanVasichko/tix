@@ -1,6 +1,8 @@
 class Merch < ApplicationRecord
   include Deactivatable
 
+  serialize :options, type: Array, coder: JSON
+
   has_one_attached :image
   scope :includes_image, -> { includes(image_attachment: :blob) }
 

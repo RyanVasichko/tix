@@ -6,6 +6,8 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
+  config.active_record.sqlite3_production_warning = false
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -18,13 +20,13 @@ Rails.application.configure do
 
   # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
-  config.require_master_key = true
-
-  config.action_controller.perform_caching = true
-  config.action_controller.enable_fragment_cache_logging = true
+  config.require_master_key = true unless ENV.fetch("SECRET_KEY_BASE_DUMMY", 0) == "1"
 
   config.cache_store = :solid_cache_store
   config.solid_cache.connects_to = { database: { writing: :cache } }
+
+  config.action_controller.perform_caching = true
+  config.action_controller.enable_fragment_cache_logging = true
 
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
   config.public_file_server.headers = {
@@ -72,23 +74,6 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
-
-  # Use a different cache store in production.
-  # config.cache_store = :redis_cache_store, {
-  #   url: ENV.fetch("REDIS_URL"),
-  #   error_handler: -> (method:, returning:, exception:) {
-  #     # Report errors to your exception reporting service here
-  #     Rails.logger.warn "Redis cache error: #{exception}"
-  #   }
-  # }
-
-  config.good_job.enable_cron = true
-  config.good_job.cron = {
-    another_task: {
-      cron: "0 2 * * *",
-      class: "DatabaseBackupJob",
-    }
-  }
 
   config.action_mailer.perform_caching = false
 

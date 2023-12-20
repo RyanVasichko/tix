@@ -1,18 +1,19 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.2"
+ruby "3.3.0rc1"
 
 gem "bcrypt", "~> 3.1.7"
 gem "cssbundling-rails"
-gem "good_job"
 gem "jsbundling-rails"
 gem "pagy"
-gem "pg", "~> 1.1"
+gem "sqlite3", "~> 1.6"
+gem "activerecord-enhancedsqlite3-adapter", "~> 0.4.0"
 gem "puma", "~> 6.0"
 gem "rails", "~> 7.1.2"
 gem "redis"
 gem "solid_cache"
+gem "solid_queue"
 gem "sprockets-rails"
 gem "stimulus-rails"
 gem "stripe"
@@ -20,7 +21,6 @@ gem "turbo-rails"
 
 gem "appsignal"
 gem "aws-sdk-s3", require: false
-gem "bootsnap", require: false
 gem "ruby-vips"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
@@ -35,9 +35,10 @@ gem "faker"
 
 group :development, :test do
   gem "awesome_print"
-  gem "htmlbeautifier"
   gem "byebug"
+  gem "htmlbeautifier"
   gem "rubocop"
+  gem "foreman"
 end
 
 group :development do

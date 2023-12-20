@@ -1,6 +1,6 @@
 # Base stage shared by both development and production
-ARG RUBY_VERSION=3.2.2-slim
-FROM registry.docker.com/library/ruby:$RUBY_VERSION as base
+ARG RUBY_VERSION=3.3.0-rc1
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 WORKDIR /rails
 
@@ -9,13 +9,9 @@ ENV BUNDLE_PATH="/usr/local/bundle" \
     PATH="/rails/bin:${PATH}"
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev curl npm libvips-dev wget gnupg && \
+    apt-get install --no-install-recommends -y build-essential pkg-config npm libjemalloc2 libvips && \
     apt-get update -qq && \
     npm install -g bun && \
-    # Add the PostgreSQL repository for the latest versions
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(. /etc/os-release; echo $VERSION_CODENAME)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
-    apt-get update && apt-get install -y postgresql-client-16 && \
     rm -rf /var/lib/apt/lists/* # Clean up the apt cache
 
 COPY Gemfile Gemfile.lock package.json bun.lockb ./
@@ -23,28 +19,16 @@ RUN bun install --check-files && \
     gem install bundler && \
     bundle install --binstubs=$BUNDLE_BIN
 
-# Development stage
-FROM base as development
-
-COPY . .
-RUN chmod +x /rails/entrypoint.sh && \
-    chmod +x /rails/bin/bundle
-CMD ["./bin/rails", "server"]
-
 # Production build stage
 FROM base as build-production
 
-ARG RAILS_MASTER_KEY
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_WITHOUT="development" \
-    RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+    RAILS_SERVE_STATIC_FILES="1"
 
 COPY . .
-RUN apt-get install libjemalloc2 && \
-    chmod +x ./bin/rails && \
-    bundle exec bootsnap precompile app/ lib/ && \
-    ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final production stage
 FROM base as production
@@ -59,12 +43,12 @@ COPY --from=build-production /usr/local/bundle /usr/local/bundle
 COPY --from=build-production /rails /rails
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y libvips && \
+    apt-get install --no-install-recommends -y curl && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* && \
-    useradd rails --create-home --shell /bin/bash && \
+    groupadd -g 5000 rails && \
+    useradd -u 5000 -g 5000 rails --create-home --shell /bin/bash && \
     mkdir -p log storage && \
-    chown -R rails:rails db log storage tmp && \
-    chmod +x /rails/bin/docker-entrypoint
+    chown -R rails:rails db log storage tmp
 
 USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   root to: "shows#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
-  mount GoodJob::Engine => "good_job"
 
   # Sessions
   get "login", to: "sessions#new"
