@@ -3,28 +3,26 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i %>
   timeout: 5000
-
-local: &local
-  <<: *default
+  retries: 1000
 
 cache: &cache
+  <<: *default
   migrations_paths: "db/cache/migrate"
+  database: db/data/dosey-doe-tickets-cache_<%= Rails.env %>.sqlite3
 
 jobs: &jobs
+  <<: *default
   migrations_paths: "db/jobs/migrate"
+  database: db/data/dosey-doe-tickets-jobs_<%= Rails.env %>.sqlite3
 
 development:
   primary:
-    <<: *local
+    <<: *default
     database: db/data/dosey-doe-tickets_development.sqlite3
   jobs:
-    <<: *local
     <<: *jobs
-    database: db/data/dosey-doe-tickets-jobs_development.sqlite3
   cache:
-    <<: *local
     <<: *cache
-    database: db/data/dosey-doe-tickets-cache_development.sqlite3
   # POSTMIGRATION: Remove
   og:
     adapter: postgresql
@@ -39,22 +37,19 @@ development:
 
 test:
   primary:
-    <<: *local
+    <<: *default
     database: db/data/dosey-doe-tickets_test.sqlite3
-
-production_default: &production_default
-  <<: *default
+  jobs:
+    <<: *jobs
 
 production:
   primary:
-    <<: *production_default
+    <<: *default
     database: data/dosey_doe_tickets.sqlite3
   cache:
-    <<: *production_default
     <<: *cache
     database: data/dosey_doe_tickets_cache.sqlite3
   jobs:
-    <<: *production_default
     <<: *jobs
     database: data/dosey_doe_tickets_jobs.sqlite3
   # POSTMIGRATION: Remove
