@@ -56,6 +56,7 @@
 - [ ] Ticket types form - convenience fee error messages are not styled properly
 - [ ] Removing a section on the seating chart form closes the slideout
 - [ ] Rapidly clicking the trash can on the shopping cart dropdown will eventually result in a 404 which replaces the shopping cart with "No content"
+- [ ] Filtering merch by category doesn't seem to be working right?
 
 - Outstanding merch orders screen
 - Shipped button on Merch

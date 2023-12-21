@@ -3,12 +3,8 @@ class MerchController < ApplicationController
   def index
     @all_selected = search_params.include?("all") || search_params.empty?
     @selected_category_ids = search_params.reject { |id| id == "all" }
-    @merch =
-      if @all_selected
-        Merch.active.includes_image
-      else
-        Merch.active.includes_image.joins(:categories).where(categories: { id: search_params })
-      end
+    @merch = Merch.active.includes_image.order(:order)
+    @merch = @merch.joins(:categories).where(categories: { id: search_params }) unless @all_selected
     @merch_categories = Merch::Category.joins(:merch).uniq
   end
 

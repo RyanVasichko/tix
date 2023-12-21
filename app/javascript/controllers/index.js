@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import Admin__MerchController from "./admin/merch_controller"
+application.register("admin--merch", Admin__MerchController)
+
 import Admin__SeatingChartForm__SeatController from "./admin/seating_chart_form/seat_controller"
 application.register("admin--seating-chart-form--seat", Admin__SeatingChartForm__SeatController)
 

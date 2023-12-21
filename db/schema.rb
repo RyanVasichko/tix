@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.boolean "active", default: true, null: false
     t.string "options"
     t.string "option_label"
+    t.integer "order", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

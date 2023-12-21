@@ -21,7 +21,7 @@ gem "turbo-rails"
 
 gem "appsignal"
 gem "aws-sdk-s3", require: false
-# gem "paperclip" #POSTMIGRATION: Remove
+# gem "paperclip" # POSTMIGRATION: Remove
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "image_processing", "~> 1.2"
 
@@ -40,7 +40,7 @@ group :development do
   gem "bullet"
   gem "rack-mini-profiler"
   gem "web-console"
-  gem "pg", "~> 1.1" # For OG data migration
+  gem "pg", "~> 1.1" # POSTMIGRATION: Remove
 end
 
 group :test do

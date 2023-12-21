@@ -7,6 +7,7 @@ class CreateMerch < ActiveRecord::Migration[7.0]
       t.boolean :active, null: false, default: true
       t.string :options
       t.string :option_label
+      t.integer :order, null: false, default: 0
 
       t.timestamps
     end

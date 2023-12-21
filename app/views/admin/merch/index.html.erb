@@ -1,8 +1,14 @@
-<div data-controller="tabs" data-tabs-active-tab-value="<%= active_tab_from_params || 0 %>" class="max-w-xl card" data-action="turbo:frame-load->tabs#displayActiveTab">
+<div data-controller="tabs"
+     data-tabs-active-tab-value="<%= active_tab_from_params || 0 %>"
+     class="max-w-xl card"
+     data-action="turbo:frame-load->tabs#displayActiveTab">
   <%= render "admin/merch/tabs" %>
 
   <%= turbo_frame_tag "admin_merch_panel" do %>
-    <div class="hidden" data-tabs-target="panel" data-turbo="false">
+    <div
+      class="hidden"
+      data-tabs-target="panel"
+      data-turbo="false">
       <div class="flex justify-between">
         <%= form_with url: admin_merch_index_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
           <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, data: { action: "quick-form#submit" }, class: "mr-1" %>
@@ -13,23 +19,19 @@
 
       <table class="table">
         <thead>
-          <tr>
-            <th scope="col" class="table-th">Name</th>
-            <th scope="col" class="table-th">Categories</th>
-            <% if @include_off_sale %>
-              <th scope="col" class="table-th">On Sale</th>
-            <% end %>
-            <th scope="col" class="table-th"></th>
-          </tr>
+        <tr>
+          <th scope="col" class="table-th">Name</th>
+          <th scope="col" class="table-th">Categories</th>
+          <th scope="col" class="table-th">On Sale</th>
+          <th scope="col" class="table-th"></th>
+        </tr>
         </thead>
-        <tbody class="table-tbody">
-          <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { on_sale_column: @include_off_sale } %>
+        <tbody class="table-tbody"
+               data-admin--merch-update-order-url-value="<%= admin_merch_sort_order_path %>"
+               data-admin--merch-target="merchTableBody"
+               data-controller="admin--merch">
+        <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { show_off_sale: @include_off_sale } %>
         </tbody>
-        <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
-          <tr>
-            <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
-          </tr>
-        </tfoot>
       </table>
     </div>
   <% end %>

@@ -4,7 +4,7 @@ class Admin::MerchController < Admin::AdminController
   def index
     @include_off_sale = params[:include_off_sale] == "1"
     @merch = Merch.includes(:categories)
-    @pagy, @merch = pagy(@include_off_sale ? @merch.order(active: :desc) : @merch.active)
+    @merch = @merch.order(:order)
   end
 
   def show
@@ -29,7 +29,7 @@ class Admin::MerchController < Admin::AdminController
 
   def update
     if @merch.update(merch_params)
-      redirect_to admin_merch_index_url, notice: "Merch was successfully updated.", status: :see_other
+      redirect_to admin_merch_index_path, notice: "Merch was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class Admin::MerchController < Admin::AdminController
 
   def destroy
     @merch.deactivate
-    redirect_back fallback_location: admin_merch_index_url, notice: "Merch was taken off sale."
+    redirect_back_or_to admin_merch_index_url, notice: "Merch was taken off sale."
   end
 
   private

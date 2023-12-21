@@ -8,6 +8,7 @@ FactoryBot.define do
     option_label { Faker::Commerce.material }
     created_at { Faker::Date.between(from: 1.year.ago, to: Date.today) }
     updated_at { Faker::Date.between(from: created_at, to: Date.today) }
+    order { 1 }
 
     transient do
       categories_count { 0 }

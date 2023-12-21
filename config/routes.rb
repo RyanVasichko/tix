@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resource :activation, only: :create, controller: "customer_questions/activation"
     end
 
+    put "/merch/sort_order", to: "merch/sort_order#update"
     resources :merch, except: %i[show] do
       resource :on_sale, only: %i[create], controller: "merch/on_sale"
     end

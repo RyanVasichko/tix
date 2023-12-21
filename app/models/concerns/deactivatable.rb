@@ -6,8 +6,8 @@ module Deactivatable
 
     scope :active, -> { where(active: true) }
 
-    before_save :clean_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && active}
-    before_save :add_suffix_to_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && !active }
+    before_save :clean_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && active }
+    before_save :add_suffix_to_name, if: -> { persisted? && has_attribute?(:name) && active_changed? && !active && !skip_name_suffix }
   end
 
   def activate
@@ -28,6 +28,10 @@ module Deactivatable
 
   def inactive?
     !active?
+  end
+
+  def skip_name_suffix
+    false
   end
 
   private
