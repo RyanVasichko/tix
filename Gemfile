@@ -21,14 +21,9 @@ gem "turbo-rails"
 
 gem "appsignal"
 gem "aws-sdk-s3", require: false
-gem "ruby-vips"
+# gem "paperclip" #POSTMIGRATION: Remove
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
-
-# Use Sass to process CSS
-# gem "sassc-rails"
-
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 gem "factory_bot_rails"
 gem "faker"
@@ -45,6 +40,7 @@ group :development do
   gem "bullet"
   gem "rack-mini-profiler"
   gem "web-console"
+  gem "pg", "~> 1.1" # For OG data migration
 end
 
 group :test do

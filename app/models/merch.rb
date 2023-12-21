@@ -3,7 +3,9 @@ class Merch < ApplicationRecord
 
   serialize :options, type: Array, coder: JSON
 
-  has_one_attached :image
+  has_one_attached :image do |image|
+    image.variant :medium, resize_to_limit: [600, 600], format: :webp, convert: :webp
+  end
   scope :includes_image, -> { includes(image_attachment: :blob) }
 
   has_and_belongs_to_many :categories,

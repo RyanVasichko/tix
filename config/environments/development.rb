@@ -44,6 +44,21 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # POSTMIGRATION: Remove
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_region: "us-east-1",
+    url: ":s3_alias_url",
+    path: "/:class/:attachment/:id_partition/:style/:filename",
+    s3_host_alias: "d7w9sk873ceod.cloudfront.net",
+    s3_headers: { "Expires" => 1.year.from_now.httpdate },
+    s3_credentials: {
+      bucket: "doseydoe",
+      access_key_id: Rails.application.credentials.dig(:og, :aws, :access_key_id),
+      secret_access_key: Rails.application.credentials.dig(:og, :aws, :secret_access_key)
+    }
+  }
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

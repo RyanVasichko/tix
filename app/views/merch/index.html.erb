@@ -37,26 +37,32 @@
     </div>
 
     <%= turbo_frame_tag "merch", target: :_top do %>
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 border-t-2 pt-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <% @merch.each do |merch| %>
-          <div class="group relative" id="<%= dom_id(merch) %>">
-            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-              <%= image_tag url_for(merch.image), id: dom_id(merch.image), class: "h-full w-full object-cover object-center lg:h-full lg:w-full", alt: merch.name, data: { turbo_permanent: true } %>
-            </div>
-            <div class="mt-4 flex justify-between">
-              <div>
-                <h3 class="text-sm text-gray-700">
-                  <%= link_to new_shopping_cart_merch_path(merch_id: merch.id), data: { turbo_stream: true } do %>
-                    <span aria-hidden="true" class="absolute inset-0"></span>
-                    <%= merch.name %>
-                  <% end %>
-                </h3>
-                <p class="mt-1 text-sm text-gray-500"><%= merch.description %></p>
+      <div class="bg-white">
+        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <h2 class="sr-only">Merch</h2>
+
+          <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+            <% @merch.each do |merch| %>
+              <div id="<%= dom_id(merch) %>" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+                <div class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+                  <%= image_tag merch.image.variant(:medium), id: dom_id(merch.image), class: "h-full w-full object-cover object-center sm:h-full sm:w-full", alt: merch.name, data: { turbo_permanent: true } %>
+                </div>
+                <div class="flex flex-1 flex-col space-y-2 p-4">
+                  <h3 class="text-sm font-medium text-gray-900">
+                    <%= link_to new_shopping_cart_merch_path(merch_id: merch.id), data: { turbo_stream: true } do %>
+                      <span aria-hidden="true" class="absolute inset-0"></span>
+                      <%= merch.name %>
+                    <% end %>
+                  </h3>
+                  <p class="text-sm text-gray-500"><%= merch.description %></p>
+                  <div class="flex flex-1 flex-col justify-end">
+                    <p class="text-base font-medium text-gray-900"><%= number_to_currency(merch.price) %></p>
+                  </div>
+                </div>
               </div>
-              <p class="text-sm font-medium text-gray-900"><%= number_to_currency(merch.price) %></p>
-            </div>
+            <% end %>
           </div>
-        <% end %>
+        </div>
       </div>
     <% end %>
   </div>

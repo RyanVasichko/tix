@@ -8,6 +8,7 @@ module Show::Agenda
     validates :dinner_ends_at, presence: true
 
     before_save :normalize_times_with_show_date
+    before_create -> { self.original_date ||= show_date }
 
     after_initialize :set_default_show_time_values, if: :new_record?
   end

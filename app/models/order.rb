@@ -44,6 +44,10 @@ class Order < ApplicationRecord
     end
   end
 
+  def total_fees
+    tickets.sum(&:total_fees)
+  end
+
   private
 
   def set_order_number

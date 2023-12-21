@@ -11,4 +11,8 @@ class Order::Ticket < ApplicationRecord
   def orderer
     order.orderer
   end
+
+  def total_fees
+    convenience_fees + venue_commission
+  end
 end

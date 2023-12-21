@@ -11,5 +11,6 @@ module Order::Billable
 
   def calculate_order_total
     self.order_total = tickets.sum(&:total_price) + merch.sum(&:total_price)
+    self.convenience_fees = tickets.sum(&:convenience_fees)
   end
 end

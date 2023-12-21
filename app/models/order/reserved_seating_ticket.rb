@@ -1,9 +1,9 @@
 class Order::ReservedSeatingTicket < Order::Ticket
   belongs_to :seat, class_name: "Show::Seat", inverse_of: :ticket, foreign_key: "show_seat_id", touch: true
-  belongs_to :show, class_name: "Show::ReservedSeatingShow", inverse_of: :tickets, foreign_key: "show_id"
   validates :seat, presence: true
-  delegate :seat_number, to: :seat
-  delegate :table_number, to: :seat
+  delegate :seat_number, :table_number, :deposit?, to: :seat
+
+  belongs_to :show, class_name: "Show::ReservedSeatingShow", inverse_of: :tickets, foreign_key: "show_id"
 
   after_initialize -> { self.quantity = 1 }, if: :new_record?
 
@@ -16,9 +16,10 @@ class Order::ReservedSeatingTicket < Order::Ticket
   end
 
   def set_pricing_from_seat
-    self.ticket_price = seat.section.ticket_price
+    self.ticket_price = seat.ticket_price
+    self.deposit_amount = seat.deposit_amount
     self.convenience_fees = seat.section.ticket_convenience_fees
     self.venue_commission = seat.section.venue_commission
-    self.total_price = ticket_price + convenience_fees + venue_commission
+    self.total_price = (seat.deposit? ? deposit_amount : ticket_price) + convenience_fees + venue_commission
   end
 end

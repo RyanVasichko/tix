@@ -51,12 +51,24 @@
                           <span class="mt-1 text-sm text-gray-500">
                             <% case ticket %>
                             <% when Order::ReservedSeatingTicket %>
+                              <%= "#{number_to_currency(ticket.ticket_price)} Ticket: " if ticket.deposit? %>
                               Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
                             <% when Order::GeneralAdmissionTicket %>
                               <%= ticket.show_section.name %> x <%= ticket.quantity %>
                             <% end %>
                           </span> -
-                          <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
+                          <span class="text-sm font-medium">
+                            <% case ticket %>
+                            <% when Order::ReservedSeatingTicket %>
+                              <% if ticket.deposit? %>
+                                <%= number_to_currency(ticket.deposit_amount) %> Deposit
+                              <% else %>
+                                <%= number_to_currency(ticket.total_price) %>
+                              <% end %>
+                            <% when Order::GeneralAdmissionTicket %>
+                              <%= number_to_currency(ticket.total_price) %>
+                            <% end %>
+                          </span>
                         </div>
                         <%= link_to ticket.is_a?(Order::ReservedSeatingTicket) ? orders_seat_reservations_path(ticket.seat) : orders_shopping_cart_ticket_path(ticket.shopping_cart_ticket),
                                     data: { turbo_method: "DELETE" },
@@ -67,6 +79,9 @@
                         <% end %>
                       </div>
                     <% end %>
+                    <div>
+                      <span class="mt-1 text-sm text-gray-500">Fees:</span> <span class="text-sm font-medium"><%= number_to_currency(tickets.sum(&:convenience_fees) + tickets.sum(&:venue_commission)) %></span>
+                    </div>
                   </div>
                 </div>
 
@@ -134,6 +149,10 @@
           <div class="flex items-center justify-between">
             <dt class="text-sm">Subtotal</dt>
             <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-sm">Fees</dt>
+            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.total_fees) %></dd>
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Shipping</dt>

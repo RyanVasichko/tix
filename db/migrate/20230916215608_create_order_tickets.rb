@@ -10,6 +10,7 @@ class CreateOrderTickets < ActiveRecord::Migration[7.0]
       t.decimal :convenience_fees, null: false, default: 0, precision: 8, scale: 2
       t.decimal :venue_commission, null: false, default: 0, precision: 8, scale: 2
       t.decimal :ticket_price, null: false, default: 0, precision: 8, scale: 2
+      t.decimal :deposit_amount, null: false, default: 0, precision: 8, scale: 2
       t.decimal :total_price, null: false, default: 0, precision: 8, scale: 2
 
       t.timestamps

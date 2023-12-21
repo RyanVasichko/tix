@@ -151,6 +151,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "venue_commission", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "ticket_price", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "deposit_amount", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "total_price", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -162,6 +163,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
 
   create_table "orders", force: :cascade do |t|
     t.decimal "order_total", null: false
+    t.decimal "convenience_fees", default: "0.0", null: false
     t.string "order_number"
     t.string "orderer_type", null: false
     t.integer "orderer_id", null: false
@@ -199,6 +201,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   create_table "seating_charts", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "active", default: true, null: false
+    t.boolean "published", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "venue_id"
@@ -261,6 +264,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.datetime "back_end_off_sale_at", null: false
     t.text "additional_text"
     t.string "type", null: false
+    t.boolean "skip_email_reminder", default: false, null: false
+    t.string "google_ad_id"
+    t.date "original_date", null: false
+    t.datetime "announced_at"
     t.decimal "deposit_amount", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -329,8 +336,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   create_table "venues", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "active", default: true, null: false
+    t.string "phone"
+    t.integer "address_id"
+    t.decimal "sales_tax", precision: 4, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_venues_on_address_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -359,4 +370,5 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
   add_foreign_key "user_shopping_cart_tickets", "show_sections"
   add_foreign_key "user_shopping_cart_tickets", "user_shopping_carts"
   add_foreign_key "users", "user_shopping_carts"
+  add_foreign_key "venues", "addresses"
 end

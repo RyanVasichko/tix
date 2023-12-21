@@ -9,7 +9,7 @@ class MerchController < ApplicationController
       else
         Merch.active.includes_image.joins(:categories).where(categories: { id: search_params })
       end
-    @merch_categories = Merch::Category.joins(:merch).all
+    @merch_categories = Merch::Category.joins(:merch).uniq
   end
 
   def search_params

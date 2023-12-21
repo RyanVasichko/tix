@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :venue do
     name { "#{Faker::Company.name} Arena" }
     active { true }
+    association :address
 
     transient do
       ticket_types_count { 1 }

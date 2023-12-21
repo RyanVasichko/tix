@@ -10,5 +10,5 @@ class SeatingChart::Section < ApplicationRecord
   accepts_nested_attributes_for :seats, allow_destroy: true
 
   validates :name, presence: true, uniqueness: { scope: :seating_chart_id }
-  validates :seats, length: { minimum: 1, message: "must have at least 1 seat" }
+  validates :seats, length: { minimum: 1, message: "must have at least 1 seat" }, if: -> { seating_chart.published? }
 end

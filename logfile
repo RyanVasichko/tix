@@ -1,0 +1,48 @@
+2023-12-18 12:21:00.371 CST [11403] LOG:  starting PostgreSQL 16.1 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, 64-bit
+2023-12-18 12:21:00.371 CST [11403] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-12-18 12:21:00.379 CST [11403] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2023-12-18 12:21:00.389 CST [11406] LOG:  database system was interrupted; last known up at 2023-12-14 16:06:48 CST
+2023-12-18 12:21:00.809 CST [11406] LOG:  database system was not properly shut down; automatic recovery in progress
+2023-12-18 12:21:00.815 CST [11406] LOG:  redo starts at 0/1528A20
+2023-12-18 12:21:00.815 CST [11406] LOG:  invalid record length at 0/1528B08: expected at least 24, got 0
+2023-12-18 12:21:00.815 CST [11406] LOG:  redo done at 0/1528AD0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2023-12-18 12:21:00.825 CST [11404] LOG:  checkpoint starting: end-of-recovery immediate wait
+2023-12-18 12:21:00.857 CST [11404] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.005 s, total=0.037 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB; lsn=0/1528B08, redo lsn=0/1528B08
+2023-12-18 12:21:00.862 CST [11403] LOG:  database system is ready to accept connections
+2023-12-18 12:21:05.343 CST [11973] FATAL:  database "dosey-doe-tickets_test" does not exist
+2023-12-18 12:21:16.671 CST [12096] FATAL:  database "dosey-doe-tickets_development" does not exist
+2023-12-18 12:21:17.615 CST [12100] FATAL:  database "dosey-doe-tickets-jobs_development" does not exist
+2023-12-18 12:21:17.868 CST [12103] FATAL:  database "dosey-doe-tickets-cache_development" does not exist
+2023-12-18 12:21:17.983 CST [12106] FATAL:  database "dosey-doe-tickets_test" does not exist
+2023-12-18 12:21:26.146 CST [12791] FATAL:  database "dosey-doe-tickets_test-0" does not exist
+2023-12-18 12:21:26.152 CST [12793] FATAL:  database "dosey-doe-tickets_test-5" does not exist
+2023-12-18 12:21:26.160 CST [12807] FATAL:  database "dosey-doe-tickets_test-1" does not exist
+2023-12-18 12:21:26.163 CST [12810] FATAL:  database "dosey-doe-tickets_test-13" does not exist
+2023-12-18 12:21:26.163 CST [12808] FATAL:  database "dosey-doe-tickets_test-4" does not exist
+2023-12-18 12:21:26.163 CST [12809] FATAL:  database "dosey-doe-tickets_test-10" does not exist
+2023-12-18 12:21:26.164 CST [12815] FATAL:  database "dosey-doe-tickets_test-2" does not exist
+2023-12-18 12:21:26.165 CST [12811] FATAL:  database "dosey-doe-tickets_test-9" does not exist
+2023-12-18 12:21:26.166 CST [12812] FATAL:  database "dosey-doe-tickets_test-3" does not exist
+2023-12-18 12:21:26.166 CST [12813] FATAL:  database "dosey-doe-tickets_test-6" does not exist
+2023-12-18 12:21:26.166 CST [12814] FATAL:  database "dosey-doe-tickets_test-8" does not exist
+2023-12-18 12:21:26.167 CST [12816] FATAL:  database "dosey-doe-tickets_test-12" does not exist
+2023-12-18 12:21:26.168 CST [12818] FATAL:  database "dosey-doe-tickets_test-7" does not exist
+2023-12-18 12:21:26.168 CST [12817] FATAL:  database "dosey-doe-tickets_test-11" does not exist
+2023-12-18 12:26:00.422 CST [11404] LOG:  checkpoint starting: time
+2023-12-18 12:30:34.523 CST [11404] LOG:  checkpoint complete: wrote 10923 buffers (66.7%); 0 WAL file(s) added, 0 removed, 6 recycled; write=269.581 s, sync=4.448 s, total=274.101 s; sync files=10247, longest=0.005 s, average=0.001 s; distance=96962 kB, estimate=96962 kB; lsn=0/73D9550, redo lsn=0/73D9518
+2023-12-18 14:52:20.328 CST [11404] LOG:  checkpoint starting: time
+2023-12-18 14:56:36.874 CST [11404] LOG:  checkpoint complete: wrote 2555 buffers (15.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=255.520 s, sync=0.985 s, total=256.547 s; sync files=2490, longest=0.012 s, average=0.001 s; distance=7356 kB, estimate=88001 kB; lsn=0/7B08890, redo lsn=0/7B08858
+2023-12-18 15:00:51.337 CST [11404] LOG:  checkpoint starting: immediate force wait
+2023-12-18 15:00:51.363 CST [11404] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.005 s, total=0.026 s; sync files=3, longest=0.004 s, average=0.002 s; distance=19 kB, estimate=79203 kB; lsn=0/7B0D748, redo lsn=0/7B0D710
+2023-12-18 15:00:51.381 CST [11404] LOG:  checkpoint starting: immediate force wait
+2023-12-18 15:00:51.411 CST [11404] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.006 s, total=0.030 s; sync files=2, longest=0.004 s, average=0.003 s; distance=3 kB, estimate=71283 kB; lsn=0/7B0E600, redo lsn=0/7B0E5C8
+2023-12-18 15:00:51.426 CST [11404] LOG:  checkpoint starting: immediate force wait
+2023-12-18 15:00:51.460 CST [11404] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.006 s, total=0.034 s; sync files=2, longest=0.004 s, average=0.003 s; distance=3 kB, estimate=64155 kB; lsn=0/7B0F468, redo lsn=0/7B0F430
+2023-12-18 15:00:51.477 CST [11404] LOG:  checkpoint starting: immediate force wait
+2023-12-18 15:00:51.507 CST [11404] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.006 s, total=0.031 s; sync files=2, longest=0.004 s, average=0.003 s; distance=3 kB, estimate=57740 kB; lsn=0/7B102E8, redo lsn=0/7B102B0
+2023-12-18 15:01:37.542 CST [56515] FATAL:  database "dosey-doe-tickets_development" does not exist
+2023-12-18 15:01:37.543 CST [56519] FATAL:  database "dosey-doe-tickets-jobs_development" does not exist
+2023-12-18 15:01:37.546 CST [56523] FATAL:  database "dosey-doe-tickets-cache_development" does not exist
+2023-12-18 15:01:51.696 CST [11404] LOG:  checkpoint starting: immediate force wait
+2023-12-18 15:01:52.230 CST [11404] LOG:  checkpoint complete: wrote 2908 buffers (17.7%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.020 s, sync=0.492 s, total=0.534 s; sync files=1126, longest=0.005 s, average=0.001 s; distance=18153 kB, estimate=53781 kB; lsn=0/8CCA838, redo lsn=0/8CCA800
+2023-12-18 15:06:52.057 CST [11404] LOG:  checkpoint starting: time

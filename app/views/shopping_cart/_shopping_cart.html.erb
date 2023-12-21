@@ -1,10 +1,10 @@
 <%= turbo_frame_tag :shopping_cart do %>
   <div class="mx-auto max-w-2xl px-4">
-    <ul role="list" class="divide-y divide-gray-200">
+    <ul role="list" id="shopping_cart_items" class="divide-y divide-gray-200">
       <% shopping_cart.shows.sort_by(&:show_date).each do |show| %>
         <li class="flex items-center py-6" id="show_<%= show.id %>_seat_reservations">
           <%= link_to show_path(show), data: { turbo: false } do %>
-            <%= image_tag url_for(show.artist.image), id: "show_#{show.id}_artist_image", class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
+            <%= image_tag show.artist.image.variant(:medium), id: "show_#{show.id}_artist_image", class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
           <% end %>
           <div class="ml-4 flex-auto">
             <h3 class="font-medium text-gray-900">
@@ -23,7 +23,7 @@
       <% end %>
       <% shopping_cart.merch.group_by(&:merch).sort_by { |merch, _| merch.name }.each do |merch, shopping_cart_merch| %>
         <li class="flex items-center py-6" id="merch_<%= merch.id %>_shopping_cart_merch">
-          <%= image_tag url_for(merch.image), id: dom_id(merch.image), data: { turbo_permanent: true }, class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
+          <%= image_tag merch.image.variant(:medium), id: dom_id(merch.image), class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
           <div class="ml-4 flex-auto">
             <h3 class="font-medium text-gray-900">
               <%= merch.name %>

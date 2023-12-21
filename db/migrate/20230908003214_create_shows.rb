@@ -14,6 +14,10 @@ class CreateShows < ActiveRecord::Migration[7.0]
       t.datetime :back_end_off_sale_at, null: false
       t.text :additional_text
       t.string :type, null: false
+      t.boolean :skip_email_reminder, null: false, default: false
+      t.string :google_ad_id
+      t.date :original_date, null: false
+      t.datetime :announced_at
       t.decimal :deposit_amount, precision: 8, scale: 2, null: false, default: 0
 
       t.timestamps

@@ -8,7 +8,7 @@
         <%= @show.artist.name %>
       </h1>
       <div>
-        <%= image_tag url_for(@show.artist.image), id: "show_#{dom_id(@show.artist.image)}", class: "rounded-md", data: { turbo_permanent: "" } %>
+        <%= image_tag @show.artist.image.variant(:medium), id: "show_#{dom_id(@show.artist.image)}", class: "rounded-md", data: { turbo_permanent: "" } %>
       </div>
       <div>
         <p><%= @show.show_date.strftime('%A, %B %e, %Y') %></p>

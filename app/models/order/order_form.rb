@@ -12,7 +12,15 @@ class Order::OrderForm
                 :user,
                 :new_payment_method
 
-  delegate :total_in_cents, :tickets, :order_total, :shipping_address, :shipping_address_attributes=, :merch, to: :order
+  delegate :total_in_cents,
+           :tickets,
+           :order_total,
+           :shipping_address,
+           :shipping_address_attributes=,
+           :merch,
+           :convenience_fees,
+           :total_fees,
+           to: :order
 
   validates :payment_method_id, presence: true
   validate :shipping_address_valid?, if: -> { merch.any? }

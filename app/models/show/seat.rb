@@ -2,7 +2,10 @@ class Show::Seat < ApplicationRecord
   include Reservable
 
   belongs_to :section, class_name: "Show::Section", inverse_of: :seats, foreign_key: "show_section_id", touch: true
+  delegate :ticket_price, :deposit?, to: :section
+
   has_one :show, through: :section
+  delegate :deposit_amount, to: :show
   has_one :ticket, class_name: "Order::ReservedSeatingTicket", inverse_of: :seat, foreign_key: "show_seat_id"
 
   validates :x, presence: true

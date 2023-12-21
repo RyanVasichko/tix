@@ -25,6 +25,17 @@ development:
     <<: *local
     <<: *cache
     database: db/data/dosey-doe-tickets-cache_development.sqlite3
+  # POSTMIGRATION: Remove
+  og:
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    host: localhost
+    username: postgres
+    password:
+    database: og_dd_tickets
+    database_tasks: false
+    gssencmode: disable
 
 test:
   primary:
@@ -46,3 +57,14 @@ production:
     <<: *production_default
     <<: *jobs
     database: data/dosey_doe_tickets_jobs.sqlite3
+  # POSTMIGRATION: Remove
+  og:
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    host: localhost
+    username: postgres
+    password:
+    database: og_dd_tickets
+    database_tasks: false
+    gssencmode: disable
