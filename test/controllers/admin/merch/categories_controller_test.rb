@@ -5,11 +5,6 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
     @merch_category = FactoryBot.create(:merch_category)
   end
 
-  test "should get index" do
-    get admin_merch_categories_url
-    assert_response :success
-  end
-
   test "should get new" do
     get new_admin_merch_category_url
     assert_response :success
@@ -20,7 +15,7 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
       post admin_merch_categories_url, params: { merch_category: { name: "Clothing" } }
     end
 
-    assert_redirected_to admin_merch_categories_url
+    assert_redirected_to admin_merch_index_url
   end
 
   test "should get edit" do
@@ -30,7 +25,7 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update merch category" do
     patch admin_merch_category_url(@merch_category), params: { merch_category: { name: "Updated name" } }
-    assert_redirected_to admin_merch_categories_url
+    assert_redirected_to admin_merch_index_url
   end
 
   test "should destroy merch category" do
@@ -40,6 +35,6 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_redirected_to admin_merch_categories_url
+    assert_redirected_to admin_merch_index_url
   end
 end

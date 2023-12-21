@@ -1,11 +1,6 @@
 class Admin::Merch::CategoriesController < Admin::AdminController
   before_action :set_merch_category, only: %i[edit update destroy]
 
-  # GET /admin/merch/categories
-  def index
-    @pagy, @merch_categories = pagy(Merch::Category.all)
-  end
-
   # GET /admin/merch/categories/new
   def new
     @merch_category = Merch::Category.new
@@ -20,7 +15,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
     @merch_category = Merch::Category.new(merch_category_params)
 
     if @merch_category.save
-      redirect_to admin_merch_categories_url, flash: { success: "Category was successfully created." }
+      redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully created." }
     else
       respond_to do |format|
         format.html { render :new, status: :unprocessable_entity }
@@ -32,7 +27,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
   # PATCH/PUT /admin/merch/categories/1
   def update
     if @merch_category.update(merch_category_params)
-      redirect_to admin_merch_categories_url, flash: { success: "Category was successfully updated." }
+      redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully updated." }
     else
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
@@ -44,7 +39,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
   # DELETE /admin/merch/categories/1
   def destroy
     @merch_category.destroy
-    redirect_to admin_merch_categories_url, flash: { success: "Category was successfully destroyed." }
+    redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully destroyed." }
   end
 
   private

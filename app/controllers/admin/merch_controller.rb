@@ -5,6 +5,7 @@ class Admin::MerchController < Admin::AdminController
     @include_off_sale = params[:include_off_sale] == "1"
     @merch = Merch.includes(:categories)
     @merch = @merch.order(:order)
+    @merch_categories = Merch::Category.all.order(:name)
   end
 
   def show
