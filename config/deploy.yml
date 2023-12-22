@@ -1,26 +1,5 @@
 service: dosey_doe_tickets
 image: ryanvasichko/dosey-doe-tickets
-
-servers:
-  web:
-    hosts:
-      - 5.161.114.209
-    cmd: "./bin/rails server"
-    labels:
-      traefik.http.routers.web.entrypoints: websecure
-      traefik.http.routers.web.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
-      traefik.http.routers.web.tls.certresolver: letsencrypt
-      traefik.http.routers.web.middlewares: compression
-    options:
-      volume: "/mnt/volume_1/db:/rails/data"
-  worker:
-    hosts:
-      - 5.161.114.209
-    cmd: "bundle exec rake solid_queue:start"
-    options:
-      volume: "/mnt/volume_1/db:/rails/data"
-
-
 registry:
   server: ghcr.io
   username: ryanvasichko@gmail.com
@@ -37,6 +16,24 @@ env:
 
 builder:
   multiarch: <%= ENV.fetch("MULTIARCH", "true") == "true" %>
+
+volumes:
+  - "/mnt/volume_1/db:/rails/data"
+
+servers:
+  web:
+    hosts:
+      - 5.161.114.209
+    cmd: "./bin/rails server"
+    labels:
+      traefik.http.routers.web.entrypoints: websecure
+      traefik.http.routers.web.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
+      traefik.http.routers.web.tls.certresolver: letsencrypt
+      traefik.http.routers.web.middlewares: compression
+  worker:
+    hosts:
+      - 5.161.114.209
+    cmd: "bundle exec rake solid_queue:start"
 
 accessories:
   redis:
