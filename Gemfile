@@ -24,6 +24,9 @@ gem "aws-sdk-s3", require: false
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "image_processing", "~> 1.2"
 
+gem "pg", "~> 1.1" # POSTMIGRATION: Remove
+gem "paperclip" # POSTMIGRATION: Remove
+
 gem "factory_bot_rails"
 gem "faker"
 
@@ -39,8 +42,6 @@ group :development do
   gem "bullet"
   gem "rack-mini-profiler"
   gem "web-console"
-  gem "pg", "~> 1.1" # POSTMIGRATION: Remove
-  gem "paperclip" # POSTMIGRATION: Remove
 end
 
 group :test do

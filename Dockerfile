@@ -23,8 +23,9 @@ ENV RAILS_ENV="production" \
     BUNDLE_WITHOUT="development"
 
 # Install packages needed to build gems
+# POSTMIGRATION: remove libpq
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config npm && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config npm libpq-dev && \
     npm install -g bun && \
     apt-get remove -y npm && \
     apt-get clean
@@ -53,8 +54,9 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Install packages needed for deployment and jemalloc
+# POSTMIGRATION: remove libpq
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libjemalloc2 && \
+    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libjemalloc2 libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set environment variable to use jemalloc
