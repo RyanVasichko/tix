@@ -1,0 +1,19 @@
+<%= turbo_frame_tag "#{dom_id(@shipping_charge, :admin)}_form", target: :_top do %>
+  <%= form_with(model: [:admin, shipping_charge]) do |form| %>
+    <%= render "shared/error_messages", { model: shipping_charge } %>
+
+    <div class="mt-6">
+      <%= form.label :weight %>
+      <%= form.number_field :weight, tabindex: 1, autofocus: true, step: 0.01 %>
+    </div>
+
+    <div class="mt-6">
+      <%= form.label :price %>
+      <%= form.currency_field :price, tabindex: 2 %>
+    </div>
+
+    <div class="mt-10 flex items-center justify-end">
+      <%= form.submit %>
+    </div>
+  <% end %>
+<% end %>

@@ -8,12 +8,10 @@ default: &default
 cache: &cache
   <<: *default
   migrations_paths: "db/cache/migrate"
-  database: db/data/dosey-doe-tickets-cache_<%= Rails.env %>.sqlite3
 
 jobs: &jobs
   <<: *default
   migrations_paths: "db/jobs/migrate"
-  database: db/data/dosey-doe-tickets-jobs_<%= Rails.env %>.sqlite3
 
 development:
   primary:
@@ -21,8 +19,10 @@ development:
     database: db/data/dosey-doe-tickets_development.sqlite3
   jobs:
     <<: *jobs
+    database: db/data/dosey-doe-tickets_jobs_development.sqlite3
   cache:
     <<: *cache
+    database: db/data/dosey-doe-tickets_cache_development.sqlite3
   # POSTMIGRATION: Remove
   og:
     adapter: postgresql
@@ -39,8 +39,6 @@ test:
   primary:
     <<: *default
     database: db/data/dosey-doe-tickets_test.sqlite3
-  jobs:
-    <<: *jobs
 
 production:
   primary:

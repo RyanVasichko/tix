@@ -6,6 +6,7 @@ class Admin::MerchController < Admin::AdminController
     @merch = Merch.includes(:categories)
     @merch = @merch.order(:order)
     @merch_categories = Merch::Category.all.order(:name)
+    @shipping_charges = Merch::ShippingCharge.all.order(weight: :asc)
   end
 
   def show

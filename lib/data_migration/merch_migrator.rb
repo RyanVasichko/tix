@@ -1,6 +1,13 @@
 module DataMigration
   class MerchMigrator < BaseMigrator
     def migrate
+      migrate_merch
+      migrate_shipping_charges
+    end
+
+    private
+
+    def migrate_merch
       puts "Migrating merch..."
       create_categories_from_og_categories
 
@@ -8,14 +15,22 @@ module DataMigration
       puts "Merch migration complete"
     end
 
-    private
+    def migrate_shipping_charges
+      puts "Migrating shipping charges..."
+      OG::ShippingCharge.all.each do |og_shipping_charge|
+        Merch::ShippingCharge.create!(id: og_shipping_charge.id,
+                                      weight: og_shipping_charge.maximum_weight,
+                                      price: og_shipping_charge.price,
+                                      created_at: og_shipping_charge.created_at)
+      end
+      puts "Shipping charges migration complete"
+    end
 
     def create_categories_from_og_categories
       OG::Category.all.each do |og_category|
         Merch::Category.create!(id: og_category.id,
                                 name: og_category.name,
-                                created_at: og_category.created_at,
-                                updated_at: og_category.updated_at)
+                                created_at: og_category.created_at)
       end
     end
 

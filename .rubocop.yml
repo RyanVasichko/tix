@@ -40,6 +40,9 @@ Naming/VariableNumber:
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
 
+Style/EmptyMethod:
+  Enabled: false
+
 AllCops:
   Exclude:
     - 'db/**/*.rb'

@@ -17,10 +17,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
     if @merch_category.save
       redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully created." }
     else
-      respond_to do |format|
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render :create, status: :unprocessable_entity }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 

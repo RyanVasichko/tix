@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -95,6 +95,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_190849) do
     t.integer "merch_category_id", null: false
     t.index ["merch_category_id"], name: "index_merch_merch_categories_on_merch_category_id"
     t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
+  end
+
+  create_table "merch_shipping_charges", force: :cascade do |t|
+    t.decimal "weight", precision: 8, scale: 2, null: false
+    t.decimal "price", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "order_guest_orderers", force: :cascade do |t|
