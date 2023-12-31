@@ -16,20 +16,6 @@ class ApplicationController extends Controller {
 
     return createdElement;
   }
-
-  debounce(func, wait) {
-    let timeout;
-
-    return function(...args) {
-      if (!timeout) {
-        func.apply(this, args);
-        timeout = setTimeout(() => {
-          timeout = null;
-        }, wait);
-      }
-    };
-  }
 }
 
 export default ApplicationController;
-

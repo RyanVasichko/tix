@@ -1,3 +1,4 @@
+import debounce from 'debounce';
 import { post, destroy } from "@rails/request.js"
 import ApplicationController from "../../application_controller";
 
@@ -50,12 +51,10 @@ export default class extends ApplicationController {
     super.connect();
     this.element.setAttribute("fill", this.fillColor);
     this.element.setAttribute("fill-opacity", 1);
-    this.clickHandler = this.debounce(this.clickHandler.bind(this), 1000);
+    this.clickHandler = debounce(this.clickHandler.bind(this), 1000, { immediate: true });
   }
 
   async clickHandler() {
-    Turbo.cache.exemptPageFromPreview();
-
     if (this.reservedByCurrentUser) {
       this.element.setAttribute("fill", "green");
       await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
