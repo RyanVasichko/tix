@@ -82,7 +82,7 @@ namespace :db do
       puts "- #{merch_categories_count} merch categories"
 
       merch_shipping_charges_count.times do |index|
-        Merch::ShippingCharge.create!(weight: index + 1, price: index + 1)
+        Merch::ShippingCharge.create!(weight: index * 5, price: index + 1)
       end
       puts "- #{merch_shipping_charges_count} merch shipping charges"
     end

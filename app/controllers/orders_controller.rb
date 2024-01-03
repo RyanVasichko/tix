@@ -21,7 +21,7 @@ class OrdersController < ApplicationController
   def edit; end
 
   def create
-    @form = Current.user.order_form_type.new(order_params)
+    @form = Order::OrderForm.from_order_form(order_params)
 
     if @form.save
       redirect_to @form.order, flash: { success: "Your order was successfully placed" }
@@ -45,7 +45,8 @@ class OrdersController < ApplicationController
         :last_name,
         :phone,
         { seat_ids: [] },
-        { merch_ids: [] },
+        { shopping_cart_merch_ids: [] },
+        { shopping_cart_ticket_ids: [] },
         { shipping_address_attributes: [:first_name, :last_name, { address_attributes: %i[address_1 address_2 city state zip_code] }] }
       )
       .merge(user: Current.user)

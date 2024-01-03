@@ -9,6 +9,7 @@ FactoryBot.define do
     created_at { Faker::Date.between(from: 1.year.ago, to: Date.today) }
     updated_at { Faker::Date.between(from: created_at, to: Date.today) }
     order { 1 }
+    weight { rand(0.0..2.0).round(2) }
 
     transient do
       categories_count { 0 }

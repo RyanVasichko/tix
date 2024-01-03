@@ -21,8 +21,11 @@
     <% order.tickets.filter { |t| t.is_a? Order::ReservedSeatingTicket }.each do |ticket| %>
       <%= form.hidden_field :seat_ids, multiple: true, value: ticket.seat.id %>
     <% end %>
+    <% order.tickets.filter { |t| t.is_a? Order::GeneralAdmissionTicket }.each do |ticket| %>
+      <%= form.hidden_field :shopping_cart_ticket_ids, multiple: true, value: ticket.shopping_cart_ticket.id %>
+    <% end %>
     <% order.merch.each do |merch| %>
-      <%= form.hidden_field :merch_ids, multiple: true, value: merch.merch_id %>
+      <%= form.hidden_field :shopping_cart_merch_ids, multiple: true, value: merch.shopping_cart_merch.id %>
     <% end %>
     <!-- Order summary -->
     <div class="mt-10 lg:mt-0m lg:order-2">
@@ -156,7 +159,7 @@
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Shipping</dt>
-            <dd class="text-sm font-medium text-gray-900">TODO</dd>
+            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.shipping_fees) %></dd>
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Taxes</dt>

@@ -7,6 +7,7 @@ class Merch < ApplicationRecord
   before_commit -> { self.order = Merch.maximum(:order).to_i + 1 }, on: :create
 
   has_one_attached :image do |image|
+    image.variant :small, resize_to_limit: [300, 300], format: :webp, convert: :webp
     image.variant :medium, resize_to_limit: [600, 600], format: :webp, convert: :webp
   end
   scope :includes_image, -> { includes(image_attachment: :blob) }

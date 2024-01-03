@@ -1,5 +1,6 @@
 class Show::ReservedSeatingSection < Show::Section
   attr_accessor :seating_chart_section_id
+
   after_initialize :set_fields_from_seating_chart_section, if: -> { seating_chart_section_id && new_record? }
 
   private

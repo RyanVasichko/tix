@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
     t.string "options"
     t.string "option_label"
     t.integer "order", default: 0, null: false
+    t.decimal "weight", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -170,8 +171,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal "order_total", null: false
-    t.decimal "convenience_fees", default: "0.0", null: false
+    t.decimal "order_total", precision: 8, scale: 2, null: false
+    t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "shipping_fees", precision: 8, scale: 2, default: "0.0", null: false
     t.string "order_number"
     t.string "orderer_type", null: false
     t.integer "orderer_id", null: false

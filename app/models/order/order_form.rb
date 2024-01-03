@@ -7,7 +7,8 @@ class Order::OrderForm
                 :payment_method_id,
                 :save_payment_method,
                 :seat_ids,
-                :merch_ids,
+                :shopping_cart_ticket_ids,
+                :shopping_cart_merch_ids,
                 :order,
                 :user,
                 :new_payment_method
@@ -20,6 +21,7 @@ class Order::OrderForm
            :merch,
            :convenience_fees,
            :total_fees,
+           :shipping_fees,
            to: :order
 
   validates :payment_method_id, presence: true
@@ -28,38 +30,29 @@ class Order::OrderForm
   def self.for_user(user)
     order = Order.build_for_user(user)
 
-    user
-      .order_form_type
-      .new(order)
-      .tap do |order_form|
-      order_form.user = user
-      order_form.payment_method_id = "new"
-    end
+    user.order_form_type.new(order: order, user: user, payment_method_id: "new")
   end
 
-  def initialize(initializer = {})
-    if initializer.is_a?(Order)
-      self.order = initializer
-    else
-      self.order = initializer[:user].orders.build
-      super(initializer)
+  def self.from_order_form(order_form_params)
+    user = order_form_params[:user]
+    order = user.orders.build
 
-      # TODO: Validate that seat ids match user's reserved seats
-      seats = user.reserved_seats.includes(section: :show).where(id: seat_ids)
-      order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
+    seats = user.reserved_seats.includes(section: :show).find(order_form_params[:seat_ids] || [])
+    order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
 
-      # TODO: Validate that ticket ids match user's shopping cart tickets
-      tickets = user.shopping_cart.tickets
-      order.tickets << Order::GeneralAdmissionTicket.build_from_shopping_cart_tickets(tickets)
+    tickets = user.shopping_cart.tickets.find(order_form_params[:shopping_cart_ticket_ids] || [])
+    order.tickets << Order::GeneralAdmissionTicket.build_from_shopping_cart_tickets(tickets)
 
-      # TODO: Validate that merch ids match user's shopping cart merch
-      merch = user.shopping_cart.merch.includes(:merch).where(merch_id: merch_ids)
-      order.merch.build_from_shopping_cart_merch(merch)
+    merch = user.shopping_cart.merch.includes(:merch).find(order_form_params[:shopping_cart_merch_ids] || [])
+    order.merch << Order::Merch.build_from_shopping_cart_merch(merch)
 
-      order.calculate_order_total
+    order.calculate_order_total
 
-      order.errors.add(:base, "One or more of your ticket reservations have expired") if order.total_in_cents != order_total_in_cents.to_d
+    if order.total_in_cents != order_form_params[:order_total_in_cents].to_d
+      order.errors.add(:base, "One or more of your ticket reservations have expired")
     end
+
+    user.order_form_type.new({ order: order }.merge(order_form_params))
   end
 
   def save

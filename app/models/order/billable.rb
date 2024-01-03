@@ -10,6 +10,7 @@ module Order::Billable
   end
 
   def calculate_order_total
+    self.shipping_fees = Merch::ShippingCharge.for_weight(merch.sum { |m| m.quantity * m.merch.weight })
     self.order_total = tickets.sum(&:total_price) + merch.sum(&:total_price)
     self.convenience_fees = tickets.sum(&:convenience_fees)
   end
