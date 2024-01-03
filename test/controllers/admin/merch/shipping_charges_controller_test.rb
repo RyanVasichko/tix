@@ -5,6 +5,11 @@ class Admin::Merch::ShippingChargesControllerTest < ActionDispatch::IntegrationT
     @shipping_charge = FactoryBot.create(:merch_shipping_charge)
   end
 
+  test "should get index" do
+    get admin_merch_shipping_charges_url
+    assert_response :success
+  end
+
   test "should get new" do
     get new_admin_merch_shipping_charge_url, as: :turbo_stream
     assert_response :success

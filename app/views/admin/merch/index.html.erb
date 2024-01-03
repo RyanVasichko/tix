@@ -1,105 +1,30 @@
-<div data-controller="tabs"
-     data-tabs-active-tab-value="<%= active_tab_from_params || 0 %>"
-     class="max-w-xl card"
-     data-action="turbo:frame-load->tabs#displayActiveTab">
+<div class="max-w-xl card">
   <%= render "admin/merch/tabs" %>
 
-  <%= turbo_frame_tag "admin_merch_panel" do %>
-    <div
-      class="hidden"
-      data-tabs-target="panel"
-      data-turbo="false">
-      <div class="flex justify-between">
-        <%= form_with url: admin_merch_index_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
-          <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, data: { action: "quick-form#submit" }, class: "mr-1" %>
-          <%= form.label :include_off_sale, "Show off sale", class: "text-sm" %>
-        <% end %>
-        <%= link_to "New Merch", new_admin_merch_path, class: "btn-primary px-2 py-1" %>
-      </div>
+  <div class="flex justify-between">
+    <%= form_with url: admin_merch_index_path, method: :get, class: "flex items-center", data: { turbo_action: "replace", turbo_frame: "admin_merch" } do |form| %>
+      <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, onchange: "this.form.requestSubmit()", class: "mr-1" %>
+      <%= form.label :include_off_sale, "Show off sale", class: "text-sm" %>
+    <% end %>
+    <%= link_to "New Merch", new_admin_merch_path, class: "btn-primary px-2 py-1", data: { turbo_frame: :_top } %>
+  </div>
 
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col" class="table-th">Name</th>
-          <th scope="col" class="table-th">Categories</th>
-          <th scope="col" class="table-th">On Sale</th>
-          <th scope="col" class="table-th"></th>
-        </tr>
-        </thead>
-        <tbody class="table-tbody"
-               data-admin--merch-update-order-url-value="<%= admin_merch_sort_order_path %>"
-               data-admin--merch-target="merchTableBody"
-               data-controller="admin--merch">
-        <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { show_off_sale: @include_off_sale } %>
-        </tbody>
-      </table>
-    </div>
-  <% end %>
-
-  <%= turbo_frame_tag "admin_merch_categories_panel", target: :_top do %>
-    <div class="hidden" data-tabs-target="panel" data-turbo="false">
-      <div class="flex justify-end">
-        <%= link_to "New Category", new_admin_merch_category_path, class: "btn-primary px-2 py-1", data: { turbo: true, turbo_stream: true } %>
-      </div>
-
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col" class="table-th">Name</th>
-          <th scope="col" class="table-th"></th>
-        </tr>
-        </thead>
-        <tbody class="table-tbody" id="admin_merch_categories">
-        <% @merch_categories.each do |merch_category| %>
-          <tr id="<%= dom_id(merch_category, :admin) %>">
-            <td class="text-indigo-600 table-td">
-              <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true, turbo: true } %>
-            </td>
-            <td class="text-right text-gray-900 table-td sm:pr-6">
-              <%= render "shared/dropdown", { id: dom_id(merch_category, :admin) } do %>
-                <%= dropdown_link_to "Delete", [:admin, merch_category], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
-  <% end %>
-
-  <%= turbo_frame_tag "admin_merch_shipping_charges_panel", target: :_top do %>
-    <div class="hidden" data-tabs-target="panel" data-turbo="false">
-      <div class="flex justify-end">
-        <%= link_to "New Shipping Charge", new_admin_merch_shipping_charge_path, class: "btn-primary px-2 py-1", data: { turbo: true, turbo_stream: true } %>
-      </div>
-
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col" class="table-th">Weight</th>
-          <th scope="col" class="table-th">Price</th>
-          <th scope="col" class="table-th"></th>
-        </tr>
-        </thead>
-        <tbody class="table-tbody" id="admin_merch_shipping_charges">
-        <% @shipping_charges.each do |shipping_charge| %>
-          <tr id="<%= dom_id(shipping_charge, :admin) %>">
-            <td class="table-td">
-              <%= shipping_charge.weight %>
-            </td>
-            <td class="table-td">
-              <%= number_to_currency(shipping_charge.price) %>
-            </td>
-            <td class="text-right text-gray-900 table-td sm:pr-6">
-              <%= render "shared/dropdown", { id: dom_id(shipping_charge, :admin) } do %>
-                <%= dropdown_link_to "Edit", edit_admin_merch_shipping_charge_path(shipping_charge), data: { turbo: true, turbo_stream: true } %>
-                <%= dropdown_link_to "Delete", [:admin, shipping_charge], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
+  <%= turbo_frame_tag "admin_merch", target: :_top do %>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col" class="table-th">Name</th>
+        <th scope="col" class="table-th">Categories</th>
+        <th scope="col" class="table-th">On Sale</th>
+        <th scope="col" class="table-th"></th>
+      </tr>
+      </thead>
+      <tbody class="table-tbody"
+             data-admin--merch-update-order-url-value="<%= admin_merch_sort_order_path %>"
+             data-admin--merch-target="merchTableBody"
+             data-controller="admin--merch">
+      <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { show_off_sale: @include_off_sale } %>
+      </tbody>
+    </table>
   <% end %>
 </div>

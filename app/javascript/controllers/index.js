@@ -75,6 +75,3 @@ application.register("shows--seating-chart--svg", Shows__SeatingChart__SvgContro
 
 import SlideOverController from "./slide_over_controller"
 application.register("slide-over", SlideOverController)
-
-import TabsController from "./tabs_controller"
-application.register("tabs", TabsController)

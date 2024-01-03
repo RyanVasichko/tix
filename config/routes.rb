@@ -51,8 +51,8 @@ Rails.application.routes.draw do
     end
 
     namespace :merch do
-      resources :categories, except: %i[show index]
-      resources :shipping_charges, except: %i[show index]
+      resources :categories, except: %i[show]
+      resources :shipping_charges, except: %i[show]
       resources :category_fields, only: %i[new]
     end
 

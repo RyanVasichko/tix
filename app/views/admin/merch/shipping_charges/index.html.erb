@@ -1,0 +1,39 @@
+<div class="max-w-xl card">
+  <%= render "admin/merch/tabs" %>
+
+  <%= turbo_frame_tag "admin_merch_shipping_charges", target: :_top do %>
+    <div>
+      <div class="flex justify-end">
+        <%= link_to "New Shipping Charge", new_admin_merch_shipping_charge_path, class: "btn-primary px-2 py-1", data: { turbo: true, turbo_stream: true } %>
+      </div>
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col" class="table-th">Weight</th>
+          <th scope="col" class="table-th">Price</th>
+          <th scope="col" class="table-th"></th>
+        </tr>
+        </thead>
+        <tbody class="table-tbody" id="admin_merch_shipping_charges">
+        <% @shipping_charges.each do |shipping_charge| %>
+          <tr id="<%= dom_id(shipping_charge, :admin) %>">
+            <td class="table-td">
+              <%= shipping_charge.weight %>
+            </td>
+            <td class="table-td">
+              <%= number_to_currency(shipping_charge.price) %>
+            </td>
+            <td class="text-right text-gray-900 table-td sm:pr-6">
+              <%= render "shared/dropdown", { id: dom_id(shipping_charge, :admin) } do %>
+                <%= dropdown_link_to "Edit", edit_admin_merch_shipping_charge_path(shipping_charge), data: { turbo: true, turbo_stream: true } %>
+                <%= dropdown_link_to "Delete", [:admin, shipping_charge], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

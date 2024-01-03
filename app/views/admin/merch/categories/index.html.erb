@@ -1,0 +1,33 @@
+<div class="max-w-xl card">
+  <%= render "admin/merch/tabs" %>
+
+  <div>
+    <%= turbo_frame_tag "admin_merch_categories", target: :_top do %>
+      <div class="flex justify-end">
+        <%= link_to "New Category", new_admin_merch_category_path, class: "btn-primary px-2 py-1", data: { turbo_stream: true } %>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col" class="table-th">Name</th>
+          <th scope="col" class="table-th"></th>
+        </tr>
+        </thead>
+        <tbody class="table-tbody" id="admin_merch_categories">
+        <% @merch_categories.each do |merch_category| %>
+          <tr id="<%= dom_id(merch_category, :admin) %>">
+            <td class="text-indigo-600 table-td">
+              <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true } %>
+            </td>
+            <td class="text-right text-gray-900 table-td sm:pr-6">
+              <%= render "shared/dropdown", { id: dom_id(merch_category, :admin) } do %>
+                <%= dropdown_link_to "Delete", [:admin, merch_category], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      </div>
+    <% end %>
+    </div>

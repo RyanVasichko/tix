@@ -20,15 +20,15 @@ namespace :db do
       venue_seating_charts_count = ENV.fetch("VENUE_SEATING_CHARTS_COUNT") { 2 }.to_i
       venues_count = ENV.fetch("VENUES_COUNT") { 3 }.to_i
       merch_count = ENV.fetch("MERCH_COUNT") { 5 }.to_i
-      puts "Creating #{artists_count} artists, #{general_admission_shows_count} general admission shows, " +
-             "#{reserved_seating_shows_count} reserved seating shows, #{merch_count} merch, " +
-             "#{venues_count} venues, and #{venue_seating_charts_count} seating charts per venue"
+      merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT") { 3 }.to_i
+      merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT") { 3 }.to_i
+      puts "Creating:"
 
       artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
-      puts "Artists created"
+      puts "- #{artists_count} artists"
 
       venues = (1..venues_count).map { FactoryBot.create(:venue) }
-      puts "Venues created"
+      puts "- #{venues_count} venues"
 
       venue_layout_blob = ActiveStorage::Blob.create_and_upload!(
         io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
@@ -47,7 +47,7 @@ namespace :db do
           Faker::SeatingChart.unique.clear
         end
       end
-      puts "Seating charts created"
+      puts "- #{venue_seating_charts_count} seating charts per venue"
 
       reserved_seating_shows_count.times do
         FactoryBot.create(
@@ -59,6 +59,7 @@ namespace :db do
           venue_layout_blob: venue_layout_blob)
         Faker::SeatingChart.unique.clear
       end
+      puts "- #{reserved_seating_shows_count} reserved seating shows"
 
       general_admission_shows_count.times do
         FactoryBot.create(
@@ -68,14 +69,22 @@ namespace :db do
           section_seats_count: 100,
           venue: venues.sample)
       end
-      puts "Shows created"
+      puts "- #{general_admission_shows_count} general admission shows"
 
       merch_image_blob = ActiveStorage::Blob.create_and_upload!(
         io: File.open(Rails.root.join("test/fixtures/files/bbq_sauce.png")),
         filename: "bbq_sauce.png",
         content_type: "image/png")
       FactoryBot.create_list(:merch, merch_count, image_blob: merch_image_blob)
-      puts "Merch created"
+      puts "- #{merch_count} merch"
+
+      FactoryBot.create_list(:merch_category, merch_categories_count)
+      puts "- #{merch_categories_count} merch categories"
+
+      merch_shipping_charges_count.times do |index|
+        Merch::ShippingCharge.create!(weight: index + 1, price: index + 1)
+      end
+      puts "- #{merch_shipping_charges_count} merch shipping charges"
     end
   end
 end

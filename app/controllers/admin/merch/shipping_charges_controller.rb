@@ -1,16 +1,17 @@
 class Admin::Merch::ShippingChargesController < Admin::AdminController
   before_action :set_merch_shipping_charge, only: %i[edit update destroy]
 
-  # GET /merch/shipping_charges/new
+  def index
+    @shipping_charges = Merch::ShippingCharge.all.order(weight: :asc)
+  end
+
   def new
     @shipping_charge = Merch::ShippingCharge.new
   end
 
-  # GET /merch/shipping_charges/1/edit
   def edit
   end
 
-  # POST /merch/shipping_charges
   def create
     @shipping_charge = Merch::ShippingCharge.new(shipping_charge_params)
 
@@ -21,7 +22,6 @@ class Admin::Merch::ShippingChargesController < Admin::AdminController
     end
   end
 
-  # PATCH/PUT /merch/shipping_charges/1
   def update
     if @shipping_charge.update(shipping_charge_params)
       redirect_back_or_to admin_merch_index_url, notice: "Merch shipping charge was successfully updated.", status: :see_other
@@ -30,7 +30,6 @@ class Admin::Merch::ShippingChargesController < Admin::AdminController
     end
   end
 
-  # DELETE /merch/shipping_charges/1
   def destroy
     @shipping_charge.destroy!
     redirect_back_or_to admin_merch_index_url, notice: "Merch shipping charge was successfully destroyed.", status: :see_other

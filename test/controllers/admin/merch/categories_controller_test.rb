@@ -5,6 +5,11 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
     @merch_category = FactoryBot.create(:merch_category)
   end
 
+  test "should get index" do
+    get admin_merch_categories_url
+    assert_response :success
+  end
+
   test "should get new" do
     get new_admin_merch_category_url
     assert_response :success

@@ -1,16 +1,17 @@
 class Admin::Merch::CategoriesController < Admin::AdminController
   before_action :set_merch_category, only: %i[edit update destroy]
 
-  # GET /admin/merch/categories/new
+  def index
+    @merch_categories = Merch::Category.all
+  end
+
   def new
     @merch_category = Merch::Category.new
   end
 
-  # GET /admin/merch/categories/1/edit
   def edit
   end
 
-  # POST /admin/merch/categories
   def create
     @merch_category = Merch::Category.new(merch_category_params)
 
@@ -21,7 +22,6 @@ class Admin::Merch::CategoriesController < Admin::AdminController
     end
   end
 
-  # PATCH/PUT /admin/merch/categories/1
   def update
     if @merch_category.update(merch_category_params)
       redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully updated." }
@@ -33,7 +33,6 @@ class Admin::Merch::CategoriesController < Admin::AdminController
     end
   end
 
-  # DELETE /admin/merch/categories/1
   def destroy
     @merch_category.destroy
     redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully destroyed." }
