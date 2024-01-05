@@ -1,0 +1,178 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "08648308c744fbef6db654ef66e00fc384b64559ccedfcd1ce641b41ac1a9c44",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/jobs/database_backup_job.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "Open3.capture3(\"pg_dump -h #{ActiveRecord::Base.connection_db_config.configuration_hash[:host]} -U #{ActiveRecord::Base.connection_db_config.configuration_hash[:username]} -d #{ActiveRecord::Base.connection_db_config.configuration_hash[:database]} > #{\"#{\"tmp/database_backups\"}/#{\"backup_#{Time.now.strftime(\"%Y-%m-%d\")}.sql\"}\"}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DatabaseBackupJob",
+        "method": "create_backup"
+      },
+      "user_input": "ActiveRecord::Base.connection_db_config.configuration_hash[:host]",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "157d23050fa5f3d1f204eb07d5a0393d6cbe09910e4bbf96d5365ff133a0a369",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/data_migration/postgres_sequences_fixer.rb",
+      "line": 50,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT setval('#{sequence_name}', #{max_id})\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataMigration::PostgresSequencesFixer",
+        "method": "set_sequence_value_to_max_id"
+      },
+      "user_input": "sequence_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "1c0b04771375e1f549242ccd8828c509e2b4ee3a5d1d374e51e3d874c3490177",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/orders/show.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => Current.user.orders.find(params[:id]), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "OrdersController",
+          "method": "show",
+          "line": 8,
+          "file": "app/controllers/orders_controller.rb",
+          "rendered": {
+            "name": "orders/show",
+            "file": "app/views/orders/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "orders/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "24270bfce909ec11a8eaf79774409ac6b46a97eb35d13bb0cd3e884f4d88470c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/data_migration/postgres_sequences_fixer.rb",
+      "line": 46,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT COALESCE(MAX(id), 1) AS max_id FROM #{table_name}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataMigration::PostgresSequencesFixer",
+        "method": "max_id_for_table"
+      },
+      "user_input": "table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "9e7fd79f53cb326f850c2b8ab580e147f22c2d31bb12cc99ec11715c4e17924f",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/data_migration/sqlite_sequences_fixer.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"UPDATE sqlite_sequence SET seq = #{ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\").first.values.first} WHERE name = '#{table}'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataMigration::SqliteSequencesFixer",
+        "method": "fix_sequences"
+      },
+      "user_input": "ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\").first.values.first",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "ad8605ad2086c84cf5a2c9fd0dc31d1390c68cd76502d12bcaa0849bd6b8c5c4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/data_migration/postgres_sequences_fixer.rb",
+      "line": 40,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT d.objid::regclass AS sequence_name\\nFROM pg_depend AS d\\nJOIN pg_attribute AS a ON d.refobjid = a.attrelid AND d.refobjsubid = a.attnum\\nWHERE d.objid = 'public.#{table_name}_id_seq'::regclass\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataMigration::PostgresSequencesFixer",
+        "method": "sequence_name_for_table"
+      },
+      "user_input": "table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "e3ac0aac8d8af410f989b431ec315518b11186229731b7b5aa3d43ab8dd5f253",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/data_migration/sqlite_sequences_fixer.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataMigration::SqliteSequencesFixer",
+        "method": "fix_sequences"
+      },
+      "user_input": "table",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-01-04 21:33:50 -0600",
+  "brakeman_version": "6.1.1"
+}
