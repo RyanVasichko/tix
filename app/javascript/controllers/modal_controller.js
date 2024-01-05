@@ -1,51 +1,40 @@
-import { enter, leave } from "el-transition"
+import {enter, leave} from "el-transition"
 import ApplicationController from "./application_controller";
+import {Modal} from "flowbite";
 
 class ModalController extends ApplicationController {
-  static targets = ["body", "backdrop", "focus"];
-  static values = { 
-    openOnConnect: { type: Boolean, default: false }
+  static values = {
+    openOnConnect: {type: Boolean, default: false}
   }
 
   connect() {
     super.connect();
+
+    this.modal = new Modal(this.element);
 
     if (this.openOnConnectValue) {
       this.open();
     }
   }
 
-  async open() {
-    this.element.classList.remove("hidden");
-    if (this.hasFocusTarget) {
-      this.focusTarget.focus();
-    }
-    await Promise.all([
-      enter(this.bodyTarget),
-      enter(this.backdropTarget)
-    ]);
+  disconnect() {
+    this.modal.destroy();
+    this.modal = null;
+  }
+
+  open() {
+    this.modal.show();
     this.isOpen = true;
   }
 
-  async closeOnSuccessfulFormSubmit(event) {
+  close() {
+    this.modal.hide();
+  }
+
+  closeOnSuccessfulFormSubmit(event) {
     if (event.detail.success) {
-      await this.close();
-      this.element.remove();
-    }
-  }
-
-  async close() {
-    this.isOpen = false;
-    await Promise.all([
-      leave(this.bodyTarget),
-      leave(this.backdropTarget)
-    ]);
-    this.element.classList.add("hidden");
-  }
-
-  hideOnOutsideClick(event) {
-    if (this.isOpen && !this.bodyTarget.contains(event.target)) {
       this.close();
+      this.element.remove();
     }
   }
 }

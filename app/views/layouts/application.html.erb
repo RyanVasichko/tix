@@ -2,8 +2,8 @@
 <html>
   <%= render "layouts/head" %>
 
-  <body data-current-user-id="<%= Current.user.shopper_uuid %>">
-    <%= render "layouts/navbar" %>  
+  <body data-current-user-id="<%= Current.user.shopper_uuid %>" data-current-user-is-admin="<%= Current.user.admin? %>">
+    <%= render "layouts/navbar" %>
     <div class="mx-auto">
       <%= yield %>
     </div>

@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 import "./stream_actions/morph"
+import "flowbite/dist/flowbite.turbo.js"

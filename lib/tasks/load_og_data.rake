@@ -5,13 +5,13 @@ namespace :db do
       start_time = Time.zone.now
       puts "Started loading OG data at #{start_time}"
 
-      # DataMigration::UsersMigrator.new.migrate
-      # DataMigration::ArtistsMigrator.new.migrate
-      # DataMigration::VenuesMigrator.new.migrate
-      # DataMigration::TicketTypesMigrator.new.migrate
-      # DataMigration::SeatingChartsMigrator.new.migrate
-      # DataMigration::ReservedSeatingShowsMigrator.new.migrate
-      # DataMigration::GeneralAdmissionShowsMigrator.new.migrate
+      DataMigration::UsersMigrator.new.migrate
+      DataMigration::ArtistsMigrator.new.migrate
+      DataMigration::VenuesMigrator.new.migrate
+      DataMigration::TicketTypesMigrator.new.migrate
+      DataMigration::SeatingChartsMigrator.new.migrate
+      DataMigration::ReservedSeatingShowsMigrator.new.migrate
+      DataMigration::GeneralAdmissionShowsMigrator.new.migrate
       DataMigration::MerchMigrator.new.migrate
 
       DataMigration::SqliteSequencesFixer.new.fix_sequences

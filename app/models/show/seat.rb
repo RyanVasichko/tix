@@ -1,5 +1,5 @@
 class Show::Seat < ApplicationRecord
-  include Reservable
+  include Reservable, Holdable
 
   belongs_to :section, class_name: "Show::Section", inverse_of: :seats, foreign_key: "show_section_id", touch: true
   delegate :ticket_price, :deposit?, to: :section
@@ -12,6 +12,9 @@ class Show::Seat < ApplicationRecord
   validates :y, presence: true
   validates :seat_number, presence: true
   validates :table_number, presence: true
+
+  scope :sold, -> { joins(:ticket) }
+  scope :not_sold, -> { left_outer_joins(:ticket).where(ticket: { id: nil }) }
 
   def self.build_from_seating_chart_seat(seating_chart_seat)
     build(
@@ -27,6 +30,6 @@ class Show::Seat < ApplicationRecord
   end
 
   def sold?
-    orderer.present?
+    ticket.present?
   end
 end

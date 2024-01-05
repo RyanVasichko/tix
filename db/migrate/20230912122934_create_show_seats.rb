@@ -7,6 +7,7 @@ class CreateShowSeats < ActiveRecord::Migration[7.0]
       t.integer :seat_number, null: false
       t.integer :table_number, null: true
       t.references :user_shopping_cart, null: true, foreign_key: true
+      t.references :held_by_admin, null: true, foreign_key: { to_table: :users }
       t.datetime :reserved_until
 
       t.timestamps

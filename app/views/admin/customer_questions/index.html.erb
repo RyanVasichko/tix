@@ -1,4 +1,4 @@
-<div class="max-w-xl card">
+<div class="max-w-2xl card">
   <h1 class="mb-4 text-center text-3xl font-semibold">Customer Questions</h1>
 
   <div class="flex items-baseline justify-between">
@@ -40,11 +40,7 @@
           </tr>
         <% end %>
       </tbody>
-      <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
-        <tr>
-          <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
-        </tr>
-      </tfoot>
     </table>
+    <%= custom_pagy_nav(@pagy) %>
   <% end %>
 </div>

@@ -11,8 +11,6 @@ module User::ShoppingCartHelper
 
   def morph_shopping_cart_and_replace_seat(seat)
     morph_shopping_cart
-    concat(turbo_stream.replace(dom_id(seat)) do
-      render partial: "reserved_seating_shows/seats/seat", collection: [seat], as: :seat, cached: true
-    end)
+    concat(turbo_replace_seat(seat))
   end
 end

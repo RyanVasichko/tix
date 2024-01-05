@@ -40,6 +40,9 @@ application.register("clear-errors", ClearErrorsController)
 import ComboboxController from "./combobox_controller"
 application.register("combobox", ComboboxController)
 
+import DebouncedSubmitController from "./debounced_submit_controller"
+application.register("debounced-submit", DebouncedSubmitController)
+
 import DestroyableController from "./destroyable_controller"
 application.register("destroyable", DestroyableController)
 

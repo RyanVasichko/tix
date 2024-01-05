@@ -13,6 +13,8 @@ module Show::Seat::Reservable
 
     has_one :reserved_by, through: :shopping_cart, source: :user
 
+    scope :reserved, -> { where(reserved_until: Time.current...) }
+
     after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_user_shopping_cart_id? }
     after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "reserved_seating_shows/seats/seat" }
   end
@@ -42,7 +44,7 @@ module Show::Seat::Reservable
   private
 
   def reservable_by?(user)
-    (shopping_cart.nil? || shopping_cart == user.shopping_cart || reserved_until.past?) && !sold?
+    (shopping_cart.nil? || shopping_cart == user.shopping_cart || reserved_until.past?) && !sold? && !held?
   end
 
   def reservation_params_for_user(user)

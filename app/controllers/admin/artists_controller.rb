@@ -39,10 +39,7 @@ class Admin::ArtistsController < Admin::AdminController
       message = "#{@artist.name} was successfully deleted."
     end
 
-    respond_to do |format|
-      format.html { redirect_to admin_artists_url, flash: { success: message } }
-      format.turbo_stream { flash.now[:success] = message }
-    end
+    redirect_back_or_to admin_artists_path, flash: { success: message }
   end
 
   private

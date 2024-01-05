@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # Public-facing routes
   resources :shows, only: %i[index]
   resources :reserved_seating_shows, only: :show do
+    resources :seat_holds, only: %i[create index destroy], controller: "reserved_seating_shows/seat_holds"
     resources :seats, only: [] do
       resource :reservation, only: %i[create destroy], controller: "reserved_seating_shows/seat_reservations"
     end

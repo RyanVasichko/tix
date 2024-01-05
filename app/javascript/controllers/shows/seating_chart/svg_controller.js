@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
+import {Controller} from "@hotwired/stimulus";
 import * as d3 from "d3";
 
 // Connects to data-controller="shows--seating-chart--svg"
@@ -15,8 +15,7 @@ export default class extends Controller {
     // turbo streams can't handle svg stuff, so replacing the seat has to be done manually
     const newStream = event.detail.newStream;
 
-    if (!newStream.getAttribute("target").startsWith("show_seat_"))
-    {
+    if (!newStream.getAttribute("target").startsWith("show_seat_")) {
       return;
     }
 
@@ -26,7 +25,7 @@ export default class extends Controller {
 
     if (circleData) {
       d3.select(this.element).append("circle")
-        .each(function() {
+        .each(function () {
           for (let attribute of circleData.attributes) {
             d3.select(this).attr(attribute.name, attribute.value);
           }

@@ -85,6 +85,8 @@ namespace :db do
         Merch::ShippingCharge.create!(weight: index * 5, price: index + 1)
       end
       puts "- #{merch_shipping_charges_count} merch shipping charges"
+
+      FactoryBot.create(:admin, password: "password", password_confirmation: "password", email: "fake_admin@test.com")
     end
   end
 end

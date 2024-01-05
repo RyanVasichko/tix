@@ -51,8 +51,6 @@ module DataMigration
     end
 
     def build_sections_for_og_show(show)
-      # OG Fields:
-      # t.integer "GAfee"
       show.sections.map do |show_section|
         if show_section.section.nil?
           puts "No show section for show #{show.artist.name} - #{show.date} (#{show.id}), section #{show_section.name} (#{show_section.id}). Skipping."

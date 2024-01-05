@@ -3,21 +3,32 @@
     <ul role="list" id="shopping_cart_items" class="divide-y divide-gray-200">
       <% shopping_cart.shows.sort_by(&:show_date).each do |show| %>
         <li class="flex items-center py-6" id="show_<%= show.id %>_seat_reservations">
-          <%= link_to show_path(show), data: { turbo: false } do %>
-            <%= image_tag show.artist.image.variant(:medium), id: "show_#{show.id}_artist_image", class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
-          <% end %>
-          <div class="ml-4 flex-auto">
-            <h3 class="font-medium text-gray-900">
-              <%= link_to show.artist.name, show_path(show), data: { turbo: false } %>
-            </h3>
-            <% case show %>
-            <% when Show::ReservedSeatingShow %>
-              <%= render partial: "shopping_cart/seat_reservations/seat_reservation", collection: shopping_cart.seats_for(show), as: :seat %>
-            <% when Show::GeneralAdmissionShow %>
-              <%= render partial: "shopping_cart/general_admission_tickets/general_admission_ticket", collection: shopping_cart.tickets_for(show), as: :ticket %>
-            <% else
-                 nil %>
+          <div class="flex py-6">
+            <%= link_to show_path(show), data: { turbo: false } do %>
+              <%= image_tag show.artist.image.variant(:medium), id: "show_#{show.id}_artist_image", class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
             <% end %>
+            <div class="ml-4 flex-auto">
+              <h3 class="font-medium text-gray-900">
+                <%= link_to show.artist.name, show_path(show), data: { turbo: false } %>
+              </h3>
+              <% case show %>
+              <% when Show::ReservedSeatingShow %>
+                <%= render partial: "shopping_cart/seat_reservations/seat_reservation", collection: shopping_cart.seats_for(show), as: :seat %>
+              <% when Show::GeneralAdmissionShow %>
+                <%= render partial: "shopping_cart/general_admission_tickets/general_admission_ticket", collection: shopping_cart.tickets_for(show), as: :ticket %>
+              <% else
+                   nil %>
+              <% end %>
+
+              <% if show.is_a?(Show::ReservedSeatingShow) && shopping_cart.user.admin? && (shopping_cart.seats.any? || shopping_cart.tickets.any?) %>
+                <%= button_to(
+                      "Hold Seats",
+                      reserved_seating_show_seat_holds_path(show),
+                      data: { turbo_stream: true },
+                      class: "block text-center w-full rounded-md border border-transparent bg-indigo-600 mt-4 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50")
+                %>
+              <% end %>
+            </div>
           </div>
         </li>
       <% end %>

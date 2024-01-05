@@ -1,6 +1,14 @@
 import { Application, Controller } from "@hotwired/stimulus";
 
 class ApplicationController extends Controller {
+  get currentUserIsAdmin() {
+    return document.body.dataset.currentUserIsAdmin === "true";
+  }
+
+  get currentUserId() {
+    return document.body.dataset.currentUserId;
+  }
+
   connect() {
     this.element[this.identifier] = this;
   }

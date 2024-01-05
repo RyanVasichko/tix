@@ -1,5 +1,5 @@
 <%= turbo_stream.replace "application_modal" do %>
-  <%= render "shared/modal", title: "New Venue", body_class: "max-w-xl" do %>
+  <%= render "shared/modal", title: "New Venue", max_w: "max-w-xl" do %>
     <%= render "form", venue: @venue %>
   <% end %>
 <% end %>

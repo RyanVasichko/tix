@@ -36,7 +36,7 @@ servers:
     cmd: "bundle exec rake solid_queue:start"
 
 accessories:
-  redis:
+  redis@7.2.3:
     image: redis:latest
     host: 5.161.114.209
     port: 6379

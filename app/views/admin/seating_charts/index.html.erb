@@ -26,10 +26,6 @@
         </tr>
       <% end %>
     </tbody>
-    <tfoot class="<%= "border-none" if @pagy.pages > 1 %>">
-      <tr>
-        <td colspan="999"><%= custom_pagy_nav(@pagy) %></td>
-      </tr>
-    </tfoot>
   </table>
+  <%= custom_pagy_nav(@pagy) %>
 </div>

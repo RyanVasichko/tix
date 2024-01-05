@@ -225,9 +225,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
     t.integer "seat_number", null: false
     t.integer "table_number"
     t.integer "user_shopping_cart_id"
+    t.integer "held_by_admin_id"
     t.datetime "reserved_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["held_by_admin_id"], name: "index_show_seats_on_held_by_admin_id"
     t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
     t.index ["user_shopping_cart_id"], name: "index_show_seats_on_user_shopping_cart_id"
   end
@@ -370,6 +372,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
   add_foreign_key "seating_charts", "venues"
   add_foreign_key "show_seats", "show_sections"
   add_foreign_key "show_seats", "user_shopping_carts"
+  add_foreign_key "show_seats", "users", column: "held_by_admin_id"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"

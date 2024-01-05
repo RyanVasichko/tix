@@ -12,6 +12,7 @@
     "debounce": "^2.0.0",
     "el-transition": "^0.0.7",
     "esbuild": "^0.19.2",
+    "flowbite": "^2.2.1",
     "idiomorph": "https://github.com/basecamp/idiomorph#rollout-build",
     "postcss": "^8.4.30",
     "postcss-import": "^15.1.0",

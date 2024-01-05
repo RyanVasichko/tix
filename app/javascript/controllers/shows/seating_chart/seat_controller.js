@@ -8,7 +8,8 @@ export default class extends ApplicationController {
     reservedByUserId: String,
     reservationPath: String,
     reservedUntil: Number,
-    soldToUserId: String
+    soldToUserId: String,
+    heldByUserId: String
   };
 
   get reservedUntilDate() {
@@ -27,24 +28,32 @@ export default class extends ApplicationController {
     return this.currentUserId === this.soldToUserIdValue;
   }
 
-  get notReserved() {
-    return !this.reservedByUserIdValue || this.reservedUntilDate < new Date();
+  get reserved() {
+    return !!this.reservedByUserIdValue && this.reservedUntilDate > new Date();
   }
 
-  get notSold() {
-    return !this.soldToUserIdValue;
+  get sold() {
+    return !!this.soldToUserIdValue;
+  }
+
+  get held() {
+    return !!this.heldByUserIdValue;
   }
 
   get fillColor() {
-    if (this.notReserved && this.notSold) {
+    if (!this.reserved && !this.sold && !this.held) {
       return "green";
     }
 
-    return this.reservedByCurrentUser || this.soldToCurrentUser ? "yellow" : "red";
-  }
+    if (this.held && this.currentUserIsAdmin) {
+      return "purple";
+    }
 
-  get currentUserId() {
-    return document.body.dataset.currentUserId;
+    if (this.reservedByCurrentUser || this.soldToCurrentUser) {
+      return "yellow";
+    }
+
+    return "red";
   }
 
   connect() {
@@ -55,13 +64,15 @@ export default class extends ApplicationController {
   }
 
   async clickHandler() {
+    console.log(this.heldByUserIdValue)
     if (this.reservedByCurrentUser) {
       this.element.setAttribute("fill", "green");
       await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
       return;
     }
 
-    if (this.notReserved && this.notSold) {
+    const reservable = !this.reserved && !this.sold && !this.held;
+    if (reservable) {
       this.element.setAttribute("fill", "yellow");
       await post(this.reservationPathValue, { responseKind: "turbo-stream" });
     }

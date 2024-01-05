@@ -1,0 +1,25 @@
+<%= render "shared/modal", title: "Seat Holds", stay_open_on_successful_submit: true do %>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
+    <div class="pb-4 bg-white">
+      <%= form_with url: reserved_seating_show_seat_holds_url(@show),
+                    scope: :search,
+                    method: :get,
+                    data: { turbo: true, turbo_frame: :seat_holds } do |form| %>
+        <label for="table-search" class="sr-only">Search</label>
+        <div class="relative mt-1">
+          <div class="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+          </div>
+          <%= form.text_field :keyword,
+                              placeholder: "Search...",
+                              data: { controller: "debounced-submit", action: "debounced-submit#submit" },
+                              class: "block pt-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-48 bg-gray-50 focus:ring-amber-400 focus:border-amber-400" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= render "reserved_seating_shows/seat_holds/seat_holds", show: @show, held_seats: @held_seats, pagy: @pagy %>
+  </div>
+<% end %>
