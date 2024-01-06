@@ -19,7 +19,7 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     phone { Faker::PhoneNumber.cell_phone }
-    email { Faker::Internet.unique.email }
+    email { "#{first_name}.#{last_name}@#{Faker::Internet.domain_name}" }
   end
 
   trait :with_password do
