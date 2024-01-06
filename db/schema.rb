@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_05_163056) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -303,6 +303,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
     t.index ["venue_id"], name: "index_ticket_types_on_venue_id"
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "hold_seats", default: false, null: false
+    t.boolean "release_seats", default: false, null: false
+    t.boolean "manage_customers", default: false, null: false
+    t.boolean "manage_admins", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_shopping_cart_merch", force: :cascade do |t|
     t.integer "merch_id", null: false
     t.integer "user_shopping_cart_id", null: false
@@ -341,8 +351,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
     t.string "shopper_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_role_id"
+    t.index ["user_role_id"], name: "index_users_on_user_role_id"
     t.index ["user_shopping_cart_id"], name: "index_users_on_user_shopping_cart_id"
     t.check_constraint "        (\n           type != 'User::Guest' \n           AND first_name IS NOT NULL \n           AND last_name IS NOT NULL \n           AND email IS NOT NULL \n           AND password_digest IS NOT NULL\n        ) \n        OR type = 'User::Guest'\n", name: "check_guest_fields"
+    t.check_constraint "type != 'User::Admin' OR user_role_id IS NOT NULL", name: "check_admin_role"
   end
 
   create_table "venues", force: :cascade do |t|
@@ -382,6 +395,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_21_232026) do
   add_foreign_key "user_shopping_cart_merch", "user_shopping_carts"
   add_foreign_key "user_shopping_cart_tickets", "show_sections"
   add_foreign_key "user_shopping_cart_tickets", "user_shopping_carts"
+  add_foreign_key "users", "user_roles"
   add_foreign_key "users", "user_shopping_carts"
   add_foreign_key "venues", "addresses"
 end

@@ -1,7 +1,5 @@
 module PaginationHelper
   def custom_pagy_nav(pagy)
-    return nil unless pagy.pages > 1
-
     total_count = @pagy.count
     current_page = @pagy.page
     items_per_page = @pagy.items
@@ -9,7 +7,7 @@ module PaginationHelper
     end_row = start_row + @pagy.items - 1
     end_row = total_count if end_row > total_count
 
-    content_tag :nav, class: "flex items-center flex-column flex-wrap md:flex-row justify-between p-4 pt-4", aria_label: "Table navigation" do
+    content_tag :nav, class: "flex items-center flex-column flex-wrap md:flex-row justify-between p-4 pt-4 bg-gray-100 border-x border-b border-gray-200 rounded-b-xl", aria_label: "Table navigation" do
       concat(content_tag(:span, class: "text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto") do
         concat("Showing")
         concat("&nbsp;".html_safe)
@@ -23,7 +21,7 @@ module PaginationHelper
         concat("&nbsp;".html_safe)
 
         concat(content_tag(:span, class: "font-semibold text-gray-900") do
-          concat(total_count)
+          concat(number_with_delimiter(total_count))
         end)
       end)
 

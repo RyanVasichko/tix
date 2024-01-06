@@ -1,0 +1,65 @@
+<div class="max-w-5xl card">
+  <%= render "admin/users/tabs" %>
+
+  <%= table_header_wrapper_tag do %>
+
+  <% end %>
+  <%= form_with url: bulk_update_admin_roles_path,
+                method: :post,
+                data: {
+                  controller: "debounced-submit",
+                  debounced_submit_wait_value: "1000", debounced_submit_target: "form",
+                } do |form| %>
+    <%= table_tag do %>
+      <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          Name
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Hold Seats
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Release Seats
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Manage Customers
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Manage Admins
+        </th>
+        <th scope="col" class="px-6 py-3">
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @roles.each do |role| %>
+        <%= fields_for "roles", role, index: role.id do |role_fields| %>
+          <tr id="<%= dom_id(role, :admin) %>" class="bg-white border-b last:border-none hover:bg-gray-50">
+            <td class="px-6 py-4">
+              <%= role_fields.hidden_field :id %>
+              <%= role_fields.text_field :name, data: { action: "debounced-submit#submit" } %>
+            </td>
+            <td class="px-6 py-4">
+              <%= role_fields.check_box :hold_seats, onchange: "this.form.requestSubmit();" %>
+            </td>
+            <td class="px-6 py-4">
+              <%= role_fields.check_box :release_seats, onchange: "this.form.requestSubmit();" %>
+            </td>
+            <td class="px-6 py-4">
+              <%= role_fields.check_box :manage_customers, onchange: "this.form.requestSubmit();" %>
+            </td>
+            <td class="px-6 py-4">
+              <%= role_fields.check_box :manage_admins, onchange: "this.form.requestSubmit();" %>
+            </td>
+            <td class="px-6 py-4">
+              <%= link_to "Delete", admin_role_path(role), data: { turbo_method: :delete }, class: "text-sm text-red-500 hover:text-red-700" %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    <% end %>
+    <%= custom_pagy_nav(@pagy) %>
+  <% end %>
+</div>

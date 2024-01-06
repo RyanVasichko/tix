@@ -1,4 +1,6 @@
 class ReservedSeatingShows::SeatHoldsController < ApplicationController
+  include Searchable
+
   before_action :set_show
 
   def create
@@ -42,16 +44,12 @@ class ReservedSeatingShows::SeatHoldsController < ApplicationController
   def set_held_seats_and_pagy
     @held_seats = @show.seats.held.order(:table_number)
     if search_keyword.present?
-      @held_seats = @held_seats.joins(:held_by_admin).where(<<-SQL, keyword: "%#{search_keyword}%")
+      @held_seats = @held_seats.joins(:held_by_admin).where(<<-SQL, keyword: wildcard_search_keyword)
         CONCAT(users.first_name, ' ', users.last_name) LIKE :keyword
         OR show_seats.seat_number LIKE :keyword
         OR show_seats.table_number LIKE :keyword
       SQL
     end
     @pagy, @held_seats = pagy(@held_seats, items: 5)
-  end
-
-  def search_keyword
-    params.dig(:search, :keyword)
   end
 end

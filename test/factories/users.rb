@@ -27,6 +27,12 @@ FactoryBot.define do
     password_confirmation { "password" }
   end
 
+  trait :superadmin do
+    after(:build) do |user|
+      user.role = User::Role.find_by_name("superadmin") || FactoryBot.build(:user_role, :superadmin)
+    end
+  end
+
   factory :guest, traits: %i[user], class: "User::Guest" do
   end
 
@@ -35,7 +41,7 @@ FactoryBot.define do
     with_password
   end
 
-  factory :admin, traits: %i[user registered with_password], class: "User::Admin" do
+  factory :admin, traits: %i[user registered with_password superadmin], class: "User::Admin" do
     registered
     with_password
   end

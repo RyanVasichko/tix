@@ -22,6 +22,8 @@ namespace :db do
       merch_count = ENV.fetch("MERCH_COUNT") { 5 }.to_i
       merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT") { 3 }.to_i
       merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT") { 3 }.to_i
+      customers_count = ENV.fetch("CUSTOMERS_COUNT") { 10 }.to_i
+      admin_count = ENV.fetch("ADMIN_COUNT") { 0 }.to_i
       puts "Creating:"
 
       artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
@@ -86,7 +88,13 @@ namespace :db do
       end
       puts "- #{merch_shipping_charges_count} merch shipping charges"
 
+      FactoryBot.create_list(:customer, customers_count)
+      puts "- #{customers_count} customers"
+
       FactoryBot.create(:admin, password: "password", password_confirmation: "password", email: "fake_admin@test.com")
+
+      FactoryBot.create_list(:admin, admins_count)
+      puts "- #{admins_count} admins"
     end
   end
 end

@@ -1,5 +1,6 @@
 <%= render "shared/modal", title: "Seat Holds", stay_open_on_successful_submit: true do %>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
+  <!--TABLE HEADER-->
+  <div class="relative overflow-x-auto p-4">
     <div class="pb-4 bg-white">
       <%= form_with url: reserved_seating_show_seat_holds_url(@show),
                     scope: :search,

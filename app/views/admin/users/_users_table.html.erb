@@ -1,0 +1,37 @@
+<%= table_tag do %>
+  <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+  <tr>
+    <th scope="col" class="px-6 py-3">
+      Name
+    </th>
+    <th scope="col" class="px-6 py-3">
+      Email
+    </th>
+    <th scope="col" class="px-6 py-3">
+      Phone
+    </th>
+    <th scope="col" class="px-6 py-3">
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <% users.each do |user| %>
+    <tr id="<%= dom_id(user, :admin) %>" class="bg-white border-b last:border-none hover:bg-gray-50">
+      <td class="px-6 py-4">
+        <%= user.full_name %>
+      </td>
+      <td class="px-6 py-4">
+        <%= user.email %>
+      </td>
+      <td class="px-6 py-4">
+        <%= user.phone %>
+      </td>
+      <td class="px-6 py-4">
+        <%= render "shared/dropdown", { id: dom_id(user, :admin) } do %>
+          <% yield %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+<% end %>
