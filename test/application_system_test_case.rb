@@ -40,4 +40,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
     all(".dismiss_flash_message").each(&:click)
   end
+
+  def dismiss_all_toast_messages
+    all(".toast_dismiss").each(&:click)
+  end
 end

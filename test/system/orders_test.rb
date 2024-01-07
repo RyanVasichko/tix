@@ -67,7 +67,7 @@ class OrdersTest < ApplicationSystemTestCase
     select 2, from: general_admission_show.sections.first.name
     click_on "Add to shopping cart"
 
-    all(".toast_dismiss").each(&:click)
+    dismiss_all_toast_messages
 
     find("#shopping_cart_toggle").click
 
