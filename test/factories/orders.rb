@@ -16,7 +16,7 @@ FactoryBot.define do
       seats = []
 
       if build_show && evaluator.with_existing_shows
-        seats = Show::Seat.all.sample(evaluator.tickets_count)
+        seats = Show::Seat.not_sold.order("RANDOM()").limit(evaluator.tickets_count)
       else
         show = FactoryBot.build(:reserved_seating_show)
         seats = show.sections.map(&:seats).flatten.sample(evaluator.tickets_count)
