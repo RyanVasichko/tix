@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :artist do
-    name { Faker::Music.unique.band }
+    name { ArtistNameGenerator.instance.artist_name }
     bio { Faker::Lorem.paragraph }
     url { Faker::Internet.url }
     active { true }
