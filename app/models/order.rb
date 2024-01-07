@@ -1,8 +1,9 @@
 class Order < ApplicationRecord
-  include Payable, Shippable, Billable, BuildableForUser
+  include Payable, Shippable, Billable, BuildableForUser, KeywordSearchable
 
   belongs_to :orderer, polymorphic: true
   has_many :tickets, inverse_of: :order
+  has_many :shows, through: :tickets
   has_many :reserved_seating_tickets, class_name: "Order::ReservedSeatingTicket", inverse_of: :order
   has_many :seats, class_name: "Show::Seat", through: :reserved_seating_tickets
   has_many :merch, class_name: "Order::Merch", inverse_of: :order
@@ -11,6 +12,10 @@ class Order < ApplicationRecord
 
   def total_fees
     tickets.sum(&:total_fees)
+  end
+
+  def tickets_count
+    tickets.sum(:quantity) + seats.count
   end
 
   private

@@ -8,7 +8,6 @@ module Show::SeatingChartable
 
     after_initialize :set_seating_chart_name, if: :seating_chart_id
     after_initialize :set_venue_layout, if: :seating_chart_id
-    after_create_commit :repopulate_venue_layout_cache_later
   end
 
   private
@@ -19,9 +18,5 @@ module Show::SeatingChartable
 
   def set_venue_layout
     self.venue_layout.attach(SeatingChart.includes(:venue_layout_blob).find(seating_chart_id).venue_layout.blob)
-  end
-
-  def repopulate_venue_layout_cache_later
-    RepopulateVenueLayoutCacheJob.perform_later
   end
 end

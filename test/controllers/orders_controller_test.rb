@@ -4,7 +4,7 @@ class OrdersControllerTest < ApplicationIntegrationTestCase
   setup do
     @user = FactoryBot.create(:customer, :with_password)
     log_in_as @user, "password"
-    @order = FactoryBot.create(:order, orderer: @user)
+    @order = FactoryBot.create(:customer_order, orderer: @user)
   end
 
   test "should get index" do

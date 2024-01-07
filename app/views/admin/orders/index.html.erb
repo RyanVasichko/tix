@@ -1,0 +1,92 @@
+<div class="max-w-7xl card">
+  <h1 class="text-center text-3xl font-semibold">Orders</h1>
+  <!-- TABLE HEADER -->
+  <%= table_header_wrapper_tag do %>
+    <%= form_with url: admin_orders_path,
+                  scope: :search,
+                  method: :get,
+                  data: { turbo: true, turbo_frame: :customers, turbo_action: "advance" } do |form| %>
+      <%= form.label :keyword, class: "sr-only" %>
+      <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <%= form.text_field :keyword,
+                            placeholder: "Search...",
+                            data: { controller: "debounced-submit", action: "debounced-submit#submit" },
+                            class: "block pt-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-48 bg-gray-50 focus:ring-amber-500 focus:border-amber-500" %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag :customers, data: { turbo_action: "advance" } do %>
+    <%= table_tag do %>
+      <%= thead_tag do %>
+        <tr>
+          <%= th_tag do %>
+            Order Number
+          <% end %>
+          <%= th_tag do %>
+            Date
+          <% end %>
+          <%= th_tag do %>
+            User
+          <% end %>
+          <%= th_tag do %>
+            User Phone
+          <% end %>
+          <%= th_tag do %>
+            User Email
+          <% end %>
+          <%= th_tag do %>
+            Shows
+          <% end %>
+          <%= th_tag do %>
+            Tickets
+          <% end %>
+          <%= th_tag do %>
+            Total
+          <% end %>
+          <%= th_tag do %>
+          <% end %>
+      <% end %>
+      <tbody>
+      <% @orders.each do |order| %>
+        <%= tr_for_tbody_tag id: dom_id(order, :admin) do %>
+          <%= td_tag class: "text-sm" do %>
+            <%= order.order_number %>
+          <% end %>
+          <%= td_tag class: "text-sm px-2 py-2" do %>
+            <%= order.created_at.to_fs(:mdy) %>
+          <% end %>
+          <%= td_tag class: "text-sm px-2 py-2" do %>
+            <%= order.orderer.full_name %>
+          <% end %>
+          <%= td_tag class: "text-sm px-2 py-2" do %>
+            <%= order.orderer.phone %>
+          <% end %>
+          <%= td_tag class: "text-sm px-2 py-2" do %>
+            <%= order.orderer.email %>
+          <% end %>
+          <%= td_tag class: "text-sm px-2 py-2" do %>
+          <%= order.shows.map { |show| "#{show.artist_name} - #{show.show_date.to_fs(:mdy)}" }.join(", ") %>
+          <% end %>
+          <%= td_tag class: "text-sm px-1 py-1" do %>
+            <%= order.tickets_count %>
+          <% end %>
+          <%= td_tag do %>
+            <%= number_to_currency(order.order_total) %>
+          <% end %>
+          <%= td_tag do %>
+
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+    <% end %>
+
+    <%= custom_pagy_nav(@pagy) %>
+  <% end %>
+</div>

@@ -1,6 +1,6 @@
 namespace :db do
   namespace :factories do
-    task load: [:environment, "db:drop", "db:prepare"] do
+    task load: [:environment, "db:drop", "db:create", "db:migrate"] do
       artist_image_blobs = [
         ActiveStorage::Blob.create_and_upload!(
           io: File.open(Rails.root.join("test", "fixtures", "files", "radiohead.jpg")),
@@ -23,7 +23,10 @@ namespace :db do
       merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT") { 3 }.to_i
       merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT") { 3 }.to_i
       customers_count = ENV.fetch("CUSTOMERS_COUNT") { 10 }.to_i
-      admin_count = ENV.fetch("ADMIN_COUNT") { 0 }.to_i
+      admins_count = ENV.fetch("ADMINS_COUNT") { 1 }.to_i
+      customer_orders_count = ENV.fetch("CUSTOMER_ORDERS_COUNT") { 10 }.to_i
+      guest_orders_count = ENV.fetch("GUEST_ORDERS_COUNT") { 10 }.to_i
+
       puts "Creating:"
 
       artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
@@ -92,9 +95,14 @@ namespace :db do
       puts "- #{customers_count} customers"
 
       FactoryBot.create(:admin, password: "password", password_confirmation: "password", email: "fake_admin@test.com")
-
       FactoryBot.create_list(:admin, admins_count)
       puts "- #{admins_count} admins"
+
+      FactoryBot.create_list(:customer_order, customer_orders_count, with_existing_shows: true, with_existing_user: true)
+      puts "- #{customer_orders_count} customer orders"
+
+      FactoryBot.create_list(:guest_order, guest_orders_count, with_existing_shows: true)
+      puts "- #{guest_orders_count} guest orders"
     end
   end
 end
