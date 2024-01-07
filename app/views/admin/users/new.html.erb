@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "application_modal" do %>
+  <%= render "shared/modal", max_w: "max-w-xl", title: "Add #{@user.is_a?(User::Customer) ? 'Customer' : 'Admin'}" do %>
+    <%= render "admin/users/form", user: @user, url: @user.is_a?(User::Customer) ? admin_customers_path : admin_admins_path %>
+  <% end %>
+<% end %>

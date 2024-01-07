@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "application_modal_body" do %>
+  <%= render "admin/users/form", user: @user, url: @user.is_a?(User::Customer) ? admin_customers_path : admin_admins_path %>
+<% end %> %>

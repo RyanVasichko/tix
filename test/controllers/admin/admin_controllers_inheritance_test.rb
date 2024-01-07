@@ -9,7 +9,8 @@ class Admin::AdminControllersInheritanceTest < ActiveSupport::TestCase
     next if class_name == "Admin::AdminController" # Skip Admin::AdminController
 
     test "#{class_name} inherits from AdminController" do
-      assert_equal Admin::AdminController, class_name.constantize.superclass
+      controller_class = class_name.constantize
+      assert controller_class.ancestors.include?(Admin::AdminController), "#{class_name} does not inherit from Admin::AdminController"
     end
   end
 end

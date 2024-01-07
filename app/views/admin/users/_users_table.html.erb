@@ -18,7 +18,7 @@
   <% users.each do |user| %>
     <tr id="<%= dom_id(user, :admin) %>" class="bg-white border-b last:border-none hover:bg-gray-50">
       <td class="px-6 py-4">
-        <%= user.full_name %>
+        <%= link_to user.full_name, user.is_a?(User::Customer) ? edit_admin_customer_path(user) : edit_admin_admin_path(user), class: "text-amber-600", data: { turbo_frame: "application_modal" } %>
       </td>
       <td class="px-6 py-4">
         <%= user.email %>

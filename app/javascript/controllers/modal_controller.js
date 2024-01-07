@@ -4,7 +4,8 @@ import {Modal} from "flowbite";
 
 class ModalController extends ApplicationController {
   static values = {
-    openOnConnect: {type: Boolean, default: false}
+    openOnConnect: {type: Boolean, default: false},
+    targetTopFrameOnSuccess: {type: Boolean, default: true}
   }
 
   connect() {
