@@ -1,6 +1,11 @@
+# Giga seed:
+# PROCESS_COUNT=8 ARTISTS_COUNT=125 UPCOMING_GENERAL_ADMISSION_SHOWS_COUNT=60 UPCOMING_RESERVED_SEATING_SHOWS_COUNT=60 PAST_GENERAL_ADMISSION_SHOWS_COUNT=1000 PAST_RESERVED_SEATING_SHOWS_COUNT=1000 CUSTOMERS_COUNT=500 CUSTOMER_ORDERS_COUNT=500 GUEST_ORDERS_COUNT=500 bin/rails db:factories:load
+
 namespace :db do
   namespace :factories do
-    task load: [:environment, "db:drop", "db:create", "db:migrate"] do
+    task load: [:environment, "db:reset"] do
+      start = Time.current
+
       artist_image_blobs = [
         ActiveStorage::Blob.create_and_upload!(
           io: File.open(Rails.root.join("test", "fixtures", "files", "radiohead.jpg")),
@@ -14,22 +19,24 @@ namespace :db do
         )
       ]
 
-      artists_count = ENV.fetch("ARTISTS_COUNT") { 20 }.to_i
-      general_admission_shows_count = ENV.fetch("GENERAL_ADMISSION_SHOWS_COUNT") { 20 }.to_i
-      reserved_seating_shows_count = ENV.fetch("RESERVED_SEATING_SHOWS_COUNT") { 20 }.to_i
-      venue_seating_charts_count = ENV.fetch("VENUE_SEATING_CHARTS_COUNT") { 2 }.to_i
-      venues_count = ENV.fetch("VENUES_COUNT") { 3 }.to_i
-      merch_count = ENV.fetch("MERCH_COUNT") { 5 }.to_i
-      merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT") { 3 }.to_i
-      merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT") { 3 }.to_i
-      customers_count = ENV.fetch("CUSTOMERS_COUNT") { 10 }.to_i
-      admins_count = ENV.fetch("ADMINS_COUNT") { 1 }.to_i
-      customer_orders_count = ENV.fetch("CUSTOMER_ORDERS_COUNT") { 10 }.to_i
-      guest_orders_count = ENV.fetch("GUEST_ORDERS_COUNT") { 10 }.to_i
+      artists_count = ENV.fetch("ARTISTS_COUNT", 20).to_i
+      upcoming_general_admission_shows_count = ENV.fetch("UPCOMING_GENERAL_ADMISSION_SHOWS_COUNT", 20).to_i
+      past_general_admission_shows_count = ENV.fetch("PAST_GENERAL_ADMISSION_SHOWS_COUNT", 20).to_i
+      upcoming_reserved_seating_shows_count = ENV.fetch("UPCOMING_RESERVED_SEATING_SHOWS_COUNT", 20).to_i
+      past_reserved_seating_shows_count = ENV.fetch("PAST_RESERVED_SEATING_SHOWS_COUNT", 20).to_i
+      venue_seating_charts_count = ENV.fetch("VENUE_SEATING_CHARTS_COUNT", 2).to_i
+      venues_count = ENV.fetch("VENUES_COUNT", 3).to_i
+      merch_count = ENV.fetch("MERCH_COUNT", 5).to_i
+      merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT", 3).to_i
+      merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT", 3).to_i
+      customers_count = ENV.fetch("CUSTOMERS_COUNT", 10).to_i
+      admins_count = ENV.fetch("ADMINS_COUNT", 1).to_i
+      customer_orders_count = ENV.fetch("CUSTOMER_ORDERS_COUNT", 10).to_i
+      guest_orders_count = ENV.fetch("GUEST_ORDERS_COUNT", 10).to_i
 
       puts "Creating:"
 
-      artists = (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
+      (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
       puts "- #{artists_count} artists"
 
       venues = (1..venues_count).map { FactoryBot.create(:venue) }
@@ -42,39 +49,79 @@ namespace :db do
       )
 
       venues.each do |venue|
-        venue_seating_charts_count.times do
-          FactoryBot.create(
-            :seating_chart,
-            sections_count: 4,
-            section_seats_count: 90,
-            venue_layout_blob: venue_layout_blob,
-            venue: venue)
-          Faker::SeatingChart.unique.clear
+        (1...venue_seating_charts_count).each_slice(100) do |slice|
+          slice.count.times do
+            FactoryBot.create(
+              :seating_chart,
+              sections_count: 4,
+              section_seats_count: 90,
+              venue_layout_blob: venue_layout_blob,
+              venue: venue)
+            Faker::SeatingChart.unique.clear
+          end
         end
       end
       puts "- #{venue_seating_charts_count} seating charts per venue"
 
-      reserved_seating_shows_count.times do
-        FactoryBot.create(
-          :reserved_seating_show,
-          artist: artists.sample,
-          sections_count: 4,
-          section_seats_count: 90,
-          venue: venues.sample,
-          venue_layout_blob: venue_layout_blob)
-        Faker::SeatingChart.unique.clear
+      with_forking do
+        (1..upcoming_reserved_seating_shows_count).each_slice(100) do |slice|
+          slice.count.times do
+            FactoryBot.create(
+              :reserved_seating_show,
+              with_existing_artist: true,
+              sections_count: 4,
+              section_seats_count: 90,
+              with_existing_venue: true,
+              venue_layout_blob: venue_layout_blob)
+            Faker::SeatingChart.unique.clear
+          end
+        end
       end
-      puts "- #{reserved_seating_shows_count} reserved seating shows"
+      puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
 
-      general_admission_shows_count.times do
-        FactoryBot.create(
-          :general_admission_show,
-          artist: artists.sample,
-          sections_count: 2,
-          section_seats_count: 100,
-          venue: venues.sample)
+      with_forking do
+        (1..past_reserved_seating_shows_count).each_slice(100) do |slice|
+          slice.count.times do
+            FactoryBot.create(
+              :reserved_seating_show,
+              :past,
+              with_existing_artist: true,
+              sections_count: 4,
+              section_seats_count: 90,
+              with_existing_venue: true,
+              venue_layout_blob: venue_layout_blob)
+            Faker::SeatingChart.unique.clear
+          end
+        end
       end
-      puts "- #{general_admission_shows_count} general admission shows"
+      puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
+
+      with_forking do
+        (1..upcoming_general_admission_shows_count).each_slice(100) do |slice|
+          FactoryBot.create_list(
+            :general_admission_show,
+            slice.count,
+            with_existing_artist: true,
+            sections_count: 2,
+            section_seats_count: 100,
+            with_existing_venue: true)
+        end
+      end
+      puts "- #{upcoming_general_admission_shows_count} upcoming general admission shows"
+
+      with_forking do
+        (1..past_general_admission_shows_count).each_slice(100) do |slice|
+          FactoryBot.create_list(
+            :general_admission_show,
+            slice.count,
+            :past,
+            with_existing_artist: true,
+            sections_count: 2,
+            section_seats_count: 100,
+            with_existing_venue: true)
+        end
+      end
+      puts "- #{past_general_admission_shows_count} past general admission shows"
 
       merch_image_blob = ActiveStorage::Blob.create_and_upload!(
         io: File.open(Rails.root.join("test/fixtures/files/bbq_sauce.png")),
@@ -91,20 +138,45 @@ namespace :db do
       end
       puts "- #{merch_shipping_charges_count} merch shipping charges"
 
-      FactoryBot.create_list(:customer, customers_count)
+      with_forking do
+        (1..customers_count).each_slice(100) do |slice|
+          FactoryBot.create_list(:customer, slice.count)
+        end
+      end
       puts "- #{customers_count} customers"
 
       FactoryBot.create(:admin, password: "password", password_confirmation: "password", email: "fake_admin@test.com")
       FactoryBot.create_list(:admin, admins_count)
       puts "- #{admins_count} admins"
 
-      FactoryBot.create_list(:customer_order, customer_orders_count, with_existing_shows: true, with_existing_user: true)
+      with_forking do
+        (1..customer_orders_count).each_slice(100) do |slice|
+          FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true)
+        end
+      end
       puts "- #{customer_orders_count} customer orders"
 
-      FactoryBot.create_list(:guest_order, guest_orders_count, with_existing_shows: true)
+      with_forking do
+        (1..guest_orders_count).each_slice(100) do |slice|
+          FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true)
+        end
+      end
       puts "- #{guest_orders_count} guest orders"
+
+      puts "Factories loaded. Total time: #{Time.current - start}"
     end
   end
+end
+
+def with_forking(&block)
+  process_count = ENV.fetch("PROCESS_COUNT", 1).to_i
+  return yield if process_count == 1
+
+  process_count.times.map { Process.fork(&block) }
+  statuses = Process.waitall.map { |pid, status| status }
+  sleep 0.5 # Give the database a chance to catch up
+
+  raise "An error occurred in one of the forked processes" if statuses.any? { |status| status.exitstatus != 0 }
 end
 
 Rake::Task["db:factories:load"].enhance(["tmp:clear"])

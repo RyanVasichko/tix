@@ -10,13 +10,12 @@ FactoryBot.define do
     end
 
     after(:build) do |order, evaluator|
-      order.payment = FactoryBot.build(:order_payment, order: order) unless order.payment.present?
-
       build_show = evaluator.tickets_count.positive? && order.tickets.empty?
       seats = []
 
       if build_show && evaluator.with_existing_shows
         seats = Show::Seat.not_sold.order("RANDOM()").limit(evaluator.tickets_count)
+        raise "Not enough seats to build order" if seats.count < evaluator.tickets_count
       else
         show = FactoryBot.build(:reserved_seating_show)
         seats = show.sections.map(&:seats).flatten.sample(evaluator.tickets_count)
@@ -25,6 +24,18 @@ FactoryBot.define do
 
       order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
       order.tickets.each { |ticket| ticket.order = order }
+
+      show = order.tickets.first&.show
+      if show.present?
+        random_seconds_in_show_on_sale_range = rand(show.front_end_on_sale_at.to_i - show.front_end_off_sale_at.to_i)
+        random_date_in_show_on_sale_range = show.front_end_on_sale_at + random_seconds_in_show_on_sale_range.seconds
+
+        order.created_at = random_seconds_in_show_on_sale_range
+      end
+
+      order.calculate_order_total
+
+      order.payment = FactoryBot.build(:order_payment, order: order, amount_in_cents: order.total_in_cents) unless order.payment.present?
     end
   end
 

@@ -2,7 +2,13 @@ class ArtistNameGenerator
   include Singleton
 
   def artist_name
-    band_name || hip_hop_artist_name || first_name_last_name
+    generated_name = band_name || hip_hop_artist_name || first_name_last_name
+    while Artist.exists?(name: generated_name)
+      puts "Name collission detected. Regenerating..."
+      generated_name = band_name || hip_hop_artist_name || first_name_last_name
+    end
+
+    generated_name
   end
 
   private

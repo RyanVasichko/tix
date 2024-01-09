@@ -1,24 +1,31 @@
 FactoryBot.define do
-  trait(:past) { show_date { Faker::Date.backward(days: 60) } }
+  trait(:past) { show_date { Faker::Date.backward(days: 730) } }
 
   trait :show do
-    association :artist
-    association :venue
+    artist { nil }
+    venue { nil }
 
-    show_date { Faker::Date.forward(days: 60) }
+    show_date { Faker::Date.forward(days: 120) }
     doors_open_at { Faker::Time.between(from: DateTime.now.change(hour: 17), to: DateTime.now.change(hour: 19)) }
-    show_starts_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    dinner_starts_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    dinner_ends_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    front_end_on_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    front_end_off_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    back_end_on_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
-    back_end_off_sale_at { Faker::Time.between(from: DateTime.now - 1, to: DateTime.now) }
+    dinner_starts_at { doors_open_at + rand(0...30).minutes }
+    show_starts_at { dinner_starts_at + rand(0...15).minutes }
+    dinner_ends_at { dinner_starts_at + 1.hour }
+    front_end_on_sale_at { show_date - rand(15...60).days }
+    front_end_off_sale_at { show_date + 1.day }
+    back_end_on_sale_at { front_end_on_sale_at - rand(15...30).days }
+    back_end_off_sale_at { show_date + 1.day }
     additional_text { Faker::Lorem.paragraph }
 
     transient do
       sections_count { 2 }
       section_seats_count { 5 }
+      with_existing_artist { false }
+      with_existing_venue { false }
+    end
+
+    after :build do |show, evaluator|
+      show.artist ||= evaluator.with_existing_artist ? Artist.order("RANDOM()").first : FactoryBot.build(:artist)
+      show.venue ||= evaluator.with_existing_venue ? Venue.order("RANDOM()").first : FactoryBot.build(:venue)
     end
   end
 

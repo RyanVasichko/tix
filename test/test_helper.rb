@@ -5,9 +5,7 @@ require "rails/test_help"
 class ActiveSupport::TestCase
   include ActiveJob::TestHelper # Used for perform_enqueued_jobs
 
-  unless ENV.fetch("DOCKERIZED") { false }
-    parallelize(workers: :number_of_processors)
-  end
+  parallelize(workers: :number_of_processors) unless ENV.fetch("DOCKERIZED", false)
 
   Time::DATE_FORMATS[:datetime_field] = "%m%d%Y\t%I%M%P"
   Time::DATE_FORMATS[:time_field] = "%I:%M%P"

@@ -15,8 +15,8 @@ FactoryBot.define do
     association :seat, factory: :show_seat
 
     after :build do |ticket, evaluator|
-      FactoryBot.build(evaluator.order_type, tickets: [ticket]) unless ticket.order.present?
       ticket.set_pricing_from_seat unless ticket.total_price.present?
+      ticket.order = FactoryBot.build(evaluator.order_type, tickets: [ticket]) unless ticket.order.present?
     end
   end
 end

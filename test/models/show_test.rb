@@ -1,7 +1,7 @@
 require "test_helper"
 
 class ShowTest < ActiveSupport::TestCase
-  test 'should sync start and end time with show date' do
+  test "should sync start and end time with show date" do
     show = FactoryBot.build(:reserved_seating_show)
 
     next_year = Time.current.year + 1
@@ -21,10 +21,24 @@ class ShowTest < ActiveSupport::TestCase
   end
 
   test "should bust the venue layout cache when a show is created" do
-    Rails.cache.write('venue_layout_images_preload', 'old_data', expires_in: 1.day)
+    Rails.cache.write("venue_layout_images_preload", "old_data", expires_in: 1.day)
 
     FactoryBot.create(:reserved_seating_show)
     perform_enqueued_jobs
-    assert_nil Rails.cache.read('venue_layout_images_preload')
+    assert_nil Rails.cache.read("venue_layout_images_preload")
+  end
+
+  test "should rebuild the order index when the artist changes" do
+    skip "I can't get order_search_indices to create in test environment"
+
+    show = FactoryBot.create(:reserved_seating_show)
+    order = FactoryBot.create(:customer_order, with_existing_shows: true)
+
+    show.artist = FactoryBot.create(:artist)
+    show.save
+
+    perform_enqueued_jobs
+
+    assert Order::SearchIndex.find_by(order_id: order.id)
   end
 end

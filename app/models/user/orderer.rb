@@ -4,5 +4,7 @@ module User::Orderer
   included do
     has_many :orders, as: :orderer
     has_many :shipping_addresses, class_name: "Order::ShippingAddress", through: :orders, source: :shipping_address
+
+    before_commit -> { orders.each(&:populate_search_index_later) }
   end
 end
