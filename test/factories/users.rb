@@ -4,6 +4,7 @@ FactoryBot.define do
       shopping_cart_merch_count { 0 }
       reserved_seats_count { 0 }
       general_admission_tickets_count { 0 }
+      orders_count { 0 }
     end
 
     shopping_cart do |evaluator|
@@ -12,6 +13,21 @@ FactoryBot.define do
                        reserved_seats_count: evaluator.reserved_seats_count,
                        general_admission_tickets_count: evaluator.general_admission_tickets_count,
                        user: nil)
+    end
+
+    after(:build) do |user, evaluator|
+      if evaluator.orders_count&.positive?
+        orders = []
+        case user
+        when User::Customer
+          user.orders << FactoryBot.build_list(:customer_order, evaluator.orders_count, orderer: user)
+          orders = user.orders
+        when User::Guest
+          orders = FactoryBot.build_list(:guest_order, evaluator.orders_count)
+        else
+          raise "Unknown user type: #{user.class}"
+        end
+      end
     end
   end
 

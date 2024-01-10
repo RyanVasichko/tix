@@ -19,6 +19,10 @@ module Show::Seat::Reservable
     after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "reserved_seating_shows/seats/seat" }
   end
 
+  def reserved?
+    reserved_until&.future?
+  end
+
   def transfer_reservation!(from:, to:)
     return unless reserved_by == from
 

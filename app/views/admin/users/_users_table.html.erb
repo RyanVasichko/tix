@@ -31,7 +31,7 @@
       <% end %>
       <%= td_tag do %>
         <%= render "shared/dropdown", { id: dom_id(user, :admin) } do %>
-          <%= yield %>
+          <%= yield(user) %>
         <% end %>
       <% end %>
     <% end %>
