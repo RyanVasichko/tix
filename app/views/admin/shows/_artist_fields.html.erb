@@ -2,4 +2,4 @@
   <%= form.combobox_label :artist_id %>
   <%= link_to "Add Artist", new_admin_shows_artist_path, class: "btn-primary text-xs px-1.5 py-1.5", data: { turbo_stream: true } unless form.object.persisted? %>
 </div>
-<%= form.collection_combobox :artist_id, Artist.active.order(:name), :id, :name, disabled: form.object.persisted? %>
+<%= form.collection_combobox :artist_id, form.object.persisted? ? Artist.where(id: form.object.artist_id) : Artist.active.order(:name), :id, :name, disabled: form.object.persisted? %>
