@@ -1,4 +1,5 @@
 import ApplicationController from "./application_controller";
+import debounce from "debounce";
 
 // Connects to data-controller="combobox"
 export default class extends ApplicationController {
@@ -6,6 +7,8 @@ export default class extends ApplicationController {
 
   connect() {
     super.connect();
+    this.createIndex();
+
     if (this.hiddenFieldTarget.value) {
       const comboboxParams = {
         optionValue: this.hiddenFieldTarget.value,
@@ -15,15 +18,26 @@ export default class extends ApplicationController {
     }
   }
 
+  createIndex() {
+    this.index = new Map();
+    this.optionTargets.forEach((option) => {
+      const text = option.innerText.toLowerCase();
+      if (!this.index.has(text)) {
+        this.index.set(text, []);
+      }
+      this.index.get(text).push(option);
+    });
+
+    console.log(this.index);
+  }
+
   filter() {
     const filterValue = this.inputTarget.value.toLowerCase();
-    this.optionTargets.forEach((t) => {
-      const containsText = t.innerText.toLowerCase().includes(filterValue);
-      if (containsText) {
-        t.classList.remove("hidden");
-      } else {
-        t.classList.add("hidden");
-      }
+    this.index.forEach((elements, text) => {
+      const isVisible = text.includes(filterValue);
+      elements.forEach(element => {
+        element.classList.toggle("hidden", !isVisible);
+      });
     });
   }
 
