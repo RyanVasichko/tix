@@ -63,38 +63,40 @@ namespace :db do
       end
       puts "- #{venue_seating_charts_count} seating charts per venue"
 
-      with_forking do
-        (1..upcoming_reserved_seating_shows_count).each_slice(100) do |slice|
-          slice.count.times do
-            FactoryBot.create(
-              :reserved_seating_show,
-              with_existing_artist: true,
-              sections_count: 4,
-              section_seats_count: 90,
-              with_existing_venue: true,
-              venue_layout_blob: venue_layout_blob)
-            Faker::SeatingChart.unique.clear
+      Show::Seat.suppressing_turbo_broadcasts do
+        with_forking do
+          (1..upcoming_reserved_seating_shows_count).each_slice(100) do |slice|
+            slice.count.times do
+              FactoryBot.create(
+                :reserved_seating_show,
+                with_existing_artist: true,
+                sections_count: 4,
+                section_seats_count: 90,
+                with_existing_venue: true,
+                venue_layout_blob: venue_layout_blob)
+              Faker::SeatingChart.unique.clear
+            end
           end
         end
-      end
-      puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
+        puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
 
-      with_forking do
-        (1..past_reserved_seating_shows_count).each_slice(100) do |slice|
-          slice.count.times do
-            FactoryBot.create(
-              :reserved_seating_show,
-              :past,
-              with_existing_artist: true,
-              sections_count: 4,
-              section_seats_count: 90,
-              with_existing_venue: true,
-              venue_layout_blob: venue_layout_blob)
-            Faker::SeatingChart.unique.clear
+        with_forking do
+          (1..past_reserved_seating_shows_count).each_slice(100) do |slice|
+            slice.count.times do
+              FactoryBot.create(
+                :reserved_seating_show,
+                :past,
+                with_existing_artist: true,
+                sections_count: 4,
+                section_seats_count: 90,
+                with_existing_venue: true,
+                venue_layout_blob: venue_layout_blob)
+              Faker::SeatingChart.unique.clear
+            end
           end
         end
+        puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
       end
-      puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
 
       with_forking do
         (1..upcoming_general_admission_shows_count).each_slice(100) do |slice|
@@ -149,19 +151,21 @@ namespace :db do
       FactoryBot.create_list(:admin, admins_count)
       puts "- #{admins_count} admins"
 
-      with_forking do
-        (1..customer_orders_count).each_slice(100) do |slice|
-          FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true)
+      Show::Seat.suppressing_turbo_broadcasts do
+        with_forking do
+          (1..customer_orders_count).each_slice(100) do |slice|
+            FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true)
+          end
         end
-      end
-      puts "- #{customer_orders_count} customer orders"
+        puts "- #{customer_orders_count} customer orders"
 
-      with_forking do
-        (1..guest_orders_count).each_slice(100) do |slice|
-          FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true)
+        with_forking do
+          (1..guest_orders_count).each_slice(100) do |slice|
+            FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true)
+          end
         end
+        puts "- #{guest_orders_count} guest orders"
       end
-      puts "- #{guest_orders_count} guest orders"
 
       puts "Factories loaded. Total time: #{Time.current - start}"
     end

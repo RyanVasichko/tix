@@ -24,7 +24,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     }
     assert_difference expected_differences do
       visit admin_shows_url
-      click_on "New Show"
+      click_on "Add show"
 
       fill_in_common_fields_for_show_create
 
@@ -73,7 +73,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     }
     assert_difference expected_differences do
       visit admin_shows_url
-      click_on "New Show"
+      click_on "Add show"
 
       select "General Admission", from: "Type"
       fill_in_common_fields_for_show_create

@@ -17,7 +17,7 @@ gem "solid_queue"
 gem "sprockets-rails"
 gem "stimulus-rails"
 gem "stripe"
-gem "turbo-rails"
+gem "turbo-rails", "~> 2.0.0.pre.beta"
 
 gem "appsignal"
 gem "aws-sdk-s3", require: false
