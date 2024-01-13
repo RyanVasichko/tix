@@ -1,5 +1,5 @@
 class Show < ApplicationRecord
-  include GoesOnSale, Agenda
+  include GoesOnSale, Agenda, KeywordSearchable
 
   before_commit -> { orders.each(&:populate_search_index_later) }, if: -> { saved_change_to_show_date? || saved_change_to_artist_id? }
 

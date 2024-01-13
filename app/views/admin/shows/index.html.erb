@@ -1,28 +1,78 @@
-<div class="card max-w-xl">
+<div class="card max-w-5xl">
   <h1 class="text-center text-3xl font-semibold">Shows</h1>
 
-  <div class="flex justify-end">
-    <%= link_to "New Show", new_admin_show_path, class: "btn-primary px-2 py-1" %>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col" class="table-th">Artist Name</th>
-        <th scope="col" class="table-th text-right sm:pr-6">Show Date</th>
-      </tr>
-    </thead>
-    <tbody class="table-tbody">
-      <% @shows.each do |show| %>
-        <tr id="<%= dom_id(show, :admin) %>">
-          <td class="table-td text-indigo-600">
-            <%= link_to show.artist.name, edit_admin_show_path(show) %>
-          </td>
-          <td class="table-td text-right sm:pr-6">
-            <%= short_date(show.show_date) %>
-          </td>
+  <%= table_header_wrapper_tag do %>
+    <%= form_with url: admin_shows_path,
+                  value: search_keyword,
+                  scope: :search,
+                  method: :get,
+                  data: { turbo: true, turbo_frame: :shows, turbo_action: "advance" },
+                  class: "flex justify-between items-baseline" do |form| %>
+      <%= form.label :keyword, class: "sr-only" %>
+      <%= keyword_search_field(form) %>
+      <div class="flex items-baseline ml-2">
+        <%= form.check_box :show_off_sale, checked: params.dig(:search, :show_off_sale) == "1", onchange: "this.form.requestSubmit();" %>
+        <%= form.label :show_off_sale, "Off sale", class: "ml-2" %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= link_to new_admin_show_path, class: "flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700" do %>
+        <%= svg_plus_icon %>
+        Add show
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= turbo_frame_tag :shows do %>
+    <%= table_tag do %>
+      <%= thead_tag do %>
+        <tr>
+          <%= th_tag do %>
+            Show Date
+          <% end %>
+          <%= th_tag do %>
+            Artist
+          <% end %>
+          <%= th_tag do %>
+            Venue
+          <% end %>
+          <%= th_tag do %>
+            Doors Open At
+          <% end %>
+          <%= th_tag do %>
+            Dinner Starts At
+          <% end %>
+          <%= th_tag do %>
+            Dinner Ends At
+          <% end %>
         </tr>
       <% end %>
-    </tbody>
-  </table>
-  <%= custom_pagy_nav(@pagy) %>
+      <tbody>
+      <% @shows.each do |show| %>
+        <%= tr_for_tbody_tag id: dom_id(show, :admin) do %>
+          <%= td_tag do %>
+            <%= short_date(show.show_date) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= link_to show.artist.name, edit_admin_show_path(show), data: { turbo_frame: :_top } %>
+          <% end %>
+          <%= td_tag do %>
+            <%= show.venue.name %>
+          <% end %>
+          <%= td_tag do %>
+            <%= show.doors_open_at.to_fs(:hour_minute) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= show.dinner_starts_at.to_fs(:hour_minute) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= show.dinner_ends_at.to_fs(:hour_minute) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+    <% end %>
+    <%= custom_pagy_nav(@pagy) %>
+  <% end %>
 </div>

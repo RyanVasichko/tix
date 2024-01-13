@@ -1,8 +1,13 @@
 class Admin::ShowsController < Admin::AdminController
+  include Searchable
+
   before_action :set_admin_show, only: %i[edit update destroy]
 
   def index
-    @pagy, @shows = pagy(Show.upcoming.includes(:artist).order(:show_date), items: 10)
+    shows = Show.order(:show_date)
+    shows = shows.upcoming unless params.dig(:search, :show_off_sale) == "1"
+    shows = shows.keyword_search(search_keyword) if search_keyword.present?
+    @pagy, @shows = pagy(shows, items: 10)
   end
 
   def new

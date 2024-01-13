@@ -128,25 +128,27 @@
             <%= link_to "Add Section",
                         new_admin_shows_general_admission_show_section_field_path,
                         class: "btn-primary text-xs px-1.5 py-1.5",
-                        data: { turbo: true, turbo_stream: true }
+                        data: { turbo: true, turbo_stream: true } unless form.object.persisted?
             %>
           </div>
           <table class="table table-auto">
             <thead>
-              <tr>
-                <th scope="col" class="table-th">Name</th>
-                <th scope="col" class="table-th">Fees</th>
-                <th scope="col" class="table-th">Price</th>
-                <th scope="col" class="table-th">Quantity</th>
+            <tr>
+              <th scope="col" class="table-th">Name</th>
+              <th scope="col" class="table-th">Fees</th>
+              <th scope="col" class="table-th">Price</th>
+              <th scope="col" class="table-th">Quantity</th>
+              <% unless form.object.persisted? %>
                 <th scope="col" class="table-th">&nbsp;</th>
-              </tr>
+              <% end %>
+            </tr>
             </thead>
             <tbody class="table-tbody" id="general_admission_show_sections">
-              <% if form.object.type == Show::GeneralAdmissionShow.to_s %>
-                <%= form.fields_for :sections do |section_fields| %>
-                  <%= render "admin/shows/general_admission_show_section_fields/section_fields", section_fields: section_fields %>
-                <% end %>
+            <% if form.object.type == Show::GeneralAdmissionShow.to_s %>
+              <%= form.fields_for :sections do |section_fields| %>
+                <%= render "admin/shows/general_admission_show_section_fields/section_fields", section_fields: section_fields %>
               <% end %>
+            <% end %>
             </tbody>
           </table>
         </div>

@@ -1,19 +1,22 @@
 <tr data-controller="destroyable" class="general_admission_show_section_fields">
   <td class="text-indigo-600 table-td">
-    <%= section_fields.text_field :name, data: { admin__shows_form_target: "generalAdmissionSectionField" }, class: "show_section_name_field" %>
+    <%= section_fields.text_field :name, data: { admin__shows_form_target: "generalAdmissionSectionField" }, disabled: section_fields.object.persisted?, class: "show_section_name_field" %>
   </td>
   <td class="text-right text-gray-900 table-td sm:pr-6">
-    <%= section_fields.currency_field :convenience_fee, data: { admin__shows_form_target: "generalAdmissionSectionField" }, class: "show_section_convenience_fee_field" %>
+    <%= section_fields.currency_field :convenience_fee, data: { admin__shows_form_target: "generalAdmissionSectionField" }, disabled: section_fields.object.persisted?, class: "show_section_convenience_fee_field" %>
   </td>
   <td class="text-right text-gray-900 table-td sm:pr-6">
-    <%= section_fields.currency_field :ticket_price, data: { admin__shows_form_target: "generalAdmissionSectionField" }, class: "show_section_ticket_price_field" %>
+    <%= section_fields.currency_field :ticket_price, data: { admin__shows_form_target: "generalAdmissionSectionField" }, disabled: section_fields.object.persisted?, class: "show_section_ticket_price_field" %>
   </td>
   <td class="text-right text-gray-900 table-td sm:pr-6">
-    <%= section_fields.number_field :ticket_quantity, data: { admin__shows_form_target: "generalAdmissionSectionField" }, class: "show_section_ticket_quantity_field" %>
+    <%= section_fields.number_field :ticket_quantity, data: { admin__shows_form_target: "generalAdmissionSectionField" }, disabled: section_fields.object.persisted?, class: "show_section_ticket_quantity_field" %>
   </td>
-  <td class="align-middle table-td">
-    <button type="button" data-action="destroyable#destroy" class="rounded-md bg-indigo-600 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-      <%= svg_trash_can_2(class: "h-4 w-4") %>
-    </button>
-  </td>
+  <% unless section_fields.object.persisted? %>
+    <td class="align-middle table-td">
+      <%= link_to "Delete",
+                  "javascript:void(0);",
+                  data: { action: "destroyable#destroy" },
+                  class: "text-sm text-red-500 hover:text-red-700" %>
+    </td>
+  <% end %>
 </tr>
