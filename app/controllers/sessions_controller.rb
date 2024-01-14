@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(login_params)
+    if user = User.active.authenticate_by(login_params)
       log_in user
       flash[:success] = "Welcome back, #{user.full_name}!"
       redirect_to root_url

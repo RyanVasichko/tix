@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include Stripeable, Shopper, KeywordSearchable
+  include Stripeable, Shopper, KeywordSearchable, Deactivatable
 
   has_secure_password validations: false
 

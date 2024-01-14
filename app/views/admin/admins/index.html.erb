@@ -6,9 +6,14 @@
     <%= form_with url: admin_admins_path,
                   scope: :search,
                   method: :get,
-                  data: { turbo: true, turbo_frame: :admins, turbo_action: "advance" } do |form| %>
+                  data: { turbo: true, turbo_frame: :admins, turbo_action: "advance" },
+                  class: "flex justify-between items-baseline" do |form| %>
       <%= form.label :keyword, class: "sr-only" %>
       <%= keyword_search_field(form) %>
+      <div class="flex items-baseline ml-2">
+        <%= form.check_box :show_deactivated, checked: params.dig(:search, :show_deactivated) == "1", onchange: "this.form.requestSubmit();" %>
+        <%= form.label :show_deactivated, "Show deactivated", class: "ml-2" %>
+      </div>
     <% end %>
 
     <div>

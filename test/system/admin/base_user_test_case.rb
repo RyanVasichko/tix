@@ -25,8 +25,8 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
   def run_update_user_test
     visit index_path
 
-    user = @users.first
-    click_on user.full_name
+    @user = @users.first
+    click_on @user.full_name
 
     fill_common_fields
     yield if block_given?
@@ -36,7 +36,7 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
       assert_text "#{user_type} was successfully updated."
     end
 
-    assert_user_attributes(user.reload)
+    assert_user_attributes(@user.reload)
   end
 
   private

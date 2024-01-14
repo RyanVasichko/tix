@@ -10,6 +10,8 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :stripe_customer_id
       t.references :user_shopping_cart, null: false, foreign_key: true
       t.string :shopper_uuid, null: false
+      t.boolean :active, default: true, null: false
+      t.index [:email, :active]
       # t.virtual :full_name, type: :string, as: "CASE WHEN type = 'User::Guest' THEN NULL ELSE COALESCE(first_name, ' ', last_name) END", stored: true
       t.check_constraint <<-SQL, name: 'check_guest_fields'
         (

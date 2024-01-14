@@ -30,7 +30,7 @@ module TablesHelper
 
   def tr_for_tbody_tag(*args, &block)
     merge_class_option(args, "bg-white border-b last:border-none hover:bg-gray-50")
-    content_tag(:tbody, *args, &block)
+    content_tag(:tr, *args, &block)
   end
 
   private

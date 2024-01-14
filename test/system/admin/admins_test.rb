@@ -4,6 +4,7 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
   setup do
     @users = FactoryBot.create_list(:admin, 5)
     @admin = FactoryBot.create(:admin)
+    @roles = FactoryBot.create_list(:user_role, 5)
 
     log_in_as(@admin)
   end
@@ -14,18 +15,33 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
 
   test "creating a admin" do
     run_create_user_test do
-      # fill_in "User role id", with: "1"
+      select @roles.third.name, from: "Role"
     end
 
-    #   Test role
+    created_user = User::Admin.last
+    assert_equal @roles.third.id, created_user.user_role_id
   end
 
   test "updating a admin" do
     run_update_user_test do
-      # fill_in "User role id", with: "2"
+      select @roles.third.name, from: "Role"
     end
 
-    #   Test role
+    assert_equal @roles.third.id, @user.reload.user_role_id
+  end
+
+  test "deactivating an admin" do
+    visit admin_admins_path
+
+    user = @users.first
+    find("##{dom_id(user, :admin)}_dropdown").click
+    click_on "Deactivate"
+
+    assert_text "Admin was successfully deactivated."
+    assert user.reload.inactive?
+    refute_text user.full_name
+    check "Show deactivated"
+    assert_text user.full_name
   end
 
   private

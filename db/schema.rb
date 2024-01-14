@@ -349,9 +349,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_09_004245) do
     t.string "stripe_customer_id"
     t.integer "user_shopping_cart_id", null: false
     t.string "shopper_uuid", null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_role_id"
+    t.index ["email", "active"], name: "index_users_on_email_and_active"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
     t.index ["user_shopping_cart_id"], name: "index_users_on_user_shopping_cart_id"
     t.check_constraint "        (\n           type != 'User::Guest' \n           AND first_name IS NOT NULL \n           AND last_name IS NOT NULL \n           AND email IS NOT NULL \n           AND password_digest IS NOT NULL\n        ) \n        OR type = 'User::Guest'\n", name: "check_guest_fields"

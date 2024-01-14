@@ -1,11 +1,12 @@
 class Admin::BaseUsersController < Admin::AdminController
   include Searchable
 
-  before_action :set_user, only: %i[edit update]
+  before_action :set_user, only: %i[edit update destroy]
 
   def index
     users = user_type.order(:first_name)
     users = users.keyword_search(search_keyword) if search_keyword.present?
+    users = users.active if user_type == User::Admin && params.dig(:search, :show_deactivated) != "1"
     @pagy, @users = pagy(users)
   end
 

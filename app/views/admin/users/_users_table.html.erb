@@ -31,7 +31,20 @@
       <% end %>
       <%= td_tag do %>
         <%= render "shared/dropdown", { id: dom_id(user, :admin) } do %>
-          <%= yield(user) %>
+          <% if user.customer? %>
+            <%= dropdown_link_to "View Orders", "#" %>
+            <%= dropdown_link_to "Delete",
+                                 admin_customer_path(user),
+                                 data: { turbo_method: "delete", turbo_frame: "_top" },
+                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+          <% end %>
+
+          <% if user.admin? %>
+            <%= dropdown_link_to "Deactivate",
+                                 admin_admin_path(user),
+                                 data: { turbo_method: "delete", turbo_frame: "_top" },
+                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

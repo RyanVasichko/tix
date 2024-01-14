@@ -1,6 +1,12 @@
 class Admin::AdminsController < Admin::BaseUsersController
   include Searchable
 
+  def destroy
+    @user.deactivate!
+
+    redirect_back_or_to admin_admins_path, flash: { notice: "Admin was successfully deactivated." }
+  end
+
   private
 
   def user_type

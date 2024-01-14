@@ -20,10 +20,7 @@
   <% end %>
 
   <%= turbo_frame_tag :customers, data: { turbo_action: "advance" } do %>
-    <%= render "admin/users/users_table", users: @users do |user| %>
-      <%= dropdown_link_to "View Orders", "#" %>
-      <%= dropdown_link_to "Delete", admin_customer_path(user), data: { turbo_method: "delete", turbo_frame: "_top" }, class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-    <% end %>
+    <%= render "admin/users/users_table", users: @users %>
     <%= custom_pagy_nav(@pagy) %>
   <% end %>
 </div>
