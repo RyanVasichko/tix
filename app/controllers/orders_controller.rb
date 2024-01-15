@@ -10,12 +10,13 @@ class OrdersController < ApplicationController
   def new
     @form = Order::OrderForm.for_user(Current.user)
 
-    if Current.user.shopping_cart.empty?
-      redirect_to root_path,
-                  flash: {
-                    notice: "Your shopping cart is empty, add some items to your shopping cart to check out"
-                  }
-    end
+    return unless Current.user.shopping_cart.empty?
+
+    redirect_to root_path,
+                flash: {
+                  notice: "Your shopping cart is empty, add some items to your shopping cart to check out"
+                }
+
   end
 
   def edit; end

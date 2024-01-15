@@ -6,9 +6,7 @@ export default class extends Controller {
   static targets = ["content"];
 
   toggle(event) {
-    console.log("toggling!")
     event.stopPropagation();
-    console.log(this.contentTargets);
     this.contentTargets.forEach(t => toggle(t));
   }
 
@@ -24,6 +22,7 @@ export default class extends Controller {
   }
 
   hide() {
+    console.log("hiding!")
     this.contentTargets.forEach(t => leave(t));
   }
 }

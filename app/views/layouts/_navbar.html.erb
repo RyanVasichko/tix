@@ -19,15 +19,54 @@
           </div>
         </div>
       </div>
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+      <div class="flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <% unless controller_name == "orders" && action_name == "new" %>
-          <div data-controller="openable" data-action="click@document->openable#hideOnOutsideClick" class="ml-4 flow-root text-sm lg:relative lg:ml-8">
+          <!-- USER DROPDOWN -->
+          <div data-controller="openable" data-action="click@document->openable#hideOnOutsideClick keydown.esc@document->openable#hide" class="relative ml-3">
+            <div>
+              <button type="button" data-action="openable#toggle" class="group flex items-center p-2" aria-expanded="false" aria-haspopup="true">
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">Open user menu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                </svg>
+              </button>
+            </div>
+            <div data-openable-target="content"
+                 data-transition-enter="transition ease-out duration-100"
+                 data-transition-enter-start="transform opacity-0 scale-95"
+                 data-transition-enter-end="transform opacity-100 scale-100"
+                 data-transition-leave="transition ease-in duration-75"
+                 data-transition-leave-start="transform opacity-100 scale-100"
+                 data-transition-leave-end="transform opacity-0 scale-95"
+                 class="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                 role="menu"
+                 aria-orientation="vertical"
+                 tabindex="-1">
+              <% if Current.user.guest? %>
+                <%= link_to "Sign In", login_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+              <% end %>
+              <% unless Current.user.guest? %>
+                <div class="block px-4 py-2 text-sm text-gray-700 border-b border-b-gray-100">
+                  <span class="italic">
+                    Signed in as:
+                  </span>
+                  <%= Current.user.full_name %>
+                </div>
+                <%= link_to "My Orders", orders_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+                <%= link_to "Sign Out", logout_path, data: { turbo_method: "delete" }, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- SHOPPING CART -->
+          <div data-controller="openable" data-action="click@document->openable#hideOnOutsideClick" class="flow-root text-sm lg:relative">
             <button data-action="openable#toggle" id="shopping_cart_toggle" type="button" class="group -m-2 flex items-center p-2" aria-expanded="false">
               <svg class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
               </svg>
               <%= turbo_stream_from Current.user.shopping_cart %>
-              <span id="shopping_cart_total_items" class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+              <span id="shopping_cart_total_items" class="ml-2 text-sm font-medium text-gray-400 group-hover:text-gray-500">
                 <%= render "shopping_cart/count", shopping_cart: Current.user.shopping_cart %>
               </span>
               <span class="sr-only">items in cart, view bag</span>
@@ -64,6 +103,7 @@
     class="hidden"
     id="mobile-menu">
     <div class="space-y-1 px-2 pb-3 pt-2">
+      <%= mobile_navbar_link_to "Admin", admin_path, "shows" if Current.user.admin? %>
       <%= mobile_navbar_link_to "Shows", shows_path, "shows" %>
       <%= mobile_navbar_link_to "Merch", merch_index_path, "merch" %>
     </div>
