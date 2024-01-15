@@ -4,10 +4,12 @@ import { enter, leave, toggle } from "el-transition"
 // Connects to data-controller="dropdown"
 export default class extends Controller {
   static targets = ["content"];
-  
+
   toggle(event) {
+    console.log("toggling!")
     event.stopPropagation();
-    toggle(this.contentTarget);
+    console.log(this.contentTargets);
+    this.contentTargets.forEach(t => toggle(t));
   }
 
   hideOnOutsideClick(event) {
@@ -18,10 +20,10 @@ export default class extends Controller {
   }
 
   show() {
-    enter(this.contentTarget);
+    this.contentTargets.forEach(t => enter(t));
   }
 
-  async hide() {
-    await leave(this.contentTarget);
+  hide() {
+    this.contentTargets.forEach(t => leave(t));
   }
 }
