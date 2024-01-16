@@ -13,7 +13,9 @@
           <div class="mx-auto max-w-2xl space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
             <% @orders.each do |order| %>
               <div class="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
-                <h3 class="sr-only">Order placed on <time datetime="<%= order.created_at.strftime("%Y-%m-%d") %>"><%= order.created_at.strftime("%B %d, %Y") %></time></h3>
+                <h3 class="sr-only">Order placed on
+                  <time datetime="<%= order.created_at.strftime("%Y-%m-%d") %>"><%= order.created_at.strftime("%B %d, %Y") %></time>
+                </h3>
 
                 <div class="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-4 sm:gap-x-6 sm:p-6">
                   <dl class="grid flex-1 grid-cols-2 gap-x-6 text-sm sm:col-span-3 sm:grid-cols-3 lg:col-span-2">
@@ -37,7 +39,7 @@
                     <div class="flex items-center">
                       <button type="button" class="-m-2 flex items-center p-2 text-gray-400 hover:text-gray-500" id="menu-0-button" aria-expanded="false" aria-haspopup="true">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"/>
                         </svg>
                       </button>
                     </div>
@@ -83,7 +85,11 @@
                           </div>
                           <% tickets.each do |ticket| %>
                             <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
+                              <% if ticket.is_a?(Order::ReservedSeatingTicket) %>
+                                <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
+                              <% else %>
+                                <span class="mt-1 text-sm text-gray-500">Section <%= ticket.show_section.name %> &times; <%= ticket.quantity %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
+                              <% end %>
                             </p>
                           <% end %>
                         </div>
@@ -103,7 +109,9 @@
                           </div>
                           <% order_merch.each do |om| %>
                             <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <span class="mt-1 text-sm text-gray-500"><%= "#{om.option_label}: #{om.option}" if om.option %> Quantity: <%= om.quantity %></span> - <span class="font-medium"><%= number_to_currency(om.total_price) %></span>
+                              <span class="mt-1 text-sm text-gray-500"><%= "#{om.option_label}: #{om.option}" if om.option %>
+                                Quantity: <%= om.quantity %></span> -
+                              <span class="font-medium"><%= number_to_currency(om.total_price) %></span>
                             </p>
                           <% end %>
                         </div>
