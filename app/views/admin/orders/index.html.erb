@@ -46,7 +46,7 @@
       <% @orders.each do |order| %>
         <%= tr_for_tbody_tag id: dom_id(order, :admin) do %>
           <%= td_tag class: "text-sm" do %>
-            <%= link_to order.order_number, [:admin, order], class: "text-teal-700 hover:underline font-medium", data: { turbo_frame: :_top } %>
+            <%= link_to order.order_number, [:admin, order], class: "text-amber-500 hover:underline hover:text-amber-600 font-medium", data: { turbo_frame: :_top } %>
           <% end %>
           <%= td_tag class: "text-sm px-2 py-2" do %>
             <%= order.created_at.to_fs(:mdy) %>

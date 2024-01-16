@@ -1,4 +1,13 @@
 module PaginationHelper
+  def custom_pagy_nav_wrapper_tag(*args, &block)
+    content = block_given? ? capture(&block) : args.shift
+
+    content_tag :nav,
+                content,
+                class: "flex items-center flex-column flex-wrap md:flex-row justify-between p-4 pt-4 bg-gray-100 border-x border-b border-gray-200 rounded-b-xl",
+                aria_label: "Table navigation"
+  end
+
   def custom_pagy_nav(pagy)
     total_count = @pagy.count
     current_page = @pagy.page
@@ -7,7 +16,7 @@ module PaginationHelper
     end_row = start_row + @pagy.items - 1
     end_row = total_count if end_row > total_count
 
-    content_tag :nav, class: "flex items-center flex-column flex-wrap md:flex-row justify-between p-4 pt-4 bg-gray-100 border-x border-b border-gray-200 rounded-b-xl", aria_label: "Table navigation" do
+    custom_pagy_nav_wrapper_tag do
       concat(content_tag(:span, class: "text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto") do
         concat("Showing")
         concat("&nbsp;".html_safe)

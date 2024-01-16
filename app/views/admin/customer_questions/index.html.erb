@@ -1,46 +1,47 @@
 <div class="max-w-2xl card">
   <h1 class="mb-4 text-center text-3xl font-semibold">Customer Questions</h1>
 
-  <div class="flex items-baseline justify-between">
+  <%= table_header_wrapper_tag do %>
     <%= form_with url: admin_customer_questions_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
       <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
       <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
     <% end %>
     <%= link_to "New customer question", new_admin_customer_question_path, class: "btn-primary px-2 py-1", data: { turbo_stream: true } %>
-  </div>
-
+  <% end %>
   <%= turbo_frame_tag :admin_customer_questions, target: :_top do %>
-    <table class="table">
-      <thead>
+    <%= table_tag do %>
+      <%= thead_tag do %>
         <tr>
-          <th scope="col" class="table-th">Question</th>
-          <% if @show_inactive %>
-            <th scope="col" class="table-th">Active</th>
+          <%= th_tag do %>
+            Question
           <% end %>
-          <th scope="col" class="table-th"></th>
+          <%= th_tag do %>
+            Active
+          <% end %>
         </tr>
-      </thead>
-      <tbody class="table-tbody">
+        <tbody>
         <% @customer_questions.each do |customer_question| %>
-          <tr id="<%= dom_id(customer_question, :admin) %>">
-            <td class="truncate text-indigo-600 table-td">
+          <%= tr_for_tbody_tag id: dom_id(customer_question, "admin") do %>
+            <%= td_tag class: "truncate text-amber-600" do %>
               <%= link_to customer_question.question, edit_admin_customer_question_path(customer_question), data: { turbo_stream: true } %>
-            </td>
-            <% if @show_inactive %>
-              <td class="table-td">
-                <%= svg_check if customer_question.active? %>
-              </td>
             <% end %>
-            <td class="text-right text-gray-900 table-td sm:pr-6">
+            <% td_tag do %>
+              <%= svg_check if customer_question.active? %>
+            <% end %>
+            <%= td_tag class: "text-right" do %>
               <%= render "shared/dropdown", { id: dom_id(customer_question, :admin) } do %>
-                <%= dropdown_link_to "Deactivate", [:admin, customer_question], data: { turbo_method: :delete } if customer_question.active? %>
+                <%= dropdown_link_to "Deactivate",
+                                     [:admin, customer_question],
+                                     data: { turbo_method: :delete },
+                                     class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" if customer_question.active? %>
                 <%= dropdown_link_to "Activate", admin_customer_question_activation_path(customer_question), data: { turbo_method: :post } unless customer_question.active? %>
               <% end %>
-            </td>
-          </tr>
+            <% end %>
+          <% end %>
         <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      <% end %>
+    <% end %>
     <%= custom_pagy_nav(@pagy) %>
   <% end %>
 </div>

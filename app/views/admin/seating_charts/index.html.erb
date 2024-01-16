@@ -1,31 +1,35 @@
 <div class="card max-w-xl">
   <h1 class="text-center text-3xl font-semibold">Seating Charts</h1>
 
-  <div class="flex justify-end">
+  <%= table_header_wrapper_tag class: "flex justify-end" do %>
     <%= link_to "New Seating Chart", new_admin_seating_chart_path, class: "btn-primary px-2 py-1" %>
-  </div>
-  <table class="table">
-    <thead>
+  <% end %>
+
+  <%= table_tag do %>
+    <%= thead_tag do %>
       <tr>
-        <th scope="col" class="table-th">Name</th>
-        <th scope="col" class="table-th"></th>
+        <%= th_tag "Name" %>
+        <%= th_tag "" %>
       </tr>
-    </thead>
-    <tbody class="table-tbody">
-      <% @seating_charts.each do |seating_chart| %>
-        <tr id="<%= dom_id(seating_chart, :admin) %>">
-          <td class="table-td text-indigo-600">
-            <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart) %>
-          </td>
-          <td class="table-td text-gray-900 text-right sm:pr-6">
-            <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
-              <%= dropdown_link_to "Deactivate", [:admin, seating_chart], data: { turbo_method: "DELETE" } %>
-              <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
-            <% end %>
-          </td>
-        </tr>
+    <% end %>
+    <tbody>
+    <% @seating_charts.each do |seating_chart| %>
+      <%= tr_for_tbody_tag id: dom_id(seating_chart, "admin") do %>
+        <%= td_tag do %>
+          <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart) %>
+        <% end %>
+        <%= td_tag class: "text-right" do %>
+          <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
+            <%= dropdown_link_to "Deactivate",
+                                 [:admin, seating_chart],
+                                 data: { turbo_method: "DELETE" },
+                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+            <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
+          <% end %>
+        <% end %>
       <% end %>
+    <% end %>
     </tbody>
-  </table>
+  <% end %>
   <%= custom_pagy_nav(@pagy) %>
 </div>

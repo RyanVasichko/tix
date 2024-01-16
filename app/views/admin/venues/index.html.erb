@@ -2,45 +2,48 @@
   <div class="max-w-xl card">
     <h1 class="text-center text-3xl font-semibold">Venues</h1>
 
-    <div class="flex items-baseline justify-between">
-      <%= form_with url: admin_venues_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
-        <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
+    <%= table_header_wrapper_tag do %>
+      <%= form_with url: admin_venues_path, method: :get, class: "flex items-center" do |form| %>
+        <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, onchange: "this.form.requestSubmit();", class: "mr-1" %>
         <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
       <% end %>
+
       <%= link_to "New Venue", new_admin_venue_path, class: "btn-primary px-2 py-1", data: { turbo_stream: true } %>
-    </div>
+    <% end %>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col" class="table-th">Name</th>
-          <th scope="col" class="table-th">Active</th>
-          <th scope="col" class="table-th"></th>
-        </tr>
-      </thead>
-
-      <tbody class="table-tbody">
-        <% @venues.each do |venue| %>
-          <tr id="<%= dom_id(venue, :admin) %>">
-            <td class="text-indigo-600 table-td">
-              <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true } %>
-            </td>
-            <td class="table-td">
-              <%= svg_check if venue.active? %>
-            </td>
-            <td class="text-right text-gray-900 table-td sm:pr-6">
-              <%= render "shared/dropdown", { id: dom_id(venue, :admin) } do %>
-                <% if venue.active? -%>
-                  <%= dropdown_link_to "Deactivate", [:admin, venue], data: { turbo_method: "delete", turbo: true, turbo_frame: :_top } %>
-                <% else %>
-                  <%= dropdown_link_to "Activate", [:admin, venue, { venue: { active: true } }], data: { turbo_method: "patch", turbo: true, turbo_frame: :_top } %>
-                <% end %>
+    <%= table_tag do %>
+      <%= thead_tag do %>
+        <%= th_tag "Name" %>
+        <%= th_tag "Active" %>
+        <%= th_tag "" %>
+      <% end %>
+      <tbody>
+      <% @venues.each do |venue| %>
+        <%= tr_for_tbody_tag do %>
+          <%= td_tag do %>
+            <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true } %>
+          <% end %>
+          <%= td_tag do %>
+            <%= svg_check if venue.active? %>
+          <% end %>
+          <%= td_tag class: "text-right" do %>
+            <%= render "shared/dropdown", { id: dom_id(venue, :admin) } do %>
+              <% if venue.active? -%>
+                <%= dropdown_link_to "Deactivate",
+                                     [:admin, venue],
+                                     data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
+                                     class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+              <% else %>
+                <%= dropdown_link_to "Activate",
+                                     [:admin, venue, { venue: { active: true } }],
+                                     data: { turbo_method: "patch", turbo: true, turbo_frame: :_top } %>
               <% end %>
-            </td>
-          </tr>
+            <% end %>
+          <% end %>
         <% end %>
+      <% end %>
       </tbody>
-    </table>
+    <% end %>
     <%= custom_pagy_nav(@pagy) %>
   </div>
 

@@ -1,8 +1,12 @@
 class Admin::ArtistsController < Admin::AdminController
+  include Searchable
+
   before_action :set_artist, only: %i[edit update destroy]
 
   def index
-    @pagy, @artists = pagy(Artist.select("artists.*, EXISTS(SELECT 1 FROM shows WHERE shows.artist_id = artists.id) AS has_shows").active.order(:name))
+    artists = Artist.active.order(:name)
+    artists = artists.where("name LIKE ?", "%#{search_keyword}%") if search_keyword.present?
+    @pagy, @artists = pagy(artists)
   end
 
   def new

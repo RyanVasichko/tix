@@ -38,9 +38,9 @@ module DoseyDoeTicketsFormBuilder
 
           options_list = @template.content_tag(:ul, data: { combobox_target: "optionsList" }, class: "absolute z-10 mt-1 hidden max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm", id: "options", role: "listbox") do
             choices_list = choices.map do |choice|
-              @template.content_tag(:li, data: { action: "click->combobox#optionSelected", combobox_target: "option", combobox_option_value_param: choice[0], combobox_option_label_param: choice[1] }, class: "relative cursor-default select-none py-2 pr-4 pl-8 text-gray-900 group hover:bg-indigo-600 hover:text-white", role: "option", tabindex: "-1") do
+              @template.content_tag(:li, data: { action: "click->combobox#optionSelected", combobox_target: "option", combobox_option_value_param: choice[0], combobox_option_label_param: choice[1] }, class: "relative cursor-default select-none py-2 pr-4 pl-8 text-gray-900 group hover:bg-amber-600 hover:text-white", role: "option", tabindex: "-1") do
                 option_label = @template.content_tag(:span, choice[1], data: { combobox_target: "optionLabel", option_value: choice[0] }, class: "block truncate")
-                option_check = @template.content_tag(:span, data: { combobox_target: "optionCheck", option_value: choice[0] }, class: "absolute inset-y-0 left-0 flex #{'hidden' if object.send(method) != choice[0]} items-center text-indigo-600 pl-1.5 group-hover:text-white") do
+                option_check = @template.content_tag(:span, data: { combobox_target: "optionCheck", option_value: choice[0] }, class: "absolute inset-y-0 left-0 flex #{'hidden' if object.send(method) != choice[0]} items-center text-amber-600 pl-1.5 group-hover:text-white") do
                   @template.content_tag(:svg, class: "h-5 w-5", viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true") do
                     @template.tag(:path, "fill-rule": "evenodd", d: "M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z", "clip-rule": "evenodd")
                   end

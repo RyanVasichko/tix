@@ -55,7 +55,7 @@
             <%= short_date(show.show_date) %>
           <% end %>
           <%= td_tag do %>
-            <%= link_to show.artist.name, edit_admin_show_path(show), data: { turbo_frame: :_top } %>
+            <%= show.artist.name %>
           <% end %>
           <%= td_tag do %>
             <%= show.venue.name %>

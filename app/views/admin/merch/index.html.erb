@@ -1,30 +1,30 @@
 <div class="max-w-xl card">
   <%= render "admin/merch/tabs" %>
 
-  <div class="flex justify-between">
+  <%= table_header_wrapper_tag do %>
     <%= form_with url: admin_merch_index_path, method: :get, class: "flex items-center", data: { turbo_action: "replace", turbo_frame: "admin_merch" } do |form| %>
       <%= form.check_box :include_off_sale, include_hidden: false, checked: @include_off_sale, onchange: "this.form.requestSubmit()", class: "mr-1" %>
       <%= form.label :include_off_sale, "Show off sale", class: "text-sm" %>
     <% end %>
     <%= link_to "New Merch", new_admin_merch_path, class: "btn-primary px-2 py-1", data: { turbo_frame: :_top } %>
-  </div>
+  <% end %>
 
   <%= turbo_frame_tag "admin_merch", target: :_top do %>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col" class="table-th">Name</th>
-        <th scope="col" class="table-th">Categories</th>
-        <th scope="col" class="table-th">On Sale</th>
-        <th scope="col" class="table-th"></th>
-      </tr>
-      </thead>
-      <tbody class="table-tbody"
-             data-admin--merch-update-order-url-value="<%= admin_merch_sort_order_path %>"
-             data-admin--merch-target="merchTableBody"
-             data-controller="admin--merch">
-      <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { show_off_sale: @include_off_sale } %>
-      </tbody>
-    </table>
+    <%= table_tag do %>
+      <%= thead_tag do %>
+        <tr>
+          <%= th_tag "Name" %>
+          <%= th_tag "Categories" %>
+          <%= th_tag "On Sale" %>
+          <%= th_tag "" %>
+        </tr>
+        <tbody data-admin--merch-update-order-url-value="<%= admin_merch_sort_order_path %>"
+               data-admin--merch-target="merchTableBody"
+               data-controller="admin--merch">
+        <%= render partial: "admin/merch/merch", collection: @merch, as: :merch, locals: { show_off_sale: @include_off_sale } %>
+        </tbody>
+      <% end %>
+    <% end %>
+    <%= custom_pagy_nav_wrapper_tag "" %>
   <% end %>
 </div>
