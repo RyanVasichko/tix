@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     resources :admins
     resources :roles
 
-    resources :orders
+    resources :orders, only: %i[index show]
 
     put "/merch/sort_order", to: "merch/sort_order#update"
     resources :merch, except: %i[show] do

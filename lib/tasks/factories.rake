@@ -154,14 +154,14 @@ namespace :db do
       Show::Seat.suppressing_turbo_broadcasts do
         with_forking do
           (1..customer_orders_count).each_slice(100) do |slice|
-            FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true)
+            FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
           end
         end
         puts "- #{customer_orders_count} customer orders"
 
         with_forking do
           (1..guest_orders_count).each_slice(100) do |slice|
-            FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true)
+            FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true, with_existing_merch: true)
           end
         end
         puts "- #{guest_orders_count} guest orders"

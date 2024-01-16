@@ -6,4 +6,8 @@ class Admin::OrdersController < Admin::AdminController
     orders = orders.keyword_search(search_keyword) if search_keyword.present?
     @pagy, @orders = pagy(orders)
   end
+
+  def show
+    @order = Order.find(params[:id])
+  end
 end

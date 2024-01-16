@@ -1,5 +1,6 @@
 class Order::ReservedSeatingTicket < Order::Ticket
   belongs_to :seat, class_name: "Show::Seat", inverse_of: :ticket, foreign_key: "show_seat_id", touch: true
+  has_one :show_section, through: :seat, class_name: "Show::ReservedSeatingSection", source: :section
   validates :seat, presence: true
   delegate :seat_number, :table_number, :deposit?, to: :seat
 

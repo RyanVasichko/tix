@@ -15,6 +15,7 @@ FactoryBot.define do
     back_end_on_sale_at { front_end_on_sale_at - rand(15...30).days }
     back_end_off_sale_at { show_date + 1.day }
     additional_text { Faker::Lorem.paragraph }
+    deposit_amount { Faker::Commerce.price(range: 0..25.0) }
 
     transient do
       sections_count { 2 }

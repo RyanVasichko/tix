@@ -1,6 +1,6 @@
 <div id="<%= dom_id @order %>" class="max-w-5xl card">
   <!--  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">-->
-  <h1 class="text-3xl font-bold tracking-tight text-gray-900">Order Details</h1>
+  <h1 class="text-3xl font-bold tracking-tight text-gray-900 text-center">Order Details</h1>
 
   <div class="mt-2 border-b border-gray-200 pb-5 text-sm">
     <dl class="flex">
@@ -29,41 +29,32 @@
   </div>
 
   <div class="mt-8">
+    <h2 class="text-center text-xl">Tickets</h2>
+    <%= table_header_wrapper_tag do %>
+    <% end %>
     <%= table_tag do %>
-      <%= thead_tag do %>
+      <%= thead_tag class: "" do %>
         <tr>
-          <%= th_tag do %>
-            Section
-          <% end %>
-          <%= th_tag do %>
-            Quantity
-          <% end %>
-          <%= th_tag do %>
-            Seat Number
-          <% end %>
-          <%= th_tag do %>
-            Table Number
-          <% end %>
-          <%= th_tag do %>
-            Fees
-          <% end %>
-          <%= th_tag do %>
-            Ticket Price
-          <% end %>
-          <%= th_tag do %>
-            Total Paid
-          <% end %>
+          <%= th_tag "Show" %>
+          <%= th_tag "Section" %>
+          <%= th_tag "Quantity" %>
+          <%= th_tag "Seat Number" %>
+          <%= th_tag "Table Number" %>
+          <%= th_tag "Fees" %>
+          <%= th_tag "Ticket Price" %>
+          <%= th_tag "Total Paid" %>
         </tr>
       <% end %>
       <tbody>
       <% @order.shows.each do |show| %>
         <%= tr_for_tbody_tag do %>
-          <%= td_tag colspan: 8, class: "text-md font-weight-bold bg-gray-50" do %>
-            <%= show.artist.name %>
+          <%= td_tag colspan: 9, class: "text-md font-weight-bold bg-gray-50" do %>
+            <%= show.artist.name %> - <%= show.show_date.to_fs(:mdy) %>
           <% end %>
         <% end %>
         <% show.tickets.each do |ticket| %>
           <%= tr_for_tbody_tag do %>
+            <%= td_tag "" %>
             <%= td_tag do %>
               <%= ticket.show_section.name %>
             <% end %>
@@ -71,10 +62,10 @@
               <%= ticket.quantity %>
             <% end %>
             <%= td_tag do %>
-              <%= ticket.seat_number %>
+              <%= ticket.seat_number if ticket.is_a?(Order::ReservedSeatingTicket) %>
             <% end %>
             <%= td_tag do %>
-              <%= ticket.table_number %>
+              <%= ticket.table_number if ticket.is_a?(Order::ReservedSeatingTicket) %>
             <% end %>
             <%= td_tag do %>
               <%= number_to_currency(ticket.total_fees) %>
@@ -90,10 +81,50 @@
       <% end %>
       </tbody>
     <% end %>
+    <%= custom_pagy_nav_wrapper_tag %>
+  </div>
+
+  <div class="mt-8">
+    <h2 class="text-center text-xl">Merch</h2>
+    <%= table_header_wrapper_tag do %>
+    <% end %>
+    <%= table_tag do %>
+      <%= thead_tag do %>
+        <tr>
+          <%= th_tag "Item" %>
+          <%= th_tag "Quantity" %>
+          <%= th_tag "Price" %>
+          <%= th_tag "Total" %>
+          <%= th_tag "Option" %>
+        </tr>
+      <% end %>
+      <tbody>
+      <% @order.merch.each do |order_merch| %>
+        <%= tr_for_tbody_tag do %>
+          <%= td_tag do %>
+            <%= order_merch.merch.name %>
+          <% end %>
+          <%= td_tag do %>
+            <%= order_merch.quantity %>
+          <% end %>
+          <%= td_tag do %>
+            <%= number_to_currency(order_merch.unit_price) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= number_to_currency(order_merch.total_price) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= order_merch.option %>
+          <% end %>
+        <% end %>
+        </tbody>
+      <% end %>
+    <% end %>
+    <%= custom_pagy_nav_wrapper_tag %>
   </div>
 
   <!-- Billing -->
-  <div class="mt-24">
+  <div class="mt-12">
     <h2 class="sr-only">Billing Summary</h2>
 
     <div class="rounded-lg bg-gray-50 px-6 py-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-0 lg:py-8">
@@ -102,10 +133,10 @@
           <div>
             <dt class="font-medium text-gray-900">Shipping address</dt>
             <dd class="mt-3 text-gray-500">
-              <span class="block"><%= order.shipping_address.first_name %> <%= order.shipping_address.last_name %></span>
-              <span class="block"><%= order.shipping_address.address_1 %> <%= order.shipping_address.address_2 %></span>
-              <span class="block"><%= order.shipping_address.city %>
-                , <%= order.shipping_address.state %> <%= order.shipping_address.zip_code %></span>
+              <span class="block"><%= @order.shipping_address.first_name %> <%= @order.shipping_address.last_name %></span>
+              <span class="block"><%= @order.shipping_address.address_1 %> <%= @order.shipping_address.address_2 %></span>
+              <span class="block"><%= @order.shipping_address.city %>
+                , <%= @order.shipping_address.state %> <%= @order.shipping_address.zip_code %></span>
             </dd>
           </div>
         <% end %>
