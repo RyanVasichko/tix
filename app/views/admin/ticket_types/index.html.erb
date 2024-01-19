@@ -24,7 +24,7 @@
     <% @ticket_types.each do |ticket_type| %>
       <%= tr_for_tbody_tag id: dom_id(ticket_type, "admin") do %>
         <%= td_tag do %>
-          <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type) %>
+          <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
         <% end %>
         <%= td_tag ticket_type.venue.name %>
         <%= td_tag ticket_type.convenience_fee_type.humanize %>

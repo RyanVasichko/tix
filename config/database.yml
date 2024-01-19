@@ -43,13 +43,13 @@ test:
 production:
   primary:
     <<: *default
-    database: data/dosey_doe_tickets.sqlite3
+    database: db/data/dosey_doe_tickets.sqlite3
   cache:
     <<: *cache
-    database: data/dosey_doe_tickets_cache.sqlite3
+    database: db/data/dosey_doe_tickets_cache.sqlite3
   jobs:
     <<: *jobs
-    database: data/dosey_doe_tickets_jobs.sqlite3
+    database: db/data/dosey_doe_tickets_jobs.sqlite3
   # POSTMIGRATION: Remove
   og:
     adapter: postgresql

@@ -21,7 +21,7 @@
       <% @venues.each do |venue| %>
         <%= tr_for_tbody_tag do %>
           <%= td_tag do %>
-            <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true } %>
+            <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true }, class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
           <% end %>
           <%= td_tag do %>
             <%= svg_check if venue.active? %>

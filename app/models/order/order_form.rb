@@ -58,11 +58,11 @@ class Order::OrderForm
   def save
     return false unless valid?
 
-    ApplicationRecord.transaction do
-      run_callbacks :create do
-        @order.save!
-        raise ActiveRecord::Rollback unless @order.process_payment(payment_method_id, save_payment_method: new_payment_method == "1" && save_payment_method)
+    run_callbacks :create do
+      return false unless @order.process_payment(payment_method_id, save_payment_method: new_payment_method == "1" && save_payment_method)
 
+      ApplicationRecord.transaction do
+        @order.save!
         @order.seats.each { |s| s.cancel_reservation_for!(@user) }
         @user.shopping_cart.merch.each(&:destroy!)
         @user.shopping_cart.tickets.each(&:destroy!)

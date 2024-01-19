@@ -2,7 +2,7 @@
                      data: { admin__merch_target: "merch", id: merch.id, active: merch.active },
                      class: "merch #{'hidden' if !show_off_sale && merch.inactive?}" do %>
   <%= td_tag do %>
-    <%= link_to merch.name, edit_admin_merch_path(merch) %>
+    <%= link_to merch.name, edit_admin_merch_path(merch), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
   <% end %>
   <%= td_tag do %>
     <%= merch.categories.map(&:name).join(", ").truncate(30) %>

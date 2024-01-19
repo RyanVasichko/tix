@@ -3,10 +3,6 @@
 - [ ] Add GA tickets to order form
 - [ ] Add GA tickets to order total calculation
 
-# Ticket Types
-- [ ] Add fees to order form
-- [ ] Add fees to order summary
-
 # Shows Index
 - [ ] Finish
 - [ ] Cache each show partial

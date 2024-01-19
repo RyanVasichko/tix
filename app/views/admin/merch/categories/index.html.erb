@@ -16,7 +16,7 @@
       <% @merch_categories.each do |merch_category| %>
         <%= tr_for_tbody_tag do %>
           <%= td_tag do %>
-            <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true } %>
+            <%= link_to merch_category.name, edit_admin_merch_category_path(merch_category), data: { turbo_stream: true }, class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
           <% end %>
           <%= td_tag class: "text-right" do %>
             <%= render "shared/dropdown", { id: dom_id(merch_category, :admin) } do %>

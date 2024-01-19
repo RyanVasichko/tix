@@ -15,32 +15,15 @@
     <%= table_tag do %>
       <%= thead_tag do %>
         <tr>
-          <%= th_tag do %>
-            Order Number
-          <% end %>
-          <%= th_tag do %>
-            Date
-          <% end %>
-          <%= th_tag do %>
-            User
-          <% end %>
-          <%= th_tag do %>
-            User Phone
-          <% end %>
-          <%= th_tag do %>
-            User Email
-          <% end %>
-          <%= th_tag do %>
-            Shows
-          <% end %>
-          <%= th_tag do %>
-            Tickets
-          <% end %>
-          <%= th_tag do %>
-            Total
-          <% end %>
-          <%= th_tag do %>
-          <% end %>
+          <%= th_tag "Order Number" %>
+          <%= th_tag "Date" %>
+          <%= th_tag "User" %>
+          <%= th_tag "User Phone" %>
+          <%= th_tag "User Email" %>
+          <%= th_tag "Shows" %>
+          <%= th_tag "Tickets" %>
+          <%= th_tag "Total" %>
+          <%= th_tag "" %>
       <% end %>
       <tbody>
       <% @orders.each do |order| %>

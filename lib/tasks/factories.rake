@@ -154,6 +154,8 @@ namespace :db do
       Show::Seat.suppressing_turbo_broadcasts do
         with_forking do
           (1..customer_orders_count).each_slice(100) do |slice|
+            truncate_wal_file
+
             FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
           end
         end
@@ -161,6 +163,8 @@ namespace :db do
 
         with_forking do
           (1..guest_orders_count).each_slice(100) do |slice|
+            truncate_wal_file
+
             FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true, with_existing_merch: true)
           end
         end
@@ -168,6 +172,30 @@ namespace :db do
       end
 
       puts "Factories loaded. Total time: #{Time.current - start}"
+    end
+
+    task load_more: [:environment] do
+      Show::Seat.suppressing_turbo_broadcasts do
+        # with_forking do
+        #   (1..1276).each_slice(100) do |slice|
+        #     truncate_wal_file
+        #
+        #     FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
+        #   end
+        # end
+        #
+        # FactoryBot.create_list(:customer_order, 6, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
+        # puts "- #{customer_orders_count} customer orders"
+
+        with_forking do
+          (1..25_000).each_slice(100) do |slice|
+            truncate_wal_file
+
+            FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true, with_existing_merch: true)
+          end
+        end
+        # puts "- #{guest_orders_count} guest orders"
+      end
     end
   end
 end
@@ -178,9 +206,16 @@ def with_forking(&block)
 
   process_count.times.map { Process.fork(&block) }
   statuses = Process.waitall.map { |pid, status| status }
-  sleep 0.5 # Give the database a chance to catch up
+
+  truncate_wal_file
 
   raise "An error occurred in one of the forked processes" if statuses.any? { |status| status.exitstatus != 0 }
+end
+
+def truncate_wal_file
+  ApplicationRecord.connection_pool.with_connection do |connection|
+    connection.execute("PRAGMA wal_checkpoint(TRUNCATE);")
+  end
 end
 
 Rake::Task["db:factories:load"].enhance(["tmp:clear"])

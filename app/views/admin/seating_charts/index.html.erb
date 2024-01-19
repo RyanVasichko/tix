@@ -16,7 +16,7 @@
     <% @seating_charts.each do |seating_chart| %>
       <%= tr_for_tbody_tag id: dom_id(seating_chart, "admin") do %>
         <%= td_tag do %>
-          <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart) %>
+          <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
         <% end %>
         <%= td_tag class: "text-right" do %>
           <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>

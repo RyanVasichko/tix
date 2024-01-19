@@ -28,24 +28,13 @@
     <%= table_tag do %>
       <%= thead_tag do %>
         <tr>
-          <%= th_tag do %>
-            Show Date
-          <% end %>
-          <%= th_tag do %>
-            Artist
-          <% end %>
-          <%= th_tag do %>
-            Venue
-          <% end %>
-          <%= th_tag do %>
-            Doors Open At
-          <% end %>
-          <%= th_tag do %>
-            Dinner Starts At
-          <% end %>
-          <%= th_tag do %>
-            Dinner Ends At
-          <% end %>
+          <%= th_tag "Show Date" %>
+          <%= th_tag "Artist" %>
+          <%= th_tag "Venue" %>
+          <%= th_tag "Doors Open At" %>
+          <%= th_tag "Dinner Starts At" %>
+          <%= th_tag "Dinner Ends At" %>
+          <%= th_tag "" %>
         </tr>
       <% end %>
       <tbody>
@@ -68,6 +57,11 @@
           <% end %>
           <%= td_tag do %>
             <%= show.dinner_ends_at.to_fs(:hour_minute) %>
+          <% end %>
+          <%= td_tag do %>
+            <%= render "shared/dropdown", { id: dom_id(show, :admin) } do %>
+              <%= dropdown_link_to "Edit", edit_admin_show_path(show), data: { turbo_frame: "_top" } %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>

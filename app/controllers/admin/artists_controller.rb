@@ -20,7 +20,7 @@ class Admin::ArtistsController < Admin::AdminController
     @artist = Artist.new(artist_params)
 
     if @artist.save
-      redirect_to admin_artists_path, flash: { success: "Artist was successfully created." }
+      redirect_to admin_artists_path, flash: { notice: "Artist was successfully created." }
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class Admin::ArtistsController < Admin::AdminController
 
   def update
     if @artist.update(artist_params)
-      redirect_to admin_artists_path, flash: { success: "Artist was successfully updated." }, status: :see_other
+      redirect_to admin_artists_path, flash: { notice: "Artist was successfully updated." }, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,7 +43,7 @@ class Admin::ArtistsController < Admin::AdminController
       message = "#{@artist.name} was successfully deleted."
     end
 
-    redirect_back_or_to admin_artists_path, flash: { success: message }
+    redirect_back_or_to admin_artists_path, flash: { notice: message }
   end
 
   private

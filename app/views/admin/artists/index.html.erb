@@ -13,32 +13,30 @@
     <%= link_to "New Artist", new_admin_artist_path, class: "btn-primary px-2 py-1" %>
   <% end %>
 
-  <%= turbo_frame_tag "artists" do %>
-    <%= table_tag do %>
-      <%= thead_tag do %>
-        <tr>
-          <%= th_tag "Name" %>
-          <%= th_tag "" %>
-        </tr>
-      <% end %>
-      <tbody>
-      <% @artists.each do |artist| %>
-        <%= tr_for_tbody_tag id: dom_id(artist, "admin") do %>
-          <%= td_tag do %>
-            <%= link_to artist.name, edit_admin_artist_path(artist) %>
-          <% end %>
-          <%= td_tag class: "text-right" do %>
-            <%= render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
-              <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete",
-                                   [:admin, artist],
-                                   data: { turbo_method: "DELETE" },
-                                   class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-            <% end %>
+  <%= table_tag do %>
+    <%= thead_tag do %>
+      <tr>
+        <%= th_tag "Name" %>
+        <%= th_tag "" %>
+      </tr>
+    <% end %>
+    <tbody>
+    <% @artists.each do |artist| %>
+      <%= tr_for_tbody_tag id: dom_id(artist, "admin") do %>
+        <%= td_tag do %>
+          <%= link_to artist.name, edit_admin_artist_path(artist), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+        <% end %>
+        <%= td_tag class: "text-right" do %>
+          <%= render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
+            <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete",
+                                 [:admin, artist],
+                                 data: { turbo_method: "DELETE" },
+                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
           <% end %>
         <% end %>
       <% end %>
-      </tbody>
     <% end %>
-    <%= custom_pagy_nav(@pagy) %>
+    </tbody>
   <% end %>
+  <%= custom_pagy_nav(@pagy) %>
 </div>
