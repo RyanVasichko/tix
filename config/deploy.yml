@@ -19,7 +19,7 @@ builder:
   multiarch: <%= ENV.fetch("MULTIARCH", "true") == "true" %>
 
 volumes:
-  - "data:/rails/db/data"
+  - "/var/lib/dosey-doe-tickets/db:/rails/db/data"
 
 servers:
   web:
