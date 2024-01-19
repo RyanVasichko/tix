@@ -173,30 +173,6 @@ namespace :db do
 
       puts "Factories loaded. Total time: #{Time.current - start}"
     end
-
-    task load_more: [:environment] do
-      Show::Seat.suppressing_turbo_broadcasts do
-        # with_forking do
-        #   (1..1276).each_slice(100) do |slice|
-        #     truncate_wal_file
-        #
-        #     FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
-        #   end
-        # end
-        #
-        # FactoryBot.create_list(:customer_order, 6, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
-        # puts "- #{customer_orders_count} customer orders"
-
-        with_forking do
-          (1..25_000).each_slice(100) do |slice|
-            truncate_wal_file
-
-            FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true, with_existing_merch: true)
-          end
-        end
-        # puts "- #{guest_orders_count} guest orders"
-      end
-    end
   end
 end
 

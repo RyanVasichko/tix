@@ -231,6 +231,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_09_004245) do
     t.datetime "updated_at", null: false
     t.index ["held_by_admin_id"], name: "index_show_seats_on_held_by_admin_id"
     t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
+    t.index ["user_shopping_cart_id", "reserved_until"], name: "index_show_seats_on_user_shopping_cart_id_and_reserved_until"
     t.index ["user_shopping_cart_id"], name: "index_show_seats_on_user_shopping_cart_id"
   end
 
