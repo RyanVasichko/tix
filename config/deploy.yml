@@ -44,33 +44,6 @@ accessories:
     port: 6379
     directories:
       - "data:/data"
-  netdata:
-    image: netdata/netdata:stable
-    host: 5.161.114.209
-    volumes:
-      - "netdataconfig:/etc/netdata"
-      - "netdatalib:/var/lib/netdata"
-      - "netdatacache:/var/cache/netdata"
-      - "/etc/passwd:/host/etc/passwd:ro"
-      - "/etc/group:/host/etc/group:ro"
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/proc:/host/proc:ro"
-      - "/sys:/host/sys:ro"
-      - "/etc/os-release:/host/etc/os-release:ro"
-      - "/var/log:/host/var/log:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    env:
-      clear:
-        NETDATA_CLAIM_TOKEN: QC00DAglr-1OS8d_GClrO4khD1dPMDKW57EN2JsY8K0HSfHvCuV1SlnnO106GYRzPE4nspLeK-2l2V8p4xwkecLc9u3xHXByIkV2JZb3kknMqFhISr_FJ0HH0FtSAEQHKAk6zzY
-        NETDATA_CLAIM_URL: https://app.netdata.cloud
-        NETDATA_CLAIM_ROOMS: d0e3ed12-620e-4b4b-b2fc-584bb58486bb
-    options:
-      pid: host
-      network: host
-      cap-add:
-        - SYS_PTRACE
-        - SYS_ADMIN
-      security-opt: apparmor=unconfined
 
 traefik:
   options:
