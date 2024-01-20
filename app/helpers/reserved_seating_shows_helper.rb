@@ -6,6 +6,6 @@ module ReservedSeatingShowsHelper
   end
 
   def turbo_replace_seats(seats)
-    seats.each { |seat| concat(turbo_replace_seat(seat)) }
+    safe_join(seats.map { |seat| turbo_replace_seat(seat) })
   end
 end

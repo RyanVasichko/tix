@@ -4,8 +4,9 @@ class ReservedSeatingShows::SeatHoldsController < ApplicationController
   before_action :set_show
 
   def create
+    @seats = @show.seats.merge(Current.user.shopping_cart.seats)
+
     ActiveRecord::Base.transaction do
-      @seats = @show.seats.merge(Current.user.shopping_cart.seats)
       @seats.each do |seat|
         seat.hold_for_admin!(Current.user)
       end
