@@ -78,6 +78,8 @@ Rails.application.configure do
 
   config.assets.debug = true
 
+  config.action_controller.default_url_options = { host: 'http://localhost', port: 3000 }
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
