@@ -20,7 +20,7 @@
       <div class="mt-8">
         <h2 class="sr-only">Products purchased</h2>
 
-        <% order.shows.each do |show| %>
+        <% order.tickets.group_by(&:show).each do |show, tickets| %>
           <div class="space-y-24 mt-8 border-b pb-8">
             <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
               <div class="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
@@ -37,7 +37,7 @@
                     <span class="mx-5 text-gray-400" aria-hidden="true">&middot;</span> <%= show.show_date.strftime("%B %d, %Y") %>
                   <% end %>
                 </h3>
-                <% show.tickets.each do |ticket| %>
+                <% tickets.each do |ticket| %>
                   <div class="my-2">
                     <span class="text-gray-500">
                       <% if ticket.is_a?(Order::ReservedSeatingTicket) %>
