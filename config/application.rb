@@ -1,4 +1,5 @@
 require_relative "boot"
+require_relative "../lib/middleware/logging_silencer"
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -26,5 +27,7 @@ module DoseyDoeTickets
 
     config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.middleware.use Middleware::LoggingSilencer, ["/up"]
   end
 end
