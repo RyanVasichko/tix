@@ -26,7 +26,7 @@ servers:
   web:
     hosts:
       - 5.161.71.124
-    cmd: "rm /rails/tmp/pids/server.pid && ./bin/rails server"
+    cmd: "./bin/rails server"
     labels:
       traefik.http.routers.web.entrypoints: websecure
       traefik.http.routers.web.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
