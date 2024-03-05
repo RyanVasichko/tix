@@ -8,7 +8,7 @@ registry:
 
 env:
   clear:
-    DB_HOST: 5.161.114.209
+    DB_HOST: 5.161.71.124
     RAILS_SERVE_STATIC_FILES: 1
     WEB_CONCURRENCY: 2
     RAILS_MAX_THREADS: 3
@@ -25,8 +25,8 @@ volumes:
 servers:
   web:
     hosts:
-      - 5.161.114.209
-    cmd: "./bin/rails server"
+      - 5.161.71.124
+    cmd: "rm /rails/tmp/pids/server.pid && ./bin/rails server"
     labels:
       traefik.http.routers.web.entrypoints: websecure
       traefik.http.routers.web.rule: Host(`dosey-doe-tickets-v2.ryanvasichko.com`)
@@ -34,13 +34,13 @@ servers:
       traefik.http.routers.web.middlewares: compression
   worker:
     hosts:
-      - 5.161.114.209
+      - 5.161.71.124
     cmd: "bundle exec rake solid_queue:start"
 
 accessories:
   redis:
     image: redis:latest
-    host: 5.161.114.209
+    host: 5.161.71.124
     port: 6379
     directories:
       - "data:/data"
