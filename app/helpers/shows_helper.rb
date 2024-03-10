@@ -24,17 +24,4 @@ module ShowsHelper
             data: data_attributes,
             class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50"
   end
-
-  def preload_venue_layout_images
-    unique_blob_ids = Show::ReservedSeatingShow.upcoming
-                                               .joins(:venue_layout_attachment)
-                                               .select(Arel.sql("DISTINCT active_storage_attachments.blob_id"))
-    unique_blobs = ActiveStorage::Blob.where(id: unique_blob_ids)
-
-    link_tags = unique_blobs.map do |blob|
-      path = rails_blob_path(blob)
-      tag.link(rel: "preload", href: path, as: "image", type: blob.content_type)
-    end
-    safe_join(link_tags)
-  end
 end
