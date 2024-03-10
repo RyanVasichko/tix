@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    user: "${UID}:${GID}"
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    environment:
+      DATABASE_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    entrypoint: ./docker-entrypoint.development.sh
+    command: bin/rails s -b 0.0.0.0
+    tty: true
+    volumes:
+      - .:/dosey_doe_tickets
+      - node_modules:/dosey_doe_tickets/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - selenium
+    restart: unless-stopped
+
+  selenium:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    shm_size: '2g'
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  node_modules:

@@ -5,18 +5,13 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Draggable
 
   Capybara.server = :puma, { Silent: true }
+  driven_by :selenium, using: :chrome, screen_size: [1920, 1080], options: {
+    browser: :remote,
+    url: "http://selenium:4444"
+  }
 
-  if ENV.fetch("DOCKERIZED") { false }
-    driven_by :selenium, using: :chrome, screen_size: [1920, 1080], options: {
-      browser: :remote,
-      url: "http://selenium:4444"
-    }
-
-    Capybara.server_host = "0.0.0.0"
-    Capybara.app_host = "http://#{ENV.fetch("HOSTNAME")}:#{Capybara.server_port}"
-  else
-    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
-  end
+  Capybara.server_host = "0.0.0.0"
+  Capybara.app_host = "http://#{ENV.fetch("HOSTNAME")}:#{Capybara.server_port}"
 
   teardown do
     if defined?(page.driver.browser.logs)
