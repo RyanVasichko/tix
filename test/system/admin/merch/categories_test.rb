@@ -18,7 +18,7 @@ class Admin::Merch::CategoriesTest < ApplicationSystemTestCase
     visit admin_merch_index_url
     click_on "Categories"
 
-    click_on "New Category"
+    find("#new_merch_category").click
     fill_in "Name", with: "New Category Name"
     click_on "Create Category"
 

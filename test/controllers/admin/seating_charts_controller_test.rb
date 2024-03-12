@@ -43,6 +43,17 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
     assert_equal "Seating chart was successfully created.", flash[:success]
   end
 
+  test "should destroy a seating chart" do
+    seating_chart = FactoryBot.create(:seating_chart)
+
+    delete("/admin/seating_charts/#{seating_chart.id}")
+
+    assert_response :redirect
+    assert_redirected_to admin_seating_charts_url
+    assert_equal "Seating chart was successfully destroyed.", flash[:success]
+
+  end
+
   test "should gracefully handle invalid records" do
     post("/admin/seating_charts", params: { seating_chart: { name: "" } })
     assert_response :unprocessable_entity

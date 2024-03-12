@@ -68,7 +68,7 @@ Rails.application.configure do
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Info include generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
@@ -100,19 +100,4 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-
-  # POSTMIGRATION: Remove
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_region: "us-east-1",
-    url: ":s3_alias_url",
-    path: "/:class/:attachment/:id_partition/:style/:filename",
-    s3_host_alias: "d7w9sk873ceod.cloudfront.net",
-    s3_headers: { "Expires" => 1.year.from_now.httpdate },
-    s3_credentials: {
-      bucket: "doseydoe",
-      access_key_id: Rails.application.credentials.dig(:og, :aws, :access_key_id),
-      secret_access_key: Rails.application.credentials.dig(:og, :aws, :secret_access_key)
-    }
-  }
 end

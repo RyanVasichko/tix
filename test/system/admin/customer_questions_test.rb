@@ -12,7 +12,7 @@ class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
     assert_text @customer_question_1.question
     refute_text @customer_question_2.question
 
-    check "Show inactive"
+    check "Include deactivated?"
 
     assert_text @customer_question_2.question
   end
@@ -20,7 +20,7 @@ class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
   test "should create customer question" do
     assert_difference("CustomerQuestion.count") do
       visit admin_customer_questions_url
-      click_on "New customer question"
+      find("#new_customer_question").click
 
       fill_in "Question", with: "What is your favorite color?"
       click_on "Create Customer question"
@@ -53,12 +53,12 @@ class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
 
     assert_text "Customer question was successfully deactivated"
 
-    refute @customer_question_1.reload.active?
+    assert_not @customer_question_1.reload.active?
   end
 
   test "should activate Customer question" do
     visit admin_customer_questions_url
-    check "Show inactive"
+    check "Include deactivated?"
     find("##{dom_id(@customer_question_2, :admin)}_dropdown").click
     click_on "Activate"
 

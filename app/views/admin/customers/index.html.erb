@@ -1,26 +1,26 @@
-<div class="max-w-5xl card">
+<%= card do %>
   <%= render "admin/users/tabs" %>
 
-  <!-- TABLE HEADER -->
-  <%= table_header_wrapper_tag do %>
-    <%= form_with url: admin_customers_path,
-                  scope: :search,
-                  method: :get,
-                  data: { turbo: true, turbo_frame: :customers, turbo_action: "advance" } do |form| %>
-      <%= form.label :keyword, class: "sr-only" %>
-      <%= keyword_search_field(form) %>
+  <%= data_table collection: @users,
+                 pagy: @pagy,
+                 namespace: :admin,
+                 new_record_modal: true,
+                 new_record_url: new_admin_customer_path,
+                 keyword_search_url: admin_customers_path,
+                 infer_include_deactivated_search_param: false do |table| %>
+    <% table.column :name do |user| %>
+      <%= link_to user.name, edit_admin_customer_path(user), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium", data: { turbo_frame: "application_modal" } %>
     <% end %>
-
-    <div>
-      <%= link_to new_admin_customer_path, data: { turbo_frame: "application_modal" }, class: "flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700" do %>
-        <%= svg_plus_icon %>
-        Add customer
+    <% table.column :email %>
+    <% table.column :phone %>
+    <% table.column "", sortable: false do |user| %>
+      <% render "shared/dropdown", { id: dom_id(user, :admin) } do %>
+        <%= dropdown_link_to "View Orders", "#" %>
+        <%= dropdown_link_to "Delete",
+                             admin_customer_path(user),
+                             data: { turbo_method: "delete" },
+                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
       <% end %>
-    </div>
+    <% end %>
   <% end %>
-
-  <%= turbo_frame_tag :customers, data: { turbo_action: "advance" } do %>
-    <%= render "admin/users/users_table", users: @users %>
-    <%= custom_pagy_nav(@pagy) %>
-  <% end %>
-</div>
+<% end %>

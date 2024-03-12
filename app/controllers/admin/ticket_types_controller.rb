@@ -1,11 +1,17 @@
 class Admin::TicketTypesController < Admin::AdminController
+  include SearchParams
+
   before_action :set_ticket_type, only: %i[ edit update destroy ]
+
+  sortable_by :name, :convenience_fee_type, :payment_method, :active, :venue_name
+  self.default_sort_field = :name
 
   # GET /admin/ticket_types
   def index
     @show_inactive = params[:show_inactive] == "1"
-    @ticket_types = @show_inactive ? TicketType.all : TicketType.active
-    @pagy, @ticket_types = pagy(@ticket_types.order(active: :desc, created_at: :desc))
+    @ticket_types = TicketType.search(search_params)
+    @ticket_types = @ticket_types.active unless @show_inactive
+    @pagy, @ticket_types = pagy(@ticket_types)
   end
 
   # GET /admin/ticket_types/new

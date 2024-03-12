@@ -11,7 +11,7 @@ FactoryBot.define do
     end
   end
 
-  factory :reserved_seating_order_ticket, traits: [:order_ticket], class: 'Order::ReservedSeatingTicket' do
+  factory :reserved_seating_order_ticket, traits: [:order_ticket], class: "Order::ReservedSeatingTicket" do
     association :seat, factory: :show_seat
 
     after :build do |ticket, evaluator|

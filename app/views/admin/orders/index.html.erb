@@ -1,65 +1,24 @@
-<div class="max-w-7xl card">
-  <h1 class="text-center text-3xl font-semibold">Orders</h1>
-  <!-- TABLE HEADER -->
-  <%= table_header_wrapper_tag do %>
-    <%= form_with url: admin_orders_path,
-                  scope: :search,
-                  method: :get,
-                  data: { turbo: true, turbo_frame: :orders, turbo_action: "advance" } do |form| %>
-      <%= form.label :keyword, class: "sr-only" %>
-      <%= keyword_search_field(form) %>
+<h1 class="mb-4 text-center text-3xl font-semibold">Orders</h1>
+
+<%= card width: "max-w-7xl" do %>
+  <%= data_table collection: @orders, pagy: @pagy, new_record_button: false do |table| %>
+    <% table.column :order_number do |order| %>
+      <%= link_to order.order_number, [:admin, order], class: "text-amber-500 hover:underline hover:text-amber-600 font-medium", data: { turbo_frame: :_top } %>
+    <% end %>
+    <% table.column :created_at, header: "Date" do |order| %>
+      <%= order.created_at.to_fs(:date) %>
+    <% end %>
+    <% table.column :orderer_name, header: "User" %>
+    <% table.column :orderer_phone, header: "User Phone" %>
+    <% table.column :orderer_email, header: "User Email" %>
+    <% table.column :shows, sortable: false do |order| %>
+      <%= order.shows.map { |show| "#{show.artist_name} - #{show.show_date.to_fs(:date)}" }.join(", ") %>
+    <% end %>
+    <% table.column :tickets_count, header: "Tickets", sortable: true do |order| %>
+      <%= order.tickets_count %>
+    <% end %>
+    <% table.column :order_total, header: "Total" do |order| %>
+      <%= number_to_currency(order.order_total) %>
     <% end %>
   <% end %>
-
-  <%= turbo_frame_tag :orders, data: { turbo_action: "advance" } do %>
-    <%= table_tag do %>
-      <%= thead_tag do %>
-        <tr>
-          <%= th_tag "Order Number" %>
-          <%= th_tag "Date" %>
-          <%= th_tag "User" %>
-          <%= th_tag "User Phone" %>
-          <%= th_tag "User Email" %>
-          <%= th_tag "Shows" %>
-          <%= th_tag "Tickets" %>
-          <%= th_tag "Total" %>
-          <%= th_tag "" %>
-      <% end %>
-      <tbody>
-      <% @orders.each do |order| %>
-        <%= tr_for_tbody_tag id: dom_id(order, :admin) do %>
-          <%= td_tag class: "text-sm" do %>
-            <%= link_to order.order_number, [:admin, order], class: "text-amber-500 hover:underline hover:text-amber-600 font-medium", data: { turbo_frame: :_top } %>
-          <% end %>
-          <%= td_tag class: "text-sm px-2 py-2" do %>
-            <%= order.created_at.to_fs(:mdy) %>
-          <% end %>
-          <%= td_tag class: "text-sm px-2 py-2" do %>
-            <%= order.orderer.full_name %>
-          <% end %>
-          <%= td_tag class: "text-sm px-2 py-2" do %>
-            <%= order.orderer.phone %>
-          <% end %>
-          <%= td_tag class: "text-sm px-2 py-2" do %>
-            <%= order.orderer.email %>
-          <% end %>
-          <%= td_tag class: "text-sm px-2 py-2" do %>
-            <%= order.shows.map { |show| "#{show.artist_name} - #{show.show_date.to_fs(:mdy)}" }.join(", ") %>
-          <% end %>
-          <%= td_tag class: "text-sm px-1 py-1" do %>
-            <%= order.tickets_count %>
-          <% end %>
-          <%= td_tag do %>
-            <%= number_to_currency(order.order_total) %>
-          <% end %>
-          <%= td_tag do %>
-
-          <% end %>
-        <% end %>
-      <% end %>
-      </tbody>
-    <% end %>
-
-    <%= custom_pagy_nav(@pagy) %>
-  <% end %>
-</div>
+<% end %>

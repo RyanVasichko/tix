@@ -4,12 +4,12 @@ require "application_system_test_case"
 class Admin::BaseUserTestCase < ApplicationSystemTestCase
   def run_visit_the_index_test
     visit index_path
-    assert_text @users.first.full_name
+    assert_text @users.first.name
   end
 
   def run_create_user_test
     visit index_path
-    click_on "Add #{user_type.downcase}"
+    find("#new_user_#{user_type.downcase}").click
 
     fill_common_fields
     yield if block_given?
@@ -26,7 +26,7 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     visit index_path
 
     @user = @users.first
-    click_on @user.full_name
+    click_on @user.name
 
     fill_common_fields
     yield if block_given?

@@ -1,4 +1,4 @@
-import ApplicationController from "../application_controller";
+import ApplicationController from "controllers/application_controller";
 import { Sortable } from "sortablejs";
 import { put } from '@rails/request.js';
 
@@ -33,7 +33,7 @@ class AdminMerchController extends ApplicationController {
       body: JSON.stringify({ merch : orderedMerch }),
       contentType: 'application/json'
     });
-    Turbo.visit('');
+    Turbo.reload();
   }
 }
 

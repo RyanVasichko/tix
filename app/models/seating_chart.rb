@@ -1,5 +1,5 @@
 class SeatingChart < ApplicationRecord
-  include Deactivatable
+  include CanBeDeactivated, Searchable
 
   has_one_attached :venue_layout
   has_many :sections, dependent: :destroy, class_name: "SeatingChart::Section", inverse_of: :seating_chart
@@ -10,6 +10,10 @@ class SeatingChart < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :venue_layout, presence: true, if: -> { published? && active? }
+
+  orderable_by :name
+
+  scope :keyword_search, ->(query) { where("name LIKE ?", "%#{query}%") }
 
   def dup
     cloned_seating_chart = super

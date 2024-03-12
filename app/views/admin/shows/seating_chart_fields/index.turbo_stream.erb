@@ -1,4 +1,4 @@
-<% form = DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, @show, self, {})  %>
+<% form = StandardFormBuilder::FormBuilder.new(:show, @show, self, {})  %>
 
 <%= turbo_stream.update "show_seating_chart_fields" do %>
   <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: @show.persisted?, seating_charts: @seating_charts %>

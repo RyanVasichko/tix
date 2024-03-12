@@ -13,7 +13,7 @@ class VenuesTest < ApplicationSystemTestCase
 
   test "should create venue" do
     visit admin_venues_url
-    click_on "New Venue"
+    find("#new_venue").click
     fill_in "Name", with: "New Venue Name"
     click_on "Create Venue"
 
@@ -42,7 +42,7 @@ class VenuesTest < ApplicationSystemTestCase
   test "should activate an inactive Venue" do
     @venue.deactivate!
     visit admin_venues_url
-    check "Show inactive"
+    check "Include deactivated?"
     click_on "#{dom_id(@venue, :admin)}_dropdown"
     click_on "Activate"
 

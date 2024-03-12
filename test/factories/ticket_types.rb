@@ -9,6 +9,8 @@ FactoryBot.define do
     active { true }
     payment_method { TicketType.payment_methods.map { |k, v| k }.sample }
 
-    association :venue
+    after :build do |ticket_type|
+      ticket_type.venue ||= FactoryBot.build(:venue, ticket_types: [ticket_type])
+    end
   end
 end

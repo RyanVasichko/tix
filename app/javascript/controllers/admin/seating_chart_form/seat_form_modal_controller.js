@@ -1,4 +1,4 @@
-import ModalController from "../../modal_controller";
+import ModalController from "controllers/modal_controller";
 
 class SeatFormModal extends ModalController {
   static targets = [
@@ -6,14 +6,14 @@ class SeatFormModal extends ModalController {
     "tableNumberInput",
     "sectionSelect"
   ];
-  
+
   open(seat, sections) {
     this.seat = seat;
     this.#populateSectionsSelectOptions(sections);
     this.#setSeatFields();
     super.open();
   }
-  
+
   save() {
     const seatController = this.application.getControllerForElementAndIdentifier(this.seat, 'admin--seating-chart-form--seat');
 

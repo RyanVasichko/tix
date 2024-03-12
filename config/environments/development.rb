@@ -35,21 +35,6 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # POSTMIGRATION: Remove
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_region: "us-east-1",
-    url: ":s3_alias_url",
-    path: "/:class/:attachment/:id_partition/:style/:filename",
-    s3_host_alias: "d7w9sk873ceod.cloudfront.net",
-    s3_headers: { "Expires" => 1.year.from_now.httpdate },
-    s3_credentials: {
-      bucket: "doseydoe",
-      access_key_id: Rails.application.credentials.dig(:og, :aws, :access_key_id),
-      secret_access_key: Rails.application.credentials.dig(:og, :aws, :secret_access_key)
-    }
-  }
-
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -76,9 +61,7 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  config.assets.debug = true
-
-  config.action_controller.default_url_options = { host: 'http://localhost', port: 3000 }
+  config.action_controller.default_url_options = { host: "http://localhost", port: 3000 }
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
@@ -93,5 +76,4 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.web_console.whitelisted_ips = "172.16.0.0/12"
-  config.hosts << "9002-73-166-40-112.ngrok-free.app"
 end

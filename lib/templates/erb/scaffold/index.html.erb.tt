@@ -1,0 +1,19 @@
+<%% content_for :title, "<%= human_name.pluralize %>" %>
+
+<%%= card do %>
+  <h1 class="text-center text-3xl font-semibold"><%= human_name.pluralize %></h1>
+  <%%= data_table collection: @<%= plural_table_name %>,
+                  id: "<%= plural_table_name %>",
+                  pagy: @pagy,
+                  new_item_url: new_<%= singular_table_name %>_path do |table| %>
+    <%- attributes.filter { |a| !["password_digest", "updated_at", "created_at"].include?(a) }.each do |attribute| -%>
+    <% if attribute.name == "name" %>
+    <%% table.column(:name) do |<%= singular_table_name %>| %>
+        <%%= primary_link_to <%= singular_table_name %>.name, edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %>
+    <%% end %>
+    <% else %>
+    <%% table.column(:<%= attribute.name %>) %>
+    <% end %>
+    <%- end -%>
+  <%% end %>
+<%% end %>

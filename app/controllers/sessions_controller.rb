@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def create
     if user = User.active.authenticate_by(login_params)
       log_in user
-      flash[:success] = "Welcome back, #{user.full_name}!"
+      flash[:success] = "Welcome back, #{user.name}!"
       redirect_to root_url
     else
       flash.now[:error] = "Invalid email/password combination"

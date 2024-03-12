@@ -1,17 +1,20 @@
 class Admin::ShowsController < Admin::AdminController
-  include Searchable
+  include SearchParams
 
   before_action :set_admin_show, only: %i[edit update destroy]
 
+  self.default_sort_field = :show_date
+  sortable_by :show_date, :artist_name, :venue_name, :doors_open_at, :dinner_starts_at, :dinner_ends_at
+
   def index
-    shows = Show.order(:show_date)
+    shows = Show.search(search_params)
     shows = shows.upcoming unless params.dig(:search, :show_off_sale) == "1"
-    shows = shows.keyword_search(search_keyword) if search_keyword.present?
-    @pagy, @shows = pagy(shows, items: 10)
+
+    @pagy, @shows = pagy(shows)
   end
 
   def new
-    venue = Venue.joins(:seating_charts).where(seating_charts: SeatingChart.active).first
+    venue = Venue.joins(:seating_charts).merge(SeatingChart.active).first
     @seating_charts = venue.seating_charts.active
     seating_chart = @seating_charts.first
     @show = Show::ReservedSeatingShow.new(venue_id: venue.id, seating_chart_id: seating_chart.id) do |show|
@@ -28,13 +31,13 @@ class Admin::ShowsController < Admin::AdminController
 
   def create
     show_type = case show_params[:type]
-                when "Show::ReservedSeatingShow"
+    when "Show::ReservedSeatingShow"
                   Show::ReservedSeatingShow
-                when "Show::GeneralAdmissionShow"
+    when "Show::GeneralAdmissionShow"
                   Show::GeneralAdmissionShow
-                else
+    else
                   raise "Invalid show type"
-                end
+    end
     @show = show_type.new(show_params)
 
     if @show.save

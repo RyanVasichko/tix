@@ -1,5 +1,5 @@
 class Admin::AdminsController < Admin::BaseUsersController
-  include Searchable
+  include SearchParams
 
   def destroy
     @user.deactivate!
@@ -9,19 +9,15 @@ class Admin::AdminsController < Admin::BaseUsersController
 
   private
 
-  def user_type
+  def user_klass
     User::Admin
   end
 
   def user_params
-    params.fetch(:user_admin, {}).permit(:first_name, :last_name, :user_role_id, :email, :password, :password_confirmation, :phone)
+    params.fetch(:user_admin, {}).permit(base_permitted_parameters.concat(%i[user_role_id active]))
   end
 
-  def users_index_path
+  def index_path
     admin_admins_path
-  end
-
-  def user_type_name
-    "Admin"
   end
 end

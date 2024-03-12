@@ -1,4 +1,4 @@
-import { Application, Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus";
 
 class ApplicationController extends Controller {
   get currentUserIsAdmin() {

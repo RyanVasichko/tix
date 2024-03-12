@@ -1,11 +1,10 @@
 module ApplicationHelper
   include Pagy::Frontend
 
-  def skip_turbo_caching?
-    screens_to_skip = [
-      { controller_name: "orders", action_name: "new" }
-    ]
-    screens_to_skip.include?({ controller_name: controller_name, action_name: action_name })
+  def card(width: "max-w-5xl")
+    content_tag :div, class: "mx-auto #{width} overflow-visible rounded-lg border-b border-slate-300 bg-white px-4 py-5 shadow sm:px-6" do
+      yield
+    end
   end
 
   def non_blank_errors_for(model)
@@ -14,16 +13,33 @@ module ApplicationHelper
     end.compact.map { |field| model.errors.full_messages_for(field) }.flatten
   end
 
-  def short_date(date)
-    date.strftime("%-m/%-d/%Y")
-  end
-
-  def active_tab_from_params
-    params[:activeTab]
-  end
-
   def random_index
     SecureRandom.random_number(1_000_000) + 100_000_000_000
+  end
+
+  def classes_merged_into_default_classes(classes, defaults)
+    classes_array = classes.split(" ").reject(&:empty?)
+    defaults_array = defaults.split(" ").reject(&:empty?)
+
+    classes_array.each do |input_class|
+      if input_class.starts_with?("p-")
+        defaults_array.reject! { |c| c.starts_with?("p-") || c.starts_with?("px-") || c.starts_with?("py-") }
+        next
+      end
+
+      %w[px- py- h- w- mt- mb- ml- mr-].each do |prefix|
+        if input_class.starts_with?(prefix)
+          defaults_array.reject! { |c| c.starts_with?(prefix) }
+        end
+
+        sizes = %w[xs sm base lg xl 2xl 3xl 4xl 5xl 6xl 7xl 8xl 9xl]
+        sizes.each do |size|
+          defaults_array.reject! { |c| sizes.any? { |s| c == "text-#{s}" } } if input_class == "text-#{size}"
+        end
+      end
+    end
+
+    classes_array.concat(defaults_array).join(" ")
   end
 
   def active_or_inactive_tab_classes_for_controller(controller_name_for_active_classes)

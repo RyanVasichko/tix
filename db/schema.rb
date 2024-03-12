@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_09_004245) do
+ActiveRecord::Schema[7.2].define(version: 2024_01_09_004245) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -238,8 +238,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_09_004245) do
   create_table "show_sections", force: :cascade do |t|
     t.integer "show_id", null: false
     t.decimal "ticket_price", precision: 10, scale: 2, null: false
-    t.integer "convenience_fee_type", null: false
-    t.integer "payment_method", null: false
+    t.string "convenience_fee_type", null: false
+    t.string "payment_method", null: false
     t.decimal "convenience_fee", precision: 10, scale: 2, null: false
     t.decimal "venue_commission", precision: 10, scale: 2, default: "0.0", null: false
     t.integer "ticket_quantity"
@@ -293,12 +293,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_09_004245) do
     t.integer "venue_id", null: false
     t.string "name", null: false
     t.decimal "convenience_fee", precision: 8, scale: 2
-    t.integer "convenience_fee_type", null: false
+    t.string "convenience_fee_type", null: false
     t.decimal "default_price", precision: 8, scale: 2, null: false
     t.decimal "venue_commission", precision: 8, scale: 2, null: false
     t.boolean "dinner_included", default: false, null: false
     t.boolean "active", default: true, null: false
-    t.integer "payment_method", null: false
+    t.string "payment_method", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["venue_id"], name: "index_ticket_types_on_venue_id"

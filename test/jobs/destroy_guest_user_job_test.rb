@@ -4,7 +4,7 @@ class DestroyGuestUserJobTest < ActiveJob::TestCase
   test "should remove the guest user" do
     guest = FactoryBot.create(:guest)
     DestroyGuestUserJob.perform_now(guest.id)
-    refute User.find_by(id: guest.id)
+    assert_not User.find_by(id: guest.id)
   end
 
   test "should not remove customers" do
@@ -21,7 +21,7 @@ class DestroyGuestUserJobTest < ActiveJob::TestCase
     guest = FactoryBot.create(:guest)
     travel_to 1.week.from_now do
       perform_enqueued_jobs
-      refute User.find_by(id: guest.id)
+      assert_not User.find_by(id: guest.id)
     end
   end
 end

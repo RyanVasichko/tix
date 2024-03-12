@@ -65,7 +65,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
 
     show = Show::ReservedSeatingShow.last
 
-    refute_nil show
+    assert_not_nil show
     assert_equal artist, show.artist
     assert_equal seating_chart.name, show.seating_chart_name
     assert_equal show_date, show.show_date
@@ -136,7 +136,7 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
 
     show = Show::GeneralAdmissionShow.last
 
-    refute_nil show
+    assert_not_nil show
     assert_equal artist, show.artist
     assert_nil show.seating_chart_name
     assert_equal show_date, show.show_date

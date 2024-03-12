@@ -15,12 +15,12 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       # t.virtual :full_name, type: :string, as: "CASE WHEN type = 'User::Guest' THEN NULL ELSE COALESCE(first_name, ' ', last_name) END", stored: true
       t.check_constraint <<-SQL, name: 'check_guest_fields'
         (
-           type != 'User::Guest' 
-           AND first_name IS NOT NULL 
-           AND last_name IS NOT NULL 
-           AND email IS NOT NULL 
+           type != 'User::Guest'#{' '}
+           AND first_name IS NOT NULL#{' '}
+           AND last_name IS NOT NULL#{' '}
+           AND email IS NOT NULL#{' '}
            AND password_digest IS NOT NULL
-        ) 
+        )#{' '}
         OR type = 'User::Guest'
       SQL
 

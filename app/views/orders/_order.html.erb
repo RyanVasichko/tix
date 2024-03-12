@@ -24,14 +24,12 @@
           <div class="space-y-24 mt-8 border-b pb-8">
             <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
               <div class="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
-                <!-- TODO: What URL should I use for reserved seating and general admission shows? I guess we need a GA Show#show view? -->
                 <%= link_to shows_path(show), class: "max-w-16 rounded-lg bg-gray-50" do %>
                   <%= image_tag url_for(show.artist.image.variant(:small)), class: "rounded-lg" %>
                 <% end %>
               </div>
               <div class="mt-6 sm:col-span-7 sm:mt-0 md:row-end-1">
                 <h3 class="text-lg font-medium text-gray-900">
-                  <!-- TODO: What URL should I use for reserved seating and general admission shows? I guess we need a GA Show#show view? -->
                   <%= link_to shows_path(show) do %>
                     <span class="text-2xl"><%= show.artist.name %></span>
                     <span class="mx-5 text-gray-400" aria-hidden="true">&middot;</span> <%= show.show_date.strftime("%B %d, %Y") %>

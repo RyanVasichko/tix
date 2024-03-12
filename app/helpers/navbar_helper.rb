@@ -1,5 +1,5 @@
 module NavbarHelper
-  def navbar_link_to(name, path, controller, options={})
+  def navbar_link_to(name, path, controller, options = {})
     default_classes = "rounded-md px-3 py-2 text-sm font-medium"
     provided_classes = options.delete(:class) || ""
 
@@ -10,7 +10,7 @@ module NavbarHelper
     link_to(name, path, options.merge(class: combined_classes.strip))
   end
 
-  def mobile_navbar_link_to(name, path, controller, options={})
+  def mobile_navbar_link_to(name, path, controller, options = {})
     default_classes = "block rounded-md px-3 py-2 text-base font-medium"
     provided_classes = options.delete(:class) || ""
 

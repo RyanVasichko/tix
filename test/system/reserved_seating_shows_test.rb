@@ -92,7 +92,7 @@ class ReservedSeatingShowsTest < ApplicationSystemTestCase
       click_on "Release"
     end
     assert_no_css "##{dom_id(seat_1)}_hold"
-    refute seat_1.reload.held?
+    assert_not seat_1.reload.held?
     assert seat_2.reload.held?
   end
 end

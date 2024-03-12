@@ -18,7 +18,7 @@ module Middleware
     private
 
     def silence_request?(env)
-      @paths.include?(env['PATH_INFO'])
+      @paths.include?(env["PATH_INFO"])
     end
   end
 end

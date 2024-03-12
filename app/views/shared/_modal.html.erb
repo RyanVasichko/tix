@@ -1,35 +1,54 @@
 <%= turbo_frame_tag "application_modal" do %>
-  <div data-controller="modal"
-       data-modal-open-on-connect-value="<%= local_assigns[:open_on_connect] || "true" %>"
-       <% unless local_assigns[:stay_open_on_successful_submit] %>
-       data-action="turbo:submit-end->modal#closeOnSuccessfulFormSubmit"
-       <% end %>
-       data-turbo-temporary
-       tabindex="-1"
-       aria-hidden="true"
-       class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full <%= local_assigns[:max_w].present? ? local_assigns[:max_w] : "max-w-xl" %> h-full md:h-auto">
-      <!-- Modal content -->
-      <div class="relative p-4 bg-white rounded-lg shadow sm:p-5">
-        <!-- Modal header -->
-        <div class="flex justify-between mb-4 rounded-t sm:mb-5">
-          <div class="text-lg text-gray-900 md:text-xl">
-            <h3 class="font-semibold">
-              <%= title %>
-            </h3>
-          </div>
+  <div
+    data-controller="modal"
+    data-action="keydown.esc@document->modal#close click@document->modal#hideOnOutsideClick <%= "turbo:submit-end->modal#closeOnSuccessfulFormSubmit" unless local_assigns[:stay_open_on_successful_submit] %>"
+    class="relative z-10 <%= "hidden" unless local_assigns[:render_hidden] == false %>"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+    data-modal-open-on-connect-value="true"
+    data-turbo-temporary>
+    <div
+      data-modal-target="backdrop"
+      data-transition-enter="ease-out duration-300"
+      data-transition-enter-start="opacity-0"
+      data-transition-enter-end="opacity-100"
+      data-transition-leave="ease-in duration-200"
+      data-transition-leave-start="opacity-100"
+      data-transition-leave-end="opacity-0"
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
+    </div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+          data-modal-target="body"
+          data-transition-enter="ease-out duration-300"
+          data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100"
+          data-transition-leave="ease-in duration-200"
+          data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100"
+          data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full <%= local_assigns[:max_w] || "max-w-lg" %> sm:p-6 ease-out duration-300 <%= "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" unless local_assigns[:render_hidden] == false %>">
           <div>
-            <button data-action="modal#close" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex">
-              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-              <span class="sr-only">Close modal</span>
-            </button>
+            <div class="relative mx-auto h-12 items-center justify-between text-lg font-semibold">
+              <h5 class="absolute inset-x-0 text-center modal-title">
+                <%= title %>
+              </h5>
+              <button type="button" data-action="modal#close" class="absolute right-0 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <span class="sr-only">Close</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            <div class="mt-3 sm:mt-5">
+              <%= turbo_frame_tag "application_modal_body" do %>
+                <%= yield %>
+              <% end %>
+            </div>
           </div>
         </div>
-        <%= turbo_frame_tag "application_modal_body" do %>
-          <%= yield %>
-        <% end %>
       </div>
     </div>
   </div>

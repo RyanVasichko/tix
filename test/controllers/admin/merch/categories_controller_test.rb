@@ -18,6 +18,7 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
   test "should create merch category" do
     assert_difference("Merch::Category.count") do
       post admin_merch_categories_url, params: { merch_category: { name: "Clothing" } }
+      assert_response :redirect
     end
 
     assert_redirected_to admin_merch_index_url

@@ -4,12 +4,12 @@ class CreateTicketTypes < ActiveRecord::Migration[7.1]
       t.references :venue, null: false, foreign_key: true
       t.string :name, null: false
       t.decimal :convenience_fee, precision: 8, scale: 2
-      t.integer :convenience_fee_type, null: false
+      t.string :convenience_fee_type, null: false
       t.decimal :default_price, null: false, precision: 8, scale: 2
       t.decimal :venue_commission, null: false, precision: 8, scale: 2
       t.boolean :dinner_included, null: false, default: false
       t.boolean :active, null: false, default: true
-      t.integer :payment_method, null: false
+      t.string :payment_method, null: false
 
       t.timestamps
     end

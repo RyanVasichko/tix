@@ -23,7 +23,7 @@ class TicketTypesTest < ApplicationSystemTestCase
 
   test "should create ticket type" do
     visit admin_ticket_types_url
-    click_on "New Ticket Type"
+    find("#new_ticket_type").click
 
     assert_difference "TicketType.count" do
       select @ticket_type_params[:convenience_fee_type].humanize, from: "Convenience fee type"
@@ -72,6 +72,6 @@ class TicketTypesTest < ApplicationSystemTestCase
     click_on "Deactivate"
 
     assert_text "Ticket type was successfully deactivated"
-    assert @ticket_type.reload.inactive?
+    assert @ticket_type.reload.deactivated?
   end
 end

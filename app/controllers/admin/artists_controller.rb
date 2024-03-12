@@ -1,12 +1,13 @@
 class Admin::ArtistsController < Admin::AdminController
-  include Searchable
+  include SearchParams
 
   before_action :set_artist, only: %i[edit update destroy]
 
+  self.default_sort_field = :name
+  sortable_by :name
+
   def index
-    artists = Artist.active.order(:name)
-    artists = artists.where("name LIKE ?", "%#{search_keyword}%") if search_keyword.present?
-    @pagy, @artists = pagy(artists)
+    @pagy, @artists = pagy(Artist.active.search(search_params))
   end
 
   def new

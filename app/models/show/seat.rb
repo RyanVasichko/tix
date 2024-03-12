@@ -1,8 +1,8 @@
 class Show::Seat < ApplicationRecord
-  include Reservable, Holdable
+  include Reservable, Holdable, Searchable
 
   belongs_to :section, class_name: "Show::Section", inverse_of: :seats, foreign_key: "show_section_id", touch: true
-  delegate :ticket_price, :deposit?, to: :section
+  delegate :ticket_price, :deposit_payment_method?, to: :section
 
   has_one :show, through: :section
   delegate :deposit_amount, to: :show
@@ -15,6 +15,8 @@ class Show::Seat < ApplicationRecord
 
   scope :sold, -> { joins(:ticket) }
   scope :not_sold, -> { left_outer_joins(:ticket).where(ticket: { id: nil }) }
+
+  orderable_by :seat_number, :table_number
 
   def self.build_from_seating_chart_seat(seating_chart_seat)
     build(

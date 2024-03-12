@@ -4,14 +4,7 @@ require "support/draggable"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Draggable
 
-  Capybara.server = :puma, { Silent: true }
-  driven_by :selenium, using: :chrome, screen_size: [1920, 1080], options: {
-    browser: :remote,
-    url: "http://selenium:4444"
-  }
-
-  Capybara.server_host = "0.0.0.0"
-  Capybara.app_host = "http://#{ENV.fetch("HOSTNAME")}:#{Capybara.server_port}"
+  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
 
   teardown do
     if defined?(page.driver.browser.logs)
@@ -31,7 +24,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "Password", with: password
     click_on "Sign In"
 
-    assert_text "Welcome back, #{user.full_name}!"
+    assert_text "Welcome back, #{user.name}!", wait: 10
 
     all(".dismiss_flash_message").each(&:click)
   end

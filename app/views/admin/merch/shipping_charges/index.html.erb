@@ -1,34 +1,21 @@
-<div class="max-w-xl card">
+<%= card do %>
   <%= render "admin/merch/tabs" %>
-  <%= table_header_wrapper_tag class: "flex justify-end" do %>
-    <%= link_to "New Shipping Charge", new_admin_merch_shipping_charge_path, class: "btn-primary px-2 py-1", data: { turbo: true, turbo_stream: true } %>
-  <% end %>
 
-  <%= table_tag do %>
-    <%= thead_tag do %>
-      <%= th_tag "Weight" %>
-      <%= th_tag "Price" %>
-      <%= th_tag "" %>
+  <%= data_table collection: @shipping_charges, namespace: :admin, keyword_search: false, new_record_modal: true do |table| %>
+    <% table.column :weight, sortable: false %>
+    <% table.column :price, sortable: false do |shipping_charge| %>
+      <%= number_to_currency(shipping_charge.price) %>
     <% end %>
-    <tbody>
-    <% @shipping_charges.each do |shipping_charge| %>
-      <%= tr_for_tbody_tag id: dom_id(shipping_charge, "admin") do %>
-        <%= td_tag shipping_charge.weight %>
-        <%= td_tag number_to_currency(shipping_charge.price) %>
-        <%= td_tag class: "text-right" do %>
-          <%= render "shared/dropdown", { id: dom_id(shipping_charge, :admin) } do %>
-            <%= dropdown_link_to "Edit",
-                                 edit_admin_merch_shipping_charge_path(shipping_charge),
-                                 data: { turbo: true, turbo_stream: true } %>
-            <%= dropdown_link_to "Delete",
-                                 [:admin, shipping_charge],
-                                 data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
-                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-          <% end %>
-        <% end %>
+    <% table.column "", sortable: false do |shipping_charge| %>
+      <% render "shared/dropdown", { id: dom_id(shipping_charge, :admin) } do %>
+        <%= dropdown_link_to "Edit",
+                             edit_admin_merch_shipping_charge_path(shipping_charge),
+                             data: { turbo: true, turbo_stream: true } %>
+        <%= dropdown_link_to "Delete",
+                             [:admin, shipping_charge],
+                             data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
+                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
       <% end %>
     <% end %>
-    </tbody>
   <% end %>
-  <%= custom_pagy_nav_wrapper_tag %>
-</div>
+<% end %>

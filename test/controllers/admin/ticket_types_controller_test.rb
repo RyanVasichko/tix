@@ -61,6 +61,6 @@ class TicketTypesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to admin_ticket_types_url
-    assert @ticket_type.reload.inactive?
+    assert @ticket_type.reload.deactivated?
   end
 end

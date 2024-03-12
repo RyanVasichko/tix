@@ -1,4 +1,4 @@
-<% form = DoseyDoeTicketsFormBuilder::FormBuilder.new(:show, @show, self, {}) %>
+<% form = StandardFormBuilder::FormBuilder.new(:show, @show, self, {}) %>
 
 <%= turbo_stream.update "show_sections_fields" do %>
   <%= form.fields_for :sections do |section_fields| %>

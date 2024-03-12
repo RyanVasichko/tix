@@ -1,6 +1,6 @@
 class Show::Section < ApplicationRecord
-  enum payment_method: TicketType::PAYMENT_METHODS
-  enum convenience_fee_type: TicketType::CONVENIENCE_FEE_TYPES
+  enum :payment_method, TicketType.payment_methods, suffix: true
+  enum :convenience_fee_type, TicketType.convenience_fee_types, suffix: true
 
   belongs_to :show, inverse_of: :sections, touch: true
   has_many :seats, class_name: "Show::Seat", inverse_of: :section, foreign_key: "show_section_id"

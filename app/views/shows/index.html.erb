@@ -15,27 +15,16 @@
 
         <div class="mb-5">
           <p class="text-sm">Doors open at <%= show.doors_open_at.strftime('%l:%M %p') %></p>
-          <p class="text-sm">Dinner <%= show.dinner_starts_at.strftime('%l:%M %p') %> to <%= show.dinner_ends_at.strftime('%l:%M %p') %></p>
+          <p class="text-sm">Dinner <%= show.dinner_starts_at.strftime('%l:%M %p') %>
+            to <%= show.dinner_ends_at.strftime('%l:%M %p') %></p>
           <% show.sections.each do |show_section| %>
             <p class="text-sm"><%= show_section.name %> - <%= number_to_currency(show_section.ticket_price) %></p>
           <% end %>
         </div>
         <%= link_to_order_tickets(show) %>
-<!--        - if show.class == ReservedSeatingShow-->
-<!--        - if show.seating_chart_contains_deposit_sections?-->
-<!--        div style="margin-top: 0.5em"-->
-<!--        strong Ticket Price Includes Three Course Meal-->
-<!--        div class="hideshowinfo" style="color: red" #{number_to_currency(show.deposit_amount)} Deposit Per Ticket Required At Time Of Purchase-->
-<!--        div class="hideshowinfo" style="color: red" The Remaining Balance Will Be Settled The Night Of The Show-->
-<!--        - else-->
-<!--        div style="color: #AE6940; font-family: 'Lato', sans-serif; font-weight: bold;"-->
-<!--        strong Come In Early, The Kitchen Is Open!-->
-<!--        - if show.class == GeneralAdmissionShow-->
-<!--        div style="color: #AE6940; font-family: 'Lato', sans-serif; font-weight: bold;"-->
-<!--        strong Come In Early, The Kitchen Is Open!-->
       </div>
     </div>
   <% end %>
 
-  <%= previous_and_next_buttons_pagy_nav(@pagy) %>
+  <%= previous_and_next_buttons_nav(@pagy) %>
 </div>

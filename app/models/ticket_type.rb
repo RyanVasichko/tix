@@ -1,13 +1,11 @@
 class TicketType < ApplicationRecord
-  include Deactivatable
+  include CanBeDeactivated, Searchable
 
   belongs_to :venue
+  delegate :name, to: :venue, prefix: true
 
-  PAYMENT_METHODS = { deposit: 0, cover: 1 }.freeze
-  enum payment_method: PAYMENT_METHODS
-
-  CONVENIENCE_FEE_TYPES = { flat_rate: 0, percentage: 1 }.freeze
-  enum convenience_fee_type: CONVENIENCE_FEE_TYPES
+  enum :payment_method, %w[deposit cover].index_by(&:itself), suffix: true
+  enum :convenience_fee_type, %w[flat_rate percentage].index_by(&:itself), suffix: true
 
   validates :name, presence: true, uniqueness: { scope: :venue_id }
   validates :convenience_fee, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -17,4 +15,17 @@ class TicketType < ApplicationRecord
   validates :dinner_included, inclusion: { in: [true, false] }
   validates :active, inclusion: { in: [true, false] }
   validates :payment_method, presence: true
+
+  orderable_by :name, :convenience_fee_type, :payment_method, :active,
+               venue: %i[name]
+
+  scope :keyword_search, ->(query) {
+    joins(:venue)
+      .where(<<~SQL, keyword: "%#{query}%")
+        ticket_types.name LIKE :keyword OR
+        venues.name LIKE :keyword OR
+        ticket_types.convenience_fee_type LIKE :keyword OR
+        ticket_types.payment_method LIKE :keyword
+      SQL
+  }
 end

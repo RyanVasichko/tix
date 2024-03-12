@@ -4,7 +4,7 @@ FactoryBot.define do
     association :shipping_address, factory: :order_shipping_address
 
     transient do
-      tickets_count { 1 }
+      reserved_seating_tickets_count { 1 }
       merch_count { 1 }
       general_admission_tickets_count { 1 }
       with_existing_shows { false }
@@ -13,14 +13,14 @@ FactoryBot.define do
     end
 
     after(:build) do |order, evaluator|
-      build_show = evaluator.tickets_count.positive? && order.tickets.empty?
+      build_show = evaluator.reserved_seating_tickets_count.positive? && order.tickets.empty?
       seats = []
       if build_show && evaluator.with_existing_shows
-        seats = Show::Seat.not_sold.order("RANDOM()").limit(evaluator.tickets_count)
-        raise "Not enough seats to build order" if seats.count < evaluator.tickets_count
+        seats = Show::Seat.not_sold.order("RANDOM()").limit(evaluator.reserved_seating_tickets_count)
+        raise "Not enough seats to build order" if seats.count < evaluator.reserved_seating_tickets_count
       else
         show = FactoryBot.build(:reserved_seating_show)
-        seats = show.sections.map(&:seats).flatten.sample(evaluator.tickets_count)
+        seats = show.sections.map(&:seats).flatten.sample(evaluator.reserved_seating_tickets_count)
         seats.each { |seat| seat.show = show }
       end
       order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
@@ -28,9 +28,9 @@ FactoryBot.define do
       if evaluator.general_admission_tickets_count.positive?
         sections = if evaluator.with_existing_shows
                      Show::GeneralAdmissionSection.order("RANDOM()").limit(evaluator.general_admission_tickets_count)
-                   else
+        else
                      FactoryBot.create_list(:general_admission_show_section, evaluator.general_admission_tickets_count)
-                   end
+        end
 
         order.tickets << sections.map do |section|
           Order::GeneralAdmissionTicket.new(show: section.show,
@@ -53,9 +53,9 @@ FactoryBot.define do
       if evaluator.merch_count.positive? && order.merch.empty?
         merch_to_add = if evaluator.with_existing_merch
                          Merch.order("RANDOM()").limit(evaluator.merch_count)
-                       else
+        else
                          FactoryBot.create_list(:merch, evaluator.merch_count)
-                       end
+        end
 
         order.merch << merch_to_add.map do |merch|
           Order::Merch.new(merch: merch,

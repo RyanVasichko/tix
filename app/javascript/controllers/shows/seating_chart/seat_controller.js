@@ -1,6 +1,6 @@
 import debounce from 'debounce';
 import { post, destroy } from "@rails/request.js"
-import ApplicationController from "../../application_controller";
+import ApplicationController from "controllers/application_controller";
 
 // Connects to data-controller="shows--seating-chart--seat"
 export default class extends ApplicationController {

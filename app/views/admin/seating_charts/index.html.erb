@@ -1,35 +1,21 @@
-<div class="card max-w-xl">
-  <h1 class="text-center text-3xl font-semibold">Seating Charts</h1>
+<h1 class="mb-4 text-center text-3xl font-semibold">
+  Seating Charts
+</h1>
 
-  <%= table_header_wrapper_tag class: "flex justify-end" do %>
-    <%= link_to "New Seating Chart", new_admin_seating_chart_path, class: "btn-primary px-2 py-1" %>
-  <% end %>
-
-  <%= table_tag do %>
-    <%= thead_tag do %>
-      <tr>
-        <%= th_tag "Name" %>
-        <%= th_tag "" %>
-      </tr>
+<%= card do %>
+  <%= data_table collection: @seating_charts, namespace: :admin, pagy: @pagy do |table| %>
+    <% table.column :name do |seating_chart| %>
+      <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
     <% end %>
-    <tbody>
-    <% @seating_charts.each do |seating_chart| %>
-      <%= tr_for_tbody_tag id: dom_id(seating_chart, "admin") do %>
-        <%= td_tag do %>
-          <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
-        <% end %>
-        <%= td_tag class: "text-right" do %>
-          <%= render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
-            <%= dropdown_link_to "Deactivate",
-                                 [:admin, seating_chart],
-                                 data: { turbo_method: "DELETE" },
-                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-            <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
-          <% end %>
-        <% end %>
+
+    <% table.column "", sortable: false do |seating_chart| %>
+      <% render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
+        <%= dropdown_link_to "Deactivate",
+                             [:admin, seating_chart],
+                             data: { turbo_method: "DELETE" },
+                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+        <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
       <% end %>
     <% end %>
-    </tbody>
   <% end %>
-  <%= custom_pagy_nav(@pagy) %>
-</div>
+<% end %>

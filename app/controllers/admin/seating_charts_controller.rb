@@ -1,8 +1,13 @@
 class Admin::SeatingChartsController < Admin::AdminController
+  include SearchParams
+
   before_action :set_seating_chart, only: %i[show edit update destroy]
 
+  sortable_by :name
+  self.default_sort_field = :name
+
   def index
-    @pagy, @seating_charts = pagy(SeatingChart.active)
+    @pagy, @seating_charts = pagy(SeatingChart.active.search(search_params))
   end
 
   def show
@@ -27,7 +32,7 @@ class Admin::SeatingChartsController < Admin::AdminController
     @seating_chart = SeatingChart.new(seating_chart_params)
 
     if seating_chart_params[:venue_layout].nil? &&
-         params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
+      params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
       @seating_chart.dup_venue_layout_from(
         params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
       )
@@ -51,14 +56,15 @@ class Admin::SeatingChartsController < Admin::AdminController
     end
   end
 
+  def deactivate
+    @seating_chart = SeatingChart.find(params[:id])
+    @seating_chart.deactivate!
+    redirect_to admin_seating_charts_url, flash: { success: "Seating chart was successfully deactivated." }
+  end
+
   def destroy
-    if @seating_chart.shows.any?
-      @seating_chart.deactivate
-      message = "#{@seating_chart.name} was successfully deactivated."
-    else
-      @seating_chart.destroy
-      message = "#{@seating_chart.name} was successfully deleted."
-    end
+    @seating_chart.deactivate!
+    message = "Seating chart was successfully destroyed."
 
     respond_to do |format|
       format.html { redirect_to admin_seating_charts_url, flash: { success: message } }

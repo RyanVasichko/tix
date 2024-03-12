@@ -1,5 +1,5 @@
-<%= turbo_stream.replace :seat_holds do %>
-  <%= render "reserved_seating_shows/seat_holds/seat_holds", held_seats: @held_seats, show: @show, pagy: @pagy %>
+<%= turbo_stream.action "morph", "application_modal" do %>
+  <%= render template: "reserved_seating_shows/seat_holds/index", held_seats: @held_seats, pagy: @pagy %>
 <% end %>
 <%= turbo_replace_seat(@seat) %>
 <%= turbo_append_toast_messages %>

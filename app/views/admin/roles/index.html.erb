@@ -2,16 +2,13 @@
   <%= render "admin/users/tabs" %>
 
   <%= turbo_frame_tag "admin_roles", target: :_top do %>
-    <%= table_header_wrapper_tag do %>
-      <div class="flex w-full justify-end mt-3">
-        <%= link_to new_admin_role_path, data: { turbo_frame: "admin_roles" }, class: "flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700" do %>
-          <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-          </svg>
-          Add role
-        <% end %>
+    <div class="relative mt-4 rounded-t-xl border-x border-t border-gray-200 bg-zinc-50 px-2 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex w-full justify-end mt-3">
+          <%= link_to_new_record "Add role", new_admin_role_path, data: { turbo_frame: :admin_roles } %>
+        </div>
       </div>
-    <% end %>
+    </div>
 
     <div class="table w-full text-sm text-left rtl:text-right text-gray-500 border-x border-gray-200">
       <div class="table-header-group font-bold text-xs text-gray-700 uppercase bg-gray-100">
@@ -64,6 +61,5 @@
         <% end %>
       </div>
     </div>
-    <%= custom_pagy_nav(@pagy) %>
   <% end %>
 </div>

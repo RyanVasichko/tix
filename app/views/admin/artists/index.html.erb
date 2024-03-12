@@ -1,42 +1,18 @@
-<div class="max-w-2xl card">
-  <h1 class="text-center text-3xl font-semibold">Artists</h1>
+<h1 class="text-center text-3xl font-semibold mb-4">Artists</h1>
 
-  <%= table_header_wrapper_tag do %>
-    <%= form_with url: admin_artists_path,
-                  scope: :search,
-                  method: :get,
-                  data: { turbo: true, turbo_frame: "artists", turbo_action: "advance" } do |form| %>
-      <%= form.label :keyword, class: "sr-only" %>
-      <%= keyword_search_field(form) %>
+<%= card do %>
+  <%= data_table collection: @artists, namespace: :admin, pagy: @pagy do |table| %>
+    <% table.column :name do |artist| %>
+      <%= link_to artist.name, edit_admin_artist_path(artist), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
     <% end %>
 
-    <%= link_to "New Artist", new_admin_artist_path, class: "btn-primary px-2 py-1" %>
-  <% end %>
-
-  <%= table_tag do %>
-    <%= thead_tag do %>
-      <tr>
-        <%= th_tag "Name" %>
-        <%= th_tag "" %>
-      </tr>
-    <% end %>
-    <tbody>
-    <% @artists.each do |artist| %>
-      <%= tr_for_tbody_tag id: dom_id(artist, "admin") do %>
-        <%= td_tag do %>
-          <%= link_to artist.name, edit_admin_artist_path(artist), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
-        <% end %>
-        <%= td_tag class: "text-right" do %>
-          <%= render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
-            <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete",
-                                 [:admin, artist],
-                                 data: { turbo_method: "DELETE" },
-                                 class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-          <% end %>
-        <% end %>
+    <% table.column "", sortable: false do |artist| %>
+      <% render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
+        <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete",
+                             [:admin, artist],
+                             data: { turbo_method: "DELETE" },
+                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
       <% end %>
     <% end %>
-    </tbody>
   <% end %>
-  <%= custom_pagy_nav(@pagy) %>
-</div>
+<% end %>

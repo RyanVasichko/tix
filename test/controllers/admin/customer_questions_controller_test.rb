@@ -43,7 +43,7 @@ class Admin::CustomerQuestionsControllerTest < ActionDispatch::IntegrationTest
       delete admin_customer_question_url(@customer_question)
     end
 
-    refute @customer_question.reload.active?
+    assert_not @customer_question.reload.active?
 
     assert_redirected_to admin_customer_questions_url
   end

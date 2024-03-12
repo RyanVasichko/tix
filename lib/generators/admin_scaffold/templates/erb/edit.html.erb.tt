@@ -1,4 +1,0 @@
-<div class="card max-w-xl">
-  <h1 class="text-center text-3xl font-semibold"><%%= @<%= model_resource_name %>.name %></h1>
-  <%%= render "form", <%= model_resource_name %>: @<%= model_resource_name %> %>
-</div>

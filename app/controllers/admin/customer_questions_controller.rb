@@ -1,11 +1,16 @@
 class Admin::CustomerQuestionsController < Admin::AdminController
+  include SearchParams
+
   before_action :set_customer_question, only: %i[ edit update destroy ]
+
+  sortable_by :question, :active
+  self.default_sort_field = :question
 
   # GET /admin/customer_questions
   def index
-    @show_inactive = params[:show_inactive] == "1"
-    @customer_questions = @show_inactive ? CustomerQuestion.all : CustomerQuestion.active
-    @pagy, @customer_questions = pagy(@customer_questions.order(active: :desc, created_at: :desc))
+    customer_questions = CustomerQuestion.search(search_params)
+    customer_questions = customer_questions.active unless include_deactivated?
+    @pagy, @customer_questions = pagy(customer_questions)
   end
 
   # GET /admin/customer_questions/new

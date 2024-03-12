@@ -1,5 +1,5 @@
 class Admin::CustomersController < Admin::BaseUsersController
-  include Searchable
+  include SearchParams
 
   def destroy
     @customer = User::Customer.find(params[:id])
@@ -10,19 +10,15 @@ class Admin::CustomersController < Admin::BaseUsersController
 
   private
 
-  def user_type
+  def user_klass
     User::Customer
   end
 
   def user_params
-    params.fetch(:user_customer, {}).permit(:first_name, :last_name, :email, :password, :password_confirmation, :phone)
+    params.fetch(:user_customer, {}).permit(base_permitted_parameters)
   end
 
-  def users_index_path
+  def index_path
     admin_customers_path
-  end
-
-  def user_type_name
-    "Customer"
   end
 end

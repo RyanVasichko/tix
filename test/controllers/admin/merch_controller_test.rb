@@ -50,7 +50,6 @@ class Admin::MerchControllerTest < ApplicationIntegrationTestCase
     assert @merch.categories.include?(@merch_category_1)
     assert @merch.categories.include?(@merch_category_2)
     assert @merch.categories.include?(@gift_card_category)
-
   end
 
   test "should get edit" do

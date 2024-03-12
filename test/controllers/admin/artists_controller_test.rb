@@ -58,7 +58,7 @@ class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
 
     artist_with_shows.reload
 
-    refute artist_with_shows.active?
+    assert_not artist_with_shows.active?
 
     assert_redirected_to admin_artists_url
   end

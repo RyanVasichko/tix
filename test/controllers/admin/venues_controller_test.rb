@@ -41,6 +41,6 @@ class VenuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to admin_venues_url
-    assert @venue.reload.inactive?
+    assert @venue.reload.deactivated?
   end
 end

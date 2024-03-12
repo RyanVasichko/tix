@@ -7,8 +7,8 @@ module Show::GoesOnSale
     validates :back_end_on_sale_at, presence: true
     validates :back_end_off_sale_at, presence: true
 
-    scope :on_sale_front_end, -> { where(front_end_on_sale_at: Time.current..) }
-    scope :on_sale_back_end, -> { where(back_end_on_sale_at: Time.current..) }
+    scope :on_sale_front_end, -> { where("? BETWEEN shows.front_end_on_sale_at AND shows.front_end_off_sale_at", Time.current) }
+    scope :on_sale_back_end, -> { where("? BETWEEN shows.back_end_on_sale_at AND shows.back_end_off_sale_at", Time.current) }
 
     after_initialize :set_default_on_sale_time_values, if: :new_record?
   end

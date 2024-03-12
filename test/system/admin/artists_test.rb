@@ -14,7 +14,7 @@ class Admin::ArtistsTest < ApplicationSystemTestCase
   test "should create artist" do
     assert_difference "Artist.count" do
       visit admin_artists_url
-      click_on "New Artist"
+      find("#new_artist").click
 
       fill_in "Name", with: "New artist name"
       fill_in "Url", with: "New artist URL"

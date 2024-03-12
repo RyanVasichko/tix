@@ -8,7 +8,7 @@ class User::Guest < User
     Order::GuestOrderForm
   end
 
-  def full_name
+  def name
     "Guest"
   end
 

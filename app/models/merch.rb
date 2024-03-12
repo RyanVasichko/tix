@@ -1,5 +1,5 @@
 class Merch < ApplicationRecord
-  include Deactivatable
+  include CanBeDeactivated
 
   serialize :options, type: Array, coder: JSON
 

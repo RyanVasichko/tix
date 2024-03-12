@@ -1,4 +1,1 @@
 web: unset PORT && rm -f /app/tmp/pids/server.pid && env RUBY_DEBUG_OPEN=true bin/rails server -b 0.0.0.0
-css: bun run build:css --watch
-js: bun run build --watch
-worker: bundle exec rake solid_queue:start

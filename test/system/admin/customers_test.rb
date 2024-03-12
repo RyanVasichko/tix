@@ -30,10 +30,8 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
     }
     assert_difference expected_differences do
       visit admin_customers_path
-      within "##{dom_id(customer, :admin)}" do
-        find("##{dom_id(customer, :admin)}_dropdown").click
-        click_on "Delete"
-      end
+      find("##{dom_id(customer, :admin)}_dropdown").click
+      click_on "Delete"
 
       assert_text "Customer was successfully destroyed."
     end
@@ -46,7 +44,7 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
       assert_equal order.orderer.last_name, customer.last_name
       assert_equal order.orderer.email, customer.email
       assert_equal order.orderer.phone, customer.phone
-      refute_equal order.orderer.shopper_uuid, customer.shopper_uuid
+      assert_not_equal order.orderer.shopper_uuid, customer.shopper_uuid
     end
   end
 

@@ -7,8 +7,8 @@ class Show::GeneralAdmissionSection < Show::Section
   private
 
   def set_defaults
-    self.payment_method = TicketType::PAYMENT_METHODS[:cover]
-    self.convenience_fee_type = TicketType::CONVENIENCE_FEE_TYPES[:flat_rate]
+    self.payment_method = :cover
+    self.convenience_fee_type = :flat_rate
     self.venue_commission = 0
   end
 end

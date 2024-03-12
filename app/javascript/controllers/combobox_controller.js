@@ -1,4 +1,4 @@
-import ApplicationController from "./application_controller";
+import ApplicationController from "controllers/application_controller";
 import debounce from "debounce";
 
 // Connects to data-controller="combobox"

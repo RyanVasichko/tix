@@ -1,52 +1,33 @@
-<div class="max-w-4xl card">
-  <h1 class="text-center text-3xl font-semibold">Ticket Types</h1>
+<h1 class="mb-4 text-center text-3xl font-semibold">
+  Ticket Types
+</h1>
 
-  <%= table_header_wrapper_tag do %>
-    <%= form_with url: admin_ticket_types_path, method: :get, class: "flex items-center", data: { controller: "quick-form" } do |form| %>
-      <%= form.check_box :show_inactive, include_hidden: false, checked: @show_inactive, data: { action: "quick-form#submit" }, class: "mr-1" %>
-      <%= form.label :show_inactive, "Show inactive", class: "text-sm" %>
+<%= card do %>
+  <%= data_table collection: @ticket_types, pagy: @pagy, namespace: :admin do |table| %>
+    <% table.column :name do |ticket_type| %>
+      <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
     <% end %>
-    <%= link_to "New Ticket Type", new_admin_ticket_type_path, class: "btn-primary px-2 py-1" %>
-  <% end %>
-
-  <%= table_tag do %>
-    <%= thead_tag do %>
-      <tr>
-        <%= th_tag "Name" %>
-        <%= th_tag "Venue" %>
-        <%= th_tag "Convenience fee type" %>
-        <%= th_tag "Payment method" %>
-        <%= th_tag "Active" %>
-        <%= th_tag "" %>
-      </tr>
+    <% table.column :venue_name, header: "Venue" %>
+    <% table.column :convenience_fee_type, header: "Convenience fee type" do |ticket_type| %>
+      <%= ticket_type.convenience_fee_type.humanize %>
     <% end %>
-    <tbody>
-    <% @ticket_types.each do |ticket_type| %>
-      <%= tr_for_tbody_tag id: dom_id(ticket_type, "admin") do %>
-        <%= td_tag do %>
-          <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
-        <% end %>
-        <%= td_tag ticket_type.venue.name %>
-        <%= td_tag ticket_type.convenience_fee_type.humanize %>
-        <%= td_tag ticket_type.payment_method.humanize %>
-        <%= td_tag do %>
-          <%= svg_check if ticket_type.active? %>
-        <% end %>
-        <%= td_tag class: "text-right" do %>
-          <%= render "shared/dropdown", { id: dom_id(ticket_type, :admin) } do %>
-            <% if ticket_type.active? -%>
-              <%= dropdown_link_to "Deactivate",
-                                   [:admin, ticket_type],
-                                   data: { turbo_method: "delete" },
-                                   class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-            <% else %>
-              <%= dropdown_link_to "Activate", [:admin, ticket_type, { ticket_type: { active: true } }], data: { turbo_method: "patch" } %>
-            <% end %>
-          <% end %>
+    <% table.column :payment_method, header: "Payment method" do |ticket_type| %>
+      <%= ticket_type.payment_method.humanize %>
+    <% end %>
+    <% table.column :active, header: "Active" do |ticket_type| %>
+      <%= svg_check if ticket_type.active? %>
+    <% end %>
+    <% table.column "", sortable: false do |ticket_type| %>
+      <% render "shared/dropdown", { id: dom_id(ticket_type, :admin) } do %>
+        <% if ticket_type.active? -%>
+          <%= dropdown_link_to "Deactivate",
+                               [:admin, ticket_type],
+                               data: { turbo_method: "delete" },
+                               class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
+        <% else %>
+          <%= dropdown_link_to "Activate", [:admin, ticket_type, { ticket_type: { active: true } }], data: { turbo_method: "patch" } %>
         <% end %>
       <% end %>
     <% end %>
-    </tbody>
   <% end %>
-  <%= custom_pagy_nav(@pagy) %>
-</div>
+<% end %>

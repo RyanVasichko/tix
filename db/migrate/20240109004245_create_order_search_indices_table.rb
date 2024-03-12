@@ -10,6 +10,7 @@ class CreateOrderSearchIndicesTable < ActiveRecord::Migration[7.1]
         orderer_email,
         order_total,
         artist_name,
+        tickets_count,
         tokenize='trigram case_sensitive 0'
       );
     SQL

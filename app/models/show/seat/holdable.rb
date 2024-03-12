@@ -3,9 +3,22 @@ module Show::Seat::Holdable
 
   included do
     belongs_to :held_by_admin, class_name: "User::Admin", inverse_of: :held_seats, optional: true
+    delegate :name, to: :held_by_admin, prefix: true, allow_nil: true
 
     scope :held, -> { where.not(held_by_admin: nil) }
     scope :not_held, -> { where(held_by_admin: nil) }
+
+    scope :seat_holds_keyword_search, ->(keyword) {
+      joins(:held_by_admin).where(<<~SQL, keyword: "%#{keyword}%")
+        CONCAT(users.first_name, ' ', users.last_name) LIKE :keyword
+        OR show_seats.seat_number LIKE :keyword
+        OR show_seats.table_number LIKE :keyword
+      SQL
+    }
+
+    scope :order_by_held_by_admin_name, ->(direction) {
+      joins(:held_by_admin).order("users.first_name #{direction}, users.last_name #{direction}")
+    }
   end
 
   def held?

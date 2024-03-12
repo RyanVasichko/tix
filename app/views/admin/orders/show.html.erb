@@ -17,7 +17,7 @@
 
     <div class="mt-2">
       <div class="text-sm">
-        <%= @order.orderer.full_name %>
+        <%= @order.orderer.name %>
       </div>
       <div class="text-sm">
         <%= @order.orderer.email %>
@@ -49,7 +49,7 @@
       <% @order.tickets.group_by(&:show).each do |show, tickets| %>
         <%= tr_for_tbody_tag do %>
           <%= td_tag colspan: 9, class: "text-md font-weight-bold bg-gray-50" do %>
-            <%= show.artist.name %> - <%= show.show_date.to_fs(:mdy) %>
+            <%= show.artist.name %> - <%= show.show_date.to_fs(:date) %>
           <% end %>
         <% end %>
         <% tickets.each do |ticket| %>
@@ -71,7 +71,7 @@
               <%= number_to_currency(ticket.total_fees) %>
             <% end %>
             <%= td_tag do %>
-              <%= number_to_currency(ticket.deposit? ? ticket.deposit_amount : ticket.ticket_price) %>
+              <%= number_to_currency(ticket.deposit_payment_method? ? ticket.deposit_amount : ticket.ticket_price) %>
             <% end %>
             <%= td_tag do %>
               <%= number_to_currency(ticket.total_price) %>

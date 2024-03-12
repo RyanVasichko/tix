@@ -8,11 +8,11 @@ class Admin::OrdersTest < ApplicationSystemTestCase
     visit admin_orders_url
 
     customer_orders.each do |order|
-      assert_text order.orderer.full_name
+      assert_text order.orderer.name
     end
 
     guest_orders.each do |order|
-      assert_text order.orderer.full_name
+      assert_text order.orderer.name
     end
   end
 end

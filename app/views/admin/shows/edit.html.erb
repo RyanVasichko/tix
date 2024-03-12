@@ -1,4 +1,7 @@
-<div class="card max-w-7xl">
-  <h1 class="text-center text-3xl font-semibold"><%= @show.artist.name %> - <%= short_date(@show.show_date) if @show.show_date %></h1>
+<h1 class="text-center text-3xl font-semibold mb-4">
+  <%= @show.artist.name %> - <%= @show.show_date.to_fs(:date) if @show.show_date %>
+</h1>
+
+<%= card do %>
   <%= render "form", show: @show %>
-</div>
+<% end %>

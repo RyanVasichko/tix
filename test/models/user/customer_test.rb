@@ -26,9 +26,9 @@ class User::CustomerTest < ActiveSupport::TestCase
       assert_equal order.orderer.first_name, customer.first_name
       assert_equal order.orderer.last_name, customer.last_name
       assert_equal order.orderer.email, customer.email
-      refute_equal order.orderer.shopper_uuid, customer.shopper_uuid
+      assert_not_equal order.orderer.shopper_uuid, customer.shopper_uuid
     end
 
-    reserved_seats.each { |seat| refute seat.reserved? }
+    reserved_seats.each { |seat| assert_not seat.reserved? }
   end
 end

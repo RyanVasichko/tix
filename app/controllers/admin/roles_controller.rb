@@ -1,8 +1,8 @@
-require 'pagy/extras/array'
+require "pagy/extras/array"
 
 class Admin::RolesController < Admin::AdminController
   def index
-    @pagy, @roles = pagy(User::Role.order(:id), items: 100_000)
+    @pagy, @roles = pagy(User::Role.all, items: 100_000)
   end
 
   def update
@@ -11,16 +11,16 @@ class Admin::RolesController < Admin::AdminController
       redirect_back_or_to admin_roles_path, flash: { notice: "Role was successfully updated." }
     else
       flash.now[:error] = @role.errors[:base].join(", ") if @role.errors[:base].any?
-      @roles = User::Role.order(:id).to_a
-      @roles[@roles.index{ |role| role.id == @role.id }] = @role
+      @roles = User::Role.all.to_a
+      @roles[@roles.index { |role| role.id == @role.id }] = @role
       @pagy, @roles = pagy_array(@roles, items: 100_000)
-      render :index, status: :unprocessable_entity
+      render "index", status: :unprocessable_entity
     end
   end
 
   def new
-    @pagy, @roles = pagy_array(User::Role.order(:id).to_a.prepend(User::Role.new), items: 100_000)
-    render :index
+    @pagy, @roles = pagy_array(User::Role.all.to_a.prepend(User::Role.new), items: 100_000)
+    render "index"
   end
 
   def create
@@ -30,8 +30,8 @@ class Admin::RolesController < Admin::AdminController
       redirect_back_or_to admin_roles_path
     else
       flash.now[:error] = @role.errors[:base].join(", ") if @role.errors[:base].any?
-      @pagy, @roles = pagy_array(User::Role.order(:id).to_a.prepend(@role), items: 100_000)
-      render :index, status: :unprocessable_entity
+      @pagy, @roles = pagy_array(User::Role.all.to_a.prepend(@role), items: 100_000)
+      render "index", status: :unprocessable_entity
     end
   end
 

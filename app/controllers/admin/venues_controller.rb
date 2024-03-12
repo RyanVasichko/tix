@@ -1,11 +1,16 @@
 class Admin::VenuesController < Admin::AdminController
+  include SearchParams
+
   before_action :set_venue, only: %i[ show edit update destroy ]
+
+  sortable_by :name, :active
+  self.default_sort_field = :name
 
   # GET /admin/venues
   def index
-    @show_inactive = params[:show_inactive] == "1"
-    @venues = @show_inactive ? Venue.all : Venue.active
-    @pagy, @venues = pagy(@venues.order(active: :desc, created_at: :desc))
+    venues = Venue.search(search_params)
+    venues = venues.active unless include_deactivated?
+    @pagy, @venues = pagy(venues)
   end
 
   # GET /admin/venues/new

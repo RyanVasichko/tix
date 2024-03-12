@@ -6,7 +6,7 @@ class Merch::ShippingChargesTest < ApplicationSystemTestCase
 
     visit admin_merch_index_url
     click_on "Shipping Charges"
-    assert_text "New Shipping Charge"
+    assert_text @shipping_charge.weight
   end
 
   test "visiting the index" do
@@ -15,7 +15,7 @@ class Merch::ShippingChargesTest < ApplicationSystemTestCase
   end
 
   test "should create shipping charge" do
-    click_on "New Shipping Charge"
+    find("#new_merch_shipping_charge").click
     fill_in "Price", with: 42
     fill_in "Weight", with: 69
     click_on "Create Shipping charge"

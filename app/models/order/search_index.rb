@@ -8,11 +8,12 @@ class Order::SearchIndex < ApplicationRecord
       create!(order_id: order.id,
               order_number: order.order_number,
               created_at: order.created_at.to_fs("mdy"),
-              orderer_name: order.orderer.full_name,
+              orderer_name: order.orderer.name,
               orderer_phone: order.orderer.phone.gsub("-", "").gsub("(", "").gsub(")", "").gsub(" ", ""),
               orderer_email: order.orderer.email,
               order_total: order.order_total.to_s.gsub(".", ""),
-              artist_name: order.shows.map { |s| "#{s.artist.name} - #{s.show_date.to_fs(:mdy)}" }.uniq.join(", "))
+              artist_name: order.shows.map { |s| "#{s.artist.name} - #{s.show_date.to_fs(:date)}" }.uniq.join(", "),
+              tickets_count: order.tickets_count)
     end
   end
 end

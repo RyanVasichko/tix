@@ -1,10 +1,11 @@
 class Admin::OrdersController < Admin::AdminController
-  include Searchable
+  include SearchParams
+
+  sortable_by :order_number, :created_at, :orderer_name, :orderer_phone, :orderer_email, :tickets_count, :order_total
+  self.default_sort_field = :created_at
 
   def index
-    orders = Order.includes(:orderer)
-    orders = orders.keyword_search(search_keyword) if search_keyword.present?
-    @pagy, @orders = pagy(orders)
+    @pagy, @orders = pagy(Order.search(search_params))
   end
 
   def show

@@ -19,7 +19,7 @@ class User::Role < ApplicationRecord
   def ensure_not_referenced_by_any_admins
     return if users.empty?
 
-    errors.add(:base, "This role is used by admins: #{users.map(&:full_name).join(', ')}")
+    errors.add(:base, "This role is used by admins: #{users.map(&:name).join(', ')}")
     throw :abort
   end
 end

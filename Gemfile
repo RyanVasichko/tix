@@ -1,52 +1,57 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.0"
+ruby file: ".ruby-version"
 
-gem "bcrypt", "~> 3.1.7"
-gem "cssbundling-rails"
-gem "jsbundling-rails"
-gem "pagy"
-gem "sqlite3", "~> 1.6"
-gem "activerecord-enhancedsqlite3-adapter", "~> 0.4.0"
+# Infrastructure
+gem "rails", github: "rails/rails", branch: "main", ref: "7d008fee705a013d51eef548cf62d7024eacc29a"
 gem "puma", "~> 6.0"
-gem "rails", "~> 7.1.2"
 gem "redis"
 gem "solid_cache"
 gem "solid_queue"
-gem "sprockets-rails"
-gem "stimulus-rails"
-gem "stripe"
-gem "turbo-rails", "~> 2.0.0.pre.beta"
-
 gem "appsignal"
-gem "aws-sdk-s3", require: false
+
+# Assets
+gem "propshaft"
+gem "importmap-rails", "~> 2.0"
+gem "requestjs-rails"
+gem "stimulus-rails"
+gem "turbo-rails", "~> 2.0"
+gem "tailwindcss-rails", "~> 2.3"
+gem "stripe"
+
+# Database
+gem "sqlite3", "~> 1.6"
+gem "activerecord-enhancedsqlite3-adapter", "~> 0.4.0"
+
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+
+# Storage
+gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 1.2"
 
-gem "pg", "~> 1.1" # POSTMIGRATION: Remove
-gem "paperclip" # POSTMIGRATION: Remove
-
-gem "factory_bot_rails"
-gem "faker"
+gem "bcrypt", "~> 3.1.7"
+gem "pagy"
 
 group :development, :test do
+  gem "rubocop-rails-omakase", require: false
   gem "awesome_print"
   gem "byebug"
-  gem "htmlbeautifier"
   gem "rubocop"
   gem "foreman"
+  gem "brakeman", require: false
+
+  gem "faker"
+  gem "factory_bot_rails"
 end
 
 group :development do
-  gem "brakeman"
   gem "rack-mini-profiler"
   gem "web-console"
 end
 
 group :test do
   gem "capybara"
-  gem "launchy"
   gem "selenium-webdriver"
   gem "simplecov"
 end

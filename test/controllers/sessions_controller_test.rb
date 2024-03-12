@@ -62,6 +62,6 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
 
     perform_enqueued_jobs
 
-    refute User.exists?(id: guest.id)
+    assert_not User.exists?(id: guest.id)
   end
 end

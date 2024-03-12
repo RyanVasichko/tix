@@ -1,5 +1,5 @@
 class Show::Upsale < ApplicationRecord
-  include Deactivatable
+  include CanBeDeactivated
 
   belongs_to :show
 

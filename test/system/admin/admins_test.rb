@@ -38,10 +38,10 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
     click_on "Deactivate"
 
     assert_text "Admin was successfully deactivated."
-    assert user.reload.inactive?
-    refute_text user.full_name
-    check "Show deactivated"
-    assert_text user.full_name
+    assert user.reload.deactivated?
+    refute_text user.name
+    check "Include deactivated?"
+    assert_text user.name
   end
 
   private

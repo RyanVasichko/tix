@@ -1,7 +1,7 @@
 require "test_helper"
 
 class ArtistTest < ActiveSupport::TestCase
-  test "Deactivatable" do
+  test "CanBeDeactivated" do
     artist = FactoryBot.create(:artist, name: "Radiohead")
     artist.deactivate!
     assert_equal false, artist.active

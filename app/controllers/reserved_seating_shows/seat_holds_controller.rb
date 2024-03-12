@@ -1,5 +1,8 @@
 class ReservedSeatingShows::SeatHoldsController < ApplicationController
-  include Searchable
+  include SearchParams
+
+  sortable_by :seat_number, :table_number, :held_by_admin_name
+  self.default_sort_field = :table_number
 
   before_action :set_show
 
@@ -32,7 +35,7 @@ class ReservedSeatingShows::SeatHoldsController < ApplicationController
     respond_to do |format|
       notice = "Seat hold was successfully released."
       format.html { redirect_back_or_to root_path, flash: { notice: notice } }
-      format.turbo_stream { flash[:notice] = notice }
+      format.turbo_stream { flash.now[:notice] = notice }
     end
   end
 
@@ -43,14 +46,10 @@ class ReservedSeatingShows::SeatHoldsController < ApplicationController
   end
 
   def set_held_seats_and_pagy
-    @held_seats = @show.seats.held.order(:table_number)
-    if search_keyword.present?
-      @held_seats = @held_seats.joins(:held_by_admin).where(<<-SQL, keyword: wildcard_search_keyword)
-        CONCAT(users.first_name, ' ', users.last_name) LIKE :keyword
-        OR show_seats.seat_number LIKE :keyword
-        OR show_seats.table_number LIKE :keyword
-      SQL
-    end
-    @pagy, @held_seats = pagy(@held_seats, items: 5)
+    @held_seats = @show.seats.held
+    @held_seats = @held_seats.seat_holds_keyword_search(search_keyword) if search_keyword.present?
+    @held_seats = @held_seats.search(search_params.except(:q))
+
+    @pagy, @held_seats = pagy(@held_seats, items: 10)
   end
 end

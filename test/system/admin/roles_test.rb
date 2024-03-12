@@ -20,10 +20,10 @@ class Admin::RolesTest < ApplicationSystemTestCase
   test "Updating a role" do
     role = @roles.first
 
-    refute role.hold_seats
-    refute role.release_seats
-    refute role.manage_customers
-    refute role.manage_admins
+    assert_not role.hold_seats
+    assert_not role.release_seats
+    assert_not role.manage_customers
+    assert_not role.manage_admins
 
     within "##{dom_id(role, :admin)}" do
       fill_in "user_role[name]", with: "New Role"
@@ -53,11 +53,11 @@ class Admin::RolesTest < ApplicationSystemTestCase
     refute_text "Role was successfully created"
 
     role = User::Role.find_by(name: "Create New Role")
-    refute_nil role
-    refute role.hold_seats
-    refute role.release_seats
-    refute role.manage_customers
-    refute role.manage_admins
+    assert_not_nil role
+    assert_not role.hold_seats
+    assert_not role.release_seats
+    assert_not role.manage_customers
+    assert_not role.manage_admins
 
     check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[hold_seats]']"
     check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[release_seats]']"

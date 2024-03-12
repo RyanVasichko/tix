@@ -16,7 +16,7 @@ class Admin::MerchTest < ApplicationSystemTestCase
     merch_category = FactoryBot.create(:merch_category)
     assert_difference("Merch.count") do
       visit admin_merch_index_url
-      click_on "New Merch"
+      find("#new_merch").click
 
       fill_in "Name", with: "Coffee"
       fill_in "Price", with: 10
@@ -87,7 +87,7 @@ class Admin::MerchTest < ApplicationSystemTestCase
     click_on "Take off sale"
 
     assert_text "Merch was taken off sale"
-    refute @merch.reload.active?
+    assert_not @merch.reload.active?
   end
 
   test "should put merch on sale" do

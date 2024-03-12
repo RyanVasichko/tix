@@ -27,4 +27,48 @@ module SvgHelper
       content_tag :path, nil, clip_rule: "evenodd", fill_rule: "evenodd", d: "M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
     end
   end
+
+  def svg_plus(options = {})
+    add_svg_width_class_to_options(options)
+    add_svg_height_class_to_options(options)
+    content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", **options do
+      content_tag :path, nil, stroke_linecap: "round", stroke_linejoin: "round", d: "M12 4.5v15m7.5-7.5h-15"
+    end
+  end
+
+  def svg_arrow_up(options = {})
+    add_svg_width_class_to_options(options)
+    add_svg_height_class_to_options(options)
+    content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", **options do
+      content_tag :path, nil, stroke_linecap: "round", stroke_linejoin: "round", d: "M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
+    end
+  end
+
+  def svg_arrow_up_down(options = {})
+    add_svg_width_class_to_options(options)
+    add_svg_height_class_to_options(options)
+    content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", class: "w-6 h-6" do
+      content_tag :path, nil, stroke_linecap: "round", stroke_linejoin: "round", d: "M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
+    end
+  end
+
+  def svg_arrow_down(options = {})
+    add_svg_width_class_to_options(options)
+    add_svg_height_class_to_options(options)
+    content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", **options do
+      content_tag :path, nil, stroke_linecap: "round", stroke_linejoin: "round", d: "M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
+    end
+  end
+
+  private
+
+  def add_svg_height_class_to_options(options)
+    options[:class] ||= ""
+    options[:class] << " h-6"
+  end
+
+  def add_svg_width_class_to_options(options)
+    options[:class] ||= ""
+    options[:class] << " w-6"
+  end
 end

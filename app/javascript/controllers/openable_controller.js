@@ -22,7 +22,6 @@ export default class extends Controller {
   }
 
   hide() {
-    console.log("hiding!")
     this.contentTargets.forEach(t => leave(t));
   }
 }

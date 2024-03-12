@@ -1,72 +1,19 @@
-<div class="card max-w-5xl">
-  <h1 class="text-center text-3xl font-semibold">Shows</h1>
+<h1 class="mb-4 text-center text-3xl font-semibold">
+  Shows
+</h1>
 
-  <%= table_header_wrapper_tag do %>
-    <%= form_with url: admin_shows_path,
-                  value: search_keyword,
-                  scope: :search,
-                  method: :get,
-                  data: { turbo: true, turbo_frame: :shows, turbo_action: "advance" },
-                  class: "flex justify-between items-baseline" do |form| %>
-      <%= form.label :keyword, class: "sr-only" %>
-      <%= keyword_search_field(form) %>
-      <div class="flex items-baseline ml-2">
-        <%= form.check_box :show_off_sale, checked: params.dig(:search, :show_off_sale) == "1", onchange: "this.form.requestSubmit();" %>
-        <%= form.label :show_off_sale, "Off sale", class: "ml-2" %>
-      </div>
+<%= card do %>
+  <%= data_table collection: @shows, namespace: :admin, pagy: @pagy do |table| %>
+    <% table.column(:show_date, header: "Show Date", date: true) %>
+    <% table.column(:artist_name, header: "Artist") %>
+    <% table.column(:venue_name, header: "Venue") %>
+    <% table.column(:doors_open_at, date: true) %>
+    <% table.column(:dinner_starts_at, date: true) %>
+    <% table.column(:dinner_ends_at, date: true) %>
+    <% table.column(header: "", sortable: false) do |show| %>
+      <% render "shared/dropdown", { id: dom_id(show, :admin) } do %>
+        <%= dropdown_link_to "Edit", edit_admin_show_path(show), data: { turbo_frame: "_top" } %>
+      <% end %>
     <% end %>
-
-    <div>
-      <%= link_to new_admin_show_path, class: "flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700" do %>
-        <%= svg_plus_icon %>
-        Add show
-      <% end %>
-    </div>
   <% end %>
-
-  <%= turbo_frame_tag :shows do %>
-    <%= table_tag do %>
-      <%= thead_tag do %>
-        <tr>
-          <%= th_tag "Show Date" %>
-          <%= th_tag "Artist" %>
-          <%= th_tag "Venue" %>
-          <%= th_tag "Doors Open At" %>
-          <%= th_tag "Dinner Starts At" %>
-          <%= th_tag "Dinner Ends At" %>
-          <%= th_tag "" %>
-        </tr>
-      <% end %>
-      <tbody>
-      <% @shows.each do |show| %>
-        <%= tr_for_tbody_tag id: dom_id(show, :admin) do %>
-          <%= td_tag do %>
-            <%= short_date(show.show_date) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= show.artist.name %>
-          <% end %>
-          <%= td_tag do %>
-            <%= show.venue.name %>
-          <% end %>
-          <%= td_tag do %>
-            <%= show.doors_open_at.to_fs(:hour_minute) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= show.dinner_starts_at.to_fs(:hour_minute) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= show.dinner_ends_at.to_fs(:hour_minute) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= render "shared/dropdown", { id: dom_id(show, :admin) } do %>
-              <%= dropdown_link_to "Edit", edit_admin_show_path(show), data: { turbo_frame: "_top" } %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-      </tbody>
-    <% end %>
-    <%= custom_pagy_nav(@pagy) %>
-  <% end %>
-</div>
+<% end %>
