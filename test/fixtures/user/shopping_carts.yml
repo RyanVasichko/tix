@@ -1,5 +1,5 @@
 _fixture:
-  model_class: User::ShoppingCart
+  model_class: ShoppingCart
 
 larry_sellers_shopping_cart: {}
 

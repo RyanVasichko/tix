@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :shopping_cart, class: "User::ShoppingCart" do
+  factory :shopping_cart, class: "ShoppingCart" do
     transient do
       merch_count { 0 }
       reserved_seats_count { 0 }
@@ -16,7 +16,7 @@ FactoryBot.define do
                                                    shopping_cart: shopping_cart,
                                                    reserved_until: Time.zone.now + 15.minutes)
 
-      shopping_cart.tickets << FactoryBot.build_list(:user_shopping_cart_ticket,
+      shopping_cart.tickets << FactoryBot.build_list(:shopping_cart_ticket,
                                                      evaluator.general_admission_tickets_count)
     end
   end

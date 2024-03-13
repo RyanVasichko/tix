@@ -13,8 +13,8 @@ class User::CustomerTest < ActiveSupport::TestCase
     expected_differences = {
       "User::Customer.count" => -1,
       "Order::GuestOrderer.count" => 1,
-      "User::ShoppingCart::Merch.count" => -2,
-      "User::ShoppingCart::Ticket.count" => -2,
+      "ShoppingCart::Merch.count" => -2,
+      "ShoppingCart::Ticket.count" => -2,
       "Show::Seat.count" => 0
     }
     assert_difference expected_differences do

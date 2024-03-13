@@ -1,4 +1,4 @@
-module User::ShoppingCartHelper
+module ShoppingCartHelper
   def morph_shopping_cart
     morphs = []
     morphs << turbo_stream.action("morph", "shopping_cart_count") do

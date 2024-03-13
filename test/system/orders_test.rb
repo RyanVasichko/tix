@@ -17,7 +17,7 @@ class OrdersTest < ApplicationSystemTestCase
         "Order::Merch.count" => 2,
         "Order::Ticket.count" => 4,
         "Order.count" => 1,
-        "User::ShoppingCart::Ticket.count" => -2
+        "ShoppingCart::Ticket.count" => -2
       }
       assert_difference expected_differences do
         click_on "Place Order"
@@ -91,7 +91,7 @@ class OrdersTest < ApplicationSystemTestCase
       "Order::Merch.count" => 2,
       "Order::Ticket.count" => 2,
       "Order.count" => 1,
-      "User::ShoppingCart::Ticket.count" => -1,
+      "ShoppingCart::Ticket.count" => -1,
       "Order::GuestOrderer.count" => 1
     }
     assert_difference expected_differences do

@@ -1,11 +1,11 @@
-class User::ShoppingCart < ApplicationRecord
+class ShoppingCart < ApplicationRecord
   after_update_commit :broadcast_updates
 
   before_commit :release_reserved_seats, on: :destroy
 
-  has_many :seats, -> { where(reserved_until: Time.current..) }, dependent: :nullify, class_name: "Show::Seat", foreign_key: :user_shopping_cart_id
-  has_many :tickets, dependent: :destroy, class_name: "User::ShoppingCart::Ticket", foreign_key: :user_shopping_cart_id
-  has_many :merch, dependent: :destroy, class_name: "User::ShoppingCart::Merch", foreign_key: :user_shopping_cart_id
+  has_many :seats, -> { where(reserved_until: Time.current..) }, dependent: :nullify, class_name: "Show::Seat", foreign_key: :shopping_cart_id
+  has_many :tickets, dependent: :destroy, class_name: "ShoppingCart::Ticket", foreign_key: :shopping_cart_id
+  has_many :merch, dependent: :destroy, class_name: "ShoppingCart::Merch", foreign_key: :shopping_cart_id
   has_one :user, inverse_of: :shopping_cart
 
   scope :includes_items, -> {

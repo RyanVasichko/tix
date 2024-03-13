@@ -1,6 +1,6 @@
 require "application_system_test_case"
 
-class User::ShoppingCart::MerchSystemTest < ApplicationSystemTestCase
+class ShoppingCart::MerchSystemTest < ApplicationSystemTestCase
   test "should add merch to shopping cart" do
     merch = FactoryBot.create(:merch)
     customer = FactoryBot.create(:customer)
@@ -10,7 +10,7 @@ class User::ShoppingCart::MerchSystemTest < ApplicationSystemTestCase
     visit merch_index_url
     find("##{dom_id(merch)}").click
     select 3, from: "Quantity"
-    find("label[for=user_shopping_cart_merch_option_#{option}]").click
+    find("label[for=shopping_cart_merch_option_#{option}]").click
     click_on "Add to Shopping Cart"
     assert_text "#{merch.name} was added to your shopping cart."
 

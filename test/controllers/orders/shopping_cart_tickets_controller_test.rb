@@ -9,7 +9,7 @@ class Orders::ShoppingCartTicketsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should destroy ticket" do
-    assert_difference("User::ShoppingCart::Ticket.count", -1) do
+    assert_difference("ShoppingCart::Ticket.count", -1) do
       delete orders_shopping_cart_ticket_url(@ticket)
     end
 

@@ -52,7 +52,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    create_table :user_shopping_carts do |t|
+    create_table :shopping_carts do |t|
       t.timestamps
     end
 
@@ -74,7 +74,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.string :password_digest
       t.string :type, null: false
       t.string :stripe_customer_id
-      t.references :user_shopping_cart, null: false, foreign_key: true
+      t.references :shopping_cart, null: false, foreign_key: true
       t.references :user_role, null: true, foreign_key: true
       t.string :shopper_uuid, null: false
       t.boolean :active, default: true, null: false
@@ -148,10 +148,10 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.integer :y, null: false
       t.integer :seat_number, null: false
       t.integer :table_number, null: true
-      t.references :user_shopping_cart, null: true, foreign_key: true
+      t.references :shopping_cart, null: true, foreign_key: true
       t.references :held_by_admin, null: true, foreign_key: { to_table: :users }
       t.datetime :reserved_until
-      t.index %i[user_shopping_cart_id reserved_until]
+      t.index %i[shopping_cart_id reserved_until]
 
       t.timestamps
     end
@@ -230,9 +230,9 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.index :merch_category_id
     end
 
-    create_table :user_shopping_cart_merch do |t|
+    create_table :shopping_cart_merch do |t|
       t.references :merch, null: false, foreign_key: true
-      t.references :user_shopping_cart, null: false, foreign_key: true
+      t.references :shopping_cart, null: false, foreign_key: true
       t.integer :quantity, null: false
       t.string :option
 
@@ -292,10 +292,10 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    create_table :user_shopping_cart_tickets do |t|
+    create_table :shopping_cart_tickets do |t|
       t.references :show_section, null: false, foreign_key: true
       t.integer :quantity, null: false
-      t.references :user_shopping_cart, null: false, foreign_key: true
+      t.references :shopping_cart, null: false, foreign_key: true
 
       t.timestamps
     end

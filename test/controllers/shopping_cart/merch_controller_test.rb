@@ -14,10 +14,10 @@ class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should create shopping_cart_merch" do
-    assert_difference("User::ShoppingCart::Merch.count") do
+    assert_difference("ShoppingCart::Merch.count") do
       post shopping_cart_merch_index_url,
            params: {
-             user_shopping_cart_merch: {
+             shopping_cart_merch: {
                merch_id: @merch.id,
                quantity: 1,
                option: @merch.options.first
@@ -29,7 +29,7 @@ class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should update shopping_cart_merch" do
-    patch shopping_cart_merch_url(@shopping_cart_merch), params: { user_shopping_cart_merch: { quantity: 3 } }
+    patch shopping_cart_merch_url(@shopping_cart_merch), params: { shopping_cart_merch: { quantity: 3 } }
 
     assert_equal "Shopping cart was successfully updated.", flash[:success]
   end

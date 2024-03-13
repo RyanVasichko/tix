@@ -25,7 +25,7 @@ class ShoppingCart::MerchController < ApplicationController
       @shopping_cart_merch = Current.user.shopping_cart.merch.build(shopping_cart_merch_params)
     end
 
-    @merch = Merch.find(params[:user_shopping_cart_merch][:merch_id])
+    @merch = Merch.find(params[:shopping_cart_merch][:merch_id])
 
     if @shopping_cart_merch.save
       redirect_back_or_to merch_index_url, flash: { success: "#{@merch.name} was added to your shopping cart." }, status: :see_other
@@ -55,11 +55,11 @@ class ShoppingCart::MerchController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_shopping_cart_merch
-    @shopping_cart_merch = User::ShoppingCart::Merch.find(params[:id])
+    @shopping_cart_merch = ShoppingCart::Merch.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
   def shopping_cart_merch_params
-    params.fetch(:user_shopping_cart_merch, {}).permit(:merch_id, :quantity, :option)
+    params.fetch(:shopping_cart_merch, {}).permit(:merch_id, :quantity, :option)
   end
 end

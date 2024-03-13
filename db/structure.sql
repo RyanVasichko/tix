@@ -43,11 +43,11 @@ FOREIGN KEY ("ticket_type_id")
 CREATE INDEX "index_seating_chart_sections_on_name_and_seating_chart_id" ON "seating_chart_sections" ("name", "seating_chart_id");
 CREATE INDEX "index_seating_chart_sections_on_seating_chart_id" ON "seating_chart_sections" ("seating_chart_id");
 CREATE INDEX "index_seating_chart_sections_on_ticket_type_id" ON "seating_chart_sections" ("ticket_type_id");
-CREATE TABLE IF NOT EXISTS "user_shopping_carts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
+CREATE TABLE IF NOT EXISTS "shopping_carts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
 CREATE TABLE IF NOT EXISTS "user_roles" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "hold_seats" boolean DEFAULT 0 NOT NULL, "release_seats" boolean DEFAULT 0 NOT NULL, "manage_customers" boolean DEFAULT 0 NOT NULL, "manage_admins" boolean DEFAULT 0 NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
-CREATE TABLE IF NOT EXISTS "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar, "last_name" varchar, "phone" varchar, "email" varchar, "password_digest" varchar, "type" varchar NOT NULL, "stripe_customer_id" varchar, "user_shopping_cart_id" integer NOT NULL, "user_role_id" integer, "shopper_uuid" varchar NOT NULL, "active" boolean DEFAULT 1 NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_ccdc570bce"
-FOREIGN KEY ("user_shopping_cart_id")
-  REFERENCES "user_shopping_carts" ("id")
+CREATE TABLE IF NOT EXISTS "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar, "last_name" varchar, "phone" varchar, "email" varchar, "password_digest" varchar, "type" varchar NOT NULL, "stripe_customer_id" varchar, "shopping_cart_id" integer NOT NULL, "user_role_id" integer, "shopper_uuid" varchar NOT NULL, "active" boolean DEFAULT 1 NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_967698ebe3"
+FOREIGN KEY ("shopping_cart_id")
+  REFERENCES "shopping_carts" ("id")
 , CONSTRAINT "fk_rails_fa83e8f093"
 FOREIGN KEY ("user_role_id")
   REFERENCES "user_roles" ("id")
@@ -60,7 +60,7 @@ FOREIGN KEY ("user_role_id")
         )
         OR type = 'User::Guest'
 ), CONSTRAINT check_admin_role CHECK (type != 'User::Admin' OR user_role_id IS NOT NULL));
-CREATE INDEX "index_users_on_user_shopping_cart_id" ON "users" ("user_shopping_cart_id");
+CREATE INDEX "index_users_on_shopping_cart_id" ON "users" ("shopping_cart_id");
 CREATE INDEX "index_users_on_user_role_id" ON "users" ("user_role_id");
 CREATE INDEX "index_users_on_email_and_active" ON "users" ("email", "active");
 CREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email");
@@ -80,20 +80,20 @@ FOREIGN KEY ("show_id")
   REFERENCES "shows" ("id")
 );
 CREATE INDEX "index_show_sections_on_show_id" ON "show_sections" ("show_id");
-CREATE TABLE IF NOT EXISTS "show_seats" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "show_section_id" integer NOT NULL, "x" integer NOT NULL, "y" integer NOT NULL, "seat_number" integer NOT NULL, "table_number" integer, "user_shopping_cart_id" integer, "held_by_admin_id" integer, "reserved_until" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d00b4b7099"
+CREATE TABLE IF NOT EXISTS "show_seats" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "show_section_id" integer NOT NULL, "x" integer NOT NULL, "y" integer NOT NULL, "seat_number" integer NOT NULL, "table_number" integer, "shopping_cart_id" integer, "held_by_admin_id" integer, "reserved_until" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d00b4b7099"
 FOREIGN KEY ("show_section_id")
   REFERENCES "show_sections" ("id")
-, CONSTRAINT "fk_rails_65c10f4625"
-FOREIGN KEY ("user_shopping_cart_id")
-  REFERENCES "user_shopping_carts" ("id")
+, CONSTRAINT "fk_rails_4738d8c918"
+FOREIGN KEY ("shopping_cart_id")
+  REFERENCES "shopping_carts" ("id")
 , CONSTRAINT "fk_rails_7f3cf83063"
 FOREIGN KEY ("held_by_admin_id")
   REFERENCES "users" ("id")
 );
 CREATE INDEX "index_show_seats_on_show_section_id" ON "show_seats" ("show_section_id");
-CREATE INDEX "index_show_seats_on_user_shopping_cart_id" ON "show_seats" ("user_shopping_cart_id");
+CREATE INDEX "index_show_seats_on_shopping_cart_id" ON "show_seats" ("shopping_cart_id");
 CREATE INDEX "index_show_seats_on_held_by_admin_id" ON "show_seats" ("held_by_admin_id");
-CREATE INDEX "index_show_seats_on_user_shopping_cart_id_and_reserved_until" ON "show_seats" ("user_shopping_cart_id", "reserved_until");
+CREATE INDEX "index_show_seats_on_shopping_cart_id_and_reserved_until" ON "show_seats" ("shopping_cart_id", "reserved_until");
 CREATE TABLE IF NOT EXISTS "order_payments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "stripe_payment_intent_id" varchar NOT NULL, "stripe_payment_method_id" varchar NOT NULL, "card_brand" varchar NOT NULL, "card_exp_month" integer NOT NULL, "card_exp_year" integer NOT NULL, "card_last_4" integer NOT NULL, "amount_in_cents" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
 CREATE TABLE IF NOT EXISTS "orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "order_total" decimal(8,2) NOT NULL, "convenience_fees" decimal(8,2) DEFAULT 0.0 NOT NULL, "shipping_fees" decimal(8,2) DEFAULT 0.0 NOT NULL, "order_number" varchar, "orderer_type" varchar NOT NULL, "orderer_id" integer NOT NULL, "order_payment_id" integer, "shipping_address_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_93fa66ee37"
 FOREIGN KEY ("order_payment_id")
@@ -128,15 +128,15 @@ CREATE TABLE IF NOT EXISTS "merch_categories" ("id" integer PRIMARY KEY AUTOINCR
 CREATE TABLE IF NOT EXISTS "merch_merch_categories" ("merch_id" integer NOT NULL, "merch_category_id" integer NOT NULL);
 CREATE INDEX "index_merch_merch_categories_on_merch_id" ON "merch_merch_categories" ("merch_id");
 CREATE INDEX "index_merch_merch_categories_on_merch_category_id" ON "merch_merch_categories" ("merch_category_id");
-CREATE TABLE IF NOT EXISTS "user_shopping_cart_merch" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "merch_id" integer NOT NULL, "user_shopping_cart_id" integer NOT NULL, "quantity" integer NOT NULL, "option" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_14f2b9242a"
+CREATE TABLE IF NOT EXISTS "shopping_cart_merch" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "merch_id" integer NOT NULL, "shopping_cart_id" integer NOT NULL, "quantity" integer NOT NULL, "option" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e3fa4423f5"
 FOREIGN KEY ("merch_id")
   REFERENCES "merch" ("id")
-, CONSTRAINT "fk_rails_3b52ad1d22"
-FOREIGN KEY ("user_shopping_cart_id")
-  REFERENCES "user_shopping_carts" ("id")
+, CONSTRAINT "fk_rails_5b5895153f"
+FOREIGN KEY ("shopping_cart_id")
+  REFERENCES "shopping_carts" ("id")
 );
-CREATE INDEX "index_user_shopping_cart_merch_on_merch_id" ON "user_shopping_cart_merch" ("merch_id");
-CREATE INDEX "index_user_shopping_cart_merch_on_user_shopping_cart_id" ON "user_shopping_cart_merch" ("user_shopping_cart_id");
+CREATE INDEX "index_shopping_cart_merch_on_merch_id" ON "shopping_cart_merch" ("merch_id");
+CREATE INDEX "index_shopping_cart_merch_on_shopping_cart_id" ON "shopping_cart_merch" ("shopping_cart_id");
 CREATE TABLE IF NOT EXISTS "order_merch" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "merch_id" integer NOT NULL, "order_id" integer NOT NULL, "quantity" integer NOT NULL, "unit_price" decimal(10,2) NOT NULL, "total_price" decimal(10,2) NOT NULL, "option" varchar, "option_label" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_5033407e09"
 FOREIGN KEY ("merch_id")
   REFERENCES "merch" ("id")
@@ -158,15 +158,15 @@ FOREIGN KEY ("show_id")
   REFERENCES "shows" ("id")
 );
 CREATE INDEX "index_show_upsales_on_show_id" ON "show_upsales" ("show_id");
-CREATE TABLE IF NOT EXISTS "user_shopping_cart_tickets" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "show_section_id" integer NOT NULL, "quantity" integer NOT NULL, "user_shopping_cart_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c722d48ae2"
+CREATE TABLE IF NOT EXISTS "shopping_cart_tickets" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "show_section_id" integer NOT NULL, "quantity" integer NOT NULL, "shopping_cart_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_cebb44c68c"
 FOREIGN KEY ("show_section_id")
   REFERENCES "show_sections" ("id")
-, CONSTRAINT "fk_rails_2771fee292"
-FOREIGN KEY ("user_shopping_cart_id")
-  REFERENCES "user_shopping_carts" ("id")
+, CONSTRAINT "fk_rails_ca2340ccb6"
+FOREIGN KEY ("shopping_cart_id")
+  REFERENCES "shopping_carts" ("id")
 );
-CREATE INDEX "index_user_shopping_cart_tickets_on_show_section_id" ON "user_shopping_cart_tickets" ("show_section_id");
-CREATE INDEX "index_user_shopping_cart_tickets_on_user_shopping_cart_id" ON "user_shopping_cart_tickets" ("user_shopping_cart_id");
+CREATE INDEX "index_shopping_cart_tickets_on_show_section_id" ON "shopping_cart_tickets" ("show_section_id");
+CREATE INDEX "index_shopping_cart_tickets_on_shopping_cart_id" ON "shopping_cart_tickets" ("shopping_cart_id");
 CREATE TABLE IF NOT EXISTS "merch_shipping_charges" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "weight" decimal(8,2) NOT NULL, "price" decimal(8,2) NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
 CREATE VIRTUAL TABLE order_search_indices USING fts5(  order_id,  created_at,  order_number,  orderer_name,  orderer_phone,  orderer_email,  order_total,  artist_name,  tickets_count,  tokenize='trigram case_sensitive 0')
 /* order_search_indices(order_id,created_at,order_number,orderer_name,orderer_phone,orderer_email,order_total,artist_name,tickets_count) */;

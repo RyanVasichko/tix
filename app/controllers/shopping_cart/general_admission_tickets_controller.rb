@@ -58,6 +58,6 @@ class ShoppingCart::GeneralAdmissionTicketsController < ApplicationController
   end
 
   def update_params
-    params.fetch(:user_shopping_cart_ticket, {}).permit(:quantity)
+    params.fetch(:shopping_cart_ticket, {}).permit(:quantity)
   end
 end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :shopping_cart_merch, class: "User::ShoppingCart::Merch" do
+  factory :shopping_cart_merch, class: "ShoppingCart::Merch" do
     association :merch
     association :shopping_cart
     quantity { rand(1..5) }

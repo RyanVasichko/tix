@@ -1,5 +1,5 @@
 _fixture:
-  model_class: User::ShoppingCart::Merch
+  model_class: ShoppingCart::Merch
 
 larry_sellers_bbq_sauce:
   merch: bbq_sauce

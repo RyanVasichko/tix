@@ -4,18 +4,18 @@ module Show::Seat::Reservable
   included do
     belongs_to :shopping_cart,
                optional: true,
-               class_name: "User::ShoppingCart",
-               foreign_key: :user_shopping_cart_id,
+               class_name: "ShoppingCart",
+               foreign_key: :shopping_cart_id,
                inverse_of: :seats,
                touch: true
-    before_save -> { ShoppingCart.find_by(id: user_shopping_cart_id_previously_was)&.touch },
-                if: -> { user_shopping_cart_id_previously_was.present? && user_shopping_cart_id_previously_changed? }
+    before_save -> { ShoppingCart.find_by(id: shopping_cart_id_previously_was)&.touch },
+                if: -> { shopping_cart_id_previously_was.present? && shopping_cart_id_previously_changed? }
 
     has_one :reserved_by, through: :shopping_cart, source: :user
 
     scope :reserved, -> { where(reserved_until: Time.current...) }
 
-    after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_user_shopping_cart_id? }
+    after_update_commit :queue_expiration_job, if: -> { saved_change_to_reserved_until? || saved_change_to_shopping_cart_id? }
     after_update_commit -> { broadcast_replace_later_to [show, "seating_chart"], partial: "reserved_seating_shows/seats/seat" }
   end
 

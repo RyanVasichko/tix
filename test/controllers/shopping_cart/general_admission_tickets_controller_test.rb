@@ -69,7 +69,7 @@ class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrati
 
     assert_no_difference -> { customer.shopping_cart.tickets.count } do
       patch shopping_cart_general_admission_show_ticket_url(@show, customer.shopping_cart.tickets.first), params: {
-        user_shopping_cart_ticket: {
+        shopping_cart_ticket: {
           quantity: 2
         }
       }
