@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   Deploy:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
