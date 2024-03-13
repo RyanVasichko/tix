@@ -6,18 +6,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
 
-  teardown do
-    if defined?(page.driver.browser.logs)
-      logs = page.driver.browser.logs.get(:browser)
-      error_logs = logs.select { |e| e.level == "SEVERE" }.filter { |e| !e.message.include?("Failed to fetch") }
-
-      error_logs.each do |log|
-        puts ""
-        puts "[CONSOLE ERROR - #{log.timestamp}] #{log.message}"
-      end
-    end
-  end
-
   def log_in_as(user, password = "password")
     visit login_path
     fill_in "Email", with: user.email
