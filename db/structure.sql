@@ -168,18 +168,7 @@ FOREIGN KEY ("user_shopping_cart_id")
 CREATE INDEX "index_user_shopping_cart_tickets_on_show_section_id" ON "user_shopping_cart_tickets" ("show_section_id");
 CREATE INDEX "index_user_shopping_cart_tickets_on_user_shopping_cart_id" ON "user_shopping_cart_tickets" ("user_shopping_cart_id");
 CREATE TABLE IF NOT EXISTS "merch_shipping_charges" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "weight" decimal(8,2) NOT NULL, "price" decimal(8,2) NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
-CREATE VIRTUAL TABLE order_search_indices USING fts5(
-  order_id,
-  created_at,
-  order_number,
-  orderer_name,
-  orderer_phone,
-  orderer_email,
-  order_total,
-  artist_name,
-  tickets_count,
-  tokenize='trigram case_sensitive 0'
-)
+CREATE VIRTUAL TABLE order_search_indices USING fts5(  order_id,  created_at,  order_number,  orderer_name,  orderer_phone,  orderer_email,  order_total,  artist_name,  tickets_count,  tokenize='trigram case_sensitive 0')
 /* order_search_indices(order_id,created_at,order_number,orderer_name,orderer_phone,orderer_email,order_total,artist_name,tickets_count) */;
 CREATE TABLE IF NOT EXISTS 'order_search_indices_data'(id INTEGER PRIMARY KEY, block BLOB);
 CREATE TABLE IF NOT EXISTS 'order_search_indices_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
