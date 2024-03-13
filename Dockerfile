@@ -24,9 +24,7 @@ ENV RAILS_ENV="production" \
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config && \
-    apt-get remove -y npm && \
-    apt-get clean
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
 
 # Install jemalloc
 RUN apt-get update && \
@@ -37,7 +35,7 @@ RUN apt-get update && \
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 # Install application gems
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile Gemfile.lock .ruby-version ./
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 

@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "05aa1fbd7b1e3eb97803df5d46fa51a6127a25d7da8d7e76f6f3f59e2e2081cf",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/user.rb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{\"REPLACE(REPLACE(REPLACE(REPLACE(phone, '-', ''), '(', ''), ')', ''), ' ', '')\"} COLLATE NOCASE #{direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "User",
+        "method": null
+      },
+      "user_input": "direction",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "08648308c744fbef6db654ef66e00fc384b64559ccedfcd1ce641b41ac1a9c44",
@@ -20,29 +43,6 @@
       "confidence": "Medium",
       "cwe_id": [
         77
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "157d23050fa5f3d1f204eb07d5a0393d6cbe09910e4bbf96d5365ff133a0a369",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/data_migration/postgres_sequences_fixer.rb",
-      "line": 50,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"SELECT setval('#{sequence_name}', #{max_id})\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DataMigration::PostgresSequencesFixer",
-        "method": "set_sequence_value_to_max_id"
-      },
-      "user_input": "sequence_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
       ],
       "note": ""
     },
@@ -83,20 +83,20 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "24270bfce909ec11a8eaf79774409ac6b46a97eb35d13bb0cd3e884f4d88470c",
+      "fingerprint": "772de838a2c47d2025a1ffc34a033d86c8261189a077efbe40df7edad6a7f800",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "lib/data_migration/postgres_sequences_fixer.rb",
-      "line": 46,
+      "file": "app/models/concerns/searchable.rb",
+      "line": 53,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"SELECT COALESCE(MAX(id), 1) AS max_id FROM #{table_name}\")",
+      "code": "Arel.sql(\"#{reflect_on_association(association).plural_name}.#{property} COLLATE NOCASE #{direction}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "DataMigration::PostgresSequencesFixer",
-        "method": "max_id_for_table"
+        "class": "Searchable",
+        "method": "define_order_by_scope_for_association_property"
       },
-      "user_input": "table_name",
+      "user_input": "reflect_on_association(association).plural_name",
       "confidence": "Medium",
       "cwe_id": [
         89
@@ -106,20 +106,20 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "9e7fd79f53cb326f850c2b8ab580e147f22c2d31bb12cc99ec11715c4e17924f",
+      "fingerprint": "ad09ef5b41a5ea1aa624d8a3350f7947c627cf97ea665da05440b53b485ee0b5",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "lib/data_migration/sqlite_sequences_fixer.rb",
-      "line": 20,
+      "file": "app/models/concerns/searchable.rb",
+      "line": 35,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"UPDATE sqlite_sequence SET seq = #{ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\").first.values.first} WHERE name = '#{table}'\")",
+      "code": "Arel.sql(\"#{table_name}.#{property} COLLATE NOCASE #{direction}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "DataMigration::SqliteSequencesFixer",
-        "method": "fix_sequences"
+        "class": "Searchable",
+        "method": "define_order_by_scope_for_property"
       },
-      "user_input": "ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\").first.values.first",
+      "user_input": "property",
       "confidence": "Medium",
       "cwe_id": [
         89
@@ -129,20 +129,20 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "ad8605ad2086c84cf5a2c9fd0dc31d1390c68cd76502d12bcaa0849bd6b8c5c4",
+      "fingerprint": "d2dec4561f826e2dc14c72375b6ffe4d166273a12986715ca652db543da1620f",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "lib/data_migration/postgres_sequences_fixer.rb",
-      "line": 40,
+      "file": "app/models/user.rb",
+      "line": 18,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"SELECT d.objid::regclass AS sequence_name\\nFROM pg_depend AS d\\nJOIN pg_attribute AS a ON d.refobjid = a.attrelid AND d.refobjsubid = a.attnum\\nWHERE d.objid = 'public.#{table_name}_id_seq'::regclass\\n\")",
+      "code": "Arel.sql(\"LOWER(CONCAT(first_name, ' ', last_name)) COLLATE NOCASE #{direction}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "DataMigration::PostgresSequencesFixer",
-        "method": "sequence_name_for_table"
+        "class": "User",
+        "method": null
       },
-      "user_input": "table_name",
+      "user_input": "direction",
       "confidence": "Medium",
       "cwe_id": [
         89
@@ -152,20 +152,20 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "e3ac0aac8d8af410f989b431ec315518b11186229731b7b5aa3d43ab8dd5f253",
+      "fingerprint": "db32b74863325cba6681bdc4eb6089083f6736a1ac9796c06d98750a93bb6669",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "lib/data_migration/sqlite_sequences_fixer.rb",
-      "line": 13,
+      "file": "app/models/order/keyword_searchable.rb",
+      "line": 12,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"SELECT MAX(id) FROM #{table}\")",
+      "code": "joins(\"#{\"INNER JOIN order_search_indices ON order_search_indices.order_id = orders.id\"} MATCH #{\"'\\\"#{ActiveRecord::Base.sanitize_sql_like(keyword.gsub(\".\", \"\"))}\\\"'\"}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "DataMigration::SqliteSequencesFixer",
-        "method": "fix_sequences"
+        "class": "Order::KeywordSearchable",
+        "method": null
       },
-      "user_input": "table",
+      "user_input": "ActiveRecord::Base.sanitize_sql_like(keyword.gsub(\".\", \"\"))",
       "confidence": "Medium",
       "cwe_id": [
         89
@@ -173,6 +173,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-01-04 21:33:50 -0600",
-  "brakeman_version": "6.1.1"
+  "updated": "2024-03-12 21:18:03 -0500",
+  "brakeman_version": "6.1.2"
 }
