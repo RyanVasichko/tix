@@ -98,9 +98,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activerecord-enhancedsqlite3-adapter (0.4.0)
-      activerecord (>= 7.1)
-      sqlite3 (~> 1.6)
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     appsignal (3.6.2)
@@ -343,7 +340,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activerecord-enhancedsqlite3-adapter (~> 0.4.0)
   appsignal
   awesome_print
   aws-sdk-s3
