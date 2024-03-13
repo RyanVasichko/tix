@@ -5,7 +5,6 @@ class Show < ApplicationRecord
 
   validates :show_date, presence: true
   scope :upcoming, -> { where(show_date: Time.current ..) }
-  validates :skip_email_reminder, inclusion: { in: [true, false] }
   validates :type, presence: true
 
   belongs_to :artist

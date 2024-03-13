@@ -29,5 +29,7 @@ module DoseyDoeTickets
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.middleware.use Middleware::LoggingSilencer, ["/up"]
+
+    config.active_record.schema_format = :sql
   end
 end

@@ -22,7 +22,6 @@ gem "stripe"
 
 # Database
 gem "sqlite3", "~> 1.6"
-gem "activerecord-enhancedsqlite3-adapter", "~> 0.4.0"
 
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
