@@ -8,9 +8,9 @@ class Admin::TicketTypesController < Admin::AdminController
 
   # GET /admin/ticket_types
   def index
-    @show_inactive = params[:show_inactive] == "1"
-    @ticket_types = TicketType.search(search_params)
-    @ticket_types = @ticket_types.active unless @show_inactive
+    @ticket_types = TicketType.all
+    @ticket_types = @ticket_types.active unless include_deactivated?
+    @ticket_types = @ticket_types.search(search_params)
     @pagy, @ticket_types = pagy(@ticket_types)
   end
 
