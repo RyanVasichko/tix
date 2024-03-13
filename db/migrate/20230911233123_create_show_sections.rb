@@ -5,7 +5,7 @@ class CreateShowSections < ActiveRecord::Migration[7.0]
       t.decimal :ticket_price, precision: 10, scale: 2, null: false
       t.string :convenience_fee_type, null: false
       t.string :payment_method, null: false
-      t.decimal :convenience_fee, precision: 10, scale: 2, null: false
+      t.decimal :convenience_fee, precision: 10, scale: 2, null: false, default: 0
       t.decimal :venue_commission, precision: 10, scale: 2, null: false, default: 0
       t.integer :ticket_quantity
       t.string :name, null: false
