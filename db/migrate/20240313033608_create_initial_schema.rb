@@ -307,8 +307,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    # Remove the newlines because for some reason the newlines get persisted into structure.sql which breaks loading the schema
-    execute <<~SQL.gsub("\n", '')
+    execute <<~SQL
       CREATE VIRTUAL TABLE IF NOT EXISTS order_search_indices USING fts5(
         order_id,
         created_at,
