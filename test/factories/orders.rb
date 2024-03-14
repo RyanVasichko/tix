@@ -27,7 +27,7 @@ FactoryBot.define do
 
       if evaluator.general_admission_tickets_count.positive?
         sections = if evaluator.with_existing_shows
-                     Show::GeneralAdmissionSection.order("RANDOM()").limit(evaluator.general_admission_tickets_count)
+                     Show::Sections::GeneralAdmission.order("RANDOM()").limit(evaluator.general_admission_tickets_count)
         else
                      FactoryBot.create_list(:general_admission_show_section, evaluator.general_admission_tickets_count)
         end

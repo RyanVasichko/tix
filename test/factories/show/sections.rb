@@ -8,11 +8,11 @@ FactoryBot.define do
     end
   end
 
-  factory :reserved_seating_show_section, traits: [:show_section], class: Show::ReservedSeatingSection.to_s do
+  factory :reserved_seating_show_section, traits: [:show_section], class: Show::Sections::ReservedSeating.to_s do
     association :show, factory: :reserved_seating_show
-    type { Show::ReservedSeatingSection.to_s }
-    payment_method { Show::ReservedSeatingSection.payment_methods.keys.sample }
-    convenience_fee_type { Show::ReservedSeatingSection.convenience_fee_types.keys.sample }
+    type { Show::Sections::ReservedSeating.to_s }
+    payment_method { Show::Sections::ReservedSeating.payment_methods.keys.sample }
+    convenience_fee_type { Show::Sections::ReservedSeating.convenience_fee_types.keys.sample }
     convenience_fee { convenience_fee_type == :flat_rate ? Faker::Commerce.price(range: 0..10.0) : Faker::Commerce.price(range: 0.1..10.0) }
     venue_commission { Faker::Commerce.price(range: 0..5.0) }
 
@@ -37,9 +37,9 @@ FactoryBot.define do
     end
   end
 
-  factory :general_admission_show_section, traits: [:show_section], class: Show::GeneralAdmissionSection.to_s do
+  factory :general_admission_show_section, traits: [:show_section], class: Show::Sections::GeneralAdmission.to_s do
     association :show, factory: :general_admission_show
-    type { Show::GeneralAdmissionSection.to_s }
+    type { Show::Sections::GeneralAdmission.to_s }
     convenience_fee { Faker::Commerce.price(range: 0..10.0) }
   end
 end

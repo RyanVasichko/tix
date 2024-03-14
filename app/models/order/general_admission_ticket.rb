@@ -1,7 +1,7 @@
 class Order::GeneralAdmissionTicket < Order::Ticket
   attr_accessor :shopping_cart_ticket
 
-  belongs_to :show_section, class_name: "Show::GeneralAdmissionSection", inverse_of: :order_tickets, foreign_key: "show_section_id"
+  belongs_to :show_section, class_name: "Show::Sections::GeneralAdmission", inverse_of: :order_tickets, foreign_key: "show_section_id"
   belongs_to :show, class_name: "Show::GeneralAdmissionShow", inverse_of: :tickets, foreign_key: "show_id"
 
   def deposit_payment_method?
