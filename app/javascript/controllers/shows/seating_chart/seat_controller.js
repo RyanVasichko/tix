@@ -12,7 +12,7 @@ export default class extends ApplicationController {
     heldByUserId: String
   };
 
-  get reservedUntilDate() {
+  get #reservedUntilDate() {
     if (!this.reservedUntilValue) {
       return undefined;
     }
@@ -20,59 +20,72 @@ export default class extends ApplicationController {
     return new Date(this.reservedUntilValue * 1000);
   }
 
-  get reservedByCurrentUser() {
-    return this.currentUserId === this.reservedByUserIdValue && this.reservedUntilDate > new Date();
+  get #reservedByCurrentUser() {
+    return this.currentUserId === this.reservedByUserIdValue && this.#reservedUntilDate > new Date();
   }
 
-  get soldToCurrentUser() {
+  get #soldToCurrentUser() {
     return this.currentUserId === this.soldToUserIdValue;
   }
 
-  get reserved() {
-    return !!this.reservedByUserIdValue && this.reservedUntilDate > new Date();
+  get #reserved() {
+    return !!this.reservedByUserIdValue && this.#reservedUntilDate > new Date();
   }
 
-  get sold() {
+  get #sold() {
     return !!this.soldToUserIdValue;
   }
 
-  get held() {
+  get #held() {
     return !!this.heldByUserIdValue;
   }
 
-  get fillColor() {
-    if (!this.reserved && !this.sold && !this.held) {
+  get #fillColor() {
+    if (!this.#reserved && !this.#sold && !this.#held) {
       return "green";
     }
 
-    if (this.held && this.currentUserIsAdmin) {
+    if (this.#held && this.currentUserIsAdmin) {
       return "purple";
     }
 
-    if (this.reservedByCurrentUser || this.soldToCurrentUser) {
+    if (this.#reservedByCurrentUser || this.#soldToCurrentUser) {
       return "yellow";
     }
 
     return "red";
   }
 
+  get #reservable() {
+    return !this.#reserved && !this.#sold && !this.#held
+  }
+
+  get #actionable() {
+    return this.#reservable || this.#reservedByCurrentUser;
+  }
+
   connect() {
     super.connect();
-    this.element.setAttribute("fill", this.fillColor);
+    this.element.setAttribute("fill", this.#fillColor);
     this.element.setAttribute("fill-opacity", 1);
+    if (this.#actionable) {
+      this.element.classList.add("cursor-pointer");
+    }
     this.clickHandler = debounce(this.clickHandler.bind(this), 1000, { immediate: true });
   }
 
   async clickHandler() {
-    console.log(this.heldByUserIdValue)
-    if (this.reservedByCurrentUser) {
+    if (!this.#actionable) {
+      return;
+    }
+
+    if (this.#reservedByCurrentUser) {
       this.element.setAttribute("fill", "green");
       await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
       return;
     }
 
-    const reservable = !this.reserved && !this.sold && !this.held;
-    if (reservable) {
+    if (this.#reservable) {
       this.element.setAttribute("fill", "yellow");
       await post(this.reservationPathValue, { responseKind: "turbo-stream" });
     }
