@@ -8,9 +8,9 @@ class Admin::CustomerQuestionsController < Admin::AdminController
 
   # GET /admin/customer_questions
   def index
-    customer_questions = CustomerQuestion.search(search_params)
-    customer_questions = customer_questions.active unless include_deactivated?
-    @pagy, @customer_questions = pagy(customer_questions)
+    @customer_questions = CustomerQuestion.search(search_params)
+    @customer_questions = @customer_questions.active unless include_deactivated?
+    @pagy, @customer_questions = pagy(@customer_questions)
   end
 
   # GET /admin/customer_questions/new

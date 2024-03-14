@@ -7,7 +7,9 @@ class Admin::SeatingChartsController < Admin::AdminController
   self.default_sort_field = :name
 
   def index
-    @pagy, @seating_charts = pagy(SeatingChart.active.search(search_params))
+    @seating_charts = SeatingChart.search(search_params)
+    @seating_charts = @seating_charts.active unless include_deactivated?
+    @pagy, @seating_charts = pagy(@seating_charts)
   end
 
   def show
@@ -50,7 +52,7 @@ class Admin::SeatingChartsController < Admin::AdminController
 
   def update
     if @seating_chart.update(seating_chart_params)
-      redirect_to admin_seating_charts_url, flash: { success: "Seating chart was successfully updated." }
+      redirect_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully updated." }
     else
       render :edit
     end
@@ -59,17 +61,12 @@ class Admin::SeatingChartsController < Admin::AdminController
   def deactivate
     @seating_chart = SeatingChart.find(params[:id])
     @seating_chart.deactivate!
-    redirect_to admin_seating_charts_url, flash: { success: "Seating chart was successfully deactivated." }
+    redirect_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully deactivated." }
   end
 
   def destroy
     @seating_chart.deactivate!
-    message = "Seating chart was successfully destroyed."
-
-    respond_to do |format|
-      format.html { redirect_to admin_seating_charts_url, flash: { success: message } }
-      format.turbo_stream { flash.now[:success] = message }
-    end
+    redirect_back_or_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully destroyed." }
   end
 
   private
