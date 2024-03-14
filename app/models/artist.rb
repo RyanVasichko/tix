@@ -11,5 +11,5 @@ class Artist < ApplicationRecord
   end
   has_many :shows
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false, conditions: -> { where(active: true) } }
 end

@@ -23,9 +23,5 @@ class Merch < ApplicationRecord
   has_many :order_merch, class_name: "Order::Merch", inverse_of: :merch
 
   validates :price, presence: true
-  validates :name, presence: true
-
-  def skip_name_suffix
-    true
-  end
+  validates :name, presence: true, uniqueness: { case_sensitive: false, conditions: -> { where(active: true) } }
 end
