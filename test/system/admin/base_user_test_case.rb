@@ -9,17 +9,17 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
 
   def run_create_user_test
     visit index_path
-    find("#new_user_#{user_type.downcase}").click
+    find("#new_users_#{user_type.downcase}").click
 
     fill_common_fields
     yield if block_given?
 
-    assert_difference "User::#{user_type}.count" do
+    assert_difference "Users::#{user_type}.count" do
       click_on "Create #{user_type}"
       assert_text "#{user_type} was successfully created."
     end
 
-    assert_user_attributes(User.const_get(user_type).last)
+    assert_user_attributes(Users.const_get(user_type).last)
   end
 
   def run_update_user_test
@@ -31,7 +31,7 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     fill_common_fields
     yield if block_given?
 
-    assert_no_difference "User::#{user_type}.count" do
+    assert_no_difference "Users::#{user_type}.count" do
       click_on "Update #{user_type}"
       assert_text "#{user_type} was successfully updated."
     end
@@ -48,6 +48,7 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     fill_in "Phone", with: "555-555-5555"
     fill_in "Password", with: "password"
     fill_in "Password confirmation", with: "password"
+    sleep 5
   end
 
   def assert_user_attributes(user)

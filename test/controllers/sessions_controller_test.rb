@@ -50,7 +50,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
     show = FactoryBot.create(:reserved_seating_show)
 
     get login_path # Just get a random endpoint so it will create the guest user
-    guest = User::Guest.last
+    guest = Users::Guest.last
 
     seat = show.seats.where(shopping_cart: nil, reserved_until: nil).first
     seat.reserve_for(guest)

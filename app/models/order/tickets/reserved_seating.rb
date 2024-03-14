@@ -1,10 +1,10 @@
-class Order::ReservedSeatingTicket < Order::Ticket
+class Order::Tickets::ReservedSeating < Order::Ticket
   belongs_to :seat, class_name: "Show::Seat", inverse_of: :ticket, foreign_key: "show_seat_id", touch: true
   has_one :show_section, through: :seat, class_name: "Show::Sections::ReservedSeating", source: :section
   validates :seat, presence: true
   delegate :seat_number, :table_number, :deposit_payment_method?, to: :seat
 
-  belongs_to :show, class_name: "Show::ReservedSeatingShow", inverse_of: :tickets, foreign_key: "show_id"
+  belongs_to :show, class_name: "Shows::ReservedSeating", inverse_of: :tickets, foreign_key: "show_id"
 
   after_initialize -> { self.quantity = 1 }, if: :new_record?
 

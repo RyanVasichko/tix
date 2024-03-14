@@ -355,8 +355,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.index ["shopper_uuid"], name: "index_users_on_shopper_uuid", unique: true
     t.index ["shopping_cart_id"], name: "index_users_on_shopping_cart_id"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
-    t.check_constraint "        (\n           type != 'User::Guest' \n           AND first_name IS NOT NULL \n           AND last_name IS NOT NULL \n           AND email IS NOT NULL \n           AND password_digest IS NOT NULL\n        )\n        OR type = 'User::Guest'\n", name: "check_user_information"
-    t.check_constraint "type != 'User::Admin' OR user_role_id IS NOT NULL", name: "check_admin_role"
+    t.check_constraint "        (\n           type != 'Users::Guest' \n           AND first_name IS NOT NULL \n           AND last_name IS NOT NULL \n           AND email IS NOT NULL \n           AND password_digest IS NOT NULL\n        )\n        OR type = 'Users::Guest'\n", name: "check_user_information"
+    t.check_constraint "type != 'Users::Admin' OR user_role_id IS NOT NULL", name: "check_admin_role"
   end
 
   create_table "venues", force: :cascade do |t|

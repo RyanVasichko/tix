@@ -1,4 +1,4 @@
-class User::Customer < User
+class Users::Customer < User
   include Authenticateable, Orderer
 
   validates :first_name, presence: true

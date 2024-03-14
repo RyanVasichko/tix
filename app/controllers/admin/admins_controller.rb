@@ -10,11 +10,11 @@ class Admin::AdminsController < Admin::BaseUsersController
   private
 
   def user_klass
-    User::Admin
+    Users::Admin
   end
 
   def user_params
-    params.fetch(:user_admin, {}).permit(base_permitted_parameters.concat(%i[user_role_id active]))
+    params.fetch(:users_admin, {}).permit(base_permitted_parameters.concat(%i[user_role_id active]))
   end
 
   def index_path

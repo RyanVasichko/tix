@@ -1,4 +1,4 @@
-class User::Admin < User
+class Users::Admin < User
   include Authenticateable, Orderer
 
   has_many :held_seats, class_name: "Show::Seat", inverse_of: :held_by_admin, foreign_key: "held_by_admin_id"

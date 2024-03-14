@@ -1,6 +1,10 @@
 require "application_system_test_case"
 
 class OrdersTest < ApplicationSystemTestCase
+  setup do
+    FactoryBot.create(:merch_shipping_charge, weight: 0.1)
+  end
+
   test "placing an order as an existing Customer" do
     customer = FactoryBot.create(:customer, shopping_cart_merch_count: 2, reserved_seats_count: 2, general_admission_tickets_count: 2)
 
@@ -148,7 +152,7 @@ class OrdersTest < ApplicationSystemTestCase
     frame = find('iframe[name^="__privateStripeFrame"]')
     within_frame(frame) do
       fill_in "Card number", with: "4242424242424242"
-      fill_in "Expiration", with: "12/#{(Time.now.year + 1).to_s[-2..]}]}"
+      fill_in "Expiration", with: "12/#{(Time.now.year + 1).to_s[-2 ..]}]}"
       fill_in "CVC", with: "123"
       fill_in "ZIP", with: "77019"
     end

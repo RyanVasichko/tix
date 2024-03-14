@@ -19,10 +19,10 @@ FactoryBot.define do
       if evaluator.orders_count&.positive?
         orders = []
         case user
-        when User::Customer
+        when Users::Customer
           user.orders << FactoryBot.build_list(:customer_order, evaluator.orders_count, orderer: user)
           orders = user.orders
-        when User::Guest
+        when Users::Guest
           orders = FactoryBot.build_list(:guest_order, evaluator.orders_count)
         else
           raise "Unknown user type: #{user.class}"
@@ -49,15 +49,15 @@ FactoryBot.define do
     end
   end
 
-  factory :guest, traits: %i[user], class: "User::Guest" do
+  factory :guest, traits: %i[user], class: "Users::Guest" do
   end
 
-  factory :customer, traits: %i[user registered with_password], class: "User::Customer" do
+  factory :customer, traits: %i[user registered with_password], class: "Users::Customer" do
     registered
     with_password
   end
 
-  factory :admin, traits: %i[user registered with_password superadmin], class: "User::Admin" do
+  factory :admin, traits: %i[user registered with_password superadmin], class: "Users::Admin" do
     registered
     with_password
   end

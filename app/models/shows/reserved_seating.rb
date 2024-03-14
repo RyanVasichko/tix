@@ -1,7 +1,7 @@
-class Show::ReservedSeatingShow < Show
+class Shows::ReservedSeating < Show
   has_many :sections, class_name: "Show::Sections::ReservedSeating", inverse_of: :show
   has_many :seats, through: :sections
-  has_many :tickets, class_name: "Order::ReservedSeatingTicket", inverse_of: :show
+  has_many :tickets, class_name: "Order::Tickets::ReservedSeating", inverse_of: :show
 
   attr_accessor :seating_chart_id
   has_one_attached :venue_layout

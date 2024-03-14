@@ -1,4 +1,4 @@
-<% form = StandardFormBuilder::FormBuilder.new(:show, Show::GeneralAdmissionShow.new, self, {}) %>
+<% form = StandardFormBuilder::FormBuilder.new(:show, Shows::GeneralAdmission.new, self, {}) %>
 
 <%= turbo_stream.append "general_admission_show_sections" do %>
   <%= form.fields_for :sections, Show::Sections::GeneralAdmission.new, child_index: random_index do |section_fields| %>

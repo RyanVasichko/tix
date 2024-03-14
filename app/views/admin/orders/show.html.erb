@@ -62,10 +62,10 @@
               <%= ticket.quantity %>
             <% end %>
             <%= td_tag do %>
-              <%= ticket.seat_number if ticket.is_a?(Order::ReservedSeatingTicket) %>
+              <%= ticket.seat_number if ticket.is_a?(Order::Tickets::ReservedSeating) %>
             <% end %>
             <%= td_tag do %>
-              <%= ticket.table_number if ticket.is_a?(Order::ReservedSeatingTicket) %>
+              <%= ticket.table_number if ticket.is_a?(Order::Tickets::ReservedSeating) %>
             <% end %>
             <%= td_tag do %>
               <%= number_to_currency(ticket.total_fees) %>

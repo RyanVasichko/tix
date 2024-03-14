@@ -38,10 +38,10 @@ class Order::OrderForm
     order = user.orders.build
 
     seats = user.reserved_seats.includes(section: :show).find(order_form_params[:seat_ids] || [])
-    order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
+    order.tickets << Order::Tickets::ReservedSeating.build_for_seats(seats)
 
     tickets = user.shopping_cart.tickets.find(order_form_params[:shopping_cart_ticket_ids] || [])
-    order.tickets << Order::GeneralAdmissionTicket.build_from_shopping_cart_tickets(tickets)
+    order.tickets << Order::Tickets::GeneralAdmission.build_from_shopping_cart_tickets(tickets)
 
     merch = user.shopping_cart.merch.includes(:merch).find(order_form_params[:shopping_cart_merch_ids] || [])
     order.merch << Order::Merch.build_from_shopping_cart_merch(merch)

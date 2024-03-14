@@ -1,5 +1,5 @@
 class ReservedSeatingShowsController < ApplicationController
   def show
-    @show = Show::ReservedSeatingShow.includes(:sections, :artist, :venue_layout_attachment).find(params[:id])
+    @show = Shows::ReservedSeating.includes(:sections, :artist, :venue_layout_attachment).find(params[:id])
   end
 end

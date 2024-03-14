@@ -1,6 +1,6 @@
 require "test_helper"
 
-class User::CustomerTest < ActiveSupport::TestCase
+class Users::CustomerTest < ActiveSupport::TestCase
   test "destroying a Customer creates a GuestOrderer for their orders" do
     customer = FactoryBot.create(:customer,
                                  orders_count: 3,
@@ -11,7 +11,7 @@ class User::CustomerTest < ActiveSupport::TestCase
     reserved_seats = customer.shopping_cart.seats
 
     expected_differences = {
-      "User::Customer.count" => -1,
+      "Users::Customer.count" => -1,
       "Order::GuestOrderer.count" => 1,
       "ShoppingCart::Merch.count" => -2,
       "ShoppingCart::Ticket.count" => -2,

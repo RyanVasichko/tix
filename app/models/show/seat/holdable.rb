@@ -2,7 +2,7 @@ module Show::Seat::Holdable
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :held_by_admin, class_name: "User::Admin", inverse_of: :held_seats, optional: true
+    belongs_to :held_by_admin, class_name: "Users::Admin", inverse_of: :held_seats, optional: true
     delegate :name, to: :held_by_admin, prefix: true, allow_nil: true
 
     scope :held, -> { where.not(held_by_admin: nil) }

@@ -30,9 +30,9 @@ FactoryBot.define do
     end
   end
 
-  factory :reserved_seating_show, traits: [:show], class: Show::ReservedSeatingShow.to_s do
+  factory :reserved_seating_show, traits: [:show], class: Shows::ReservedSeating.to_s do
     seating_chart_name { Faker::Lorem.word }
-    type { Show::ReservedSeatingShow.to_s }
+    type { Shows::ReservedSeating.to_s }
 
     transient do
       venue_layout_blob do
@@ -60,8 +60,8 @@ FactoryBot.define do
     end
   end
 
-  factory :general_admission_show, traits: [:show], class: Show::GeneralAdmissionShow.to_s do
-    type { Show::GeneralAdmissionShow.to_s }
+  factory :general_admission_show, traits: [:show], class: Shows::GeneralAdmission.to_s do
+    type { Shows::GeneralAdmission.to_s }
 
     after(:build) do |show, evaluator|
       # Build an upsale for 10% of shows

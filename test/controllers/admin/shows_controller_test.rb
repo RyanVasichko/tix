@@ -56,14 +56,14 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
           { seating_chart_section_id: section_2.id, ticket_price: 49.50 }
         ],
         customer_question_ids: [customer_question.id],
-        type: Show::ReservedSeatingShow.to_s
+        type: Shows::ReservedSeating.to_s
       }
       post admin_shows_path, params: { show: params }
 
       assert_redirected_to admin_shows_path
     end
 
-    show = Show::ReservedSeatingShow.last
+    show = Shows::ReservedSeating.last
 
     assert_not_nil show
     assert_equal artist, show.artist
@@ -127,14 +127,14 @@ class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
           { name: "Section 2", ticket_price: 49.50, convenience_fee: 2.00, ticket_quantity: 100 }
         ],
         customer_question_ids: [customer_question.id],
-        type: Show::GeneralAdmissionShow.to_s
+        type: Shows::GeneralAdmission.to_s
       }
       post admin_shows_path, params: { show: params }
 
       assert_redirected_to admin_shows_path
     end
 
-    show = Show::GeneralAdmissionShow.last
+    show = Shows::GeneralAdmission.last
 
     assert_not_nil show
     assert_equal artist, show.artist

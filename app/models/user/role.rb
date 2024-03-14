@@ -2,7 +2,7 @@ class User::Role < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validate :ensure_at_least_one_role_with_manage_admins_permission, if: -> { manage_admins_changed? && !manage_admins? }
 
-  has_many :users, foreign_key: :user_role_id, class_name: "User::Admin"
+  has_many :users, foreign_key: :user_role_id, class_name: "Users::Admin"
   before_destroy :ensure_at_least_one_role_with_manage_admins_permission
   before_destroy :ensure_not_referenced_by_any_admins
 

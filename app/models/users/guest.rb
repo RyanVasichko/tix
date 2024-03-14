@@ -1,4 +1,4 @@
-class User::Guest < User
+class Users::Guest < User
   after_create_commit -> { DestroyGuestUserJob.set(wait: 1.week).perform_later(id) }
   has_many :guest_orderers, class_name: "Order::GuestOrderer", foreign_key: :shopper_uuid, primary_key: :shopper_uuid
   has_many :orders, through: :guest_orderers, class_name: "Order"

@@ -46,8 +46,8 @@
             <%= form.select(
                   :type,
                   [
-                    ["Reserved Seating", Show::ReservedSeatingShow.to_s],
-                    ["General Admission", Show::GeneralAdmissionShow.to_s]
+                    ["Reserved Seating", Shows::ReservedSeating.to_s],
+                    ["General Admission", Shows::GeneralAdmission.to_s]
                   ],
                   {},
                   disabled: show.persisted?,
@@ -116,14 +116,14 @@
             <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: show.persisted?, seating_charts: @seating_charts %>
           </div>
           <div class="mt-6" id="show_sections_fields">
-            <% if form.object.type == Show::ReservedSeatingShow.to_s %>
+            <% if form.object.type == Shows::ReservedSeating.to_s %>
               <%= form.fields_for :sections do |section_fields| %>
                 <%= render "admin/shows/reserved_seating_show_sections_fields/section_fields", section_fields: section_fields %>
               <% end %>
             <% end %>
           </div>
         </div>
-        <div data-admin--shows-form-target="generalAdmissionShowFields" class="<%= "hidden" if form.object.type != Show::GeneralAdmissionShow.to_s %>">
+        <div data-admin--shows-form-target="generalAdmissionShowFields" class="<%= "hidden" if form.object.type != Shows::GeneralAdmission.to_s %>">
           <div class="w-full flex justify-end">
             <%= link_to "Add Section",
                         new_admin_shows_general_admission_show_section_field_path,
@@ -144,7 +144,7 @@
             </tr>
             </thead>
             <tbody class="table-tbody" id="general_admission_show_sections">
-            <% if form.object.type == Show::GeneralAdmissionShow.to_s %>
+            <% if form.object.type == Shows::GeneralAdmission.to_s %>
               <%= form.fields_for :sections do |section_fields| %>
                 <%= render "admin/shows/general_admission_show_section_fields/section_fields", section_fields: section_fields %>
               <% end %>

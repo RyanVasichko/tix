@@ -84,16 +84,16 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
 
       t.check_constraint <<-SQL, name: 'check_user_information'
         (
-           type != 'User::Guest'#{' '}
+           type != 'Users::Guest'#{' '}
            AND first_name IS NOT NULL#{' '}
            AND last_name IS NOT NULL#{' '}
            AND email IS NOT NULL#{' '}
            AND password_digest IS NOT NULL
         )
-        OR type = 'User::Guest'
+        OR type = 'Users::Guest'
       SQL
 
-      t.check_constraint "type != 'User::Admin' OR user_role_id IS NOT NULL", name: 'check_admin_role'
+      t.check_constraint "type != 'Users::Admin' OR user_role_id IS NOT NULL", name: 'check_admin_role'
 
       t.timestamps
     end

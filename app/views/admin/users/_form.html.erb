@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <% if user.is_a?(User::Admin) %>
+  <% if user.is_a?(Users::Admin) %>
     <div class="mt-6 grid grid-cols-1 gap-4">
       <div>
         <%= form.label :user_role_id, "Role" %>

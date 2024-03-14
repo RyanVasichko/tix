@@ -39,7 +39,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       assert_text "Show was successfully created"
     end
 
-    created_show = Show::ReservedSeatingShow.last
+    created_show = Shows::ReservedSeating.last
     execute_common_assertions_for_show_create(created_show)
 
     assert_equal @seating_chart.name, created_show.seating_chart_name
@@ -101,7 +101,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       assert_text "Show was successfully created"
     end
 
-    created_show = Show::GeneralAdmissionShow.last
+    created_show = Shows::GeneralAdmission.last
     execute_common_assertions_for_show_create(created_show)
 
     assert_equal 2, created_show.sections.count
@@ -187,8 +187,8 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   end
 
   def fill_in_common_fields_for_show_create
-    fill_in "Artist", with: "#{@artist.name[0..2]}"
-    sleep 0.1
+    fill_in "Artist", with: @artist.name
+    assert_text @artist.name, wait: 5
     find("li[data-combobox-option-label-param='#{@artist.name}']").click
 
     select @venue.name, from: "Venue"

@@ -18,7 +18,7 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
       select @roles.third.name, from: "Role"
     end
 
-    created_user = User::Admin.last
+    created_user = Users::Admin.last
     assert_equal @roles.third.id, created_user.user_role_id
   end
 

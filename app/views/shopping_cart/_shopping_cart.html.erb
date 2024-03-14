@@ -12,15 +12,15 @@
                 <%= link_to show.artist.name, show_path(show), data: { turbo: false } %>
               </h3>
               <% case show %>
-              <% when Show::ReservedSeatingShow %>
+              <% when Shows::ReservedSeating %>
                 <%= render partial: "shopping_cart/seat_reservations/seat_reservation", collection: shopping_cart.seats_for(show), as: :seat %>
-              <% when Show::GeneralAdmissionShow %>
+              <% when Shows::GeneralAdmission %>
                 <%= render partial: "shopping_cart/general_admission_tickets/general_admission_ticket", collection: shopping_cart.tickets_for(show), as: :ticket %>
               <% else
                    nil %>
               <% end %>
 
-              <% if show.is_a?(Show::ReservedSeatingShow) && shopping_cart.user.admin? && (shopping_cart.seats.any? || shopping_cart.tickets.any?) %>
+              <% if show.is_a?(Shows::ReservedSeating) && shopping_cart.user.admin? && (shopping_cart.seats.any? || shopping_cart.tickets.any?) %>
                 <%= button_to(
                       "Hold Seats",
                       reserved_seating_show_seat_holds_path(show),

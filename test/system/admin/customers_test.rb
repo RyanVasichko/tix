@@ -25,7 +25,7 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
     orders = FactoryBot.create_list(:customer_order, 5, orderer: customer)
 
     expected_differences = {
-      "User::Customer.count" => -1,
+      "Users::Customer.count" => -1,
       "Order::GuestOrderer.count" => 1
     }
     assert_difference expected_differences do
@@ -36,7 +36,7 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
       assert_text "Customer was successfully destroyed."
     end
 
-    assert_nil User::Customer.find_by(id: customer.id)
+    assert_nil Users::Customer.find_by(id: customer.id)
 
     orders.each do |order|
       assert order.reload.orderer.is_a?(Order::GuestOrderer)

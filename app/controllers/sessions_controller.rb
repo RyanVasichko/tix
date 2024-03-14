@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    redirect_to root_url, flash: { notice: "You are already logged in!" } unless Current.user.is_a? User::Guest
+    redirect_to root_url, flash: { notice: "You are already logged in!" } unless Current.user.is_a? Users::Guest
   end
 
   def create
@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
   end
 
   def log_in(user)
-    if Current.user.is_a? User::Guest
+    if Current.user.is_a? Users::Guest
       Current.user.transfer_shopping_cart_to(user)
       Current.user.destroy_later
     end

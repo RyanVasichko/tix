@@ -85,7 +85,7 @@
                           </div>
                           <% tickets.each do |ticket| %>
                             <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <% if ticket.is_a?(Order::ReservedSeatingTicket) %>
+                              <% if ticket.is_a?(Order::Tickets::ReservedSeating) %>
                                 <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
                               <% else %>
                                 <span class="mt-1 text-sm text-gray-500">Section <%= ticket.show_section.name %> &times; <%= ticket.quantity %></span> - <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>

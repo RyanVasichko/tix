@@ -17,6 +17,6 @@ class ApplicationController < ActionController::Base
   end
 
   def create_guest
-    User::Guest.create!.tap { |guest| session[:user_id] = guest.id }
+    Users::Guest.create!.tap { |guest| session[:user_id] = guest.id }
   end
 end

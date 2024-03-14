@@ -6,7 +6,7 @@ class Show::Seat < ApplicationRecord
 
   has_one :show, through: :section
   delegate :deposit_amount, to: :show
-  has_one :ticket, class_name: "Order::ReservedSeatingTicket", inverse_of: :seat, foreign_key: "show_seat_id"
+  has_one :ticket, class_name: "Order::Tickets::ReservedSeating", inverse_of: :seat, foreign_key: "show_seat_id"
 
   validates :x, presence: true
   validates :y, presence: true

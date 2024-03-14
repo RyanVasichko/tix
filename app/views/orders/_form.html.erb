@@ -24,10 +24,10 @@
   %>
     <%= form.hidden_field :new_payment_method, data: { checkout_target: "newPaymentMethodField" } %>
     <%= form.hidden_field :order_total_in_cents %>
-    <% order.tickets.filter { |t| t.is_a? Order::ReservedSeatingTicket }.each do |ticket| %>
+    <% order.tickets.filter { |t| t.is_a? Order::Tickets::ReservedSeating }.each do |ticket| %>
       <%= form.hidden_field :seat_ids, multiple: true, value: ticket.seat.id %>
     <% end %>
-    <% order.tickets.filter { |t| t.is_a? Order::GeneralAdmissionTicket }.each do |ticket| %>
+    <% order.tickets.filter { |t| t.is_a? Order::Tickets::GeneralAdmission }.each do |ticket| %>
       <%= form.hidden_field :shopping_cart_ticket_ids, multiple: true, value: ticket.shopping_cart_ticket.id %>
     <% end %>
     <% order.merch.each do |merch| %>
@@ -59,29 +59,29 @@
                         <div>
                           <span class="mt-1 text-sm text-gray-500">
                             <% case ticket %>
-                            <% when Order::ReservedSeatingTicket %>
+                            <% when Order::Tickets::ReservedSeating %>
                               <%= "#{number_to_currency(ticket.ticket_price)} Ticket: " if ticket.deposit_payment_method? %>
                               Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
-                            <% when Order::GeneralAdmissionTicket %>
+                            <% when Order::Tickets::GeneralAdmission %>
                               <%= ticket.show_section.name %> x <%= ticket.quantity %>
                             <% end %>
                           </span> -
                           <span class="text-sm font-medium">
                             <% case ticket %>
-                            <% when Order::ReservedSeatingTicket %>
+                            <% when Order::Tickets::ReservedSeating %>
                               <% if ticket.deposit_payment_method? %>
                                 <%= number_to_currency(ticket.deposit_amount) %> Deposit
                               <% else %>
                                 <%= number_to_currency(ticket.total_price) %>
                               <% end %>
-                            <% when Order::GeneralAdmissionTicket %>
+                            <% when Order::Tickets::GeneralAdmission %>
                               <%= number_to_currency(ticket.total_price) %>
                             <% end %>
                           </span>
                         </div>
-                        <%= link_to ticket.is_a?(Order::ReservedSeatingTicket) ? orders_seat_reservations_path(ticket.seat) : orders_shopping_cart_ticket_path(ticket.shopping_cart_ticket),
+                        <%= link_to ticket.is_a?(Order::Tickets::ReservedSeating) ? orders_seat_reservations_path(ticket.seat) : orders_shopping_cart_ticket_path(ticket.shopping_cart_ticket),
                                     data: { turbo_method: "DELETE" },
-                                    id: ticket.is_a?(Order::ReservedSeatingTicket) ? "destroy_#{dom_id(ticket.seat)}_reservation" : "destroy_#{dom_id(ticket.shopping_cart_ticket)}",
+                                    id: ticket.is_a?(Order::Tickets::ReservedSeating) ? "destroy_#{dom_id(ticket.seat)}_reservation" : "destroy_#{dom_id(ticket.shopping_cart_ticket)}",
                                     class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
                           <span class="sr-only">Remove</span>
                           <%= svg_trash_can %>

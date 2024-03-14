@@ -13,6 +13,8 @@ FactoryBot.define do
     end
 
     after(:build) do |order, evaluator|
+      FactoryBot.create(:merch_shipping_charge, weight: 0.25) unless Merch::ShippingCharge.any?
+
       build_show = evaluator.reserved_seating_tickets_count.positive? && order.tickets.empty?
       seats = []
       if build_show && evaluator.with_existing_shows
@@ -23,7 +25,7 @@ FactoryBot.define do
         seats = show.sections.map(&:seats).flatten.sample(evaluator.reserved_seating_tickets_count)
         seats.each { |seat| seat.show = show }
       end
-      order.tickets << Order::ReservedSeatingTicket.build_for_seats(seats)
+      order.tickets << Order::Tickets::ReservedSeating.build_for_seats(seats)
 
       if evaluator.general_admission_tickets_count.positive?
         sections = if evaluator.with_existing_shows
@@ -33,7 +35,7 @@ FactoryBot.define do
         end
 
         order.tickets << sections.map do |section|
-          Order::GeneralAdmissionTicket.new(show: section.show,
+          Order::Tickets::GeneralAdmission.new(show: section.show,
                                             show_section: section,
                                             quantity: 1)
                                        .tap(&:calculate_pricing)
@@ -82,7 +84,7 @@ FactoryBot.define do
 
     after(:build) do |order, evaluator|
       order.orderer ||= FactoryBot.build(:customer) unless evaluator.with_existing_user
-      order.orderer ||= User::Customer.order("RANDOM()").first if evaluator.with_existing_user
+      order.orderer ||= Users::Customer.order("RANDOM()").first if evaluator.with_existing_user
     end
   end
 end

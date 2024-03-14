@@ -38,7 +38,7 @@
                 <% tickets.each do |ticket| %>
                   <div class="my-2">
                     <span class="text-gray-500">
-                      <% if ticket.is_a?(Order::ReservedSeatingTicket) %>
+                      <% if ticket.is_a?(Order::Tickets::ReservedSeating) %>
                       Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
                         <% else %>
                           <%= ticket.show_section.name %> &times; <%= ticket.quantity %>

@@ -4,8 +4,8 @@ module Order::BuildableForUser
   class_methods do
     def build_for_user(user)
       build do |order|
-        order.tickets << Order::ReservedSeatingTicket.build_for_seats(user.shopping_cart.seats)
-        order.tickets << Order::GeneralAdmissionTicket.build_from_shopping_cart_tickets(user.shopping_cart.tickets)
+        order.tickets << Order::Tickets::ReservedSeating.build_for_seats(user.shopping_cart.seats)
+        order.tickets << Order::Tickets::GeneralAdmission.build_from_shopping_cart_tickets(user.shopping_cart.tickets)
         order.merch << Order::Merch.build_from_shopping_cart_merch(user.shopping_cart_merch)
 
         set_shipping_address(order, user)

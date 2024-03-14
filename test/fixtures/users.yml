@@ -3,7 +3,7 @@ larry_sellers:
   last_name: Sellers
   email: larry_sellers@test.com
   password_digest: <%= BCrypt::Password.create('password', cost: 4) %>
-  type: User::Customer
+  type: Users::Customer
   shopping_cart: larry_sellers_shopping_cart
 
 ryan_vasichko:
@@ -11,5 +11,5 @@ ryan_vasichko:
   last_name: Vasichko
   email: RyanVasichko@gmail.com
   password_digest: <%= BCrypt::Password.create('N!rv4na', cost: 4) %>
-  type: User::Admin
+  type: Users::Admin
   shopping_cart: ryan_vasichko_shopping_cart

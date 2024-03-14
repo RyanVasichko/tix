@@ -7,7 +7,7 @@ class Order < ApplicationRecord
   has_many :tickets, inverse_of: :order
 
   has_many :shows, through: :tickets
-  has_many :reserved_seating_tickets, class_name: "Order::ReservedSeatingTicket", inverse_of: :order
+  has_many :reserved_seating_tickets, class_name: "Order::Tickets::ReservedSeating", inverse_of: :order
   has_many :seats, class_name: "Show::Seat", through: :reserved_seating_tickets
   has_many :merch, class_name: "Order::Merch", inverse_of: :order
 

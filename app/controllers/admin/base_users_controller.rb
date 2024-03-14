@@ -8,7 +8,7 @@ class Admin::BaseUsersController < Admin::AdminController
 
   def index
     @users = user_klass.search(search_params)
-    @users = @users.active if user_klass == User::Admin && !include_deactivated?
+    @users = @users.active if user_klass == Users::Admin && !include_deactivated?
     @pagy, @users = pagy(@users)
   end
 

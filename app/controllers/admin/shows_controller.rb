@@ -17,7 +17,7 @@ class Admin::ShowsController < Admin::AdminController
     venue = Venue.joins(:seating_charts).merge(SeatingChart.active).first
     @seating_charts = venue.seating_charts.active
     seating_chart = @seating_charts.first
-    @show = Show::ReservedSeatingShow.new(venue_id: venue.id, seating_chart_id: seating_chart.id) do |show|
+    @show = Shows::ReservedSeating.new(venue_id: venue.id, seating_chart_id: seating_chart.id) do |show|
       show.seating_chart_id = seating_chart.id
       seating_chart.sections.each do |section|
         show.sections.build(name: section.name, seating_chart_section_id: section.id)
@@ -31,10 +31,10 @@ class Admin::ShowsController < Admin::AdminController
 
   def create
     show_type = case show_params[:type]
-    when "Show::ReservedSeatingShow"
-                  Show::ReservedSeatingShow
-    when "Show::GeneralAdmissionShow"
-                  Show::GeneralAdmissionShow
+    when "Shows::ReservedSeating"
+                  Shows::ReservedSeating
+    when "Shows::GeneralAdmission"
+                  Shows::GeneralAdmission
     else
                   raise "Invalid show type"
     end
@@ -85,7 +85,7 @@ class Admin::ShowsController < Admin::AdminController
       upsales_attributes: permitted_upsales_attributes
     ]
     if action_name == "create"
-      permitted_params << :seating_chart_id if params[:show][:type] == Show::ReservedSeatingShow.to_s
+      permitted_params << :seating_chart_id if params[:show][:type] == Shows::ReservedSeating.to_s
       permitted_params << :artist_id
       permitted_params << :venue_id
       permitted_params << :type
@@ -101,8 +101,8 @@ class Admin::ShowsController < Admin::AdminController
   def permitted_sections_attributes
     if action_name == "create"
       %i[name seating_chart_section_id ticket_price].tap do |a|
-        a << :ticket_quantity if params[:show][:type] == Show::GeneralAdmissionShow.to_s
-        a << :convenience_fee if params[:show][:type] == Show::GeneralAdmissionShow.to_s
+        a << :ticket_quantity if params[:show][:type] == Shows::GeneralAdmission.to_s
+        a << :convenience_fee if params[:show][:type] == Shows::GeneralAdmission.to_s
       end
     elsif action_name == "update"
       %i[id ticket_price]

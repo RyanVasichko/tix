@@ -23,10 +23,10 @@ export default class extends Controller {
   async showFieldsForShowType() {
     this.#hideAndDisableAllShowTypeSpecificFields();
 
-    if (this.#showType === "Show::ReservedSeatingShow") {
+    if (this.#showType === "Shows::ReservedSeating") {
       await this.loadVenueSeatingCharts()
       this.#showReservedSeatingShowFields();
-    } else if (this.#showType === "Show::GeneralAdmissionShow") {
+    } else if (this.#showType === "Shows::GeneralAdmission") {
       this.#showGeneralAdmissionShowFields();
     }
   }
@@ -39,7 +39,7 @@ export default class extends Controller {
   }
 
   async loadVenueSeatingCharts() {
-    if (this.#showType !== "Show::ReservedSeatingShow") {
+    if (this.#showType !== "Shows::ReservedSeating") {
       return;
     }
 
@@ -52,8 +52,8 @@ export default class extends Controller {
   #hideAndDisableAllShowTypeSpecificFields() {
     this.generalAdmissionShowFieldsTarget.classList.add("hidden");
     this.reservedSeatingShowFieldsTarget.classList.add("hidden");
-    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Show::GeneralAdmissionShow");
-    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Show::ReservedSeatingShow");
+    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::GeneralAdmission");
+    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::ReservedSeating");
   }
 
   #showGeneralAdmissionShowFields() {
