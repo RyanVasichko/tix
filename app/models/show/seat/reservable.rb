@@ -23,10 +23,8 @@ module Show::Seat::Reservable
     reserved_until&.future?
   end
 
-  def transfer_reservation!(from:, to:)
-    return unless reserved_by == from
-
-    with_lock { update!(reservation_params_for_user(to)) }
+  def transfer_reservation_to!(recipient)
+    with_lock { update!(reservation_params_for_user(recipient)) }
   end
 
   def reserve_for(user)

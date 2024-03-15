@@ -35,10 +35,11 @@ class ShoppingCart < ApplicationRecord
     seats.empty? && merch.empty? && tickets.empty?
   end
 
-  def transfer_to(to)
+  def transfer_to(recipient)
     ActiveRecord::Base.transaction do
-      seats.each { |s| s.transfer_reservation!(from: user, to: to) }
-      merch.each { |m| m.transfer!(from: user, to: to) }
+      seats.each { |s| s.transfer_reservation_to!(recipient) }
+      merch.each { |m| m.transfer_to!(recipient) }
+      destroy!
     end
   end
 
