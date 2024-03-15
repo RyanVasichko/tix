@@ -34,8 +34,9 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
     visit admin_admins_path
 
     user = @users.first
-    find("##{dom_id(user, :admin)}_dropdown").click
-    click_on "Deactivate"
+    within "tr", text: user.name do
+      click_on "Deactivate"
+    end
 
     assert_text "Admin was successfully deactivated."
     assert user.reload.deactivated?

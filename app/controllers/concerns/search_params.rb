@@ -5,7 +5,10 @@ module SearchParams
     class_attribute :sortable_fields, default: []
     class_attribute :default_sort_field, default: nil
 
-    helper_method :sort_by, :sort_direction
+    before_action :set_default_sort_field, only: :index
+    before_action :set_default_sort_direction, only: :index
+
+    helper_method :sort, :sort_direction, :search_params
   end
 
   module ClassMethods
@@ -17,7 +20,7 @@ module SearchParams
   def search_params
     {
       q: search_keyword,
-      sort_by: sort_by,
+      sort: sort,
       sort_direction: sort_direction
     }
   end
@@ -30,7 +33,7 @@ module SearchParams
     params[:q]
   end
 
-  def sort_by
+  def sort
     if sortable_fields.include?(params[:sort]&.downcase)
       params[:sort].downcase
     else
@@ -39,6 +42,16 @@ module SearchParams
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:sort_direction]) ? params[:sort_direction].to_sym : :asc
+    params[:sort_direction].presence_in(%w[asc desc]) || :asc
+  end
+
+  private
+
+  def set_default_sort_field
+    params[:sort] = default_sort_field if params[:sort].blank?
+  end
+
+  def set_default_sort_direction
+    params[:sort_direction] = "asc" if params[:sort_direction].blank?
   end
 end

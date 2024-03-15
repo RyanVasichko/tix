@@ -17,9 +17,9 @@ module ApplicationHelper
     SecureRandom.random_number(1_000_000) + 100_000_000_000
   end
 
-  def classes_merged_into_default_classes(classes, defaults)
-    classes_array = classes.split(" ").reject(&:empty?)
-    defaults_array = defaults.split(" ").reject(&:empty?)
+  def customization_classes_merged_into_default_classes(classes, defaults)
+    classes_array = classes.split(" ").reject(&:empty?).uniq
+    defaults_array = defaults.split(" ").reject(&:empty?).uniq
 
     classes_array.each do |input_class|
       if input_class.starts_with?("p-")

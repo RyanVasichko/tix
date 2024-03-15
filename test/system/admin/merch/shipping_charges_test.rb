@@ -24,9 +24,10 @@ class Merch::ShippingChargesTest < ApplicationSystemTestCase
   end
 
   test "should update Shipping charge" do
-    sleep 0.1
-    find("##{dom_id(@shipping_charge, :admin)}_dropdown").click
+    within "tr", text: @shipping_charge.weight do
     click_on "Edit"
+    end
+
     assert_text "Edit Shipping Charge"
 
     fill_in "Price", with: 18
@@ -39,9 +40,9 @@ class Merch::ShippingChargesTest < ApplicationSystemTestCase
   end
 
   test "should destroy Shipping charge" do
-    sleep 0.1
-    find("##{dom_id(@shipping_charge, :admin)}_dropdown").click
-    click_on "Delete"
+    within "tr", text: @shipping_charge.weight do
+      click_on "Delete"
+    end
 
     assert_text "Merch shipping charge was successfully destroyed."
   end

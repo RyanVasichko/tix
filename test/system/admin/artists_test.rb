@@ -54,7 +54,8 @@ class Admin::ArtistsTest < ApplicationSystemTestCase
   test "should deactivate an Artist if they have any shows" do
     visit admin_artists_url
 
-    find("##{dom_id(@artist, :admin)}_dropdown").click
-    click_on "Deactivate"
+    within "tr", text: @artist.name do
+      click_on "Deactivate"
+    end
   end
 end

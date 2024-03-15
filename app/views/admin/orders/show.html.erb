@@ -1,6 +1,6 @@
-<div id="<%= dom_id @order %>" class="max-w-5xl card">
-  <!--  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">-->
-  <h1 class="text-3xl font-bold tracking-tight text-gray-900 text-center">Order Details</h1>
+<h1 class="mb-4 text-center text-3xl font-semibold">Order Details</h1>
+
+<%= card do %>
 
   <div class="mt-2 border-b border-gray-200 pb-5 text-sm">
     <dl class="flex">
@@ -30,97 +30,68 @@
 
   <div class="mt-8">
     <h2 class="text-center text-xl">Tickets</h2>
-    <%= table_header_wrapper_tag do %>
-    <% end %>
-    <%= table_tag do %>
-      <%= thead_tag class: "" do %>
-        <tr>
-          <%= th_tag "Show" %>
-          <%= th_tag "Section" %>
-          <%= th_tag "Quantity" %>
-          <%= th_tag "Seat Number" %>
-          <%= th_tag "Table Number" %>
-          <%= th_tag "Fees" %>
-          <%= th_tag "Ticket Price" %>
-          <%= th_tag "Total Paid" %>
+    <div class="w-full rounded border border-gray-200 bg-zinc-50 pt-2 text-gray-500">
+      <table class="w-full">
+        <thead class="border-b border-gray-200 bg-zinc-50 uppercase text-gray-700">
+        <tr class="text-xs">
+          <th class="px-6 py-3">Section</th>
+          <th class="px-6 py-3">Quantity</th>
+          <th class="px-6 py-3">Seat Number</th>
+          <th class="px-6 py-3">Table Number</th>
+          <th class="px-6 py-3">Fees</th>
+          <th class="px-6 py-3">Ticket Price</th>
+          <th class="px-6 py-3">Total Paid</th>
         </tr>
-      <% end %>
-      <tbody>
-      <% @order.tickets.group_by(&:show).each do |show, tickets| %>
-        <%= tr_for_tbody_tag do %>
-          <%= td_tag colspan: 9, class: "text-md font-weight-bold bg-gray-50" do %>
-            <%= show.artist.name %> - <%= show.show_date.to_fs(:date) %>
+        </thead>
+        <tbody>
+        <% @order.tickets.group_by(&:show).each do |show, tickets| %>
+          <tr class="border-b bg-white text-sm last:border-none hover:bg-zinc-50">
+            <td colspan="8" class="bg-gray-50 p-2 pl-4 text-black text-md">
+              <%= show.artist.name %> - <%= show.show_date.to_fs(:date) %>
+            </td>
+          </tr>
+          <% tickets.each do |ticket| %>
+            <tr class="border-b bg-white text-sm last:border-none hover:bg-zinc-50">
+              <td class="px-6 py-3 text-center"><%= ticket.show_section.name %></td>
+              <td class="px-6 py-3 text-right"><%= ticket.quantity %></td>
+              <td class="px-6 py-3 text-right"><%= ticket.seat_number if ticket.is_a?(Order::Tickets::ReservedSeating) %></td>
+              <td class="px-6 py-3 text-right"><%= ticket.table_number if ticket.is_a?(Order::Tickets::ReservedSeating) %></td>
+              <td class="px-6 py-3 text-right"><%= number_to_currency(ticket.total_fees) %></td>
+              <td class="px-6 py-3 text-right"><%= number_to_currency(ticket.deposit_payment_method? ? ticket.deposit_amount : ticket.ticket_price) %></td>
+              <td class="px-6 py-3 text-right"><%= number_to_currency(ticket.total_price) %></td>
+            </tr>
           <% end %>
         <% end %>
-        <% tickets.each do |ticket| %>
-          <%= tr_for_tbody_tag do %>
-            <%= td_tag "" %>
-            <%= td_tag do %>
-              <%= ticket.show_section.name %>
-            <% end %>
-            <%= td_tag do %>
-              <%= ticket.quantity %>
-            <% end %>
-            <%= td_tag do %>
-              <%= ticket.seat_number if ticket.is_a?(Order::Tickets::ReservedSeating) %>
-            <% end %>
-            <%= td_tag do %>
-              <%= ticket.table_number if ticket.is_a?(Order::Tickets::ReservedSeating) %>
-            <% end %>
-            <%= td_tag do %>
-              <%= number_to_currency(ticket.total_fees) %>
-            <% end %>
-            <%= td_tag do %>
-              <%= number_to_currency(ticket.deposit_payment_method? ? ticket.deposit_amount : ticket.ticket_price) %>
-            <% end %>
-            <%= td_tag do %>
-              <%= number_to_currency(ticket.total_price) %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-      </tbody>
-    <% end %>
-    <%= custom_pagy_nav_wrapper_tag %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="mt-8">
     <h2 class="text-center text-xl">Merch</h2>
-    <%= table_header_wrapper_tag do %>
-    <% end %>
-    <%= table_tag do %>
-      <%= thead_tag do %>
-        <tr>
-          <%= th_tag "Item" %>
-          <%= th_tag "Quantity" %>
-          <%= th_tag "Price" %>
-          <%= th_tag "Total" %>
-          <%= th_tag "Option" %>
-        </tr>
-      <% end %>
-      <tbody>
-      <% @order.merch.each do |order_merch| %>
-        <%= tr_for_tbody_tag do %>
-          <%= td_tag do %>
-            <%= order_merch.merch.name %>
-          <% end %>
-          <%= td_tag do %>
-            <%= order_merch.quantity %>
-          <% end %>
-          <%= td_tag do %>
-            <%= number_to_currency(order_merch.unit_price) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= number_to_currency(order_merch.total_price) %>
-          <% end %>
-          <%= td_tag do %>
-            <%= order_merch.option %>
-          <% end %>
+    <div class="w-full rounded border border-gray-200 bg-zinc-50 pt-2 text-gray-500">
+      <table class="w-full">
+        <thead class="border-b border-gray-200 bg-zinc-50 uppercase text-gray-700">
+        <tr class="text-xs">
+          <th class="px-6 py-3">Item</th>
+          <th class="px-6 py-3">Quantity</th>
+          <th class="px-6 py-3">Price</th>
+          <th class="px-6 py-3">Total</th>
+          <th class="px-6 py-3">Option</th>
+        </thead>
+        <tbody>
+        <% @order.merch.each do |order_merch| %>
+          <tr class="border-b bg-white text-sm last:border-none hover:bg-zinc-50">
+            <td class="px-6 py-3 text-center"><%= order_merch.merch.name %></td>
+            <td class="px-6 py-3 text-right"><%= order_merch.quantity %></td>
+            <td class="px-6 py-3 text-right"><%= number_to_currency(order_merch.unit_price) %></td>
+            <td class="px-6 py-3 text-right"><%= number_to_currency(order_merch.total_price) %></td>
+            <td class="px-6 py-3 text-right"><%= order_merch.option %></td>
+          </tr>
         <% end %>
         </tbody>
-      <% end %>
-    <% end %>
-    <%= custom_pagy_nav_wrapper_tag %>
+      </table>
+    </div>
   </div>
 
   <!-- Billing -->
@@ -157,7 +128,7 @@
         </div>
       </dl>
 
-      <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-7 lg:mt-0 lg:pr-8">
+      <dl class="mt-8 text-sm divide-y divide-gray-200 lg:col-span-7 lg:mt-0 lg:pr-8">
         <div class="flex items-center justify-between pb-4">
           <dt class="text-gray-600">Subtotal</dt>
           <dd class="font-medium text-gray-900"><%= number_to_currency(@order.order_total) %></dd>
@@ -177,5 +148,4 @@
       </dl>
     </div>
   </div>
-  <!--  </div>-->
-</div>
+<% end %>

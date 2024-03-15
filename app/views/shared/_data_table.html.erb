@@ -1,12 +1,7 @@
 <%= turbo_frame_tag "#{turbo_frame_id_for_collection(collection)}_data_table", target: "_top" do %>
   <!-- TABLE HEADER -->
   <div class="relative mt-4 rounded-t-xl border-x border-t border-gray-200 bg-zinc-50 px-2 py-3">
-    <%= form_with url: keyword_search_url,
-                  data: {
-                    turbo_frame: turbo_frame_id_for_collection(collection)
-                  },
-                  method: :get,
-                  class: "flex items-center justify-between" do |form| %>
+    <%= data_table_form_with(collection, keyword_search_url) do |form| %>
       <div>
         <% if include_deactivated_search_param %>
           <label class="flex items-center space-x-2">
@@ -35,12 +30,12 @@
             <%
               link_options = {
                 id: "new_#{collection.model.model_name.singular}",
-                class: "flex p-1 rounded bg-gray-100 border border-gray-300 hover:bg-blue-800 hover:text-white",
+                class: "flex p-1 rounded bg-gray-100 border border-gray-300 hover:bg-amber-600 hover:text-white",
                 data: {}
               }
               link_options[:data] = { turbo_stream: true } if local_assigns[:new_record_modal]
             %>
-            <%= link_to_new_record "new #{collection.model.name.underscore.humanize}", new_record_url, link_options %>
+            <%= link_to_new_record "New #{collection.model.name.underscore.humanize}", new_record_url, link_options %>
           <% end %>
         </div>
       </div>
@@ -56,13 +51,13 @@
           <% builder.header_cells.each do |cell| %>
             <th class="px-6 py-3 text-xs">
               <% if cell.sortable %>
-                <%= link_to("#{keyword_search_url}?#{{ sort: cell.as.downcase, sort_direction: cell.sort_direction, q: params[:q], include_deactivated: params[:include_deactivated] }.to_query}",
+                <%= link_to("#{keyword_search_url}?#{data_table_header_cell_sort_query_params(cell)}",
                             data: { turbo_frame: "#{turbo_frame_id_for_collection(collection)}_data_table" },
                             class: "flex items-center") do %>
                   <%= cell.text %>
-                  <%= svg_arrow_up(class: "w-4 h-4 ml-1") if sort_by.to_s.casecmp?(cell.as.to_s) && sort_direction.to_s == "asc" %>
-                  <%= svg_arrow_down class: "w-4 h-4 ml-1" if sort_by.to_s.casecmp?(cell.as.to_s) && sort_direction.to_s == "desc" %>
-                  <%= svg_arrow_up_down class: "w-4 h-4 ml-1" if !sort_by.to_s.casecmp?(cell.as.to_s) %>
+                  <%= svg_arrow_up(class: "w-4 h-4 ml-1") if sort.to_s.casecmp?(cell.as.to_s) && sort_direction.to_s == "asc" %>
+                  <%= svg_arrow_down class: "w-4 h-4 ml-1" if sort.to_s.casecmp?(cell.as.to_s) && sort_direction.to_s == "desc" %>
+                  <%= svg_arrow_up_down class: "w-4 h-4 ml-1" if !sort.to_s.casecmp?(cell.as.to_s) %>
                 <% end %>
               <% else %>
                 <%= cell.text %>
@@ -75,7 +70,7 @@
         <% collection.each do |collection_item| %>
           <tr id="<%= dom_id(collection_item) %><%= row_id_suffix %>" class="border-b bg-white text-sm last:border-none hover:bg-zinc-50">
             <% builder.row_cells.each do |row_cell| %>
-              <td class="px-6 py-4">
+              <td class="<%= customization_classes_merged_into_default_classes(row_cell.classes, "px-6 py-4") %>">
                 <%= row_cell.render(collection_item) %>
               </td>
             <% end %>
@@ -87,7 +82,7 @@
 
 
     <!-- TABLE FOOTER -->
-    <nav class="flex flex-col flex-wrap items-center justify-between rounded-b-xl border-x border-b border-gray-200 bg-zinc-50 p-2 pt-2 md:flex-row" aria-label="Table navigation">
+    <nav class="flex flex-col flex-wrap items-center justify-between rounded-b-xl border-x border-b border-gray-200 bg-zinc-50 p-2 pt-2 text-sm md:flex-row" aria-label="Table navigation">
       <% if local_assigns[:pagy] %>
         <% start_row = (pagy.page - 1) * pagy.items + 1 %>
         <% end_row = start_row + pagy.items - 1 %>

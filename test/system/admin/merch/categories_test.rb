@@ -42,9 +42,9 @@ class Admin::Merch::CategoriesTest < ApplicationSystemTestCase
     visit admin_merch_index_url
     click_on "Categories"
 
-    sleep 0.1
-    find("##{dom_id(@merch_category, :admin)}_dropdown").click
-    click_on "Delete"
+    within "tr", text: @merch_category.name do
+      click_on "Delete"
+    end
 
     assert_text "Merch category was successfully destroyed"
   end

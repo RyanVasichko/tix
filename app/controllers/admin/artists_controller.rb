@@ -7,7 +7,9 @@ class Admin::ArtistsController < Admin::AdminController
   sortable_by :name
 
   def index
-    @pagy, @artists = pagy(Artist.active.search(search_params))
+    @artists = Artist.search(search_params)
+    @artists = @artists.active unless include_deactivated?
+    @pagy, @artists = pagy(@artists)
   end
 
   def new

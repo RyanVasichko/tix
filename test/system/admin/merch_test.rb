@@ -83,8 +83,9 @@ class Admin::MerchTest < ApplicationSystemTestCase
   test "should take merch off sale" do
     visit admin_merch_index_url
 
-    find("#admin_merch_#{@merch.id}_dropdown").click
-    click_on "Take off sale"
+    within "tr", text: @merch.name do
+      click_on "Take off sale"
+    end
 
     assert_text "Merch was taken off sale"
     assert_not @merch.reload.active?
@@ -95,8 +96,9 @@ class Admin::MerchTest < ApplicationSystemTestCase
     visit admin_merch_index_url
     check "Show off sale"
 
-    find("#admin_merch_#{@merch.id}_dropdown").click
-    click_on "Put on sale"
+    within "tr", text: @merch.name do
+      click_on "Put on sale"
+    end
 
     assert_text "Merch was put on sale"
     assert @merch.reload.active?

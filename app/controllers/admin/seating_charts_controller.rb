@@ -41,7 +41,7 @@ class Admin::SeatingChartsController < Admin::AdminController
     end
 
     if @seating_chart.save
-      redirect_to admin_seating_charts_url, flash: { success: "Seating chart was successfully created." }
+      redirect_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully created." }
     else
       respond_to do |format|
         format.turbo_stream { render :create, status: :unprocessable_entity }

@@ -5,7 +5,7 @@ module Searchable
     scope :search, ->(search_params) {
       relation = all
       relation = relation.keyword_search(search_params[:q]) if search_params[:q].present?
-      relation = relation.ordered(search_params[:sort_by], search_params[:sort_direction]) if search_params[:sort_by].present?
+      relation = relation.ordered(search_params[:sort], search_params[:sort_direction]) if search_params[:sort].present?
       relation
     }
 

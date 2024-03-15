@@ -21,7 +21,7 @@ module StandardFormBuilder
           image_preview = @template.tag(:img, src: "#", id: "image-preview", alt: "Uploaded Image Preview", class: "mx-auto hidden max-h-48 w-auto rounded-lg object-cover", data: { preview_target: "output", turbo_permanent: "" })
 
           upload_section = @template.content_tag(:div, class: "mt-4 flex justify-center leading-6 text-gray-600") do
-            label = label(method, class: "relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500", data: { image_preview_target: "input" }) do
+            label = label(method, class: "relative cursor-pointer rounded-md bg-white font-semibold text-amber-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/75 focus-within:ring-offset-2 hover:text-amber-500", data: { image_preview_target: "input" }) do
               @template.safe_join [
                                     @template.content_tag(:span, "Upload a file"),
                                     file_field(method, class: "sr-only", data: { file_drop_target: "input", action: "change->preview#preview", turbo_permanent: true }),

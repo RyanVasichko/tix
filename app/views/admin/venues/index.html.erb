@@ -2,23 +2,25 @@
 <%= card do %>
   <%= data_table collection: @venues, pagy: @pagy, namespace: :admin, new_record_modal: true do |table| %>
     <% table.column :name do |venue| %>
-      <%= link_to venue.name, edit_admin_venue_path(venue), data: { turbo_stream: true }, class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+      <%= primary_link_to venue.name,
+                          edit_admin_venue_path(venue),
+                          data: { turbo_stream: true },
+                          class: "font-medium" %>
     <% end %>
     <% table.column :active do |venue| %>
       <%= svg_check if venue.active? %>
     <% end %>
-    <% table.column "", sortable: false do |venue| %>
-      <% render "shared/dropdown", { id: dom_id(venue, :admin) } do %>
-        <% if venue.active? -%>
-          <%= dropdown_link_to "Deactivate",
-                               [:admin, venue],
-                               data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
-                               class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-        <% else %>
-          <%= dropdown_link_to "Activate",
-                               [:admin, venue, { venue: { active: true } }],
-                               data: { turbo_method: "patch", turbo: true, turbo_frame: :_top } %>
-        <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |venue| %>
+      <% if venue.active? -%>
+        <%= danger_link_to "Deactivate",
+                           [:admin, venue],
+                           data: { turbo_method: "delete" },
+                           class: "text-sm" %>
+      <% else %>
+        <%= success_link_to "Activate",
+                            [:admin, venue, { venue: { active: true } }],
+                            data: { turbo_method: "patch" },
+                            class: "text-sm" %>
       <% end %>
     <% end %>
   <% end %>

@@ -1,18 +1,16 @@
-<h1 class="text-center text-3xl font-semibold mb-4">Artists</h1>
+<h1 class="mb-4 text-center text-3xl font-semibold">Artists</h1>
 
 <%= card do %>
   <%= data_table collection: @artists, namespace: :admin, pagy: @pagy do |table| %>
     <% table.column :name do |artist| %>
-      <%= link_to artist.name, edit_admin_artist_path(artist), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+      <%= primary_link_to artist.name, edit_admin_artist_path(artist), class: "hover:underline font-medium" %>
     <% end %>
 
-    <% table.column "", sortable: false do |artist| %>
-      <% render "shared/dropdown", { id: dom_id(artist, :admin) } do %>
-        <%= dropdown_link_to artist.shows.any? ? "Deactivate" : "Delete",
+    <% table.column "", sortable: false, cell_class: "text-right" do |artist| %>
+        <%= danger_link_to artist.shows.any? ? "Deactivate" : "Delete",
                              [:admin, artist],
                              data: { turbo_method: "DELETE" },
-                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-      <% end %>
+                             class: "text-sm" if artist.active? %>
     <% end %>
   <% end %>
 <% end %>

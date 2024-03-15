@@ -1,7 +1,7 @@
 require "application_system_test_case"
 
 class Admin::SeatingCharts::CopySeatingChartTest < ApplicationSystemTestCase
-  test "copying a seat" do
+  test "copying a seating chart" do
     seating_chart = FactoryBot.create(:seating_chart)
 
     assert_difference "SeatingChart.count", 1 do
@@ -9,8 +9,9 @@ class Admin::SeatingCharts::CopySeatingChartTest < ApplicationSystemTestCase
         assert_difference "SeatingChart::Seat.count", seating_chart.seats.count do
           visit admin_seating_charts_path
 
-          find("##{dom_id(seating_chart, :admin)}_dropdown").click
-          click_on "Copy"
+          within "tr", text: seating_chart.name do
+            click_on "Copy"
+          end
 
           click_on "Save"
 

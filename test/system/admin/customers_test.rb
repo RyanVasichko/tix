@@ -30,8 +30,9 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
     }
     assert_difference expected_differences do
       visit admin_customers_path
-      find("##{dom_id(customer, :admin)}_dropdown").click
-      click_on "Delete"
+      within "tr", text: customer.email do
+        click_on "Delete"
+      end
 
       assert_text "Customer was successfully destroyed."
     end

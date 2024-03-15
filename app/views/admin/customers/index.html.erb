@@ -9,18 +9,17 @@
                  keyword_search_url: admin_customers_path,
                  infer_include_deactivated_search_param: false do |table| %>
     <% table.column :name do |user| %>
-      <%= link_to user.name, edit_admin_customer_path(user), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium", data: { turbo_frame: "application_modal" } %>
+      <%= primary_link_to user.name,
+                          edit_admin_customer_path(user),
+                          data: { turbo_frame: "application_modal" },
+                          class: "font-medium" %>
     <% end %>
     <% table.column :email %>
     <% table.column :phone %>
-    <% table.column "", sortable: false do |user| %>
-      <% render "shared/dropdown", { id: dom_id(user, :admin) } do %>
-        <%= dropdown_link_to "View Orders", "#" %>
-        <%= dropdown_link_to "Delete",
-                             admin_customer_path(user),
-                             data: { turbo_method: "delete" },
-                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-      <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |user| %>
+      <%= primary_link_to "View Orders", "#", class: "text-sm" %>
+      |
+      <%= danger_link_to "Delete", admin_customer_path(user), data: { turbo_method: "delete" }, class: "text-sm" %>
     <% end %>
   <% end %>
 <% end %>

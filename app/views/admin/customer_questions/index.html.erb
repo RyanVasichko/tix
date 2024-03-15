@@ -3,19 +3,23 @@
 <%= card do %>
   <%= data_table collection: @customer_questions, namespace: :admin, pagy: @pagy do |table| %>
     <% table.column "Question" do |customer_question| %>
-      <%= link_to customer_question.question, edit_admin_customer_question_path(customer_question), data: { turbo_stream: true } %>
+      <%= primary_link_to customer_question.question,
+                          edit_admin_customer_question_path(customer_question),
+                          data: { turbo_stream: true },
+                          class: "font-medium" %>
     <% end %>
     <% table.column "Active" do |customer_question| %>
       <%= svg_check if customer_question.active? %>
     <% end %>
-    <% table.column "", sortable: false do |customer_question| %>
-      <% render "shared/dropdown", { id: dom_id(customer_question, :admin) } do %>
-        <%= dropdown_link_to "Deactivate",
-                             [:admin, customer_question],
-                             data: { turbo_method: :delete },
-                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" if customer_question.active? %>
-        <%= dropdown_link_to "Activate", admin_customer_question_activation_path(customer_question), data: { turbo_method: :post } unless customer_question.active? %>
-      <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |customer_question| %>
+      <%= danger_link_to "Deactivate",
+                         [:admin, customer_question],
+                         data: { turbo_method: :delete },
+                         class: "text-sm" if customer_question.active? %>
+      <%= success_link_to "Activate",
+                          admin_customer_question_activation_path(customer_question),
+                          data: { turbo_method: :post },
+                          class: "text-sm" unless customer_question.active? %>
     <% end %>
   <% end %>
 <% end %>

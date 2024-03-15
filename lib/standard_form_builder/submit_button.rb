@@ -4,7 +4,7 @@ module StandardFormBuilder
       value, options = nil, value if value.is_a?(Hash)
       value ||= submit_default_value
 
-      merge_default_input_classes_into_options_classes(options, "rounded bg-blue-900 px-3 py-2 font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 group flex items-center justify-center")
+      merge_default_input_classes_into_options_classes(options, "rounded bg-amber-600 px-3 py-2 font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 group flex items-center justify-center")
 
       if block_given?
         @template.button_tag(type: "submit", **options, &block)

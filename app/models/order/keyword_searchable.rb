@@ -7,9 +7,7 @@ module Order::KeywordSearchable
 
     ORDER_SEARCH_INDICES_JOIN = "INNER JOIN order_search_indices ON order_search_indices.order_id = orders.id".freeze
     scope :keyword_search, ->(keyword) {
-      sanitized_keyword = ActiveRecord::Base.sanitize_sql_like(keyword.gsub(".", ""))
-      sanitized_keyword = "'\"#{sanitized_keyword}\"'" # Surround with quotes to match whole words
-      joins("#{ORDER_SEARCH_INDICES_JOIN} MATCH #{sanitized_keyword}")
+      joins("#{ORDER_SEARCH_INDICES_JOIN} AND order_search_indices MATCH '\"#{keyword}\"'")
     }
   end
 

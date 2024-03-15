@@ -10,10 +10,11 @@
     <% table.column(:doors_open_at, date: true) %>
     <% table.column(:dinner_starts_at, date: true) %>
     <% table.column(:dinner_ends_at, date: true) %>
-    <% table.column(header: "", sortable: false) do |show| %>
-      <% render "shared/dropdown", { id: dom_id(show, :admin) } do %>
-        <%= dropdown_link_to "Edit", edit_admin_show_path(show), data: { turbo_frame: "_top" } %>
-      <% end %>
+    <% table.column(header: "", sortable: false, cell_class: "text-right") do |show| %>
+      <%= primary_link_to "Edit",
+                          edit_admin_show_path(show),
+                          data: { turbo_frame: "_top" },
+                          class: "text-sm" %>
     <% end %>
   <% end %>
 <% end %>

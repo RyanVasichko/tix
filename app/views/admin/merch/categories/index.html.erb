@@ -3,15 +3,16 @@
 
   <%= data_table collection: @merch_categories, keyword_search: false, new_record_modal: true do |table| %>
     <% table.column :name, sortable: false do |category| %>
-      <%= link_to category.name, edit_admin_merch_category_path(category), data: { turbo_stream: true }, class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+      <%= primary_link_to category.name,
+                          edit_admin_merch_category_path(category),
+                          data: { turbo_stream: true },
+                          class: "hover:underline font-medium" %>
     <% end %>
-    <% table.column "", sortable: false do |category| %>
-      <% render "shared/dropdown", { id: dom_id(category, :admin) } do %>
-        <%= dropdown_link_to "Delete",
-                             [:admin, category],
-                             data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
-                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-      <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |category| %>
+      <%= danger_link_to "Delete",
+                         [:admin, category],
+                         data: { turbo_method: "DELETE", turbo: true, turbo_frame: :_top },
+                         class: "text-sm" %>
     <% end %>
   <% end %>
 <% end %>

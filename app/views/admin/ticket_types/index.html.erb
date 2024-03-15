@@ -5,7 +5,9 @@
 <%= card do %>
   <%= data_table collection: @ticket_types, pagy: @pagy, namespace: :admin do |table| %>
     <% table.column :name do |ticket_type| %>
-      <%= link_to ticket_type.name, edit_admin_ticket_type_path(ticket_type), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+      <%= primary_link_to ticket_type.name,
+                          edit_admin_ticket_type_path(ticket_type),
+                          class: "font-medium" %>
     <% end %>
     <% table.column :venue_name, header: "Venue" %>
     <% table.column :convenience_fee_type, header: "Convenience fee type" do |ticket_type| %>
@@ -18,15 +20,16 @@
       <%= svg_check if ticket_type.active? %>
     <% end %>
     <% table.column "", sortable: false do |ticket_type| %>
-      <% render "shared/dropdown", { id: dom_id(ticket_type, :admin) } do %>
-        <% if ticket_type.active? -%>
-          <%= dropdown_link_to "Deactivate",
-                               [:admin, ticket_type],
-                               data: { turbo_method: "delete" },
-                               class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-        <% else %>
-          <%= dropdown_link_to "Activate", [:admin, ticket_type, { ticket_type: { active: true } }], data: { turbo_method: "patch" } %>
-        <% end %>
+      <% if ticket_type.active? -%>
+        <%= danger_link_to "Deactivate",
+                           [:admin, ticket_type],
+                           data: { turbo_method: "delete" },
+                           class: "text-sm" %>
+      <% else %>
+        <%= success_link_to "Activate",
+                            [:admin, ticket_type, { ticket_type: { active: true } }],
+                            data: { turbo_method: "patch" },
+                            class: "text-sm" %>
       <% end %>
     <% end %>
   <% end %>

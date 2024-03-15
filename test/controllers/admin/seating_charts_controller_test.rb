@@ -40,7 +40,7 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
     end
 
     assert_redirected_to admin_seating_charts_url
-    assert_equal "Seating chart was successfully created.", flash[:success]
+    assert_equal "Seating chart was successfully created.", flash[:notice]
   end
 
   test "should destroy a seating chart" do
@@ -50,8 +50,7 @@ class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
 
     assert_response :redirect
     assert_redirected_to admin_seating_charts_url
-    assert_equal "Seating chart was successfully destroyed.", flash[:success]
-
+    assert_equal "Seating chart was successfully destroyed.", flash[:notice]
   end
 
   test "should gracefully handle invalid records" do

@@ -21,25 +21,25 @@ module StandardFormBuilder
     end
 
     def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
-      merge_default_input_classes_into_options_classes(options, "h-4 w-4 rounded border-gray-300 text-blue-600 accent-blue-600 focus:ring-0 focus:ring-offset-0")
+      merge_default_input_classes_into_options_classes(options, "h-4 w-4 rounded border-gray-300 text-amber-600 accent-amber-600/50 focus:ring-0 focus:ring-offset-0")
       add_error_fields_to_options(options, method)
       super(method, options, checked_value, unchecked_value)
     end
 
     def radio_button(method, text = nil, options = {}, &block)
-      merge_default_input_classes_into_options_classes(options, "mt-5 mr-4 h-4 w-4 border-gray-300 text-blue-600 accent-blue-500")
+      merge_default_input_classes_into_options_classes(options, "mt-5 mr-4 h-4 w-4 border-gray-300 text-amber-600 accent-amber-500")
       add_error_fields_to_options(options, method)
       super(method, text, options, &block)
     end
 
     def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-      merge_default_input_classes_into_options_classes(html_options, "mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-blue-600 sm:leading-6")
+      merge_default_input_classes_into_options_classes(html_options, "mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-offset focus:ring-amber-500/75 sm:leading-6")
       add_error_fields_to_options(options, method)
       super(method, collection, value_method, text_method, options, html_options)
     end
 
     def select(method, choices = nil, options = {}, html_options = {}, &block)
-      merge_default_input_classes_into_options_classes(html_options, "mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-blue-600 sm:leading-6")
+      merge_default_input_classes_into_options_classes(html_options, "mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-offset focus:ring-amber-500/75 sm:leading-6")
       add_error_fields_to_options(options, method)
       super(method, choices, options, html_options, &block)
     end
@@ -61,7 +61,7 @@ module StandardFormBuilder
         if value.is_a?(Hash)
           value, options = options, value
         end
-        merge_default_input_classes_into_options_classes(options, "mt-2 block w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-800 sm:leading-6")
+        merge_default_input_classes_into_options_classes(options, "mt-2 block w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-offset focus:ring-amber-500/75  sm:leading-6")
         add_error_fields_to_options(options, method)
         @template.safe_join([super(method, options), error_message_for(method)])
       end
@@ -86,7 +86,7 @@ module StandardFormBuilder
     def merge_default_input_classes_into_options_classes(options, base_class)
       return if options[:skip_class]
 
-      options[:class] = classes_merged_into_default_classes(options[:class] || "", base_class)
+      options[:class] = customization_classes_merged_into_default_classes(options[:class] || "", base_class)
     end
 
     def add_error_fields_to_options(options, attribute)

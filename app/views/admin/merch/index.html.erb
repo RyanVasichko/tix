@@ -10,14 +10,14 @@
         <% end %>
       </div>
 
-      <div class="flex space-x-2 items-end">
+      <div class="flex items-end space-x-2">
         <%= link_to_new_record("New merch", new_admin_merch_path, id: "new_merch") %>
       </div>
     </div>
   </div>
 
   <%= turbo_frame_tag("merch", target: "_top") do %>
-    <div class="relative overflow-x-auto">
+    <div class="relative">
       <table class="w-full border-x border-gray-200 text-left rtl:text-right text-gray-500">
         <thead class="bg-zinc-50 uppercase text-gray-700">
         <tr>
@@ -45,14 +45,15 @@
             <td class="px-6 py-4">
               <%= svg_check if merch.active? %>
             </td>
-            <td class="px-6 py-4">
-              <%= render "shared/dropdown", { id: dom_id(merch, :admin) } do %>
-                <%= dropdown_link_to "Take off sale",
-                                     [:admin, merch],
-                                     data: { turbo_method: "delete", turbo: true },
-                                     class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" if merch.active? %>
-                <%= dropdown_link_to "Put on sale", admin_merch_on_sale_path(merch), data: { turbo_method: "post", turbo: true } unless merch.active? %>
-              <% end %>
+            <td class="px-6 py-4 text-right">
+              <%= success_link_to "Put on sale",
+                                  admin_merch_on_sale_path(merch),
+                                  data: { turbo_method: "post", turbo: true },
+                                  class: "text-sm" unless merch.active? %>
+              <%= danger_link_to "Take off sale",
+                                 [:admin, merch],
+                                 data: { turbo_method: "delete", turbo: true },
+                                 class: "text-sm" if merch.active? %>
           </tr>
         <% end %>
         </tbody>

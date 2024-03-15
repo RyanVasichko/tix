@@ -33,8 +33,9 @@ class VenuesTest < ApplicationSystemTestCase
 
   test "should deactivate Venue" do
     visit admin_venues_url
-    click_on "#{dom_id(@venue, :admin)}_dropdown"
-    click_on "Deactivate"
+    within "tr", text: @venue.name do
+      click_on "Deactivate"
+    end
 
     assert_text "Venue was successfully deactivated"
   end
@@ -43,8 +44,9 @@ class VenuesTest < ApplicationSystemTestCase
     @venue.deactivate!
     visit admin_venues_url
     check "Include deactivated?"
-    click_on "#{dom_id(@venue, :admin)}_dropdown"
-    click_on "Activate"
+    within "tr", text: @venue.name do
+      click_on "Activate"
+    end
 
     assert_text "Venue was successfully activated"
     assert @venue.reload.active?

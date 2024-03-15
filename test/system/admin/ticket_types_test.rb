@@ -68,8 +68,9 @@ class TicketTypesTest < ApplicationSystemTestCase
 
   test "should deactivate Ticket type" do
     visit admin_ticket_types_url
-    click_on "#{dom_id(@ticket_type, :admin)}_dropdown"
-    click_on "Deactivate"
+    within "tr", text: @ticket_type.name do
+      click_on "Deactivate"
+    end
 
     assert_text "Ticket type was successfully deactivated"
     assert @ticket_type.reload.deactivated?

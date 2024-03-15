@@ -5,17 +5,18 @@
 <%= card do %>
   <%= data_table collection: @seating_charts, namespace: :admin, pagy: @pagy do |table| %>
     <% table.column :name do |seating_chart| %>
-      <%= link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "text-amber-500 hover:underline hover:text-amber-600 font-medium" %>
+      <%= primary_link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "hover:underline font-medium" %>
     <% end %>
 
-    <% table.column "", sortable: false do |seating_chart| %>
-      <% render "shared/dropdown", { id: dom_id(seating_chart, :admin) } do %>
-        <%= dropdown_link_to "Deactivate",
-                             [:admin, seating_chart],
-                             data: { turbo_method: "DELETE" },
-                             class: "block px-4 py-2 hover:bg-gray-100 text-sm text-red-500 hover:text-red-700" %>
-        <%= dropdown_link_to 'Copy', new_admin_seating_chart_path(clone_from: seating_chart.id) %>
-      <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |seating_chart| %>
+      <%= primary_link_to 'Copy',
+                          new_admin_seating_chart_path(clone_from: seating_chart.id),
+                          class: "text-sm" %>
+      |
+      <%= danger_link_to "Deactivate",
+                         [:admin, seating_chart],
+                         data: { turbo_method: "DELETE" },
+                         class: "text-sm" %>
     <% end %>
   <% end %>
 <% end %>

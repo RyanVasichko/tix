@@ -48,8 +48,9 @@ class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
 
   test "should deactivate Customer question" do
     visit admin_customer_questions_url
-    find("##{dom_id(@customer_question_1, :admin)}_dropdown").click
-    click_on "Deactivate"
+    within "tr", text: @customer_question_1.question do
+      click_on "Deactivate"
+    end
 
     assert_text "Customer question was successfully deactivated"
 
@@ -59,8 +60,9 @@ class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
   test "should activate Customer question" do
     visit admin_customer_questions_url
     check "Include deactivated?"
-    find("##{dom_id(@customer_question_2, :admin)}_dropdown").click
-    click_on "Activate"
+    within "tr", text: @customer_question_2.question do
+      click_on "Activate"
+    end
 
     assert_text "Customer question was successfully activated"
 
