@@ -6,10 +6,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
 
-  def log_in_as(user, password = "password")
+  def sign_in(user)
     visit login_path
     fill_in "Email", with: user.email
-    fill_in "Password", with: password
+    fill_in "Password", with: "Radiohead"
     click_on "Sign In"
 
     assert_text "Welcome back, #{user.name}!", wait: 10

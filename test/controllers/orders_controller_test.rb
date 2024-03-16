@@ -1,9 +1,9 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class OrdersControllerTest < ApplicationIntegrationTestCase
+class OrdersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = FactoryBot.create(:customer, :with_password)
-    log_in_as @user, "password"
+    sign_in @user
     @order = FactoryBot.create(:customer_order, orderer: @user)
   end
 

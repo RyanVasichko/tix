@@ -8,7 +8,7 @@ class GeneralAdmissionShowsTest < ApplicationSystemTestCase
   test "adding tickets to the shopping cart" do
     visit shows_url
     user = FactoryBot.create(:customer)
-    log_in_as(user)
+    sign_in user
 
     assert_difference -> { user.shopping_cart.tickets.count }, 2 do
       within "##{dom_id(@show)}" do

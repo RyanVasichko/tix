@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::ArtistsControllerTest < ApplicationIntegrationTestCase
+class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @artist = FactoryBot.create(:artist)
   end

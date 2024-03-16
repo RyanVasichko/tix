@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class SessionsControllerTest < ApplicationIntegrationTestCase
+class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup { @user = FactoryBot.create(:customer) }
 
   test "should get new if not logged in" do
@@ -9,41 +9,31 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
   end
 
   test "should redirect to root if already logged in" do
-    log_in_as(@user, "password")
+    sign_in @user
     get login_url
     assert_redirected_to root_url
     assert_equal "You are already logged in!", flash[:notice]
   end
 
   test "should log in with valid credentials" do
-    post login_url, params: { session: { email: @user.email, password: "password" } }
+    post login_url, params: { session: { email: @user.email, password: "Radiohead" } }
     assert_redirected_to root_url
     follow_redirect!
-
-    skip "need some UI indication that they're logged in"
-    # Check for some indication that user is logged in (maybe a flash message or some content change)
-    assert_select "a[href=?]", logout_path
   end
 
   test "shouldn't log in with invalid credentials" do
     post login_url, params: { session: { email: @user.email, password: "wrongpassword" } }
     assert_response :success
     assert flash[:error], "Invalid email/password combination"
-
-    skip "need some UI indication that they're logged in"
-    # Assert that the user is not logged in. Maybe look for the absence of a logout link.
-    assert_select "a[href=?]", logout_path, count: 0
+    assert User.find(session[:user_id]).guest?
   end
 
   test "should log out" do
-    log_in_as(@user, "password")
+    sign_in @user
     delete logout_url
     assert_redirected_to root_url
+    assert_nil session[:user_id]
     follow_redirect!
-
-    skip "need some UI indication that they're logged in"
-    # Check for some indication that user is logged out (maybe a flash message or some content change)
-    assert_select "a[href=?]", login_path
   end
 
   test "should transfer seat reservations from a guest to the logged in user" do
@@ -55,7 +45,7 @@ class SessionsControllerTest < ApplicationIntegrationTestCase
     seat = show.seats.where(shopping_cart: nil, reserved_until: nil).first
     seat.reserve_for(guest)
 
-    log_in_as(@user, "password")
+    sign_in @user
 
     seat.reload
     assert_equal @user, seat.reserved_by

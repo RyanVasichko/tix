@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrationTestCase
+class ShoppingCart::GeneralAdmissionTicketsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @show = FactoryBot.create(:general_admission_show)
   end
@@ -11,7 +11,7 @@ class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrati
 
   test "should create shopping cart tickets" do
     customer = FactoryBot.create(:customer)
-    log_in_as(customer)
+    sign_in customer
 
     assert_difference -> { customer.shopping_cart.tickets.count }, 2 do
       post shopping_cart_general_admission_show_tickets_url(@show), params: {
@@ -33,7 +33,7 @@ class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrati
 
   test "should destroy tickets when update quantity is zero" do
     customer = FactoryBot.create(:customer)
-    log_in_as(customer)
+    sign_in customer
     customer.shopping_cart.tickets.create(show_section: @show.sections.first, quantity: 1)
 
     assert_difference -> { customer.shopping_cart.tickets.count }, -1 do
@@ -52,7 +52,7 @@ class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrati
 
   test "should destroy tickets" do
     customer = FactoryBot.create(:customer)
-    log_in_as(customer)
+    sign_in customer
     customer.shopping_cart.tickets.create(show_section: @show.sections.first, quantity: 1)
 
     assert_difference -> { customer.shopping_cart.tickets.count }, -1 do
@@ -64,7 +64,7 @@ class ShoppingCart::GeneralAdmissionTicketsControllerTest < ApplicationIntegrati
 
   test "should update tickets" do
     customer = FactoryBot.create(:customer)
-    log_in_as(customer)
+    sign_in customer
     customer.shopping_cart.tickets.create(show_section: @show.sections.first, quantity: 1)
 
     assert_no_difference -> { customer.shopping_cart.tickets.count } do

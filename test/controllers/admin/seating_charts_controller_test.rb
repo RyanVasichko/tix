@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::SeatingChartsControllerTest < ApplicationIntegrationTestCase
+class Admin::SeatingChartsControllerTest < ActionDispatch::IntegrationTest
   test "should create seating chart with two sections and two seats in each" do
     venue = FactoryBot.create(:venue, ticket_types_count: 2)
     params = {

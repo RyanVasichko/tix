@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class ShowsControllerTest < ApplicationIntegrationTestCase
+class ShowsControllerTest < ActionDispatch::IntegrationTest
   setup do
     FactoryBot.create(:reserved_seating_show)
     FactoryBot.create(:general_admission_show)

@@ -39,8 +39,8 @@ FactoryBot.define do
   end
 
   trait :with_password do
-    password { "password" }
-    password_confirmation { "password" }
+    password { "Radiohead" }
+    password_confirmation { "Radiohead" }
   end
 
   trait :superadmin do

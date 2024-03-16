@@ -5,7 +5,7 @@ class ShoppingCart::MerchSystemTest < ApplicationSystemTestCase
     merch = FactoryBot.create(:merch)
     customer = FactoryBot.create(:customer)
     option = merch.options.sample
-    log_in_as(customer, "password")
+    sign_in customer
 
     visit merch_index_url
     find("##{dom_id(merch)}").click

@@ -11,7 +11,7 @@ class SignInTest < ApplicationSystemTestCase
     assert_selector "h2", text: "Sign In"
 
     fill_in "session[email]", with: @user.email
-    fill_in "session[password]", with: "password"
+    fill_in "session[password]", with: "Radiohead"
     click_button "Sign In"
 
     assert_text "Upcoming Shows"

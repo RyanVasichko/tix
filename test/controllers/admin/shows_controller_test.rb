@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::ShowsControllerTest < ApplicationIntegrationTestCase
+class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
   setup { @reserved_seating_show = FactoryBot.create(:reserved_seating_show) }
 
   test "should get index" do

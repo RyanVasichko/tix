@@ -9,7 +9,7 @@ class OrdersTest < ApplicationSystemTestCase
     customer = FactoryBot.create(:customer, shopping_cart_merch_count: 2, reserved_seats_count: 2, general_admission_tickets_count: 2)
 
     assert_difference "customer.orders.reload.count" do
-      log_in_as(customer, "password")
+      sign_in customer
 
       find("#shopping_cart_toggle").click
       click_on "Checkout"
@@ -174,7 +174,7 @@ class OrdersTest < ApplicationSystemTestCase
                                   reserved_seats_count: 1,
                                   general_admission_tickets_count: 1)
 
-    log_in_as(@customer, "password")
+    sign_in @customer
 
     find("#shopping_cart_toggle").click
     click_on "Checkout"

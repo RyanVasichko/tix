@@ -1,8 +1,8 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::MerchControllerTest < ApplicationIntegrationTestCase
+class Admin::MerchControllerTest < ActionDispatch::IntegrationTest
   setup do
-    log_in_as(FactoryBot.create(:customer), "password")
+    sign_in FactoryBot.create(:customer)
     @merch = FactoryBot.create(:merch)
     @merch_category_1 = FactoryBot.create(:merch_category)
     @merch_category_2 = FactoryBot.create(:merch_category)

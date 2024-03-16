@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::CustomerQuestions::ActivationControllerTest < ApplicationIntegrationTestCase
+class Admin::CustomerQuestions::ActivationControllerTest < ActionDispatch::IntegrationTest
   setup do
     @customer_question = FactoryBot.create(:customer_question, :inactive)
   end

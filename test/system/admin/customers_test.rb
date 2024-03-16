@@ -5,7 +5,7 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
     @users = FactoryBot.create_list(:customer, 5)
     @admin = FactoryBot.create(:admin)
 
-    log_in_as(@admin)
+    sign_in @admin
   end
 
   test "visiting the index" do

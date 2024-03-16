@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::Shows::ReservedSeatingShowSectionsFieldsControllerTest < ApplicationIntegrationTestCase
+class Admin::Shows::ReservedSeatingShowSectionsFieldsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     seating_chart = FactoryBot.create(:seating_chart)
 

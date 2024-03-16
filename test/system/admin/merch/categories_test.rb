@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class Admin::Merch::CategoriesTest < ApplicationSystemTestCase
   setup do
-    log_in_as FactoryBot.create(:admin), "password"
+    sign_in FactoryBot.create(:admin)
     @merch_category = FactoryBot.create(:merch_category)
   end
 

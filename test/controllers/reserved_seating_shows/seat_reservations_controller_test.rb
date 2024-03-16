@@ -1,12 +1,12 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class ReservedSeatingShows::SeatReservationsControllerTest < ApplicationIntegrationTestCase
+class ReservedSeatingShows::SeatReservationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @show = FactoryBot.create(:reserved_seating_show)
     @user = FactoryBot.create(:customer)
     @seat = @show.seats.first
 
-    log_in_as(@user, "password")
+    sign_in @user
   end
 
   test "should reserve a seat for a show responding using turbo streams" do

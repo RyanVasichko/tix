@@ -1,11 +1,11 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class ShoppingCart::MerchControllerTest < ApplicationIntegrationTestCase
+class ShoppingCart::MerchControllerTest < ActionDispatch::IntegrationTest
   setup do
     @merch = FactoryBot.create(:merch)
     @shopping_cart_merch = FactoryBot.create(:shopping_cart_merch, merch: @merch)
     @user = FactoryBot.create(:customer)
-    log_in_as(@user, "password")
+    sign_in @user
   end
 
   test "should get new" do

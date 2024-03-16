@@ -16,3 +16,7 @@ class ActiveSupport::TestCase
     Faker::UniqueGenerator.clear
   end
 end
+
+class ActionDispatch::IntegrationTest
+  include SessionTestHelper
+end

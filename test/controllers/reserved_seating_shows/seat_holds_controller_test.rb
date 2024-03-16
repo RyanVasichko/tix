@@ -1,10 +1,10 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class ReservedSeatingShows::SeatHoldsControllerTest < ApplicationIntegrationTestCase
+class ReservedSeatingShows::SeatHoldsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @admin = FactoryBot.create(:admin)
 
-    log_in_as(@admin)
+    sign_in @admin
     @show = FactoryBot.create(:reserved_seating_show)
     @show.seats.limit(3).each do |seat|
       seat.reserve_for!(@admin)

@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Orders::SeatReservationsControllerTest < ApplicationIntegrationTestCase
+class Orders::SeatReservationsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy seat reservation" do
     @user = FactoryBot.create(:customer)
     @show = FactoryBot.create(:reserved_seating_show)
@@ -8,7 +8,7 @@ class Orders::SeatReservationsControllerTest < ApplicationIntegrationTestCase
     @seat = @show.seats.first
     @seat.reserve_for(@user)
 
-    log_in_as(@user, "password")
+    sign_in @user
 
     assert_difference -> { @user.reserved_seats.count }, -1 do
       delete orders_seat_reservations_url(@seat), as: :turbo_stream

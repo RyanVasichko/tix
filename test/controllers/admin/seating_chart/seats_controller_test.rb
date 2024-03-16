@@ -1,6 +1,6 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Admin::SeatingChart::SeatsControllerTest < ApplicationIntegrationTestCase
+class Admin::SeatingChart::SeatsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
     FactoryBot.create(:venue)
 

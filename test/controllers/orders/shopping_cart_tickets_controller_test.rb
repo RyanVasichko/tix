@@ -1,11 +1,11 @@
-require "application_integration_test_case"
+require "test_helper"
 
-class Orders::ShoppingCartTicketsControllerTest < ApplicationIntegrationTestCase
+class Orders::ShoppingCartTicketsControllerTest < ActionDispatch::IntegrationTest
   setup do
     user = FactoryBot.create(:customer)
     shopping_cart = FactoryBot.create(:shopping_cart, user: user, general_admission_tickets_count: 1)
     @ticket = shopping_cart.tickets.first
-    log_in_as(user)
+    sign_in user
   end
 
   test "should destroy ticket" do

@@ -14,7 +14,7 @@ class ReservedSeatingShowsTest < ApplicationSystemTestCase
 
   test "reserving a seat" do
     customer = FactoryBot.create(:customer)
-    log_in_as customer
+    sign_in customer
 
     seat = @show.seats.where(shopping_cart: nil).first
 
@@ -40,7 +40,7 @@ class ReservedSeatingShowsTest < ApplicationSystemTestCase
 
   test "cancelling a seat reservation" do
     customer = FactoryBot.create(:customer)
-    log_in_as customer
+    sign_in customer
 
     seat = @show.seats.where(shopping_cart: nil).first
     seat.reserve_for(customer)
@@ -65,7 +65,7 @@ class ReservedSeatingShowsTest < ApplicationSystemTestCase
 
   test "holding seats" do
     admin = FactoryBot.create(:admin)
-    log_in_as admin
+    sign_in admin
 
     available_seats = @show.seats.merge(Show::Seat.not_sold).merge(Show::Seat.not_held).limit(2)
     seat_1 = available_seats.first

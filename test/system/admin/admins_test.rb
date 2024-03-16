@@ -6,7 +6,7 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
     @admin = FactoryBot.create(:admin)
     @roles = FactoryBot.create_list(:user_role, 5)
 
-    log_in_as(@admin)
+    sign_in @admin
   end
 
   test "visiting the index" do

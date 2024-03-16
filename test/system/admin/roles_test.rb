@@ -5,7 +5,7 @@ class Admin::RolesTest < ApplicationSystemTestCase
     @admin = FactoryBot.create(:admin)
     @roles = FactoryBot.create_list(:user_role, 5)
 
-    log_in_as(@admin)
+    sign_in @admin
     visit admin_roles_path
   end
 
