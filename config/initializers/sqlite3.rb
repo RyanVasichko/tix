@@ -32,5 +32,5 @@ end
 
 ActiveSupport.on_load :active_record do
   ActiveRecord::ConnectionAdapters::SQLite3Adapter.prepend SQLite3Configuration
-  ActiveRecord::Tasks::SQLiteDatabaseTasks.prepend SQLite3DumpConfiguration
+  # ActiveRecord::Tasks::SQLiteDatabaseTasks.prepend SQLite3DumpConfiguration
 end
