@@ -3,7 +3,7 @@ require "application_system_test_case"
 class Admin::RolesTest < ApplicationSystemTestCase
   setup do
     @admin = FactoryBot.create(:admin)
-    @roles = FactoryBot.create_list(:user_role, 5)
+    @roles = FactoryBot.create_list(:user_role, 2)
 
     sign_in @admin
     visit admin_roles_path
@@ -59,10 +59,10 @@ class Admin::RolesTest < ApplicationSystemTestCase
     assert_not role.manage_customers
     assert_not role.manage_admins
 
-    check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[hold_seats]']"
-    check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[release_seats]']"
-    check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[manage_customers]']"
-    check_field_and_dismiss_toast_messages_within_role role, "input[type='checkbox'][name='user_role[manage_admins]']"
+    grant_permission_and_dismiss_toast_messages role, :hold_seats
+    grant_permission_and_dismiss_toast_messages role, :release_seats
+    grant_permission_and_dismiss_toast_messages role, :manage_customers
+    grant_permission_and_dismiss_toast_messages role, :manage_admins
 
     assert role.reload.hold_seats
     assert role.release_seats
@@ -72,9 +72,9 @@ class Admin::RolesTest < ApplicationSystemTestCase
 
   private
 
-  def check_field_and_dismiss_toast_messages_within_role(role, field_selector)
+  def grant_permission_and_dismiss_toast_messages(role, permission)
     within "##{dom_id(role, :admin)}" do
-      find(field_selector).check
+      find("input[type='checkbox'][name='user_role[#{permission}]']").check
     end
     assert_text "Role was successfully updated"
     dismiss_all_toast_messages

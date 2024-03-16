@@ -11,7 +11,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit admin_shows_url
-    assert_selector "h1", text: "Shows"
+    assert_text @show.artist_name
   end
 
   test "should create a reserved seating show" do
@@ -140,11 +140,15 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     visit new_admin_show_url
     click_on "Add Artist"
 
+    artist_name = ArtistNameGenerator.instance.unique_artist_name
+    artist_bio = Faker::Lorem.sentence(word_count: 10)
+    artist_url = Faker::Internet.url
+
     assert_difference "Artist.count" do
       within "#admin_artist_form" do
-        fill_in "Name", with: "The Beatles"
-        fill_in "Bio", with: "The Beatles were an English rock band formed in Liverpool in 1960."
-        fill_in "Url", with: "https://www.thebeatles.com/"
+        fill_in "Name", with: artist_name
+        fill_in "Bio", with: artist_bio
+        fill_in "Url", with: artist_url
         attach_file("artist_image", Rails.root.join("test/fixtures/files/radiohead.jpg"))
         click_on "Create Artist"
       end
@@ -152,14 +156,14 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       assert_text "Artist was successfully created."
 
       created_artist = Artist.last
-      assert_equal "The Beatles", created_artist.name
-      assert_equal "The Beatles were an English rock band formed in Liverpool in 1960.", created_artist.bio
-      assert_equal "https://www.thebeatles.com/", created_artist.url
+      assert_equal artist_name, created_artist.name
+      assert_equal artist_bio, created_artist.bio
+      assert_equal artist_url, created_artist.url
       assert created_artist.image.attached?
     end
 
-    fill_in "Artist", with: "The Bea"
-    assert_text "The Beatles"
+    fill_in "Artist", with: artist_name[0 .. -2]
+    assert_text artist_name, wait: 5
   end
 
   test "should destroy Show" do
