@@ -23,7 +23,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "shouldn't log in with invalid credentials" do
     post login_url, params: { session: { email: @user.email, password: "wrongpassword" } }
-    assert_response :success
+    assert_response :unprocessable_entity
     assert flash[:error], "Invalid email/password combination"
     assert User.find(session[:user_id]).guest?
   end

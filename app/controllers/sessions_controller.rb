@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     else
       flash.now[:error] = "Invalid email/password combination"
       respond_to do |format|
-        format.html { render "new" }
+        format.html { render "new", status: :unprocessable_entity }
         format.turbo_stream
       end
     end

@@ -1,7 +1,7 @@
 FactoryBot.define do
   trait :show_section do
     ticket_price { Faker::Commerce.price(range: 25..100.0) }
-    name { "Section #{Faker::Lorem.word}" }
+    name { "Section #{Faker::Lorem.unique.sentence(word_count: 3)}" }
 
     transient do
       seats_count { 5 }

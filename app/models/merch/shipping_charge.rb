@@ -3,6 +3,6 @@ class Merch::ShippingCharge < ApplicationRecord
   validates :price, presence: true
 
   def self.for_weight(weight)
-    where(weight: weight..).order(weight: :asc).limit(1).pluck(:price).first || maximum(:price)
+    where(weight: weight..).order(weight: :asc).limit(1).pluck(:price).first || maximum(:price) || 0
   end
 end

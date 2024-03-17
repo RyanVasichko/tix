@@ -9,10 +9,6 @@ module User::Shopper
     has_many :shopping_cart_merch, class_name: "ShoppingCart::Merch", through: :shopping_cart, source: :merch
   end
 
-  def shopping_cart_with_items
-    ShoppingCart.includes_items.find(shopping_cart_id)
-  end
-
   def ticket_reservation_time
     15.minutes
   end

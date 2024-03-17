@@ -8,13 +8,6 @@ class ShoppingCart < ApplicationRecord
   has_many :merch, dependent: :destroy, class_name: "ShoppingCart::Merch", foreign_key: :shopping_cart_id
   has_one :user, inverse_of: :shopping_cart
 
-  scope :includes_items, -> {
-    includes(
-      seats: [section: [{ show: :artist }]],
-      merch: [merch: [{ image_attachment: :blob }]]
-    )
-  }
-
   def shows
     Show.where(id: seats.joins(:show).select("DISTINCT shows.id")).or(Show.where(id: tickets.joins(:show).select("DISTINCT shows.id")))
   end

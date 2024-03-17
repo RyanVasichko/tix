@@ -16,6 +16,12 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    {
+      pattern:
+        /(text|bg)-(blue|gray|red|yellow|green|indigo|pink|purple|amber|lime|emerald|teal|cyan|sky|violet|rose|fuchsia|orange|lightBlue)-\d{2,3}$/
+    }
+  ],
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),

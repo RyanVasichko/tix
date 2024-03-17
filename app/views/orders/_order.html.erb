@@ -21,7 +21,7 @@
         <h2 class="sr-only">Products purchased</h2>
 
         <% order.tickets.group_by(&:show).each do |show, tickets| %>
-          <div class="space-y-24 mt-8 border-b pb-8">
+          <div class="mt-8 border-b pb-8 space-y-24">
             <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
               <div class="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
                 <%= link_to shows_path(show), class: "max-w-16 rounded-lg bg-gray-50" do %>
@@ -50,39 +50,17 @@
                 <% end %>
                 <p class="mt-1 font-medium text-gray-900"><%= number_to_currency(show.tickets.sum(:total_price)) %></p>
               </div>
-              <!-- BILLING/SHIPPING UPDATES SECTION
-                <div class="sm:col-span-12 md:col-span-7">
-                  <dl class="grid grid-cols-1 gap-y-8 border-b border-gray-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
-                    <div>
-                      <dt class="font-medium text-gray-900">Delivery address</dt>
-                      <dd class="mt-3 text-gray-500">
-                        <span class="block">Floyd Miles</span>
-                        <span class="block">7363 Cynthia Pass</span>
-                        <span class="block">Toronto, ON N3Y 4H8</span>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt class="font-medium text-gray-900">Shipping updates</dt>
-                      <dd class="mt-3 space-y-3 text-gray-500">
-                        <p>f•••@example.com</p>
-                        <p>1•••••••••40</p>
-                        <button type="button" class="font-medium text-amber-600 hover:text-amber-500">Edit</button>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-               -->
             </div>
           </div>
         <% end %>
 
         <% order.merch.group_by(&:merch).each do |merch, order_merch| %>
-          <div class="space-y-24 mt-8 border-b pb-8">
-            <div class="grid grid-cols-1 text-sm sm:grid-cols-4 md:grid-cols-6 sm:gap-x-6 md:gap-x-8">
+          <div class="mt-8 border-b pb-8 space-y-24">
+            <div class="grid grid-cols-1 text-sm sm:grid-cols-4 sm:gap-x-6 md:grid-cols-6 md:gap-x-8">
               <div class="col-span-4 sm:col-span-1">
                 <%= image_tag url_for(merch.image.variant(:small)), class: "h-36 w-auto rounded-lg" %>
               </div>
-              <div class="mt-6 col-span-4 sm:col-span-3 md:col-span-5 sm:mt-0">
+              <div class="col-span-4 mt-6 sm:col-span-3 sm:mt-0 md:col-span-5">
                 <h3 class="text-lg font-medium text-gray-900">
                   <span class="text-2xl"><%= merch.name %></span>
                 </h3>
@@ -96,30 +74,6 @@
                 <p class="mt-1 font-medium text-gray-900"><%= number_to_currency(order_merch.sum(&:total_price)) %></p>
               </div>
             </div>
-            <!--            <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">-->
-            <!-- BILLING/SHIPPING UPDATES SECTION
-              <div class="sm:col-span-12 md:col-span-7">
-                <dl class="grid grid-cols-1 gap-y-8 border-b border-gray-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
-                  <div>
-                    <dt class="font-medium text-gray-900">Delivery address</dt>
-                    <dd class="mt-3 text-gray-500">
-                      <span class="block">Floyd Miles</span>
-                      <span class="block">7363 Cynthia Pass</span>
-                      <span class="block">Toronto, ON N3Y 4H8</span>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt class="font-medium text-gray-900">Shipping updates</dt>
-                    <dd class="mt-3 space-y-3 text-gray-500">
-                      <p>f•••@example.com</p>
-                      <p>1•••••••••40</p>
-                      <button type="button" class="font-medium text-amber-600 hover:text-amber-500">Edit</button>
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-             -->
-            <!--            </div>-->
           </div>
         <% end %>
       </div>
@@ -130,14 +84,13 @@
 
         <div class="rounded-lg bg-gray-50 px-6 py-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-0 lg:py-8">
           <dl class="grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-5 lg:pl-8">
-            <% if order.merch.any? %>
+            <% if order.shipping_address.present? %>
               <div>
                 <dt class="font-medium text-gray-900">Shipping address</dt>
                 <dd class="mt-3 text-gray-500">
                   <span class="block"><%= order.shipping_address.first_name %> <%= order.shipping_address.last_name %></span>
                   <span class="block"><%= order.shipping_address.address_1 %> <%= order.shipping_address.address_2 %></span>
-                  <span class="block"><%= order.shipping_address.city %>
-                    , <%= order.shipping_address.state %> <%= order.shipping_address.zip_code %></span>
+                  <span class="block"><%= order.shipping_address.city %>, <%= order.shipping_address.state %> <%= order.shipping_address.zip_code %></span>
                 </dd>
               </div>
             <% end %>
@@ -145,12 +98,6 @@
               <dt class="font-medium text-gray-900">Payment information</dt>
               <dd class="mt-3 flex">
                 <div>
-                  <!--
-                    <svg aria-hidden="true" width="36" height="24" viewBox="0 0 36 24" class="h-6 w-auto">
-                      <rect width="36" height="24" rx="4" fill="#224DBA" />
-                      <path d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z" fill="#fff" />
-                    </svg>
-                    -->
                   <%= image_tag "/card_brands/#{order.payment.card_brand}.png", class: "h-6 w-auto" %>
                   <p class="sr-only">Visa</p>
                 </div>
@@ -163,7 +110,7 @@
             </div>
           </dl>
 
-          <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-7 lg:mt-0 lg:pr-8">
+          <dl class="mt-8 text-sm divide-y divide-gray-200 lg:col-span-7 lg:mt-0 lg:pr-8">
             <div class="flex items-center justify-between pb-4">
               <dt class="text-gray-600">Subtotal</dt>
               <dd class="font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>

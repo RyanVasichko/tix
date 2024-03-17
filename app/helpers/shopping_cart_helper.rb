@@ -2,11 +2,11 @@ module ShoppingCartHelper
   def morph_shopping_cart
     morphs = []
     morphs << turbo_stream.action("morph", "shopping_cart_count") do
-      render "shopping_cart/count", shopping_cart: Current.user.shopping_cart_with_items
+      render "shopping_cart/count", shopping_cart: Current.user.shopping_cart
     end
 
     morphs << turbo_stream.action("morph", "shopping_cart") do
-      render "shopping_cart/shopping_cart", shopping_cart: Current.user.shopping_cart_with_items
+      render "shopping_cart/shopping_cart", shopping_cart: Current.user.shopping_cart
     end
 
     safe_join(morphs)

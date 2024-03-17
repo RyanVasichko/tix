@@ -12,10 +12,9 @@ class OrdersController < ApplicationController
 
     return unless Current.user.shopping_cart.empty?
 
-    redirect_to root_path,
-                flash: {
-                  notice: "Your shopping cart is empty, add some items to your shopping cart to check out"
-                }
+    redirect_to \
+      root_path,
+      flash: { notice: "Your shopping cart is empty, add some items to your shopping cart to check out" }
   end
 
   def edit; end

@@ -27,7 +27,7 @@ namespace :db do
       venue_seating_charts_count = ENV.fetch("VENUE_SEATING_CHARTS_COUNT", 2).to_i
       venues_count = ENV.fetch("VENUES_COUNT", 3).to_i
       merch_count = ENV.fetch("MERCH_COUNT", 5).to_i
-      merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT", 3).to_i
+      merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT", 5).to_i
       merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT", 3).to_i
       customers_count = ENV.fetch("CUSTOMERS_COUNT", 10).to_i
       admins_count = ENV.fetch("ADMINS_COUNT", 1).to_i
@@ -36,10 +36,10 @@ namespace :db do
 
       puts "Creating:"
 
-      (1..artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
+      (1 .. artists_count).map { FactoryBot.create(:artist, image_blob: artist_image_blobs.sample) }
       puts "- #{artists_count} artists"
 
-      venues = (1..venues_count).map { FactoryBot.create(:venue) }
+      venues = (1 .. venues_count).map { FactoryBot.create(:venue) }
       puts "- #{venues_count} venues"
 
       venue_layout_blob = ActiveStorage::Blob.create_and_upload!(
@@ -49,7 +49,7 @@ namespace :db do
       )
 
       venues.each do |venue|
-        (1...venue_seating_charts_count).each_slice(100) do |slice|
+        (1 ... venue_seating_charts_count).each_slice(100) do |slice|
           slice.count.times do
             FactoryBot.create(
               :seating_chart,
@@ -65,7 +65,7 @@ namespace :db do
 
       Show::Seat.suppressing_turbo_broadcasts do
         with_forking do
-          (1..upcoming_reserved_seating_shows_count).each_slice(100) do |slice|
+          (1 .. upcoming_reserved_seating_shows_count).each_slice(100) do |slice|
             slice.count.times do
               FactoryBot.create(
                 :reserved_seating_show,
@@ -81,7 +81,7 @@ namespace :db do
         puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
 
         with_forking do
-          (1..past_reserved_seating_shows_count).each_slice(100) do |slice|
+          (1 .. past_reserved_seating_shows_count).each_slice(100) do |slice|
             slice.count.times do
               FactoryBot.create(
                 :reserved_seating_show,
@@ -99,7 +99,7 @@ namespace :db do
       end
 
       with_forking do
-        (1..upcoming_general_admission_shows_count).each_slice(100) do |slice|
+        (1 .. upcoming_general_admission_shows_count).each_slice(100) do |slice|
           FactoryBot.create_list(
             :general_admission_show,
             slice.count,
@@ -112,7 +112,7 @@ namespace :db do
       puts "- #{upcoming_general_admission_shows_count} upcoming general admission shows"
 
       with_forking do
-        (1..past_general_admission_shows_count).each_slice(100) do |slice|
+        (1 .. past_general_admission_shows_count).each_slice(100) do |slice|
           FactoryBot.create_list(
             :general_admission_show,
             slice.count,
@@ -125,15 +125,17 @@ namespace :db do
       end
       puts "- #{past_general_admission_shows_count} past general admission shows"
 
-      merch_image_blob = ActiveStorage::Blob.create_and_upload!(
+      merch_categories = FactoryBot.create_list(:merch_category, merch_categories_count)
+      puts "- #{merch_categories_count} merch categories"
+
+      merch_image_blob = ActiveStorage::Blob.create_and_upload! \
         io: File.open(Rails.root.join("test/fixtures/files/bbq_sauce.png")),
         filename: "bbq_sauce.png",
-        content_type: "image/png")
-      FactoryBot.create_list(:merch, merch_count, image_blob: merch_image_blob)
+        content_type: "image/png"
+      merch_count.times do
+        FactoryBot.create(:merch, categories: merch_categories.sample(2), image_blob: merch_image_blob)
+      end
       puts "- #{merch_count} merch"
-
-      FactoryBot.create_list(:merch_category, merch_categories_count)
-      puts "- #{merch_categories_count} merch categories"
 
       merch_shipping_charges_count.times do |index|
         Merch::ShippingCharge.create!(weight: index * 5, price: index + 1)
@@ -141,7 +143,7 @@ namespace :db do
       puts "- #{merch_shipping_charges_count} merch shipping charges"
 
       with_forking do
-        (1..customers_count).each_slice(100) do |slice|
+        (1 .. customers_count).each_slice(100) do |slice|
           FactoryBot.create_list(:customer, slice.count)
         end
       end
@@ -153,7 +155,7 @@ namespace :db do
 
       Show::Seat.suppressing_turbo_broadcasts do
         with_forking do
-          (1..customer_orders_count).each_slice(100) do |slice|
+          (1 .. customer_orders_count).each_slice(100) do |slice|
             truncate_wal_file
 
             FactoryBot.create_list(:customer_order, slice.count, with_existing_shows: true, with_existing_user: true, with_existing_merch: true)
@@ -162,7 +164,7 @@ namespace :db do
         puts "- #{customer_orders_count} customer orders"
 
         with_forking do
-          (1..guest_orders_count).each_slice(100) do |slice|
+          (1 .. guest_orders_count).each_slice(100) do |slice|
             truncate_wal_file
 
             FactoryBot.create_list(:guest_order, slice.count, with_existing_shows: true, with_existing_merch: true)
