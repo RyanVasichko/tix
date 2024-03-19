@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby file: ".ruby-version"
 
 # Infrastructure
-gem "rails", github: "rails/rails", branch: "main", ref: "7d008fee705a013d51eef548cf62d7024eacc29a"
+gem "rails", github: "rails/rails", branch: "main"
 gem "puma", "~> 6.0"
 gem "redis"
 gem "solid_cache"

@@ -43,9 +43,6 @@ when "development"
   # Specifies a very generous `worker_timeout` so that the worker
   # isn't killed by Puma when suspended by a debugger.
   worker_timeout 3600
-
-  plugin :tailwindcss
-  plugin :solid_queue
 end
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
