@@ -1,19 +1,19 @@
 FactoryBot.define do
   trait :show_section do
     ticket_price { Faker::Commerce.price(range: 25..100.0) }
-    name { "Section #{Faker::Lorem.unique.sentence(word_count: 3)}" }
-
-    transient do
-      seats_count { 5 }
-    end
+    name { "#{Faker::Lorem.unique.sentence(word_count: 4)}" }
   end
 
-  factory :reserved_seating_show_section, traits: [:show_section], class: Show::Sections::ReservedSeating.to_s do
-    association :show, factory: :reserved_seating_show
+  factory :reserved_seating_show_section, traits: [:show_section], class: Show::Sections::ReservedSeating do
+    transient do
+      tickets_count { 5 }
+      show_deposit_amount { 0 }
+    end
+
     type { Show::Sections::ReservedSeating.to_s }
     payment_method { Show::Sections::ReservedSeating.payment_methods.keys.sample }
     convenience_fee_type { Show::Sections::ReservedSeating.convenience_fee_types.keys.sample }
-    convenience_fee { convenience_fee_type == :flat_rate ? Faker::Commerce.price(range: 0..10.0) : Faker::Commerce.price(range: 0.1..10.0) }
+    convenience_fee { Faker::Commerce.price(range: 0.1..10.0) }
     venue_commission { Faker::Commerce.price(range: 0..5.0) }
 
     transient do
@@ -21,11 +21,12 @@ FactoryBot.define do
     end
 
     after(:build) do |show_section, evaluator|
-      if show_section.seats.empty?
-        show_section.seats = FactoryBot.build_list(
-          :show_seat,
-          evaluator.seats_count,
-          section: show_section)
+      show_section.show ||= FactoryBot.build(:reserved_seating_show, sections: [show_section], deposit_amount: evaluator.show_deposit_amount)
+
+      if show_section.tickets.empty?
+        show_section.tickets = FactoryBot.build_list :reserved_seating_ticket,
+                                                     evaluator.tickets_count,
+                                                     show_section: show_section
       end
 
       if evaluator.ticket_type

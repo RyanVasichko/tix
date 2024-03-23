@@ -1,0 +1,31 @@
+<% purchases.group_by { |p| p.purchaseable.show }.each do |show, ticket_purchases| %>
+  <li class="flex px-4 py-6 sm:px-6">
+    <div class="flex-shrink-0">
+      <%= link_to shows_path(show) do %>
+        <%= image_tag url_for(show.artist.image), class: "h-24 w-auto rounded-md" %>
+      <% end %>
+    </div>
+
+    <div class="ml-6 flex flex-1 flex-col">
+      <div class="flex">
+        <div class="min-w-0 flex-1">
+          <h4 class="text-lg font-medium text-gray-900">
+            <%= link_to show.artist.name, shows_path(show), class: "font-medium text-gray-700 hover:text-gray-800" %>
+          </h4>
+          <%= render partial: "orders/ticket_purchases/#{show.type.demodulize.underscore}_ticket_purchase",
+                     collection: ticket_purchases,
+                     as: "purchase" %>
+          <div>
+            <span class="mt-1 text-sm text-gray-500">Fees:</span>&nbsp;<span class="text-sm font-medium"><%= number_to_currency(ticket_purchases.sum(&:total_fees)) %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-1 items-end justify-between pt-2">
+        <p class="mt-1 text-sm font-medium text-gray-900">
+          <%= number_to_currency(ticket_purchases.sum(&:balance_paid)) %>
+        </p>
+      </div>
+    </div>
+  </li>
+<% end %>

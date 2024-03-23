@@ -1,0 +1,14 @@
+<%= form_with url: shows_general_admission_ticket_selections_path, scope: "shopping_cart_ticket_selections", data: { turbo_frame: :_top } do |form| %>
+  <% ticket_selections.each_with_index do |ticket_selection| %>
+    <% show_section = ticket_selection.selectable.show_section %>
+    <%= form.fields_for "", ticket_selection, index: show_section.id do |ticket_selection_fields| %>
+      <%= ticket_selection_fields.hidden_field :show_section_id, value: show_section.id %>
+      <div class="mt-4">
+        <%= ticket_selection_fields.label :quantity, show_section.name %>
+        <%= ticket_selection_fields.collection_select :quantity, 0 .. 10, :to_i, :to_i, {} %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= form.submit "Add to shopping cart", class: "mt-4" %>
+<% end %>

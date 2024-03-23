@@ -42,13 +42,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get login_path # Just get a random endpoint so it will create the guest user
     guest = Users::Guest.last
 
-    seat = show.seats.where(shopping_cart: nil, reserved_until: nil).first
-    seat.reserve_for(guest)
+    seat = show.seats.available.first
+    seat.ticket.select_for!(guest)
 
     sign_in @user
 
     seat.reload
-    assert_equal @user, seat.reserved_by
+    assert_equal @user, seat.selected_by
 
     perform_enqueued_jobs
 

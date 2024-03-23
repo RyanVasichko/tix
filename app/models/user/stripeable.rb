@@ -12,6 +12,6 @@ module User::Stripeable
   def stripe_payment_methods
     return [] unless stripe_customer_id.present?
 
-    Stripe::Customer.list_payment_methods(stripe_customer_id, { type: "card" })
+    @stripe_payment_methods ||= Stripe::Customer.list_payment_methods(stripe_customer_id, { type: "card" })
   end
 end

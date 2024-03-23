@@ -8,7 +8,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @form = Order::OrderForm.for_user(Current.user)
+    @checkout = Order::Checkout.new(user: Current.user)
 
     return unless Current.user.shopping_cart.empty?
 
@@ -17,13 +17,11 @@ class OrdersController < ApplicationController
       flash: { notice: "Your shopping cart is empty, add some items to your shopping cart to check out" }
   end
 
-  def edit; end
-
   def create
-    @form = Order::OrderForm.from_order_form(order_params)
+    @checkout = Order::Checkout.new(user: Current.user, **order_params)
 
-    if @form.save
-      redirect_to @form.order, flash: { success: "Your order was successfully placed" }
+    if @checkout.create_order
+      redirect_to @checkout.order, flash: { success: "Your order was successfully placed" }
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,20 +33,15 @@ class OrdersController < ApplicationController
     params
       .fetch(:order, {})
       .permit(
-        :order_total_in_cents,
-        :payment_method_id,
+        :total_due_in_cents,
         :save_payment_method,
-        :new_payment_method,
-        :email,
-        :first_name,
-        :last_name,
-        :phone,
-        { seat_ids: [] },
-        { shopping_cart_merch_ids: [] },
-        { shopping_cart_ticket_ids: [] },
-        { shipping_address_attributes: [:first_name, :last_name, { address_attributes: %i[address_1 address_2 city state zip_code] }] }
-      )
-      .merge(user: Current.user)
+        :payment_method_id,
+        shopping_cart_selection_ids: [],
+        guest_orderer_attributes: %i[first_name last_name email phone],
+        shipping_address_attributes: [:first_name, :last_name, { address_attributes: %i[address_1 address_2 city state zip_code] }]
+      ).tap do |params|
+      params[:shopping_cart_selection_ids] = params[:shopping_cart_selection_ids].map(&:to_i)
+    end
   end
 
   def set_order

@@ -1,37 +1,41 @@
 class ShoppingCart < ApplicationRecord
   after_update_commit :broadcast_updates
 
-  before_commit :release_reserved_seats, on: :destroy
+  has_many :selections, dependent: :destroy, class_name: "ShoppingCart::Selection", foreign_key: :shopping_cart_id
+  has_many :ticket_selections, -> { where(selectable_type: "Ticket") }, class_name: "ShoppingCart::Selection", foreign_key: :shopping_cart_id
+  has_one :user
 
-  has_many :seats, -> { where(reserved_until: Time.current..) }, dependent: :nullify, class_name: "Show::Seat", foreign_key: :shopping_cart_id
-  has_many :tickets, dependent: :destroy, class_name: "ShoppingCart::Ticket", foreign_key: :shopping_cart_id
-  has_many :merch, dependent: :destroy, class_name: "ShoppingCart::Merch", foreign_key: :shopping_cart_id
-  has_one :user, inverse_of: :shopping_cart
+  def adjust_ticket_selections_for!(show_section_id:, quantity:)
+    ticket = Tickets::GeneralAdmission.find_or_initialize_for_show_section_and_shopping_cart(user, show_section_id)
+    selection = ticket_selections.find_or_initialize_by(selectable: ticket)
 
-  def shows
-    Show.where(id: seats.joins(:show).select("DISTINCT shows.id")).or(Show.where(id: tickets.joins(:show).select("DISTINCT shows.id")))
+    if quantity.zero?
+      selection.destroy! if selection.persisted?
+    else
+      selection.update!(quantity: quantity)
+    end
   end
 
-  def seats_for(show)
-    seats.joins(:show).where(show_sections: { show_id: show.id })
+  def find_or_initialize_ticket_selections_for_show_section(show_section_id)
+    ticket = Tickets::GeneralAdmission.find_or_initialize_for_show_section_and_shopping_cart(self, show_section_id)
+    ticket_selections.find_or_initialize_by(selectable: ticket) { |s| s.quantity = 0 }
   end
 
-  def tickets_for(show)
-    tickets.joins(:show).where(show_sections: { show_id: show.id })
+  def size
+    selections.sum(:quantity)
   end
 
-  def total_items
-    seats.count + merch.sum(:quantity) + tickets.sum(:quantity)
+  def empty!
+    selections.each(&:destroy!)
   end
 
   def empty?
-    seats.empty? && merch.empty? && tickets.empty?
+    selections.empty?
   end
 
-  def transfer_to(recipient)
+  def transfer_selections_to(recipient)
     ActiveRecord::Base.transaction do
-      seats.each { |s| s.transfer_reservation_to!(recipient) }
-      merch.each { |m| m.transfer_to!(recipient) }
+      selections.each { |s| s.transfer_to!(recipient) }
     end
   end
 
@@ -40,20 +44,16 @@ class ShoppingCart < ApplicationRecord
   def broadcast_updates
     broadcast_action_later action: :morph,
                            target: "shopping_cart",
-                           partial: "shopping_cart/shopping_cart",
+                           partial: "shopping_carts/shopping_cart",
                            locals: {
                              shopping_cart: self
                            }
 
     broadcast_action_later action: :morph,
                            target: "shopping_cart_count",
-                           partial: "shopping_cart/count",
+                           partial: "shopping_carts/count",
                            locals: {
                              shopping_cart: self
                            }
-  end
-
-  def release_reserved_seats
-    seats.each { |seat| seat.cancel_reservation_for!(user) }
   end
 end

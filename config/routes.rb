@@ -9,33 +9,41 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
 
-
   # Public-facing routes
   resources :shows, only: %i[index]
-  resources :reserved_seating_shows, only: :show do
-    resources :seat_holds, only: %i[create index destroy], controller: "reserved_seating_shows/seat_holds"
-    resources :seats, only: [] do
-      resource :reservation, only: %i[create destroy], controller: "reserved_seating_shows/seat_reservations"
+  namespace :shows do
+    resources :general_admission, param: :show_id, only: [] do
+      scope module: :general_admission do
+        # TODO: Make this ticket_selections
+        resource :ticket_selections, only: %i[new create]
+      end
+    end
+
+    resources :reserved_seating, param: :show_id, only: %i[show] do
+      scope module: :reserved_seating do
+        resources :seat_holds, only: %i[create destroy index]
+        resources :seats, only: [] do
+          resources :ticket_selections, only: %i[create destroy]
+        end
+      end
     end
   end
 
-  resources :merch, only: %i[index show]
+  resources :merch, only: %i[index show] do
+    scope module: :merch do
+      resources :shopping_cart_selections, only: %i[new create]
+    end
+  end
 
   resources :orders, only: %i[new create show index]
-  namespace :orders do
-    resources :shopping_cart_merch, only: %i[destroy update], controller: :shopping_cart_merch
-    delete "/seat/:id/reservations", to: "seat_reservations#destroy", as: :seat_reservations
-    resources :shopping_cart_tickets, only: %i[destroy update], controller: :shopping_cart_tickets
-  end
 
-  resource :shopping_cart, only: %i[show], controller: "shopping_cart" do
-    resources :merch, only: %i[new create update destroy], controller: "shopping_cart/merch"
-    resources :seats, only: [] do
-      resource :reservation, only: %i[destroy], controller: "shopping_cart/seat_reservations"
-    end
+  resource :shopping_cart, only: %i[show] do
+    scope module: :shopping_cart do
+      resources :merch_selections, only: %i[destroy update]
 
-    resources :general_admission_shows, only: [] do
-      resources :tickets, only: %i[new create destroy update], controller: "shopping_cart/general_admission_tickets"
+      namespace :ticket_selections do
+        resources :general_admission, only: %i[destroy update]
+      end
     end
   end
 
@@ -59,7 +67,7 @@ Rails.application.routes.draw do
 
     namespace :merch do
       resources :categories, except: %i[show]
-      resources :shipping_charges, except: %i[show]
+      resources :shipping_rates, except: %i[show]
       resources :category_fields, only: %i[new]
     end
 
@@ -97,14 +105,5 @@ Rails.application.routes.draw do
     resources :venues, except: %i[show]
 
     resources :ticket_types, except: %i[show]
-  end
-
-  # Hack so that sourcemaps work with Sprockets
-  if Rails.env.development?
-    redirector = lambda { |params, _req|
-      ApplicationController.helpers.asset_path(params[:name].split("-").first + ".map")
-    }
-    constraint = ->(request) { request.path.ends_with?(".map") }
-    get "assets/*name", to: redirect(redirector), constraints: constraint
   end
 end

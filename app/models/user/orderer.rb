@@ -4,7 +4,8 @@ module User::Orderer
   included do
     before_commit :transfer_orders_to_guest_orderer, on: :destroy
 
-    has_many :orders, as: :orderer
+    has_many :orders, class_name: "Order", as: :orderer
+    has_many :purchases, class_name: "Order::Purchase", through: :orders, source: :purchases
     has_many :shipping_addresses, class_name: "Order::ShippingAddress", through: :orders, source: :shipping_address
   end
 

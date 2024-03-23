@@ -1,0 +1,16 @@
+<div class="p-2 flex items-baseline justify-between">
+  <%= form_with model: selection, url: shopping_cart_ticket_selections_general_admission_path(selection), data: { turbo_frame: :_top }, class: "text-gray-500" do |form| %>
+    <div>
+      Section: <%= selection.selectable.show_section.name %>
+    </div>
+    <div>
+      <%= form.collection_select :quantity, 1..[10, selection.quantity].max, :to_i, :to_i, {}, onchange: "this.form.requestSubmit();", class: "form-control-select p-0 mx-2" %>
+    </div>
+  <% end %>
+  <div>
+    <%= button_to shopping_cart_ticket_selections_general_admission_path(selection), method: :delete, data: { turbo_stream: true }, class: "-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
+      <span class="sr-only">Remove</span>
+      <%= svg_trash_can %>
+    <% end %>
+  </div>
+</div>

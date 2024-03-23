@@ -1,18 +1,13 @@
 class Show::Sections::GeneralAdmission < Show::Section
-  attribute :payment_method, :string, default: "cover"
-  attribute :convenience_fee_type, :string, default: "flat_rate"
-  attribute :venue_commission, :integer, default: 0
-
+  has_many :tickets, class_name: "Tickets::GeneralAdmission", inverse_of: :show_section
   validates :ticket_price, presence: true, numericality: { greater_than: 0 }
 
-  before_validation :set_defaults, on: :create
-
-  has_many :order_tickets, class_name: "Order::Tickets::GeneralAdmission", inverse_of: :show_section, foreign_key: "show_section_id"
-  has_many :shopping_cart_tickets, class_name: "ShoppingCart::Ticket", foreign_key: :show_section_id, inverse_of: :show_section
+  before_validation :set_payment_settings, on: :create
 
   private
 
-  def set_defaults
+  def set_payment_settings
+    # General admission shows may only have these options
     self.payment_method = :cover
     self.convenience_fee_type = :flat_rate
     self.venue_commission = 0

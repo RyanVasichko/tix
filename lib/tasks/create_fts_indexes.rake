@@ -10,7 +10,7 @@ namespace :db do
           orderer_name,
           orderer_phone,
           orderer_email,
-          order_total,
+          balance_paid,
           artist_name,
           tickets_count,
           tokenize='trigram case_sensitive 0');

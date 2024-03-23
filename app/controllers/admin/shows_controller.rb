@@ -30,14 +30,6 @@ class Admin::ShowsController < Admin::AdminController
   end
 
   def create
-    show_type = case show_params[:type]
-    when "Shows::ReservedSeating"
-                  Shows::ReservedSeating
-    when "Shows::GeneralAdmission"
-                  Shows::GeneralAdmission
-    else
-                  raise "Invalid show type"
-    end
     @show = show_type.new(show_params)
 
     if @show.save
@@ -68,6 +60,10 @@ class Admin::ShowsController < Admin::AdminController
     @show = Show.find(params[:id])
   end
 
+  def show_type
+    params.dig(:show, :type).presence_in(%w[Shows::ReservedSeating Shows::GeneralAdmission]).constantize
+  end
+
   def show_params
     permitted_params = [
       :show_date,
@@ -85,7 +81,7 @@ class Admin::ShowsController < Admin::AdminController
       upsales_attributes: permitted_upsales_attributes
     ]
     if action_name == "create"
-      permitted_params << :seating_chart_id if params[:show][:type] == Shows::ReservedSeating.to_s
+      permitted_params << :seating_chart_id if show_type == Shows::ReservedSeating
       permitted_params << :artist_id
       permitted_params << :venue_id
       permitted_params << :type
@@ -101,8 +97,8 @@ class Admin::ShowsController < Admin::AdminController
   def permitted_sections_attributes
     if action_name == "create"
       %i[name seating_chart_section_id ticket_price].tap do |a|
-        a << :ticket_quantity if params[:show][:type] == Shows::GeneralAdmission.to_s
-        a << :convenience_fee if params[:show][:type] == Shows::GeneralAdmission.to_s
+        a << :ticket_quantity if show_type == Shows::GeneralAdmission
+        a << :convenience_fee if show_type == Shows::GeneralAdmission
       end
     elsif action_name == "update"
       %i[id ticket_price]

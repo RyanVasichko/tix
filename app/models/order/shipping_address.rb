@@ -10,4 +10,6 @@ class Order::ShippingAddress < ApplicationRecord
   validates :last_name, presence: true
 
   after_initialize { self.address ||= Address.new }
+
+  scope :order_by_recent_usage, -> { joins(:order).order("orders.created_at DESC") }
 end

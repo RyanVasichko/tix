@@ -1,0 +1,43 @@
+<% width = @show.venue_layout.metadata["width"] %>
+<% height = @show.venue_layout.metadata["height"] %>
+
+<%= turbo_stream_from [@show, "seating_chart"] %>
+<div class="p-8">
+  <div class="grid grid-cols-1 md:grid-cols-8 gap-x-4">
+    <!-- SHOW DETAILS -->
+    <div class="col-span-2 mt-10">
+      <h1 class="text-center text-3xl mb-10">
+        <%= @show.artist.name %>
+      </h1>
+      <div>
+        <%= image_tag @show.artist.image.variant(:medium), id: "show_#{dom_id(@show.artist.image)}", class: "rounded-md", data: { turbo_permanent: "" } %>
+      </div>
+      <div>
+        <p><%= @show.show_date.strftime('%A, %B %e, %Y') %></p>
+        <p>Doors open at <%= @show.doors_open_at.strftime('%l:%M %p') %></p>
+        <% @show.sections.order(:name).each do |show_section| %>
+          <p class="text-sm"><%= show_section.name %> - <%= number_to_currency(show_section.ticket_price) %></p>
+        <% end %>
+      </div>
+
+      <% if Current.user.admin? %>
+        <div>
+          <%= link_to(
+                "Seat Holds",
+                shows_reserved_seating_seat_holds_path(@show),
+                data: { turbo_frame: "application_modal", turbo: "" },
+                class: "block text-center w-full rounded-md border border-transparent bg-amber-600 mt-4 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50")
+          %>
+        </div>
+      <% end %>
+    </div>
+    <!-- SEATING CHART -->
+    <div class="col-span-6 mt-10">
+      <svg data-controller="shows--seating-chart--svg" data-loader-target="content" viewBox="0 0 <%= width %> <%= height %>">
+        <image data-loader-target="loadable" data-action="load->loader#showContent" href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
+        </image>
+        <%= render partial: "shows/reserved_seating/sections/section", collection: @show.sections, cached: true %>
+      </svg>
+    </div>
+  </div>
+</div>

@@ -1,41 +1,28 @@
 class Order < ApplicationRecord
-  include Payable, Shippable, Billable, BuildableForUser, KeywordSearchable, Searchable
+  include Shippable, Billable, KeywordSearchable, Searches, Searchable
 
   belongs_to :orderer, polymorphic: true
   delegate :name, :phone, :email, to: :orderer, prefix: true
 
-  has_many :tickets, inverse_of: :order
-
-  has_many :shows, through: :tickets
-  has_many :reserved_seating_tickets, class_name: "Order::Tickets::ReservedSeating", inverse_of: :order
-  has_many :seats, class_name: "Show::Seat", through: :reserved_seating_tickets
-  has_many :merch, class_name: "Order::Merch", inverse_of: :order
+  has_many :purchases, class_name: "Order::Purchase"
+  has_many :tickets, through: :purchases, source: :purchaseable, source_type: "Ticket"
+  has_many :shows, through: :tickets, source: :show
 
   before_commit :set_order_number, on: :create
 
-  orderable_by :created_at, :order_total, :order_number
-  scope :order_by_orderer_name, ->(direction = :asc) {
-    joins(ORDER_SEARCH_INDICES_JOIN).order(sanitize_sql("order_search_indices.orderer_name COLLATE NOCASE #{direction}"))
-  }
-
-  scope :order_by_orderer_phone, ->(direction = :asc) {
-    joins(ORDER_SEARCH_INDICES_JOIN).order(sanitize_sql("order_search_indices.orderer_phone COLLATE NOCASE #{direction}"))
-  }
-
-  scope :order_by_orderer_email, ->(direction = :asc) {
-    joins(ORDER_SEARCH_INDICES_JOIN).order(sanitize_sql("order_search_indices.orderer_email COLLATE NOCASE #{direction}"))
- }
-
-  scope :order_by_tickets_count, ->(direction = :asc) {
-    joins(ORDER_SEARCH_INDICES_JOIN).order(sanitize_sql("order_search_indices.tickets_count #{direction}"))
-  }
+  def self.build_from_shopping_cart_selections(shopping_cart_selections)
+    build do |order|
+      order.purchases << Order::Purchase.build_from_shopping_cart_selections(shopping_cart_selections)
+      order.calculate_order_totals
+    end
+  end
 
   def total_fees
-    tickets.sum(&:total_fees)
+    purchases.sum(:total_fees)
   end
 
   def tickets_count
-    tickets.sum(:quantity) + seats.size
+    purchases.tickets.sum(:quantity)
   end
 
   private

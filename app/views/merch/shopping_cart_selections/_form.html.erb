@@ -1,0 +1,56 @@
+<div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+  <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:items-center lg:gap-x-8">
+    <div class="overflow-hidden rounded-lg bg-gray-100 aspect-h-3 aspect-w-2 sm:col-span-4 lg:col-span-5">
+      <%= image_tag merch.image.variant(:medium), alt: merch.name, class: "object-cover object-center" %>
+    </div>
+    <div class="sm:col-span-8 lg:col-span-7">
+      <%= form_with model: merch_selection, url: merch_shopping_cart_selections_path, data: { turbo_frame: :_top } do |form| %>
+        <%= form.hidden_field :merch_id %>
+        <h2 class="text-xl font-medium text-gray-900 sm:pr-12"><%= merch.name %></h2>
+
+        <section aria-labelledby="information-heading" class="mt-1">
+          <h3 id="information-heading" class="sr-only">Product information</h3>
+
+          <p class="font-medium text-gray-900"><%= number_to_currency(merch.price) %></p>
+
+          <div class="mt-6">
+            <h4 class="sr-only">Description</h4>
+
+            <p class="text-sm text-gray-700"><%= merch.description %></p>
+          </div>
+        </section>
+
+        <section>
+          <%= form.label :quantity %>
+          <%= form.collection_select :quantity, 1 .. 10, :to_i, :to_i, {} %>
+        </section>
+
+        <% if merch.options.any? && merch.option_label %>
+          <section aria-labelledby="options-heading" class="mt-8">
+            <h3 id="options-heading" class="sr-only">Product options</h3>
+
+            <%= form.fields_for :options, OpenStruct.new(merch_selection.options) do |options_fields| %>
+              <div class="mt-8">
+                <h4 class="text-sm font-medium text-gray-900"><%= merch.option_label %></h4>
+
+                <fieldset class="mt-2">
+                  <legend class="sr-only">Choose a <%= merch.option_label %></legend>
+                  <div class="flex">
+                    <%= options_fields.hidden_field :name, value: merch.option_label %>
+                    <%= options_fields.collection_radio_buttons :value, merch.options, :to_s, :to_s, include_blank: false do |b| %>
+                      <div class="flex">
+                        <%= b.radio_button class: "peer sr-only", required: "" %>
+                        <%= b.label class: "rounded-md border mr-2 py-3 px-3 text-sm font-medium border-gray-200 bg-white text-gray-900 hover:bg-gray-50 uppercase sm:flex-1 cursor-pointer focus:outline-none peer-checked:border-transparent peer-checked:bg-amber-600 peer-checked:text-white peer-checked:hover:bg-amber-700" %>
+                      </div>
+                    <% end %>
+                  </div>
+                </fieldset>
+              </div>
+            <% end %>
+          </section>
+        <% end %>
+        <%= form.submit "Add to Shopping Cart", class: "mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-amber-600 px-8 py-3 text-base font-medium text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" %>
+      <% end %>
+    </div>
+  </div>
+</div>

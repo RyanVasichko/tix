@@ -1,2 +1,0 @@
-module Merch::ShippingChargesHelper
-end

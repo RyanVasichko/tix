@@ -1,0 +1,5 @@
+<%= turbo_stream.action "morph", "application_modal" do %>
+  <%= render template: "shows/reserved_seating/seat_holds/index", held_seats: @held_seats, pagy: @pagy %>
+<% end %>
+<%= turbo_replace_seat(@seat) %>
+<%= turbo_append_toast_messages %>

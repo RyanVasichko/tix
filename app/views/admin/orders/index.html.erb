@@ -19,8 +19,8 @@
     <% table.column :tickets_count, header: "Tickets", sortable: true do |order| %>
       <%= order.tickets_count %>
     <% end %>
-    <% table.column :order_total, header: "Total" do |order| %>
-      <%= number_to_currency(order.order_total) %>
+    <% table.column :balance_paid, header: "Total" do |order| %>
+      <%= number_to_currency(order.balance_paid) %>
     <% end %>
   <% end %>
 <% end %>

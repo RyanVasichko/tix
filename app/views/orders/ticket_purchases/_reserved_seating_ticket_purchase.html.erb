@@ -1,0 +1,13 @@
+<% ticket = purchase.purchaseable %>
+
+<div class="flex items-baseline justify-between">
+  <div>
+    <span class="mt-1 text-sm text-gray-500">
+      <%= "#{number_to_currency(purchase.item_price)} Ticket: " if ticket.deposit_payment_method? %>
+      Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
+    </span> -
+    <span class="text-sm font-medium">
+      <%= number_to_currency(purchase.balance_paid) %> <%= "Deposit" if ticket.deposit_payment_method? %>
+    </span>
+  </div>
+</div>

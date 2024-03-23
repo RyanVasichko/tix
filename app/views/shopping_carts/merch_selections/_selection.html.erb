@@ -1,0 +1,18 @@
+<div class="p-2 flex items-baseline justify-between">
+  <%= form_with model: selection, url: shopping_cart_merch_selection_path(selection), class: "text-gray-500" do |form| %>
+    <div class="flex items-baseline">
+      Quantity: <%= form.collection_select :quantity, 1..10, :to_i, :to_i, {}, onchange: "this.form.requestSubmit();", class: "form-control-select p-0 mx-2" %>
+    </div>
+    <% if selection.options["name"].present? && selection.options["value"].present? %>
+      <div class="mt-2">
+        <%= selection.options["name"] %>: <%= selection.options["value"] %>
+      </div>
+    <% end %>
+  <% end %>
+  <div>
+    <%= button_to shopping_cart_merch_selection_path(selection), method: "delete", class: "-m-2.5 flex items-center justify-center bg-white px-2.5 text-gray-400 hover:text-gray-500" do %>
+      <span class="sr-only">Remove</span>
+      <%= svg_trash_can %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<%= turbo_frame_tag :shopping_cart do %>
+  <div class="mx-auto max-w-2xl px-4">
+    <ul role="list" id="shopping_cart_items" class="divide-y divide-gray-200">
+      <% shopping_cart.selections.group_by(&:selectable_name).map do |selectable_name, selections| %>
+        <%= render "shopping_carts/#{selectable_name}_selections/selections",
+                   selections: selections,
+                   shopping_cart: shopping_cart %>
+      <% end %>
+    </ul>
+    <%= link_to "Checkout",
+                new_order_path,
+                data: { turbo: false },
+                class: "block text-center rounded-md border border-transparent bg-amber-600 mt-4 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" %>
+  </div>
+<% end %>

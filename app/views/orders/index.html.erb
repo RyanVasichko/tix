@@ -31,7 +31,7 @@
                     </div>
                     <div>
                       <dt class="font-medium text-gray-900">Total amount</dt>
-                      <dd class="mt-1 font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
+                      <dd class="mt-1 font-medium text-gray-900"><%= number_to_currency(order.balance_paid) %></dd>
                     </div>
                   </dl>
 
@@ -72,53 +72,8 @@
                 <!-- Tickets -->
                 <h4 class="sr-only">Items</h4>
                 <ul role="list" class="divide-y divide-gray-200">
-                  <% order.tickets.group_by(&:show).each do |show, tickets| %>
-                    <li class="p-4 sm:p-6">
-                      <div class="flex items-center sm:items-start">
-                        <div class="h-auto w-28 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:h-auto sm:w-40">
-                          <%= image_tag url_for(show.artist.image), class: "object-cover object-center", alt: show.artist.name %>
-                        </div>
-                        <div class="ml-6 flex-1 text-sm">
-                          <div class="font-medium text-gray-900 sm:flex sm:justify-between">
-                            <h5 class="text-xl"><%= show.artist.name %></h5>
-                            <p class="mt-2 sm:mt-0"><%= number_to_currency(tickets.sum(&:total_price)) %></p>
-                          </div>
-                          <% tickets.each do |ticket| %>
-                            <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <% if ticket.is_a?(Order::Tickets::ReservedSeating) %>
-                                <span class="mt-1 text-sm text-gray-500">Table <%= ticket.table_number %> Seat <%= ticket.seat_number %></span> -
-                                <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
-                              <% else %>
-                                <span class="mt-1 text-sm text-gray-500">Section <%= ticket.show_section.name %> &times; <%= ticket.quantity %></span> -
-                                <span class="text-sm font-medium"><%= number_to_currency(ticket.total_price) %></span>
-                              <% end %>
-                            </p>
-                          <% end %>
-                        </div>
-                      </div>
-                    </li>
-                  <% end %>
-                  <% order.merch.group_by(&:merch).each do |merch, order_merch| %>
-                    <li class="p-4 sm:p-6">
-                      <div class="flex items-center sm:items-start">
-                        <div class="h-auto w-28 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:h-auto sm:w-40">
-                          <%= image_tag url_for(merch.image), class: "object-cover object-center", alt: merch.name %>
-                        </div>
-                        <div class="ml-6 flex-1 text-sm">
-                          <div class="font-medium text-gray-900 sm:flex sm:justify-between">
-                            <h5 class="text-xl"><%= merch.name %></h5>
-                            <p class="mt-2 sm:mt-0"><%= number_to_currency(order_merch.sum(&:total_price)) %></p>
-                          </div>
-                          <% order_merch.each do |om| %>
-                            <p class="hidden text-gray-500 sm:mt-2 sm:block">
-                              <span class="mt-1 text-sm text-gray-500"><%= "#{om.option_label}: #{om.option}" if om.option %>
-                                Quantity: <%= om.quantity %></span> -
-                              <span class="font-medium"><%= number_to_currency(om.total_price) %></span>
-                            </p>
-                          <% end %>
-                        </div>
-                      </div>
-                    </li>
+                  <% order.purchases.group_by(&:purchaseable_name).each do |purchaseable_name, purchases| %>
+                    <%= render "orders/#{purchaseable_name}_purchases/purchases", purchases: purchases %>
                   <% end %>
                 </ul>
               </div>

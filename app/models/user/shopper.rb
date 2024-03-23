@@ -3,10 +3,10 @@ module User::Shopper
 
   included do
     after_initialize :set_shopper_uuid, if: :new_record?
+
+    belongs_to :shopping_cart, class_name: "ShoppingCart", dependent: :destroy
     after_initialize :build_shopping_cart, if: :new_record?
-    belongs_to :shopping_cart, class_name: "ShoppingCart", foreign_key: :shopping_cart_id, inverse_of: :user, dependent: :destroy
-    has_many :reserved_seats, class_name: "Show::Seat", through: :shopping_cart, source: :seats
-    has_many :shopping_cart_merch, class_name: "ShoppingCart::Merch", through: :shopping_cart, source: :merch
+    has_many :shopping_cart_selections, class_name: "ShoppingCart::Selection", through: :shopping_cart, source: :selections
   end
 
   def ticket_reservation_time

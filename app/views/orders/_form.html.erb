@@ -5,21 +5,10 @@
 <% end %>
 
 <%= turbo_frame_tag order, target: :_top do %>
-  <div class="max-w-lg text-center">
-    <%= render "shared/error_messages", { model: order } %>
-  </div>
-
   <%= order_form_with(order) do |form| %>
-    <%= form.hidden_field :new_payment_method, data: { checkout_target: "newPaymentMethodField" } %>
-    <%= form.hidden_field :order_total_in_cents %>
-    <% order.tickets.filter { |t| t.is_a? Order::Tickets::ReservedSeating }.each do |ticket| %>
-      <%= form.hidden_field :seat_ids, multiple: true, value: ticket.seat.id %>
-    <% end %>
-    <% order.tickets.filter { |t| t.is_a? Order::Tickets::GeneralAdmission }.each do |ticket| %>
-      <%= form.hidden_field :shopping_cart_ticket_ids, multiple: true, value: ticket.shopping_cart_ticket.id %>
-    <% end %>
-    <% order.merch.each do |merch| %>
-      <%= form.hidden_field :shopping_cart_merch_ids, multiple: true, value: merch.shopping_cart_merch.id %>
+    <%= form.hidden_field :total_due_in_cents %>
+    <% order.shopping_cart_selection_ids.each do |selection_id| %>
+      <%= form.hidden_field :shopping_cart_selection_ids, multiple: true, value: selection_id %>
     <% end %>
     <!-- Order summary -->
     <div class="mt-10 lg:mt-0m lg:order-2">
@@ -28,125 +17,14 @@
       <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
         <h3 class="sr-only">Items in your cart</h3>
         <ul role="list" class="divide-y divide-gray-200">
-          <% order.tickets.group_by(&:show).each do |show, tickets| %>
-            <li id="<%= dom_id(show) %>_order_tickets" class="flex px-4 py-6 sm:px-6">
-              <div class="flex-shrink-0">
-                <%= link_to shows_path(show) do %>
-                  <%= image_tag url_for(show.artist.image), class: "w-20 rounded-md" %>
-                <% end %>
-              </div>
-
-              <div class="ml-6 flex flex-1 flex-col">
-                <div class="flex">
-                  <div class="min-w-0 flex-1">
-                    <h4 class="text-sm">
-                      <%= link_to show.artist.name, shows_path(show), class: "font-medium text-gray-700 hover:text-gray-800" %>
-                    </h4>
-                    <% tickets.each do |ticket| %>
-                      <div class="flex items-baseline justify-between">
-                        <div>
-                          <span class="mt-1 text-sm text-gray-500">
-                            <% case ticket %>
-                            <% when Order::Tickets::ReservedSeating %>
-                              <%= "#{number_to_currency(ticket.ticket_price)} Ticket: " if ticket.deposit_payment_method? %>
-                              Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
-                            <% when Order::Tickets::GeneralAdmission %>
-                              <%= ticket.show_section.name %> x <%= ticket.quantity %>
-                            <% end %>
-                          </span> -
-                          <span class="text-sm font-medium">
-                            <% case ticket %>
-                            <% when Order::Tickets::ReservedSeating %>
-                              <% if ticket.deposit_payment_method? %>
-                                <%= number_to_currency(ticket.deposit_amount) %> Deposit
-                              <% else %>
-                                <%= number_to_currency(ticket.total_price) %>
-                              <% end %>
-                            <% when Order::Tickets::GeneralAdmission %>
-                              <%= number_to_currency(ticket.total_price) %>
-                            <% end %>
-                          </span>
-                        </div>
-                        <%= link_to ticket.is_a?(Order::Tickets::ReservedSeating) ? orders_seat_reservations_path(ticket.seat) : orders_shopping_cart_ticket_path(ticket.shopping_cart_ticket),
-                                    data: { turbo_method: "DELETE" },
-                                    id: ticket.is_a?(Order::Tickets::ReservedSeating) ? "destroy_#{dom_id(ticket.seat)}_reservation" : "destroy_#{dom_id(ticket.shopping_cart_ticket)}",
-                                    class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do %>
-                          <span class="sr-only">Remove</span>
-                          <%= svg_trash_can %>
-                        <% end %>
-                      </div>
-                    <% end %>
-                    <div>
-                      <span class="mt-1 text-sm text-gray-500">Fees:</span>
-                      <span class="text-sm font-medium"><%= number_to_currency(tickets.sum(&:convenience_fees) + tickets.sum(&:venue_commission)) %></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="flex flex-1 items-end justify-between pt-2">
-                  <p class="mt-1 text-sm font-medium text-gray-900">
-                    <%= number_to_currency(tickets.sum(&:total_price)) %>
-                  </p>
-                </div>
-              </div>
-            </li>
-          <% end %>
-          <% order.merch.group_by { |merch| merch.merch }.each do |merch, order_merch| %>
-            <li class="flex px-4 py-6 sm:px-6">
-              <div class="flex-shrink-0">
-                <%= image_tag url_for(merch.image), class: "w-20 rounded-md" %>
-              </div>
-
-              <div class="ml-6 flex flex-1 flex-col">
-                <div class="flex">
-                  <div class="min-w-0 flex-1">
-                    <h4 class="text-sm font-medium text-gray-700 hover:text-gray-800">
-                      <%= merch.name %>
-                    </h4>
-                    <% order_merch.each do |om| %>
-                      <div class="flex items-baseline justify-between">
-                        <div class="grow">
-                          <span class="text-sm text-gray-500">
-                            Quantity: <%= select_tag(:quantity,
-                                                     options_from_collection_for_select(1..10, :to_i, :to_i, om.quantity),
-                                                     data: {
-                                                       controller: "checkout--shopping-cart-merch-quantity",
-                                                       action: "checkout--shopping-cart-merch-quantity#updateQuantity",
-                                                       checkout__shopping_cart_merch_quantity_new_order_url_value: new_order_path,
-                                                       checkout__shopping_cart_merch_quantity_update_url_value: shopping_cart_merch_path(om.shopping_cart_merch.id)
-                                                     },
-                                                     class: "form-control-select inline max-w-[40px] p-0 mr-1") %>
-                            <%= "#{merch.option_label}: #{om.option}" unless om.option.blank? %>
-                            -
-                          </span>
-                          <span class="text-sm font-medium text-gray-900"><%= number_to_currency(om.total_price) %></span>
-                        </div>
-                        <%= link_to shopping_cart_merch_path(om.shopping_cart_merch.id),
-                                    id: "destroy_#{dom_id(om.shopping_cart_merch)}",
-                                    data: { turbo_method: "DELETE", turbo_frame: :_top },
-                                    class: "flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500" do
-                        %>
-                          <span class="sr-only">Remove</span>
-                          <%= svg_trash_can %>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-
-                <div class="flex flex-1 items-end justify-between pt-2">
-                  <p class="mt-1 text-sm font-medium text-gray-900">
-                    <%= number_to_currency(order_merch.sum(&:total_price)) %>
-                  </p>
-                </div>
-              </div>
-            </li>
+          <% order.purchases.group_by(&:purchaseable_name).sort_by { |name, _| name == 'merch' ? 1 : 0 }.each do |purchaseable_name, purchases| %>
+            <%= render "orders/#{purchaseable_name}_purchases/purchases", purchases: purchases %>
           <% end %>
         </ul>
         <dl class="border-t border-gray-200 px-4 py-6 space-y-6 sm:px-6">
           <div class="flex items-center justify-between">
             <dt class="text-sm">Subtotal</dt>
-            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
+            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.total_due) %></dd>
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Fees</dt>
@@ -154,7 +32,7 @@
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Shipping</dt>
-            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.shipping_fees) %></dd>
+            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(order.shipping_charges) %></dd>
           </div>
           <div class="flex items-center justify-between">
             <dt class="text-sm">Taxes</dt>
@@ -162,12 +40,12 @@
           </div>
           <div class="flex items-center justify-between border-t border-gray-200 pt-6">
             <dt class="text-base font-medium">Total</dt>
-            <dd class="text-base font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
+            <dd class="text-base font-medium text-gray-900"><%= number_to_currency(order.total_due) %></dd>
           </div>
         </dl>
 
         <div class="hidden border-t border-gray-200 px-4 py-6 hover:pointer sm:px-6 lg:block">
-          <%= button_tag type: "submit", data: { checkout_target: "btnSubmit" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
+          <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
             <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
             <span class="group-disabled:hidden">Place Order</span>
             <span class="group-disabled:block hidden">Placing Order...</span>
@@ -177,33 +55,33 @@
     </div>
     <div class="mt-10 border-t border-gray-200 pt-5 lg:order-1 lg:border-none lg:pt-0">
       <!-- CONTACT INFORMATION -->
-      <% if order.collect_contact_information? %>
+      <%= form.fields_for :guest_orderer, order.guest_orderer do |guest_orderer_fields| %>
         <div id="order_contact_information">
           <h2 class="text-lg font-medium text-gray-900">Contact information</h2>
 
           <div class="mt-4 md:grid md:grid-cols-2 md:gap-4">
             <div class="mt-2 md:mt-0">
-              <%= form.label :first_name %>
-              <%= form.text_field :first_name %>
+              <%= guest_orderer_fields.label :first_name %>
+              <%= guest_orderer_fields.text_field :first_name %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :last_name %>
-              <%= form.text_field :last_name %>
+              <%= guest_orderer_fields.label :last_name %>
+              <%= guest_orderer_fields.text_field :last_name %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :email %>
-              <%= form.email_field :email %>
+              <%= guest_orderer_fields.label :email %>
+              <%= guest_orderer_fields.email_field :email %>
             </div>
             <div class="mt-2 md:mt-0">
-              <%= form.label :phone, "Phone number" %>
-              <%= form.telephone_field :phone %>
+              <%= guest_orderer_fields.label :phone, "Phone number" %>
+              <%= guest_orderer_fields.telephone_field :phone %>
             </div>
           </div>
         </div>
       <% end %>
 
       <!-- SHIPPING INFORMATION -->
-      <%= form.fields_for :shipping_address do |shipping_address_fields| %>
+      <%= form.fields_for :shipping_address, order.shipping_address do |shipping_address_fields| %>
         <div class="mt-10 border-t border-gray-200 pt-10" id="order_shipping_address">
           <h2 class="text-lg font-medium text-gray-900">Shipping information</h2>
 
@@ -248,14 +126,14 @@
       <% end %>
 
       <!-- PAYMENT INFORMATION -->
-      <div class="<%= "mt-10 border-t border-gray-200 pt-5" if order.collect_contact_information? %> mb-5">
+      <div class="<%= "mt-10 border-t border-gray-200 pt-5" if order.guest_orderer.present? %> mb-5">
         <h2 class="text-lg font-medium text-gray-900">Payment</h2>
 
         <% if order.errors.added?(:payment_method_id, :blank) %>
           <p class="text-center text-sm text-red-600">Please select a payment method</p>
         <% end %>
 
-        <% order.payment_methods.each do |payment_method| %>
+        <% order.stripe_payment_methods.each do |payment_method| %>
           <div class="flex items-center py-2">
             <%= form.radio_button :payment_method_id, payment_method.id %>
             <%= form.label :payment_method_id, value: payment_method.id, class: "flex grow justify-between text-sm border border-gray-200 bg-white shadow-sm rounded-md p-4" do %>
@@ -271,13 +149,13 @@
         <% end %>
 
         <div class="flex py-2">
-          <%= form.radio_button :payment_method_id, "new", data: { checkout_target: "paymentMethodIdField" } %>
+          <%= form.radio_button :payment_method_id, "new", data: { checkout_target: "newPaymentMethodRadioButton" } %>
           <%= form.label :payment_method_id, value: "new", class: "w-full text-sm border border-gray-200 bg-white shadow-sm rounded-md p-4" do %>
             <div class="font-medium">
               New Card
             </div>
 
-            <div id="payment-element" data-checkout-target="payment-element" class="mt-4" turbo-replace="false"></div>
+            <div id="payment-element" data-checkout-target="payment-element" class="mt-4"></div>
             <div class="relative mt-3 flex items-start">
               <div class="flex h-6 items-center">
                 <%= form.check_box :save_payment_method, class: "form-control-check-box" %>
@@ -291,7 +169,7 @@
       </div>
 
       <div class="px-4 py-6 sm:px-6 lg:hidden">
-        <%= button_tag type: "submit", data: { checkout_target: "btnSubmit" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
+        <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
           <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
           <span class="group-disabled:hidden">Place Order</span>
           <span class="group-disabled:block hidden">Placing Order...</span>

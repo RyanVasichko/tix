@@ -9,18 +9,16 @@ module ShowsHelper
     "background-image: url(#{background_image}); width: #{width}px; height: #{height}px;"
   end
 
-  def show_path(show)
-    if show.is_a?(Shows::ReservedSeating)
-      reserved_seating_show_path(show)
-    else
-      new_shopping_cart_general_admission_show_ticket_url(show)
-    end
-  end
-
   def link_to_order_tickets(show)
     data_attributes = show.is_a?(Shows::GeneralAdmission) ? { turbo: "", turbo_stream: "" } : {}
+    path = if show.is_a?(Shows::ReservedSeating)
+             shows_reserved_seating_path(show)
+           else
+             new_shows_general_admission_ticket_selections_path(show)
+           end
+
     link_to "Order Tickets",
-            show_path(show),
+            path,
             data: data_attributes,
             class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50"
   end

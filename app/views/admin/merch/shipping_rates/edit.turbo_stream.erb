@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "application_modal" do %>
+  <%= render "shared/modal", title: "Edit Shipping Rate", max_w: "max-w-md" do %>
+    <%= render "form", shipping_rate: @shipping_rate %>
+  <% end %>
+<% end %>

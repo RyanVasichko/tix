@@ -1,10 +1,10 @@
 class Show < ApplicationRecord
   include GoesOnSale, Agenda, Searchable
 
-  before_commit -> { orders.each(&:populate_search_index_later) }, if: -> { saved_change_to_show_date? || saved_change_to_artist_id? }
+  before_commit :rebuild_index_for_show_orders, if: -> { saved_change_to_show_date? || saved_change_to_artist_id? }
 
   validates :show_date, presence: true
-  scope :upcoming, -> { where(show_date: Time.current ..) }
+  scope :upcoming, -> { where(show_date: Time.current..) }
   validates :type, presence: true
 
   belongs_to :artist
@@ -14,8 +14,10 @@ class Show < ApplicationRecord
   delegate :name, to: :venue, prefix: true
 
   has_many :sections, class_name: "Show::Section", inverse_of: :show
-  has_many :tickets, class_name: "Order::Ticket", inverse_of: :show
-  has_many :orders, through: :tickets
+  has_many :tickets, through: :sections
+  has_many :ticket_purchases, class_name: "Order::Purchase", through: :tickets, source: :purchase
+  has_many :orders, through: :ticket_purchases
+
   has_and_belongs_to_many :customer_questions
   has_many :upsales, class_name: "Show::Upsale", inverse_of: :show
 
@@ -36,5 +38,12 @@ class Show < ApplicationRecord
 
   def contains_deposit_section?
     sections.any?(&:deposit_payment_method?)
+  end
+
+  private
+
+  def rebuild_index_for_show_orders
+    jobs = orders.pluck(:id).map{ |order_id| Order::SearchIndex::PopulateJob.new(order_id) }
+    ActiveJob.perform_all_later(jobs)
   end
 end

@@ -98,7 +98,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
   end
 
-  create_table "merch_shipping_charges", force: :cascade do |t|
+  create_table "merch_shipping_rates", force: :cascade do |t|
     t.decimal "weight", precision: 8, scale: 2, null: false
     t.decimal "price", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
@@ -115,20 +115,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "order_merch", force: :cascade do |t|
-    t.integer "merch_id", null: false
-    t.integer "order_id", null: false
-    t.integer "quantity", null: false
-    t.decimal "unit_price", precision: 10, scale: 2, null: false
-    t.decimal "total_price", precision: 10, scale: 2, null: false
-    t.string "option"
-    t.string "option_label"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["merch_id"], name: "index_order_merch_on_merch_id"
-    t.index ["order_id"], name: "index_order_merch_on_order_id"
-  end
-
   create_table "order_payments", force: :cascade do |t|
     t.string "stripe_payment_intent_id", null: false
     t.string "stripe_payment_method_id", null: false
@@ -141,6 +127,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "order_purchases", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.string "purchaseable_type", null: false
+    t.integer "purchaseable_id", null: false
+    t.json "options"
+    t.decimal "item_price", precision: 8, scale: 2, null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "total_fees", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "balance_paid", precision: 8, scale: 2, null: false
+    t.decimal "total_price", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_purchases_on_order_id"
+    t.index ["purchaseable_type", "purchaseable_id"], name: "index_order_purchases_on_purchaseable"
+  end
+
   create_table "order_shipping_addresses", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
@@ -150,35 +152,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.index ["address_id"], name: "index_order_shipping_addresses_on_address_id"
   end
 
-  create_table "order_tickets", force: :cascade do |t|
-    t.integer "order_id", null: false
-    t.integer "show_seat_id"
-    t.integer "show_id", null: false
-    t.integer "show_section_id"
-    t.integer "quantity", default: 1, null: false
-    t.string "type", null: false
-    t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
-    t.decimal "venue_commission", precision: 8, scale: 2, default: "0.0", null: false
-    t.decimal "ticket_price", precision: 8, scale: 2, default: "0.0", null: false
-    t.decimal "deposit_amount", precision: 8, scale: 2, default: "0.0", null: false
-    t.decimal "total_price", precision: 8, scale: 2, default: "0.0", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_order_tickets_on_order_id"
-    t.index ["show_id"], name: "index_order_tickets_on_show_id"
-    t.index ["show_seat_id"], name: "index_order_tickets_on_show_seat_id"
-    t.index ["show_section_id"], name: "index_order_tickets_on_show_section_id"
-  end
-
   create_table "orders", force: :cascade do |t|
-    t.decimal "order_total", precision: 8, scale: 2, null: false
-    t.decimal "convenience_fees", precision: 8, scale: 2, default: "0.0", null: false
-    t.decimal "shipping_fees", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "balance_paid", precision: 8, scale: 2, null: false
+    t.decimal "total_price", precision: 8, scale: 2, null: false
+    t.decimal "total_fees", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "shipping_charges", precision: 8, scale: 2, default: "0.0", null: false
     t.string "order_number"
     t.string "orderer_type", null: false
     t.integer "orderer_id", null: false
     t.integer "order_payment_id"
-    t.integer "shipping_address_id", null: false
+    t.integer "shipping_address_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
@@ -218,15 +201,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.index ["venue_id"], name: "index_seating_charts_on_venue_id"
   end
 
-  create_table "shopping_cart_merch", force: :cascade do |t|
-    t.integer "merch_id", null: false
+  create_table "shopping_cart_selections", force: :cascade do |t|
     t.integer "shopping_cart_id", null: false
-    t.integer "quantity", null: false
-    t.string "option"
+    t.string "selectable_type", null: false
+    t.integer "selectable_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.json "options"
+    t.datetime "expires_at"
+    t.bigint "lock_version", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["merch_id"], name: "index_shopping_cart_merch_on_merch_id"
-    t.index ["shopping_cart_id"], name: "index_shopping_cart_merch_on_shopping_cart_id"
+    t.index ["selectable_type", "selectable_id"], name: "index_shopping_cart_selections_on_selectable"
+    t.index ["shopping_cart_id"], name: "index_shopping_cart_selections_on_shopping_cart_id"
   end
 
   create_table "shopping_cart_tickets", force: :cascade do |t|
@@ -245,20 +231,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
   end
 
   create_table "show_seats", force: :cascade do |t|
-    t.integer "show_section_id", null: false
+    t.integer "ticket_id", null: false
     t.integer "x", null: false
     t.integer "y", null: false
     t.integer "seat_number", null: false
     t.integer "table_number"
-    t.integer "shopping_cart_id"
-    t.integer "held_by_admin_id"
-    t.datetime "reserved_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["held_by_admin_id"], name: "index_show_seats_on_held_by_admin_id"
-    t.index ["shopping_cart_id", "reserved_until"], name: "index_show_seats_on_shopping_cart_id_and_reserved_until"
-    t.index ["shopping_cart_id"], name: "index_show_seats_on_shopping_cart_id"
-    t.index ["show_section_id"], name: "index_show_seats_on_show_section_id"
+    t.index ["ticket_id"], name: "index_show_seats_on_ticket_id"
   end
 
   create_table "show_sections", force: :cascade do |t|
@@ -326,6 +306,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
     t.index ["venue_id"], name: "index_ticket_types_on_venue_id"
   end
 
+  create_table "tickets", force: :cascade do |t|
+    t.integer "show_section_id", null: false
+    t.integer "held_by_id"
+    t.string "type"
+    t.bigint "lock_version", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["held_by_id"], name: "index_tickets_on_held_by_id"
+    t.index ["show_section_id"], name: "index_tickets_on_show_section_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "hold_seats", default: false, null: false
@@ -372,30 +363,24 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_033608) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "order_merch", "merch"
-  add_foreign_key "order_merch", "orders"
-  add_foreign_key "order_tickets", "orders"
-  add_foreign_key "order_tickets", "show_seats"
-  add_foreign_key "order_tickets", "show_sections"
-  add_foreign_key "order_tickets", "shows"
+  add_foreign_key "order_purchases", "orders"
   add_foreign_key "orders", "order_payments"
   add_foreign_key "orders", "order_shipping_addresses", column: "shipping_address_id"
   add_foreign_key "seating_chart_seats", "seating_chart_sections"
   add_foreign_key "seating_chart_sections", "seating_charts"
   add_foreign_key "seating_chart_sections", "ticket_types"
   add_foreign_key "seating_charts", "venues"
-  add_foreign_key "shopping_cart_merch", "merch"
-  add_foreign_key "shopping_cart_merch", "shopping_carts"
+  add_foreign_key "shopping_cart_selections", "shopping_carts"
   add_foreign_key "shopping_cart_tickets", "shopping_carts"
   add_foreign_key "shopping_cart_tickets", "show_sections"
-  add_foreign_key "show_seats", "shopping_carts"
-  add_foreign_key "show_seats", "show_sections"
-  add_foreign_key "show_seats", "users", column: "held_by_admin_id"
+  add_foreign_key "show_seats", "tickets"
   add_foreign_key "show_sections", "shows"
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "venues"
   add_foreign_key "ticket_types", "venues"
+  add_foreign_key "tickets", "show_sections"
+  add_foreign_key "tickets", "users", column: "held_by_id"
   add_foreign_key "users", "shopping_carts"
   add_foreign_key "users", "user_roles"
   add_foreign_key "venues", "addresses"

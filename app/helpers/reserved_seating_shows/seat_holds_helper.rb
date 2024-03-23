@@ -1,2 +1,0 @@
-module ReservedSeatingShows::SeatHoldsHelper
-end

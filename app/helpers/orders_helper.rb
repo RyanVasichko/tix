@@ -7,7 +7,7 @@ module OrdersHelper
                 {
                   controller: "checkout",
                   action: "checkout#handlePaymentMethod",
-                  checkout_amount_value: order.total_in_cents,
+                  checkout_amount_value: order.total_due_in_cents,
                   checkout_stripe_public_key_value: Rails.application.credentials.stripe.public_key
                 },
               class: "lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16",

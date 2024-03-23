@@ -3,67 +3,55 @@
     <h2 class="text-2xl font-bold tracking-tight text-gray-900">Merchandise</h2>
 
     <div class="mt-4">
-      <%= form_with url: merch_index_path, method: :get, data: { controller: "merch-search", turbo_frame: "merch" } do |form| %>
+      <%= form_with url: merch_index_path, method: :get, data: { controller: "merch-search" } do |form| %>
         <div class="inline">
-          <%= form.check_box(
-                "merch_category_id[]",
-                {
-                  checked: @all_selected,
-                  include_hidden: false,
-                  data:
-                    {
-                      merch_search_target: "allCheckbox",
-                      action: "merch-search#uncheckCategoriesIfAllSelected merch-search#submitForm"
-                    },
-                  class: "peer sr-only"
-                },
-                "all") %>
+          <%= form.check_box "merch_category_id[]",
+                             {
+                               checked: all_selected?,
+                               include_hidden: false,
+                               data: { merch_search_target: "allCheckbox", action: "merch-search#uncheckCategoriesIfAllSelected merch-search#submitForm" },
+                               class: "peer sr-only"
+                             },
+                             "all" %>
           <%= form.label "merch_category_id[]", "All", class: "rounded-3xl border mr-2 py-1.5 px-3 text-xs font-medium border-gray-200 bg-white text-gray-900 hover:bg-gray-50 uppercase sm:flex-1 cursor-pointer focus:outline-none peer-checked:border-transparent peer-checked:bg-amber-600 peer-checked:text-white peer-checked:hover:bg-amber-700", skip_class: true %>
         </div>
         <%= form.collection_check_boxes :merch_category_id, @merch_categories, :id, :name, include_hidden: false do |b| %>
           <div class="inline">
-            <%= b.check_box(
-                  checked: @selected_category_ids.map(&:to_i).include?(b.value),
-                  data:
-                    {
-                      merch_search_target: "categoryIdCheckbox",
-                      action: "merch-search#uncheckAllIfCategorySelected merch-search#submitForm"
-                    },
-                  class: "peer sr-only") %>
+            <%= b.check_box checked: selected_category_ids.include?(b.value),
+                            data: { merch_search_target: "categoryIdCheckbox", action: "merch-search#uncheckAllIfCategorySelected merch-search#submitForm" },
+                            class: "peer sr-only" %>
             <%= b.label class: "rounded-3xl border mr-2 py-1.5 px-3 text-xs font-medium border-gray-200 bg-white text-gray-900 hover:bg-gray-50 uppercase sm:flex-1 cursor-pointer focus:outline-none peer-checked:border-transparent peer-checked:bg-amber-600 peer-checked:text-white peer-checked:hover:bg-amber-700", skip_class: true %>
           </div>
         <% end %>
       <% end %>
     </div>
 
-    <%= turbo_frame_tag "merch", target: :_top do %>
-      <div class="bg-white">
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h2 class="sr-only">Merch</h2>
+    <div class="bg-white">
+      <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 class="sr-only">Merch</h2>
 
-          <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-            <% @merch.each do |merch| %>
-              <div id="<%= dom_id(merch) %>" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-                <div class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
-                  <%= image_tag merch.image.variant(:medium), id: dom_id(merch.image), class: "h-full w-full object-cover object-center sm:h-full sm:w-full", alt: merch.name, data: { turbo_permanent: true } %>
-                </div>
-                <div class="flex flex-1 flex-col space-y-2 p-4">
-                  <h3 class="text-sm font-medium text-gray-900">
-                    <%= link_to new_shopping_cart_merch_path(merch_id: merch.id), data: { turbo_stream: true } do %>
-                      <span aria-hidden="true" class="absolute inset-0"></span>
-                      <%= merch.name %>
-                    <% end %>
-                  </h3>
-                  <p class="text-sm text-gray-500"><%= merch.description %></p>
-                  <div class="flex flex-1 flex-col justify-end">
-                    <p class="text-base font-medium text-gray-900"><%= number_to_currency(merch.price) %></p>
-                  </div>
+        <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+          <% @merch.each do |merch| %>
+            <div id="<%= dom_id(merch) %>" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+              <div class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+                <%= image_tag merch.image.variant(:medium), id: dom_id(merch.image), class: "h-full w-full object-cover object-center sm:h-full sm:w-full", alt: merch.name, data: { turbo_permanent: true } %>
+              </div>
+              <div class="flex flex-1 flex-col space-y-2 p-4">
+                <h3 class="text-sm font-medium text-gray-900">
+                  <%= link_to new_merch_shopping_cart_selection_path(merch_id: merch.id), data: { turbo_stream: true } do %>
+                    <span aria-hidden="true" class="absolute inset-0"></span>
+                    <%= merch.name %>
+                  <% end %>
+                </h3>
+                <p class="text-sm text-gray-500"><%= merch.description %></p>
+                <div class="flex flex-1 flex-col justify-end">
+                  <p class="text-base font-medium text-gray-900"><%= number_to_currency(merch.price) %></p>
                 </div>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>

@@ -56,6 +56,17 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
+    create_table :shopping_cart_selections do |t|
+      t.references :shopping_cart, null: false, foreign_key: true
+      t.references :selectable, polymorphic: true, null: false
+      t.integer :quantity, null: false, default: 1
+      t.json :options
+      t.datetime :expires_at, null: true
+      t.bigint :lock_version, null: false, default: 0
+
+      t.timestamps
+    end
+
     create_table :user_roles do |t|
       t.string :name, null: false
       t.boolean :hold_seats, default: false, null: false
@@ -142,16 +153,21 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    create_table :show_seats do |t|
+    create_table :tickets do |t|
       t.references :show_section, null: false, foreign_key: true
+      t.references :held_by, null: true, foreign_key: { to_table: :users }
+      t.string :type
+      t.bigint :lock_version, default: 0, null: false
+
+      t.timestamps
+    end
+
+    create_table :show_seats do |t|
+      t.references :ticket, null: false, foreign_key: true
       t.integer :x, null: false
       t.integer :y, null: false
       t.integer :seat_number, null: false
       t.integer :table_number, null: true
-      t.references :shopping_cart, null: true, foreign_key: true
-      t.references :held_by_admin, null: true, foreign_key: { to_table: :users }
-      t.datetime :reserved_until
-      t.index %i[shopping_cart_id reserved_until]
 
       t.timestamps
     end
@@ -169,29 +185,27 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
     end
 
     create_table :orders do |t|
-      t.decimal :order_total, null: false, precision: 8, scale: 2
-      t.decimal :convenience_fees, null: false, default: 0, precision: 8, scale: 2
-      t.decimal :shipping_fees, null: false, default: 0, precision: 8, scale: 2
+      t.decimal :balance_paid, null: false, precision: 8, scale: 2
+      t.decimal :total_price, null: false, precision: 8, scale: 2
+      t.decimal :total_fees, null: false, default: 0, precision: 8, scale: 2
+      t.decimal :shipping_charges, null: false, default: 0, precision: 8, scale: 2
       t.string :order_number
       t.references :orderer, polymorphic: true, null: false
       t.references :order_payment, foreign_key: true
-      t.references :shipping_address, null: false, foreign_key: { to_table: :order_shipping_addresses }
+      t.references :shipping_address, null: true, foreign_key: { to_table: :order_shipping_addresses }
 
       t.timestamps
     end
 
-    create_table :order_tickets do |t|
+    create_table :order_purchases do |t|
       t.references :order, null: false, foreign_key: true
-      t.references :show_seat, foreign_key: true
-      t.references :show, null: false, foreign_key: true
-      t.references :show_section, null: true, foreign_key: true
+      t.references :purchaseable, polymorphic: true, null: false
+      t.json :options
+      t.decimal :item_price, null: false, precision: 8, scale: 2
       t.integer :quantity, null: false, default: 1
-      t.string :type, null: false
-      t.decimal :convenience_fees, null: false, default: 0, precision: 8, scale: 2
-      t.decimal :venue_commission, null: false, default: 0, precision: 8, scale: 2
-      t.decimal :ticket_price, null: false, default: 0, precision: 8, scale: 2
-      t.decimal :deposit_amount, null: false, default: 0, precision: 8, scale: 2
-      t.decimal :total_price, null: false, default: 0, precision: 8, scale: 2
+      t.decimal :total_fees, null: false, default: 0, precision: 8, scale: 2
+      t.decimal :balance_paid, null: false, precision: 8, scale: 2
+      t.decimal :total_price, null: false, precision: 8, scale: 2
 
       t.timestamps
     end
@@ -228,27 +242,6 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
     create_join_table :merch, :merch_categories do |t|
       t.index :merch_id
       t.index :merch_category_id
-    end
-
-    create_table :shopping_cart_merch do |t|
-      t.references :merch, null: false, foreign_key: true
-      t.references :shopping_cart, null: false, foreign_key: true
-      t.integer :quantity, null: false
-      t.string :option
-
-      t.timestamps
-    end
-
-    create_table :order_merch do |t|
-      t.references :merch, null: false, foreign_key: true
-      t.references :order, null: false, foreign_key: true
-      t.integer :quantity, null: false
-      t.decimal :unit_price, null: false, precision: 10, scale: 2
-      t.decimal :total_price, null: false, precision: 10, scale: 2
-      t.string :option
-      t.string :option_label
-
-      t.timestamps
     end
 
     create_table :order_shipping_addresses do |t|
@@ -300,7 +293,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    create_table :merch_shipping_charges do |t|
+    create_table :merch_shipping_rates do |t|
       t.decimal :weight, precision: 8, scale: 2, null: false
       t.decimal :price, precision: 8, scale: 2, null: false
 
@@ -315,7 +308,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
         orderer_name,
         orderer_phone,
         orderer_email,
-        order_total,
+        balance_paid,
         artist_name,
         tickets_count,
         tokenize='trigram case_sensitive 0'

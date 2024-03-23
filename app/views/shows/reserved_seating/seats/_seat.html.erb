@@ -1,0 +1,15 @@
+<circle
+  fill-opacity="0" <%# Set fill opacity to 0 so the controller can update the fill color before the element is shown %>
+  data-controller="shows--seating-chart--seat"
+  data-shows--seating-chart--seat-create-ticket-selection-path-value="<%= shows_reserved_seating_seat_ticket_selections_path(seat.show, seat) %>"
+  data-shows--seating-chart--seat-destroy-ticket-selection-path-value="<%= shows_reserved_seating_seat_ticket_selection_path(seat.show, seat, seat.shopping_cart_selection&.id) if seat.shopping_cart_selection %>"
+  data-shows--seating-chart--seat-selected-by-user-id-value="<%= seat.selected_by_shopper_uuid %>"
+  data-shows--seating-chart--seat-selection-expires-at-value="<%= seat.shopping_cart_selection_expires_at&.to_i %>"
+  data-shows--seating-chart--seat-sold-to-user-id-value="<%= seat.purchaser_shopper_uuid %>"
+  data-shows--seating-chart--seat-held-by-user-id-value="<%= seat.held_by_shopper_uuid %>"
+  data-action="click->shows--seating-chart--seat#clickHandler"
+  id="<%= dom_id(seat) %>"
+  r="7"
+  cx="<%= seat.x %>"
+  cy="<%= seat.y %>">
+</circle>

@@ -19,62 +19,8 @@
 
       <div class="mt-8">
         <h2 class="sr-only">Products purchased</h2>
-
-        <% order.tickets.group_by(&:show).each do |show, tickets| %>
-          <div class="mt-8 border-b pb-8 space-y-24">
-            <div class="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
-              <div class="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
-                <%= link_to shows_path(show), class: "max-w-16 rounded-lg bg-gray-50" do %>
-                  <%= image_tag url_for(show.artist.image.variant(:small)), class: "rounded-lg" %>
-                <% end %>
-              </div>
-              <div class="mt-6 sm:col-span-7 sm:mt-0 md:row-end-1">
-                <h3 class="text-lg font-medium text-gray-900">
-                  <%= link_to shows_path(show) do %>
-                    <span class="text-2xl"><%= show.artist.name %></span>
-                    <span class="mx-5 text-gray-400" aria-hidden="true">&middot;</span> <%= show.show_date.strftime("%B %d, %Y") %>
-                  <% end %>
-                </h3>
-                <% tickets.each do |ticket| %>
-                  <div class="my-2">
-                    <span class="text-gray-500">
-                      <% if ticket.is_a?(Order::Tickets::ReservedSeating) %>
-                      Table <%= ticket.table_number %> Seat <%= ticket.seat_number %>
-                        <% else %>
-                          <%= ticket.show_section.name %> &times; <%= ticket.quantity %>
-                        <% end %>
-                    </span>
-                    -
-                    <span class="font-medium"><%= number_to_currency(ticket.total_price) %></span>
-                  </div>
-                <% end %>
-                <p class="mt-1 font-medium text-gray-900"><%= number_to_currency(show.tickets.sum(:total_price)) %></p>
-              </div>
-            </div>
-          </div>
-        <% end %>
-
-        <% order.merch.group_by(&:merch).each do |merch, order_merch| %>
-          <div class="mt-8 border-b pb-8 space-y-24">
-            <div class="grid grid-cols-1 text-sm sm:grid-cols-4 sm:gap-x-6 md:grid-cols-6 md:gap-x-8">
-              <div class="col-span-4 sm:col-span-1">
-                <%= image_tag url_for(merch.image.variant(:small)), class: "h-36 w-auto rounded-lg" %>
-              </div>
-              <div class="col-span-4 mt-6 sm:col-span-3 sm:mt-0 md:col-span-5">
-                <h3 class="text-lg font-medium text-gray-900">
-                  <span class="text-2xl"><%= merch.name %></span>
-                </h3>
-                <% order_merch.each do |om| %>
-                  <div class="my-2">
-                    <span class="text-gray-500"><%= "#{om.option_label}: #{om.option}" if om.option %>
-                      Quantity: <%= om.quantity %></span> -
-                    <span class="font-medium"><%= number_to_currency(om.total_price) %></span>
-                  </div>
-                <% end %>
-                <p class="mt-1 font-medium text-gray-900"><%= number_to_currency(order_merch.sum(&:total_price)) %></p>
-              </div>
-            </div>
-          </div>
+        <% order.purchases.group_by(&:purchaseable_name).each do |purchaseable_name, purchases| %>
+          <%= render "orders/#{purchaseable_name}_purchases/purchases", purchases: purchases %>
         <% end %>
       </div>
 
@@ -113,11 +59,11 @@
           <dl class="mt-8 text-sm divide-y divide-gray-200 lg:col-span-7 lg:mt-0 lg:pr-8">
             <div class="flex items-center justify-between pb-4">
               <dt class="text-gray-600">Subtotal</dt>
-              <dd class="font-medium text-gray-900"><%= number_to_currency(order.order_total) %></dd>
+              <dd class="font-medium text-gray-900"><%= number_to_currency(order.balance_paid) %></dd>
             </div>
             <div class="flex items-center justify-between py-4">
               <dt class="text-gray-600">Shipping</dt>
-              <dd class="font-medium text-gray-900"><%= number_to_currency(order.shipping_fees) %></dd>
+              <dd class="font-medium text-gray-900"><%= number_to_currency(order.shipping_charges) %></dd>
             </div>
             <div class="flex items-center justify-between py-4">
               <dt class="text-gray-600">Tax</dt>
@@ -125,7 +71,7 @@
             </div>
             <div class="flex items-center justify-between pt-4">
               <dt class="font-medium text-gray-900">Order total</dt>
-              <dd class="font-medium text-amber-600"><%= number_to_currency(order.order_total) %></dd>
+              <dd class="font-medium text-amber-600"><%= number_to_currency(order.balance_paid) %></dd>
             </div>
           </dl>
         </div>

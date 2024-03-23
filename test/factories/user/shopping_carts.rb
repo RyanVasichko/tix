@@ -7,17 +7,18 @@ FactoryBot.define do
     end
 
     after(:build) do |shopping_cart, evaluator|
-      shopping_cart.merch << FactoryBot.build_list(:shopping_cart_merch,
-                                                   evaluator.merch_count,
-                                                   quantity: 1)
+      shopping_cart.selections << FactoryBot.build_list(:shopping_cart_merch_selection,
+                                                        evaluator.merch_count,
+                                                        quantity: 1)
 
-      shopping_cart.seats << FactoryBot.build_list(:show_seat,
-                                                   evaluator.reserved_seats_count,
-                                                   shopping_cart: shopping_cart,
-                                                   reserved_until: Time.zone.now + 15.minutes)
+      shopping_cart.selections << FactoryBot.build_list(:shopping_cart_general_admission_ticket_selection,
+                                                        evaluator.general_admission_tickets_count,
+                                                        quantity: 1)
 
-      shopping_cart.tickets << FactoryBot.build_list(:shopping_cart_ticket,
-                                                     evaluator.general_admission_tickets_count)
+      shopping_cart.selections << FactoryBot.build_list(:shopping_cart_reserved_seating_ticket_selection,
+                                                        evaluator.reserved_seats_count,
+                                                        expires_at: 15.minutes.from_now,
+                                                        quantity: 1)
     end
   end
 end

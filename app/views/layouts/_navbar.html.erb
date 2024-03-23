@@ -68,7 +68,7 @@
               </svg>
               <%= turbo_stream_from Current.user.shopping_cart %>
               <span id="shopping_cart_total_items" class="ml-2 text-sm font-medium text-gray-400 group-hover:text-gray-500">
-                <%= render "shopping_cart/count", shopping_cart: Current.user.shopping_cart %>
+                <%= render "shopping_carts/count", shopping_cart: Current.user.shopping_cart %>
               </span>
               <span class="sr-only">items in cart, view bag</span>
             </button>

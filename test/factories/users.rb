@@ -8,6 +8,7 @@ FactoryBot.define do
     end
 
     shopping_cart do |evaluator|
+      # TODO: Probably make this in after(:build)
       FactoryBot.build(:shopping_cart,
                        merch_count: evaluator.shopping_cart_merch_count,
                        reserved_seats_count: evaluator.reserved_seats_count,

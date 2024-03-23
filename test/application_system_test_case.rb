@@ -4,6 +4,14 @@ require "support/draggable"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Draggable
 
+  setup do
+    WebMock.enable_net_connect!
+  end
+
+  teardown do
+    WebMock.reset!
+  end
+
   driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
 
   def sign_in(user)

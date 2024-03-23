@@ -19,22 +19,22 @@ FactoryBot.define do
 
     transient do
       sections_count { 2 }
-      section_seats_count { 5 }
       with_existing_artist { false }
       with_existing_venue { false }
     end
 
     after :build do |show, evaluator|
-      show.artist ||= evaluator.with_existing_artist ? Artist.order("RANDOM()").first : FactoryBot.build(:artist)
-      show.venue ||= evaluator.with_existing_venue ? Venue.order("RANDOM()").first : FactoryBot.build(:venue)
+      show.artist ||= evaluator.with_existing_artist ? Artist.all.sample : FactoryBot.build(:artist)
+      show.venue ||= evaluator.with_existing_venue ? Venue.all.sample : FactoryBot.build(:venue)
     end
   end
 
-  factory :reserved_seating_show, traits: [:show], class: Shows::ReservedSeating.to_s do
+  factory :reserved_seating_show, traits: [:show], class: Shows::ReservedSeating do
     seating_chart_name { Faker::Lorem.word }
     type { Shows::ReservedSeating.to_s }
 
     transient do
+      section_tickets_count { 5 }
       venue_layout_blob do
         ActiveStorage::Blob.create_and_upload!(
           io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
@@ -53,15 +53,15 @@ FactoryBot.define do
           :reserved_seating_show_section,
           evaluator.sections_count,
           show: show,
-          seats_count: evaluator.section_seats_count)
+          tickets_count: evaluator.section_tickets_count)
       end
 
       show.venue_layout.attach(evaluator.venue_layout_blob)
     end
   end
 
-  factory :general_admission_show, traits: [:show], class: Shows::GeneralAdmission.to_s do
-    type { Shows::GeneralAdmission.to_s }
+  factory :general_admission_show, traits: [:show], class: Shows::GeneralAdmission do
+    type { "Shows::GeneralAdmission" }
 
     after(:build) do |show, evaluator|
       # Build an upsale for 10% of shows
@@ -71,8 +71,7 @@ FactoryBot.define do
         show.sections = FactoryBot.build_list(
           :general_admission_show_section,
           evaluator.sections_count,
-          show: show,
-          seats_count: evaluator.section_seats_count)
+          show: show)
       end
     end
   end

@@ -1,0 +1,21 @@
+<%= card do %>
+  <%= render "admin/merch/tabs" %>
+
+  <%= data_table collection: @shipping_rates, namespace: :admin, keyword_search: false, new_record_modal: true do |table| %>
+    <% table.column :weight, sortable: false %>
+    <% table.column :price, sortable: false do |shipping_rate| %>
+      <%= number_to_currency(shipping_rate.price) %>
+    <% end %>
+    <% table.column "", sortable: false, cell_class: "text-right" do |shipping_rate| %>
+      <%= primary_link_to "Edit",
+                          edit_admin_merch_shipping_rate_path(shipping_rate),
+                          data: { turbo: true, turbo_stream: true },
+                          class: "font-sm" %>
+      |
+      <%= danger_link_to "Delete",
+                         [:admin, shipping_rate],
+                         data: { turbo_method: "delete", turbo: true, turbo_frame: :_top },
+                         class: "text-sm" %>
+    <% end %>
+  <% end %>
+<% end %>

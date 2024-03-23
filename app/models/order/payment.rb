@@ -9,7 +9,7 @@ class Order::Payment < ApplicationRecord
 
   has_one :order, class_name: "Order", inverse_of: :payment, foreign_key: :order_payment_id
 
-  def process(save_payment_method = false)
+  def process!(save_payment_method = false)
     stripe_customer = order.orderer.stripe_customer
     payment_method = Stripe::PaymentMethod.retrieve(self.stripe_payment_method_id)
     payment_intent_params = {
@@ -18,6 +18,7 @@ class Order::Payment < ApplicationRecord
       payment_method: self.stripe_payment_method_id,
       confirm: true,
       customer: stripe_customer&.id,
+      setup_future_usage: save_payment_method ? :on_session : nil,
       automatic_payment_methods: {
         enabled: true,
         allow_redirects: "never"
@@ -26,9 +27,12 @@ class Order::Payment < ApplicationRecord
         order_id: order.id
       }
     }
-    payment_intent_params[:setup_future_usage] = :on_session if save_payment_method
 
-    payment_intent = Stripe::PaymentIntent.create(payment_intent_params)
+    begin
+      payment_intent = Stripe::PaymentIntent.create(payment_intent_params)
+    rescue Stripe::StripeError
+      return false
+    end
 
     if payment_intent["status"] == "succeeded"
       update!(

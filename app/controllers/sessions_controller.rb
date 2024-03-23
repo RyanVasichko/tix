@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
 
   def log_in(user)
     if Current.user.is_a? Users::Guest
-      Current.user.transfer_shopping_cart_to(user)
+      Current.user.shopping_cart.transfer_selections_to(user)
       Current.user.destroy_later
     end
 

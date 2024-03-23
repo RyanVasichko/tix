@@ -1,7 +1,11 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "mocha/minitest"
+require "webmock/minitest"
 require_relative "../lib/faker/seating_chart"
+
+WebMock.enable!
 
 class ActiveSupport::TestCase
   include ActiveJob::TestHelper # Used for perform_enqueued_jobs

@@ -1,0 +1,13 @@
+<% selections.group_by(&:selectable).each do |merch, selected_merch| %>
+  <li class="flex items-center py-6" id="shopping_cart_merch_<%= merch.id %>_selections">
+    <%= image_tag merch.image.variant(:medium), id: dom_id(merch.image), class: "h-auto w-32 flex-none rounded-md border border-gray-200" %>
+    <div class="ml-4 flex-auto">
+      <h3 class="font-medium text-gray-900">
+        <%= merch.name %>
+      </h3>
+      <div class="divide-y divide-gray-200">
+        <%= render partial: "shopping_carts/merch_selections/selection", collection: selected_merch %>
+      </div>
+    </div>
+  </li>
+<% end %>

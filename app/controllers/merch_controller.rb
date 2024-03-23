@@ -1,11 +1,20 @@
 class MerchController < ApplicationController
-  # GET /merch
+  helper_method :all_selected?, :selected_category_ids
+
   def index
-    @all_selected = search_params.include?("all") || search_params.empty?
-    @selected_category_ids = search_params.reject { |id| id == "all" }
-    @merch = Merch.active.includes_image.order(:order)
-    @merch = @merch.joins(:categories).where(categories: { id: search_params }) unless @all_selected
+    @merch = Merch.active.order(:order)
+    @merch = @merch.for_categories(selected_category_ids) unless all_selected?
     @merch_categories = Merch::Category.joins(:merch).uniq
+  end
+
+  private
+
+  def all_selected?
+    search_params.include?("all") || search_params.empty?
+  end
+
+  def selected_category_ids
+    search_params.reject { |id| id == "all" }.map(&:to_i)
   end
 
   def search_params

@@ -1,0 +1,2 @@
+module Shows::GeneralAdmissionHelper
+end

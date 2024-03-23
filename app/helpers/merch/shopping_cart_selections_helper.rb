@@ -1,0 +1,2 @@
+module Merch::ShoppingCartSelectionsHelper
+end

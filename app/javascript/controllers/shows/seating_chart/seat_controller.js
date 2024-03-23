@@ -5,31 +5,32 @@ import ApplicationController from "controllers/application_controller";
 // Connects to data-controller="shows--seating-chart--seat"
 export default class extends ApplicationController {
   static values = {
-    reservedByUserId: String,
-    reservationPath: String,
-    reservedUntil: Number,
+    selectedByUserId: String,
+    createTicketSelectionPath: String,
+    destroyTicketSelectionPath: String,
+    selectionExpiresAt: Number,
     soldToUserId: String,
     heldByUserId: String
   };
 
-  get #reservedUntilDate() {
-    if (!this.reservedUntilValue) {
+  get #selectionExpiresAtDate() {
+    if (!this.selectionExpiresAtValue) {
       return undefined;
     }
 
-    return new Date(this.reservedUntilValue * 1000);
+    return new Date(this.selectionExpiresAtValue * 1000);
   }
 
-  get #reservedByCurrentUser() {
-    return this.currentUserId === this.reservedByUserIdValue && this.#reservedUntilDate > new Date();
+  get #selectedByCurrentUser() {
+    return this.currentUserId === this.selectedByUserIdValue && this.#selectionExpiresAtDate > new Date();
   }
 
   get #soldToCurrentUser() {
     return this.currentUserId === this.soldToUserIdValue;
   }
 
-  get #reserved() {
-    return !!this.reservedByUserIdValue && this.#reservedUntilDate > new Date();
+  get #selected() {
+    return !!this.selectedByUserIdValue && this.#selectionExpiresAtDate > new Date();
   }
 
   get #sold() {
@@ -41,7 +42,7 @@ export default class extends ApplicationController {
   }
 
   get #fillColor() {
-    if (!this.#reserved && !this.#sold && !this.#held) {
+    if (!this.#selected && !this.#sold && !this.#held) {
       return "green";
     }
 
@@ -49,19 +50,19 @@ export default class extends ApplicationController {
       return "purple";
     }
 
-    if (this.#reservedByCurrentUser || this.#soldToCurrentUser) {
+    if (this.#selectedByCurrentUser || this.#soldToCurrentUser) {
       return "yellow";
     }
 
     return "red";
   }
 
-  get #reservable() {
-    return !this.#reserved && !this.#sold && !this.#held
+  get #selectable() {
+    return !this.#selected && !this.#sold && !this.#held
   }
 
   get #actionable() {
-    return this.#reservable || this.#reservedByCurrentUser;
+    return this.#selectable || this.#selectedByCurrentUser;
   }
 
   connect() {
@@ -71,7 +72,7 @@ export default class extends ApplicationController {
     if (this.#actionable) {
       this.element.classList.add("cursor-pointer");
     }
-    this.clickHandler = debounce(this.clickHandler.bind(this), 1000, { immediate: true });
+    this.clickHandler = debounce(this.clickHandler.bind(this), 1_000, { immediate: true });
   }
 
   async clickHandler() {
@@ -79,15 +80,15 @@ export default class extends ApplicationController {
       return;
     }
 
-    if (this.#reservedByCurrentUser) {
+    if (this.#selectedByCurrentUser) {
       this.element.setAttribute("fill", "green");
-      await destroy(this.reservationPathValue, { responseKind: "turbo-stream" });
+      await destroy(this.destroyTicketSelectionPathValue, { responseKind: "turbo-stream" });
       return;
     }
 
-    if (this.#reservable) {
+    if (this.#selectable) {
       this.element.setAttribute("fill", "yellow");
-      await post(this.reservationPathValue, { responseKind: "turbo-stream" });
+      await post(this.createTicketSelectionPathValue, { responseKind: "turbo-stream" });
     }
   }
 }

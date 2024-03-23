@@ -1,0 +1,21 @@
+<% selections.group_by { |s| s.selectable.show }.each do |show, selections| %>
+  <li class="flex items-center py-6" id="show_<%= show.id %>_shopping_cart_selections">
+    <%= image_tag show.artist.image.variant(:medium), id: "show_#{show.id}_artist_image", class: "max-w-32 flex-none rounded-md border border-gray-200" %>
+    <div class="ml-4 flex-auto">
+      <h3 class="font-medium text-gray-900">
+        <%= show.artist.name %>
+      </h3>
+      <div class="divide-y-divide-gray-200">
+        <%= render partial: "shopping_carts/ticket_selections/#{show.type.demodulize.underscore}/selection",
+                   collection: selections,
+                   as: "selection" %>
+      </div>
+      <% if selections.first.shopping_cart.user.admin? && show.is_a?(Shows::ReservedSeating) %>
+        <%= button_to "Hold Seats",
+                      shows_reserved_seating_seat_holds_path(show),
+                      data: { turbo_stream: true },
+                      class: "block text-center w-full rounded-md border border-transparent bg-amber-600 mt-4 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" %>
+      <% end %>
+    </div>
+  </li>
+<% end %>

@@ -28,7 +28,7 @@ namespace :db do
       venues_count = ENV.fetch("VENUES_COUNT", 3).to_i
       merch_count = ENV.fetch("MERCH_COUNT", 5).to_i
       merch_categories_count = ENV.fetch("MERCH_CATEGORIES_COUNT", 5).to_i
-      merch_shipping_charges_count = ENV.fetch("MERCH_SHIPPING_CHARGES_COUNT", 3).to_i
+      merch_shipping_rates_count = ENV.fetch("MERCH_shipping_rateS_COUNT", 3).to_i
       customers_count = ENV.fetch("CUSTOMERS_COUNT", 10).to_i
       admins_count = ENV.fetch("ADMINS_COUNT", 1).to_i
       customer_orders_count = ENV.fetch("CUSTOMER_ORDERS_COUNT", 10).to_i
@@ -71,7 +71,7 @@ namespace :db do
                 :reserved_seating_show,
                 with_existing_artist: true,
                 sections_count: 4,
-                section_seats_count: 90,
+                section_tickets_count: 90,
                 with_existing_venue: true,
                 venue_layout_blob: venue_layout_blob)
               Faker::SeatingChart.unique.clear
@@ -88,7 +88,7 @@ namespace :db do
                 :past,
                 with_existing_artist: true,
                 sections_count: 4,
-                section_seats_count: 90,
+                section_tickets_count: 90,
                 with_existing_venue: true,
                 venue_layout_blob: venue_layout_blob)
               Faker::SeatingChart.unique.clear
@@ -105,7 +105,6 @@ namespace :db do
             slice.count,
             with_existing_artist: true,
             sections_count: 2,
-            section_seats_count: 100,
             with_existing_venue: true)
         end
       end
@@ -119,7 +118,6 @@ namespace :db do
             :past,
             with_existing_artist: true,
             sections_count: 2,
-            section_seats_count: 100,
             with_existing_venue: true)
         end
       end
@@ -137,10 +135,10 @@ namespace :db do
       end
       puts "- #{merch_count} merch"
 
-      merch_shipping_charges_count.times do |index|
-        Merch::ShippingCharge.create!(weight: index * 5, price: index + 1)
+      merch_shipping_rates_count.times do |index|
+        Merch::ShippingRate.create!(weight: index * 5, price: index + 1)
       end
-      puts "- #{merch_shipping_charges_count} merch shipping charges"
+      puts "- #{merch_shipping_rates_count} merch shipping rates"
 
       with_forking do
         (1 .. customers_count).each_slice(100) do |slice|

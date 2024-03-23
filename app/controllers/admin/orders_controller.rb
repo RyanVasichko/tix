@@ -1,7 +1,7 @@
 class Admin::OrdersController < Admin::AdminController
   include SearchParams
 
-  sortable_by :order_number, :created_at, :orderer_name, :orderer_phone, :orderer_email, :tickets_count, :order_total
+  sortable_by :order_number, :created_at, :orderer_name, :orderer_phone, :orderer_email, :tickets_count, :balance_paid
   self.default_sort_field = :created_at
 
   def index

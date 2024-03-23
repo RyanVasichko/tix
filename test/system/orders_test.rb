@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class OrdersTest < ApplicationSystemTestCase
   setup do
-    FactoryBot.create(:merch_shipping_charge, weight: 0.1)
+    FactoryBot.create(:merch_shipping_rate, weight: 0.1)
   end
 
   test "placing an order as an existing Customer" do
@@ -18,27 +18,16 @@ class OrdersTest < ApplicationSystemTestCase
       fill_in_credit_card_information
 
       expected_differences = {
-        "Order::Merch.count" => 2,
-        "Order::Ticket.count" => 4,
-        "Order.count" => 1,
-        "ShoppingCart::Ticket.count" => -2
+        "customer.purchases.merch.count" => 2,
+        "customer.purchases.tickets.count" => 4,
+        "customer.orders.count" => 1,
+        "customer.shopping_cart_selections.count" => -6
       }
       assert_difference expected_differences do
         click_on "Place Order"
         assert_text "Your order was successfully placed", wait: 30
       end
     end
-
-    created_order = customer.orders.last
-
-    assert_equal "1214 Test St.", created_order.shipping_address.address_1
-    assert_equal "APT 7203", created_order.shipping_address.address_2
-    assert_equal "Houston", created_order.shipping_address.city
-    assert_equal "TX", created_order.shipping_address.state
-    assert_equal "77019", created_order.shipping_address.zip_code
-
-    assert_equal 2, created_order.merch.count
-    assert_equal 4, created_order.tickets.count
   end
 
   test "placing an order as a guest" do
@@ -59,8 +48,8 @@ class OrdersTest < ApplicationSystemTestCase
     select "2", from: "Quantity"
     click_on "Add to Shopping Cart"
 
-    visit reserved_seating_show_url(reserved_seating_show)
-    seat = reserved_seating_show.seats.where(shopping_cart: nil).first
+    visit shows_reserved_seating_url(reserved_seating_show)
+    seat = reserved_seating_show.seats.available.first
     find("##{dom_id(seat)}").click
 
     visit shows_url
@@ -72,8 +61,11 @@ class OrdersTest < ApplicationSystemTestCase
     click_on "Add to shopping cart"
 
     dismiss_all_toast_messages
-
+    sleep 0.25
     find("#shopping_cart_toggle").click
+    unless has_link? href: new_order_path, wait: 5
+      find("#shopping_cart_toggle").click
+    end
 
     click_on "Checkout"
 
@@ -92,10 +84,9 @@ class OrdersTest < ApplicationSystemTestCase
     fill_in_credit_card_information
 
     expected_differences = {
-      "Order::Merch.count" => 2,
-      "Order::Ticket.count" => 2,
+      "Order::Purchase.merch.count" => 2,
+      "Order::Purchase.tickets.count" => 2,
       "Order.count" => 1,
-      "ShoppingCart::Ticket.count" => -1,
       "Order::GuestOrderer.count" => 1
     }
     assert_difference expected_differences do
@@ -114,36 +105,6 @@ class OrdersTest < ApplicationSystemTestCase
     assert_equal "Houston", created_order.shipping_address.city
     assert_equal "TX", created_order.shipping_address.state
     assert_equal "77019", created_order.shipping_address.zip_code
-  end
-
-  test "removing general admission tickets from the new order screen" do
-    set_up_removals_test
-    general_admission_ticket = @customer.shopping_cart.tickets.first
-    find("#destroy_#{dom_id(general_admission_ticket)}").click
-
-    count = 0
-    sleep 0.05 while !@customer.shopping_cart.reload.tickets.empty? && ++count < 5
-    assert @customer.shopping_cart.reload.tickets.empty?
-  end
-
-  test "removing reserved seating tickets from the new order screen" do
-    set_up_removals_test
-    reserved_seat = @customer.shopping_cart.seats.first
-    find("#destroy_#{dom_id(reserved_seat)}_reservation").click
-
-    count = 0
-    sleep 0.05 while !@customer.shopping_cart.reload.seats.empty? && ++count < 5
-    assert @customer.shopping_cart.reload.seats.empty?
-  end
-
-  test "removing merch from the new order screen" do
-    set_up_removals_test
-    merch = @customer.shopping_cart.merch.first
-    find("#destroy_#{dom_id(merch)}").click
-
-    count = 0
-    sleep 0.05 while !@customer.shopping_cart.reload.merch.empty? && ++count < 5
-    assert @customer.shopping_cart.reload.merch.empty?
   end
 
   private

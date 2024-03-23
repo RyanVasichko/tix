@@ -11,7 +11,7 @@ class Order::SearchIndex < ApplicationRecord
               orderer_name: order.orderer.name,
               orderer_phone: order.orderer.phone.gsub("-", "").gsub("(", "").gsub(")", "").gsub(" ", ""),
               orderer_email: order.orderer.email,
-              order_total: order.order_total.to_s.gsub(".", ""),
+              balance_paid: order.balance_paid.to_s.gsub(".", ""),
               artist_name: order.shows.map { |s| "#{s.artist.name} - #{s.show_date.to_fs(:date)}" }.uniq.join(", "),
               tickets_count: order.tickets_count)
     end
