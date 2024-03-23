@@ -15,6 +15,8 @@ module DoseyDoeTickets
     config.solid_queue.connects_to = { database: { writing: :jobs } }
     config.solid_queue.silence_polling = true
 
+    config.mission_control.jobs.base_controller_class = "Admin::AdminController"
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

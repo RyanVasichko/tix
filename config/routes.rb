@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+
   # Sessions
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

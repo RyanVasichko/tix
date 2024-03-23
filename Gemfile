@@ -10,6 +10,7 @@ gem "redis"
 gem "solid_cache"
 gem "solid_queue"
 gem "appsignal"
+gem "mission_control-jobs"
 
 # Assets
 gem "propshaft"

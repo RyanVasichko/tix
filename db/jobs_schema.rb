@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2023_12_18_224322) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
     t.integer "job_id", null: false
     t.string "queue_name", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_12_18_224322) do
     t.string "concurrency_key", null: false
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
+    t.index ["concurrency_key", "priority", "job_id"], name: "index_solid_queue_blocked_executions_for_release"
     t.index ["expires_at", "concurrency_key"], name: "index_solid_queue_blocked_executions_for_maintenance"
     t.index ["job_id"], name: "index_solid_queue_blocked_executions_on_job_id", unique: true
   end
@@ -83,6 +84,15 @@ ActiveRecord::Schema[7.2].define(version: 2023_12_18_224322) do
     t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
   end
 
+  create_table "solid_queue_recurring_executions", force: :cascade do |t|
+    t.integer "job_id", null: false
+    t.string "task_key", null: false
+    t.datetime "run_at", null: false
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
+    t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
+  end
+
   create_table "solid_queue_scheduled_executions", force: :cascade do |t|
     t.integer "job_id", null: false
     t.string "queue_name", null: false
@@ -108,5 +118,6 @@ ActiveRecord::Schema[7.2].define(version: 2023_12_18_224322) do
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
 end
