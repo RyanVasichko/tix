@@ -3,36 +3,29 @@ import { get } from "@rails/request.js";
 
 // Connects to data-controller="admin--shows-form"
 export default class extends Controller {
-  static targets = [
-    "generalAdmissionShowFields",
-    "reservedSeatingShowFields",
-    "generalAdmissionSectionFields",
-    "reservedSeatingSectionFields",
-    "showTypeSelect",
-    "seatingChartSelect",
-    "venueSelect"
-  ];
+  static targets = [ "generalAdmissionShowFields", "reservedSeatingShowFields", "generalAdmissionSectionFields", "reservedSeatingSectionFields", "showTypeSelect", "venueSelect" ];
+
+  connect() {
+  }
 
   get #showType() {
     return this.showTypeSelectTarget.value;
   }
 
-  connect() {
-  }
-
   async showFieldsForShowType() {
-    this.#hideAndDisableAllShowTypeSpecificFields();
-
     if (this.#showType === "Shows::ReservedSeating") {
-      await this.loadVenueSeatingCharts()
-      this.#showReservedSeatingShowFields();
-    } else if (this.#showType === "Shows::GeneralAdmission") {
-      this.#showGeneralAdmissionShowFields();
+      await this.loadVenueSeatingCharts();
     }
+
+    this.generalAdmissionShowFieldsTargets.forEach(t => t.classList.toggle("hidden", this.#showType !== "Shows::GeneralAdmission"));
+    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::GeneralAdmission");
+
+    this.reservedSeatingShowFieldsTargets.forEach(t => t.classList.toggle("hidden", this.#showType !== "Shows::ReservedSeating"));
+    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::ReservedSeating");
   }
 
-  async loadSeatingChartSections() {
-    const seatingChartId = this.seatingChartSelectTarget.value;
+  async loadSeatingChartSections({ currentTarget }) {
+    const seatingChartId = currentTarget.value;
     await get(`/admin/shows/seating_charts/${seatingChartId}/reserved_seating_show_sections_fields`, {
       responseKind: "turbo-stream"
     });
@@ -47,22 +40,5 @@ export default class extends Controller {
     await get(`/admin/shows/venues/${venueId}/seating_chart_fields`, {
       responseKind: "turbo-stream"
     });
-  }
-
-  #hideAndDisableAllShowTypeSpecificFields() {
-    this.generalAdmissionShowFieldsTarget.classList.add("hidden");
-    this.reservedSeatingShowFieldsTarget.classList.add("hidden");
-    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::GeneralAdmission");
-    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = this.#showType !== "Shows::ReservedSeating");
-  }
-
-  #showGeneralAdmissionShowFields() {
-    this.generalAdmissionShowFieldsTarget.classList.remove("hidden");
-    this.generalAdmissionSectionFieldsTargets.forEach(t => t.disabled = false);
-  }
-
-  #showReservedSeatingShowFields() {
-    this.reservedSeatingShowFieldsTarget.classList.remove("hidden");
-    this.reservedSeatingSectionFieldsTargets.forEach(t => t.disabled = false);
   }
 }

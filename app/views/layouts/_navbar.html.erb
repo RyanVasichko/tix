@@ -14,7 +14,7 @@
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
-            <%= navbar_link_to "Admin", admin_path, "shows" if Current.user.admin? %>
+            <%= navbar_link_to "Admin", admin_path if Current.user.admin? %>
             <%= navbar_link_to "Shows", shows_path, "shows" %>
             <%= navbar_link_to "Merch", merch_index_path, "merch" %>
           </div>

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       scope module: :reserved_seating do
         resources :seat_holds, only: %i[create destroy index]
         resources :seats, only: [] do
-          resources :ticket_selections, only: %i[create destroy]
+          resource :ticket_selections, only: %i[create destroy]
         end
       end
     end
@@ -74,9 +74,9 @@ Rails.application.routes.draw do
     end
 
     resources :shows, except: %i[show]
+
     namespace :shows do
       resource :upsale_fields, only: %i[new]
-      resources :artists, only: %i[new create]
 
       resources :seating_charts, only: [] do
         resources :reserved_seating_show_sections_fields, only: %i[index]

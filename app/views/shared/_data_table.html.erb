@@ -30,7 +30,6 @@
             <%
               link_options = {
                 id: "new_#{collection.model.model_name.singular}",
-                class: "flex p-1 rounded bg-gray-100 border border-gray-300 hover:bg-amber-600 hover:text-white",
                 data: {}
               }
               link_options[:data] = { turbo_stream: true } if local_assigns[:new_record_modal]

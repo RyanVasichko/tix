@@ -55,7 +55,6 @@ module StandardFormBuilder
       telephone_field
       password_field
     ].freeze
-
     FIELD_METHODS.each do |method_name|
       define_method(method_name) do |method, value = nil, options = {}|
         if value.is_a?(Hash)
@@ -63,6 +62,9 @@ module StandardFormBuilder
         end
         merge_default_input_classes_into_options_classes(options, "mt-2 block w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-offset focus:ring-amber-500/75  sm:leading-6")
         add_error_fields_to_options(options, method)
+        if %i[date_field time_field datetime_field].include?(method_name)
+          options[:include_seconds] ||= false
+        end
         @template.safe_join([super(method, options), error_message_for(method)])
       end
     end
@@ -77,9 +79,9 @@ module StandardFormBuilder
 
       message = if @object.errors.details[actual_attribute].any? { |error| error[:error] == :blank }
                   "Required"
-      else
+                else
                   @object.errors.full_messages_for(actual_attribute).join(", ")
-      end
+                end
       @template.content_tag :p, message, class: "ml-2 mt-2 text-red-500 text-xs italic"
     end
 

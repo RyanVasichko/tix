@@ -35,7 +35,6 @@ class ModalController extends ApplicationController {
   }
 
   async close() {
-    console.log("closing")
     this.isOpen = false;
     await Promise.all([
       leave(this.bodyTarget),

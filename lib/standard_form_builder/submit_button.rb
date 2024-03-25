@@ -11,7 +11,7 @@ module StandardFormBuilder
       else
         @template.button_tag(type: "submit", **options) do
           @template.safe_join [
-                                @template.content_tag(:div, nil, class: "mr-2 group-disabled:block hidden h-4 w-4 loader"),
+                                @template.svg_spinner(class: "hidden group-disabled:block h-4 w-4"),
                                 @template.content_tag(:span, value)
                               ]
         end

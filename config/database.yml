@@ -16,26 +16,26 @@ jobs: &jobs
 development:
   primary:
     <<: *default
-    database: db/data/dosey-doe-tickets_development.sqlite3
+    database: storage/db/tix_development.sqlite3
   jobs:
     <<: *jobs
-    database: db/data/dosey-doe-tickets_jobs_development.sqlite3
+    database: storage/db/tix_jobs_development.sqlite3
   cache:
     <<: *cache
-    database: db/data/dosey-doe-tickets_cache_development.sqlite3
+    database: storage/db/tix_cache_development.sqlite3
 
 test:
   primary:
     <<: *default
-    database: db/data/dosey-doe-tickets_test.sqlite3
+    database: storage/db/tix_test.sqlite3
 
 production:
   primary:
     <<: *default
-    database: db/data/dosey_doe_tickets.sqlite3
+    database: storage/db/tix.sqlite3
   cache:
     <<: *cache
-    database: db/data/dosey_doe_tickets_cache.sqlite3
+    database: storage/db/tix_cache.sqlite3
   jobs:
     <<: *jobs
-    database: db/data/dosey_doe_tickets_jobs.sqlite3
+    database: storage/db/tix_jobs.sqlite3

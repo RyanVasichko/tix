@@ -7,14 +7,14 @@ module ApplicationHelper
     end
   end
 
+  def unix_timestamp_in_milliseconds(time = Time.now)
+    (time.to_f * 1000).to_i
+  end
+
   def non_blank_errors_for(model)
     model.errors.details.map do |field, errors_array|
       field if errors_array.none? { |error_info| error_info[:error] == :blank }
     end.compact.map { |field| model.errors.full_messages_for(field) }.flatten
-  end
-
-  def random_index
-    SecureRandom.random_number(1_000_000) + 100_000_000_000
   end
 
   def customization_classes_merged_into_default_classes(classes, defaults)

@@ -1,12 +1,7 @@
 <%= turbo_frame_tag :admin, show, target: :_top do %>
-  <%= form_with model: [:admin, show],
-                scope: "show",
-                url: admin_shows_path,
-                class: "mt-12",
-                data: { controller: "admin--shows-form" } do |form|
-  %>
-    <div class="my-6 flex justify-center" data-controller="clear-errors">
-      <div class="w-full max-w-md">
+  <%= form_with model: [:admin, show], scope: "show", url: admin_shows_path, class: "mt-12", data: { controller: "admin--shows-form" } do |form| %>
+    <div class="my-6 flex justify-center">
+      <div class="w-full max-w-lg">
         <%= render "shared/error_messages", { model: show } %>
       </div>
     </div>
@@ -20,7 +15,8 @@
 
         <div class="grid gap-6 md:grid-cols-2">
           <div id="show_artist_fields">
-            <%= render "artist_fields", form: form %>
+            <%= form.combobox_label :artist_id %>
+            <%= form.collection_combobox :artist_id, form.object.persisted? ? Artist.where(id: form.object.artist_id) : Artist.active.order(:name), :id, :name, disabled: form.object.persisted?, class: "grow" %>
           </div>
 
           <div>
@@ -30,29 +26,24 @@
 
           <div>
             <%= form.label :venue_id %>
-            <%= form.collection_select(
+            <%= form.collection_select \
                   :venue_id,
                   Venue.active.select(:id, :name),
                   :id,
                   :name,
                   {},
                   disabled: show.persisted?,
-                  data: { action: "admin--shows-form#loadVenueSeatingCharts", admin__shows_form_target: "venueSelect" })
-            %>
+                  data: { action: "admin--shows-form#loadVenueSeatingCharts", admin__shows_form_target: "venueSelect" } %>
           </div>
 
           <div>
             <%= form.label :type %>
-            <%= form.select(
+            <%= form.select \
                   :type,
-                  [
-                    ["Reserved Seating", Shows::ReservedSeating.to_s],
-                    ["General Admission", Shows::GeneralAdmission.to_s]
-                  ],
+                  [["Reserved Seating", Shows::ReservedSeating.to_s], ["General Admission", Shows::GeneralAdmission.to_s]],
                   {},
                   disabled: show.persisted?,
-                  data: { admin__shows_form_target: "showTypeSelect", action: "admin--shows-form#showFieldsForShowType" })
-            %>
+                  data: { admin__shows_form_target: "showTypeSelect", action: "admin--shows-form#showFieldsForShowType" } %>
           </div>
 
           <div>
@@ -108,29 +99,36 @@
 
       <!-- SECTIONS -->
       <div class="border-b border-gray-300/75 pb-12">
-        <h3 class="mb-6 font-medium text-gray-900 text-md">
+        <h3 class="flex justify-between mb-6 font-medium text-gray-900 text-md">
           Sections
+
+          <% if form.object.new_record? %>
+            <%= link_to_new_record \
+                  "Add Section",
+                  new_admin_shows_general_admission_show_section_field_path,
+                  class: "#{"hidden" if form.object.is_a?(Shows::ReservedSeating)}",
+                  data: { admin__shows_form_target: "generalAdmissionShowFields", turbo: true, turbo_stream: true } %>
+          <% end %>
         </h3>
         <div data-admin--shows-form-target="reservedSeatingShowFields">
           <div id="show_seating_chart_fields">
             <%= render "admin/shows/seating_chart_fields/seating_chart_fields", form: form, disabled: show.persisted?, seating_charts: @seating_charts %>
           </div>
           <div class="mt-6" id="show_sections_fields">
-            <% if form.object.type == Shows::ReservedSeating.to_s %>
+            <% if form.object.is_a?(Shows::ReservedSeating) %>
               <%= form.fields_for :sections do |section_fields| %>
                 <%= render "admin/shows/reserved_seating_show_sections_fields/section_fields", section_fields: section_fields %>
               <% end %>
+              <div class="mt-2">
+                <% if @show.contains_deposit_section? %>
+                  <%= form.label :deposit_amount %>
+                  <%= form.currency_field :deposit_amount %>
+                <% end %>
+              </div>
             <% end %>
           </div>
         </div>
-        <div data-admin--shows-form-target="generalAdmissionShowFields" class="<%= "hidden" if form.object.type != Shows::GeneralAdmission.to_s %>">
-          <div class="w-full flex justify-end">
-            <%= link_to "Add Section",
-                        new_admin_shows_general_admission_show_section_field_path,
-                        class: "btn-primary text-xs px-1.5 py-1.5",
-                        data: { turbo: true, turbo_stream: true } unless form.object.persisted?
-            %>
-          </div>
+        <div data-admin--shows-form-target="generalAdmissionShowFields" class="<%= "hidden" if form.object.is_a?(Shows::ReservedSeating) %>">
           <table class="table table-auto">
             <thead>
             <tr>
@@ -162,12 +160,10 @@
 
       <!-- UPSALES -->
       <div class="pb-12">
-        <h3 class="mb-6 font-medium text-gray-900 text-md">
+        <h3 class="flex justify-between mb-6 font-medium text-gray-900 text-md">
           Upsales
+          <%= link_to_new_record "Add Upsale", new_admin_shows_upsale_fields_path, data: { turbo_stream: true } %>
         </h3>
-
-        <%= link_to "Add Upsale", new_admin_shows_upsale_fields_path, class: "btn-primary text-xs px-1.5 py-1.5", data: { turbo_stream: true } %>
-
         <div id="show_upsales_fields">
           <% show.upsales.each do |upsale| %>
             <%= form.fields_for :upsales, upsale do |upsale_fields| %>

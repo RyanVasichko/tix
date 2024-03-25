@@ -3,9 +3,8 @@ module Tickets::ReservedSeating::Selectable
 
   def select_for!(user)
     return false unless selectable_by(user)
-    user.shopping_cart.selections.create! \
-      selectable: self,
-      expires_at: Time.current + user.ticket_reservation_time
+    selection = user.shopping_cart.selections.find_or_initialize_by(selectable: self)
+    selection.update!(expires_at: Time.current + user.ticket_reservation_time)
   end
 
   def cancel_selection_for!(user)

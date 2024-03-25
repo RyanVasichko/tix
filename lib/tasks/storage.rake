@@ -11,6 +11,3 @@ namespace :storage do
     end
   end
 end
-
-Rake::Task["db:fixtures:load"].enhance(["storage:clear"])
-Rake::Task["db:factories:load"].enhance(["storage:clear"])

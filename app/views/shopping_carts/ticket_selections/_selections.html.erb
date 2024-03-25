@@ -8,7 +8,8 @@
       <div class="divide-y-divide-gray-200">
         <%= render partial: "shopping_carts/ticket_selections/#{show.type.demodulize.underscore}/selection",
                    collection: selections,
-                   as: "selection" %>
+                   as: "selection",
+                   cached: true %>
       </div>
       <% if selections.first.shopping_cart.user.admin? && show.is_a?(Shows::ReservedSeating) %>
         <%= button_to "Hold Seats",

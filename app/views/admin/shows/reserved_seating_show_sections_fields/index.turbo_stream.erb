@@ -5,8 +5,10 @@
     <%= render "section_fields", section_fields: section_fields %>
   <% end %>
 
-  <% if @show.contains_deposit_section? %>
-    <%= form.label :deposit_amount %>
-    <%= form.currency_field :deposit_amount %>
-  <% end %>
+  <div class="mt-2">
+    <% if @show.contains_deposit_section? %>
+      <%= form.label :deposit_amount %>
+      <%= form.currency_field :deposit_amount %>
+    <% end %>
+  </div>
 <% end %>

@@ -11,7 +11,7 @@ module SearchParams
     helper_method :sort, :sort_direction, :search_params
   end
 
-  module ClassMethods
+  class_methods do
     def sortable_by(*fields)
       self.sortable_fields = fields.map(&:to_s)
     end

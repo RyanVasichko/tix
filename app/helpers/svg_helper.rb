@@ -13,7 +13,6 @@ module SvgHelper
     end
   end
 
-
   def svg_trash_can(options = {})
     svg_options = { class: "h-5 w-5", fill: "currentColor", viewBox: "0 0 20 20", aria_hidden: "true" }
     svg_options.merge!(options)
@@ -57,6 +56,16 @@ module SvgHelper
     add_svg_height_class_to_options(options)
     content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", **options do
       content_tag :path, nil, stroke_linecap: "round", stroke_linejoin: "round", d: "M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
+    end
+  end
+
+  def svg_spinner(options = {})
+    customization_classes_merged_into_default_classes(options[:class] || "", "animate-spin -ml-1 mr-3 h-5 w-5 text-white")
+    content_tag :svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", **options do
+      safe_join [
+                  content_tag(:circle, nil, class: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", stroke_width: "4"),
+                  content_tag(:path, nil, class: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z")
+                ]
     end
   end
 

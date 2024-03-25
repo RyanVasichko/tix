@@ -1,21 +1,18 @@
 import ModalController from "controllers/modal_controller";
 
-class SeatFormModal extends ModalController {
-  static targets = [
-    "seatNumberInput",
-    "tableNumberInput",
-    "sectionSelect"
-  ];
+export default class SeatFormModal extends ModalController {
+  static targets = [ "seatNumberInput", "tableNumberInput", "sectionSelect" ];
+  #seat;
 
   open(seat, sections) {
-    this.seat = seat;
+    this.#seat = seat;
     this.#populateSectionsSelectOptions(sections);
     this.#setSeatFields();
     super.open();
   }
 
   save() {
-    const seatController = this.application.getControllerForElementAndIdentifier(this.seat, 'admin--seating-chart-form--seat');
+    const seatController = this.#getSeatController();
 
     seatController.seatNumberValue = this.seatNumberInputTarget.value;
     seatController.tableNumberValue = this.tableNumberInputTarget.value;
@@ -25,18 +22,24 @@ class SeatFormModal extends ModalController {
   }
 
   delete() {
-    const seatController = this.application.getControllerForElementAndIdentifier(this.seat, 'admin--seating-chart-form--seat');
+    const seatController = this.#getSeatController();
+
+    const seatElement = seatController.element;
     if (seatController.idValue) {
-      this.seat.classList.add("d-none");
+      seatElement.classList.add("hidden");
     } else {
-      this.seat.remove();
+      seatElement.remove();
     }
 
     this.close();
   }
 
+  #getSeatController() {
+    return this.application.getControllerForElementAndIdentifier(this.#seat, "admin--seating-chart-form--seat");
+  }
+
   #populateSectionsSelectOptions(sections) {
-    this.sectionSelectTarget.innerHTML = '';
+    this.sectionSelectTarget.innerHTML = "";
     sections.forEach(section => {
       const option = document.createElement("option");
       option.text = section.name;
@@ -46,13 +49,10 @@ class SeatFormModal extends ModalController {
   }
 
   #setSeatFields() {
-    const seatController = this.application.getControllerForElementAndIdentifier(this.seat, 'admin--seating-chart-form--seat');
+    const seatController = this.#getSeatController();
 
-    this.seatNumberInputTarget.value = seatController?.seatNumberValue || '';
-    this.tableNumberInputTarget.value = seatController?.tableNumberValue || '';
-    this.sectionSelectTarget.value = seatController?.sectionIdValue || '';
+    this.seatNumberInputTarget.value = seatController?.seatNumberValue || "";
+    this.tableNumberInputTarget.value = seatController?.tableNumberValue || "";
+    this.sectionSelectTarget.value = seatController?.sectionIdValue || "";
   }
-
 }
-
-export default SeatFormModal;

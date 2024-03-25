@@ -48,7 +48,6 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     fill_in "Phone", with: "555-555-5555"
     fill_in "Password", with: "password"
     fill_in "Password confirmation", with: "password"
-    sleep 5
   end
 
   def assert_user_attributes(user)

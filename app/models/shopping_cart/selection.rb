@@ -1,6 +1,7 @@
 class ShoppingCart::Selection < ApplicationRecord
   attribute :quantity, :integer, default: 1
   validates :quantity, presence: true, numericality: { greater_than: 0 }
+  validate :no_more_than_one_selection_for_the_same_seat, if: -> { selectable.is_a?(Tickets::ReservedSeating) }
 
   belongs_to :shopping_cart, touch: true
   has_one :user, through: :shopping_cart
@@ -15,5 +16,12 @@ class ShoppingCart::Selection < ApplicationRecord
 
   def transfer_to!(recipient)
     update!(shopping_cart: recipient.shopping_cart)
+  end
+
+  private
+
+  def no_more_than_one_selection_for_the_same_seat
+    return unless shopping_cart.selections.tickets.where(selectable: selectable).where.not(id: id).exists?
+    errors.add(:base, "Only one shopping cart selection may be added per seat.")
   end
 end

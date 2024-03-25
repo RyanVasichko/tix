@@ -54,6 +54,10 @@ class Admin::ShowsController < Admin::AdminController
     redirect_to admin_shows_url, notice: "Show was successfully destroyed."
   end
 
+  def artist_fields
+    @artist = Artist.new
+  end
+
   private
 
   def set_admin_show

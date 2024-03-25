@@ -8,27 +8,30 @@ export default class extends Controller {
     y: Number,
     seatNumber: Number,
     tableNumber: Number,
-    sectionId: Number
+    sectionId: Number,
+    sectionIdWas: Number
   };
 
   connect() {
-    const drag = d3.drag()
-      .on("drag", this.dragged.bind(this));
+    const drag = d3.drag().on("drag", this.#updatePositionValues);
 
     d3.select(this.element).call(drag);
   }
 
   xValueChanged() {
-    this.element.setAttribute('cx', this.xValue);
+    this.element.setAttribute("cx", this.xValue);
   }
 
   yValueChanged() {
-    this.element.setAttribute('cy', this.yValue);
+    this.element.setAttribute("cy", this.yValue);
   }
 
-  dragged(event) {
+  sectionIdValueChanged(value, previousValue) {
+    this.sectionIdWasValue = this.sectionIdWasValue || previousValue;
+  }
+
+  #updatePositionValues = (event) => {
     this.xValue = event.x;
     this.yValue = event.y;
-  }
+  };
 }
-

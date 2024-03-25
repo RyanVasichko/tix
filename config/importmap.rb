@@ -44,3 +44,5 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin_all_from "app/javascript/stream_actions", under: "stream_actions"
 pin "idiomorph", to: "idiomorph--dist--idiomorph.esm.js.js" # @0.3.0
+
+pin_all_from "app/javascript/models", under: "models"

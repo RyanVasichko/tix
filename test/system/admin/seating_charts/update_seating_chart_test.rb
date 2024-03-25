@@ -6,7 +6,7 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
 
   setup do
     @venue = FactoryBot.create(:venue, ticket_types_count: 3)
-    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, venue: @venue)
+    @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2, venue: @venue)
     @section_1 = @seating_chart.sections.first
     @section_2 = @seating_chart.sections.second
     @seat_to_delete = @section_1.seats.first
@@ -45,10 +45,13 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
 
   test "adding a new section and a seat" do
     ticket_type = @venue.ticket_types.third
-    add_section "New Section", ticket_type.name
+
+    add_section("New Section", ticket_type.name)
     close_slide_over
+
     add_seat(seat_number: 13, table_number: 14, section_name: "New Section")
     open_slide_over
+
     assert_difference "@seating_chart.sections.reload.count", 1 do
       click_on "Save"
       assert_text "Seating chart was successfully updated."
@@ -64,27 +67,77 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   end
 
   test "removing a section" do
-    skip "for now"
-    within "#admin_seating_chart_section_#{@section_2.id}" do
-      find(".btn-remove-section").click
+    assert_difference -> { @seating_chart.sections.count } => -1, -> { @seating_chart.seats.count } => -2 do
+      within "#seating_chart_section_#{@section_2.id}_fields" do
+        click_on "Remove section"
+      end
+      click_on "Save"
+      assert_text "Seating chart was successfully updated."
     end
-    click_on "Save"
-    assert_text "Seating chart was successfully updated."
     assert_not SeatingChart::Section.exists?(@section_2.id)
   end
 
   test "deleting a seat" do
-    skip "I have no clue why the modal won't go away"
-
-    find("circle[data-seat-id-value='#{@seat_to_delete.id}']").click
+    close_slide_over
+    find("circle[data-admin--seating-chart-form--seat-id-value='#{@seat_to_delete.id}']").click
     assert_selector("#edit-seat-modal", visible: true)
     within("#edit-seat-modal") do
       click_on "Delete"
     end
-
     assert_no_selector("#edit-seat-modal", visible: true)
+
+    open_slide_over
     click_on "Save"
     assert_text "Seating chart was successfully updated."
+
     assert_not SeatingChart::Seat.exists?(@seat_to_delete.id)
+  end
+
+  test "updating a seat" do
+    close_slide_over
+
+    seat = @section_1.seats.first
+    find("circle[data-admin--seating-chart-form--seat-id-value='#{seat.id}']").click
+    assert_selector("#edit-seat-modal", visible: true)
+
+    within("#edit-seat-modal") do
+      fill_in "Seat Number", with: "123"
+      fill_in "Table Number", with: "456"
+      click_on "Save"
+    end
+    assert_no_selector("#edit-seat-modal", visible: true)
+
+    open_slide_over
+    click_on "Save"
+
+    assert_text "Seating chart was successfully updated."
+
+    assert "123", seat.reload.seat_number
+    assert "456", seat.table_number
+  end
+
+  test "updating a seat and moving it to a new section" do
+    close_slide_over
+
+    seat = @section_1.seats.first
+    find("circle[data-admin--seating-chart-form--seat-id-value='#{seat.id}']").click
+    assert_selector("#edit-seat-modal", visible: true)
+
+    within("#edit-seat-modal") do
+      fill_in "Seat Number", with: "123"
+      fill_in "Table Number", with: "456"
+      select @section_2.name, from: "Section"
+      click_on "Save"
+    end
+    assert_no_selector("#edit-seat-modal", visible: true)
+
+    open_slide_over
+    assert_difference -> { @section_1.seats.count } => -1, -> { @section_2.seats.count } => 1 do
+      click_on "Save"
+      assert_text "Seating chart was successfully updated."
+    end
+
+    assert_not SeatingChart::Seat.exists?(seat.id)
+    assert SeatingChart::Seat.exists?(section: @section_2, seat_number: "123", table_number: "456")
   end
 end

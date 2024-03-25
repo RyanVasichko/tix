@@ -27,8 +27,6 @@ export default class extends ApplicationController {
       }
       this.index.get(text).push(option);
     });
-
-    console.log(this.index);
   }
 
   filter() {

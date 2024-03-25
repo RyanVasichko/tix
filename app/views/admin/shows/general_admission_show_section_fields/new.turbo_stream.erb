@@ -1,7 +1,7 @@
 <% form = StandardFormBuilder::FormBuilder.new(:show, Shows::GeneralAdmission.new, self, {}) %>
 
 <%= turbo_stream.append "general_admission_show_sections" do %>
-  <%= form.fields_for :sections, Show::Sections::GeneralAdmission.new, child_index: random_index do |section_fields| %>
+  <%= form.fields_for :sections, Show::Sections::GeneralAdmission.new, child_index: unix_timestamp_in_milliseconds do |section_fields| %>
     <%= render "section_fields", section_fields: section_fields %>
   <% end %>
 <% end %>

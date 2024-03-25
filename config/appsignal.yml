@@ -1,6 +1,6 @@
 default: &defaults
   push_api_key: <%= Rails.application.credentials.dig(:app_signal, :push_api_key) %>
-  name: "Dosey Doe Tickets V2"
+  name: "Tix"
 
   ignore_namespaces:
     - action_cable

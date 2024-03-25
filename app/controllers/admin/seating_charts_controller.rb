@@ -2,6 +2,7 @@ class Admin::SeatingChartsController < Admin::AdminController
   include SearchParams
 
   before_action :set_seating_chart, only: %i[show edit update destroy]
+  before_action :set_clone_from, only: %i[new]
 
   sortable_by :name
   self.default_sort_field = :name
@@ -16,15 +17,13 @@ class Admin::SeatingChartsController < Admin::AdminController
   end
 
   def new
-    if params[:clone_from]
-      # TODO: Should we be dup'ing the sections and seats as well?
-      @seating_chart = SeatingChart.includes(sections: :seats).find(params[:clone_from]).dup
-      @seating_chart.venue = Venue.find(@seating_chart.venue_id)
-      @dup_venue_layout_from = SeatingChart.find(params[:clone_from])
+    if @clone_from
+      @seating_chart = SeatingChart.build_copy_from(@clone_from)
     else
-      @seating_chart = SeatingChart.new
-      @seating_chart.sections.build.id = SecureRandom.random_number(1_000_000) + 100_000_000_000
-      @seating_chart.venue = Venue.active.first
+      @seating_chart = SeatingChart.new do |seating_chart|
+        seating_chart.venue = Venue.active.first
+        seating_chart.sections.build
+      end
     end
 
     @ticket_types = @seating_chart.venue.ticket_types
@@ -33,20 +32,10 @@ class Admin::SeatingChartsController < Admin::AdminController
   def create
     @seating_chart = SeatingChart.new(seating_chart_params)
 
-    if seating_chart_params[:venue_layout].nil? &&
-      params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
-      @seating_chart.dup_venue_layout_from(
-        params.require(:seating_chart).permit(:dup_venue_layout_from)[:dup_venue_layout_from]
-      )
-    end
-
     if @seating_chart.save
       redirect_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully created." }
     else
-      respond_to do |format|
-        format.turbo_stream { render :create, status: :unprocessable_entity }
-        format.html { render :new, status: :unprocessable_entity }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -54,7 +43,7 @@ class Admin::SeatingChartsController < Admin::AdminController
     if @seating_chart.update(seating_chart_params)
       redirect_to admin_seating_charts_url, flash: { notice: "Seating chart was successfully updated." }
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -75,11 +64,16 @@ class Admin::SeatingChartsController < Admin::AdminController
     @seating_chart = SeatingChart.includes(sections: [:seats]).find(params[:id])
   end
 
+  def set_clone_from
+    @clone_from = SeatingChart.find(params[:clone_from]) if params[:clone_from].present?
+  end
+
   def seating_chart_params
     params.require(:seating_chart).permit(
       :name,
       :venue_layout,
       :venue_id,
+      :venue_layout_signed_id,
       sections_attributes: [:id, :name, :ticket_type_id, :_destroy, { seats_attributes: %i[id seat_number table_number x y _destroy] }]
     )
   end

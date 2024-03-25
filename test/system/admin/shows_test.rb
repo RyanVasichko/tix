@@ -136,36 +136,6 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_equal Date.strptime("04/05/2024", "%m/%d/%Y"), @show.show_date
   end
 
-  test "should create an artist from the shows form" do
-    visit new_admin_show_url
-    click_on "Add Artist"
-
-    artist_name = ArtistNameGenerator.instance.unique_artist_name
-    artist_bio = Faker::Lorem.sentence(word_count: 10)
-    artist_url = Faker::Internet.url
-
-    assert_difference "Artist.count" do
-      within "#admin_artist_form" do
-        fill_in "Name", with: artist_name
-        fill_in "Bio", with: artist_bio
-        fill_in "Url", with: artist_url
-        attach_file("artist_image", Rails.root.join("test/fixtures/files/radiohead.jpg"))
-        click_on "Create Artist"
-      end
-
-      assert_text "Artist was successfully created."
-
-      created_artist = Artist.last
-      assert_equal artist_name, created_artist.name
-      assert_equal artist_bio, created_artist.bio
-      assert_equal artist_url, created_artist.url
-      assert created_artist.image.attached?
-    end
-
-    fill_in "Artist", with: artist_name[0 .. -2]
-    assert_text artist_name, wait: 5
-  end
-
   test "should destroy Show" do
     skip "how is deleting/taking a show offsale supposed to be handled?"
     visit admin_show_url(@show)

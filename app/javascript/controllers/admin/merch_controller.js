@@ -1,13 +1,13 @@
-import ApplicationController from "controllers/application_controller";
+import { Controller } from "@hotwired/stimulus";
 import { Sortable } from "sortablejs";
-import { put } from '@rails/request.js';
+import { put } from "@rails/request.js";
 
 // Connects to data-controller="admin--merch"
-class AdminMerchController extends ApplicationController {
-  static targets = ["merch", "merchTableBody"];
+export default class extends Controller {
+  static targets = [ "merch", "merchTableBody" ];
   static values = {
     updateOrderUrl: String
-  }
+  };
 
   connect() {
     this.sortable = new Sortable(this.merchTableBodyTarget, {
@@ -30,11 +30,9 @@ class AdminMerchController extends ApplicationController {
     const orderedMerch = this.merchTargets.map((t, index) => ({ id: +t.dataset.id, order: index + 1 }));
 
     await put(this.updateOrderUrlValue, {
-      body: JSON.stringify({ merch : orderedMerch }),
-      contentType: 'application/json'
+      body: JSON.stringify({ merch: orderedMerch }),
+      contentType: "application/json"
     });
     Turbo.reload();
-  }
+  };
 }
-
-export default AdminMerchController;

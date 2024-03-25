@@ -1,90 +1,68 @@
-import ApplicationController from "controllers/application_controller";
+import { Controller } from "@hotwired/stimulus";
 import { get } from "@rails/request.js";
+import SeatFormFields from "models/admin/seating_chart_form/seat_form_fields";
 
-export default class extends ApplicationController {
-  static targets = [
-    "svgCanvas",
-    "seatsContainer",
-    "sectionNameInput",
-    "modal",
-    "seat",
-    "ticketTypeSelect",
-    "venueSelect"
-  ];
-
-  static values = {
-    newSeatUrl: String,
-    removedSections: Array,
-    ticketTypeOptionsUrl: String,
-    newSectionUrl: String
-  };
-
-  connect() {
-    super.connect();
-  }
-
-  get sections() {
-    return this.sectionNameInputTargets
-      .filter(i => !this.removedSectionsValue.includes(+i.dataset.sectionId))
-      .map(s => ({ id: s.dataset.sectionId, name: s.value }));
-  }
+export default class extends Controller {
+  static targets = [ "svgCanvas", "seatsContainer", "sectionNameInput", "modal", "ticketTypeSelect", "venueSelect" ];
+  static outlets = [ "admin--seating-chart-form--seat" ];
+  static values = { newSeatUrl: String, removedSections: Array, ticketTypeOptionsUrl: String, newSectionUrl: String };
 
   async addSeat() {
     const response = await get(this.newSeatUrlValue);
     const html = await response.text;
 
-    this.svgCanvasTarget.innerHTML += html;
-    const newSeat = this.svgCanvasTarget.lastElementChild;
-    this.application.getControllerForElementAndIdentifier(this.modalTarget, "admin--seating-chart-form--seat-form-modal").open(newSeat, this.sections);
+    const svgCircle = this.#createSvgCircleFromString(html);
+    this.svgCanvasTarget.appendChild(svgCircle);
+    this.#seatFormModal.open(svgCircle, this.#sections);
   }
 
   editSeat(event) {
-    const modalController = this.application.getControllerForElementAndIdentifier(this.modalTarget, "admin--seating-chart-form--seat-form-modal");
-    modalController.open(event.target, this.sections);
+    this.#seatFormModal.open(event.target, this.#sections);
   }
 
-  submitForm() {
+  addSeatFieldsToForm({ currentTarget }) {
     this.seatsContainerTarget.innerHTML = "";
 
-    this.seatTargets.forEach((seat, i) => {
-      const seatController = this.application.getControllerForElementAndIdentifier(seat, "admin--seating-chart-form--seat");
-      const namePrefix = `seating_chart[sections_attributes][${seatController.sectionIdValue}][seats_attributes][${i}]`;
-      this.appendHiddenField(`${namePrefix}[seat_number]`, seatController.seatNumberValue);
-      this.appendHiddenField(`${namePrefix}[table_number]`, seatController.tableNumberValue);
-      this.appendHiddenField(`${namePrefix}[x]`, seatController.xValue);
-      this.appendHiddenField(`${namePrefix}[y]`, seatController.yValue);
-      this.appendHiddenField(`${namePrefix}[_destroy]`, seat.classList.contains("d-none"));
-      if (seatController.idValue) {
-        this.appendHiddenField(`${namePrefix}[id]`, seatController.idValue);
-      }
+    this.adminSeatingChartFormSeatOutlets.forEach((seat) => {
+      const seatFormFields = new SeatFormFields(seat);
+      seatFormFields.appendHiddenFieldsTo(this.seatsContainerTarget);
     });
-  }
 
-  appendHiddenField(name, value) {
-    const inputField = document.createElement("input");
-    inputField.type = "hidden";
-    inputField.name = name;
-    inputField.value = value;
-    this.seatsContainerTarget.appendChild(inputField);
+    currentTarget.submit();
   }
 
   removeSection(e) {
-    const removedSectionId = e.currentTarget.dataset.sectionId;
-    this.removedSectionsValue = [...this.removedSectionsValue, +removedSectionId];
-    this.seatTargets.filter(c => c.dataset.seatSectionIdValue === removedSectionId).forEach(c => c.remove());
+    const removedSectionId = +e.currentTarget.dataset.sectionId;
+    this.removedSectionsValue = [ ...this.removedSectionsValue, removedSectionId ];
+    this.adminSeatingChartFormSeatOutlets.filter(c => c.sectionIdValue === removedSectionId)
+      .forEach(c => c.element.remove());
   }
 
-  async loadTicketTypeOptionsForVenue(e) {
-    const selectedVenue = e.currentTarget.value;
-    const ticketTypeOptionsResponse = await get(this.ticketTypeOptionsUrlValue.replace("venue_id", selectedVenue));
-    const ticketTypeOptionsHtml = await ticketTypeOptionsResponse.text
-    this.ticketTypeSelectTargets.forEach((s) => {
-      s.innerHTML = ticketTypeOptionsHtml;
-    });
+  async loadTicketTypeOptionsForVenue({ currentTarget }) {
+    const ticketTypeOptionsResponse = await get(this.ticketTypeOptionsUrlValue.replace("_venue_id_", currentTarget.value));
+    const ticketTypeOptionsHtml = await ticketTypeOptionsResponse.text;
+    this.ticketTypeSelectTargets.forEach((s) => s.innerHTML = ticketTypeOptionsHtml);
   }
 
   async loadNewSectionForm() {
     const venueSeatsUrl = this.newSectionUrlValue.replace("_venue_id_", this.venueSelectTarget.value);
     await get(venueSeatsUrl, { responseKind: "turbo-stream" });
+  }
+
+  get #seatFormModal() {
+    return this.application.getControllerForElementAndIdentifier(this.modalTarget, "admin--seating-chart-form--seat-form-modal");
+  }
+
+  get #sections() {
+    return this.sectionNameInputTargets
+      .filter(i => !this.removedSectionsValue.includes(+i.dataset.sectionId))
+      .map(s => ({ id: s.dataset.sectionId, name: s.value }));
+  }
+
+  #createSvgCircleFromString(html) {
+    const htmlCircle = new DOMParser().parseFromString(html, "image/svg+xml").querySelector("circle");
+    const svgCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    Array.from(htmlCircle.attributes).forEach((attr) => svgCircle.setAttribute(attr.name, attr.value));
+    return svgCircle;
   }
 }

@@ -1,13 +1,9 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="admin--ticket-types-form"
 export default class extends Controller {
-  static targets = [
-    "flatRateConvenienceFeeLabel",
-    "percentageConvenienceFeeLabel",
-    "convenienceFeeTypeSelect",
-    "convenienceFeeInput"
-  ];
+  static targets = [ "flatRateConvenienceFeeLabel", "percentageConvenienceFeeLabel", "convenienceFeeTypeSelect", "convenienceFeeInput" ];
+
   connect() {
   }
 

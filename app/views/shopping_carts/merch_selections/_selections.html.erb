@@ -6,7 +6,7 @@
         <%= merch.name %>
       </h3>
       <div class="divide-y divide-gray-200">
-        <%= render partial: "shopping_carts/merch_selections/selection", collection: selected_merch %>
+        <%= render partial: "shopping_carts/merch_selections/selection", collection: selected_merch, cached: true %>
       </div>
     </div>
   </li>

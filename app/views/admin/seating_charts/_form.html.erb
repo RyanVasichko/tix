@@ -1,36 +1,32 @@
-<div
-  data-controller="admin--seating-chart-form admin--seating-chart-form--venue-layout"
-  data-admin--seating-chart-form-new-seat-url-value="<%= new_admin_seating_charts_seat_path %>"
-  data-admin--seating-chart-form-ticket-type-options-url-value="<%= admin_seating_charts_venue_ticket_type_options_path(venue_id: :venue_id) %>"
-  data-admin--seating-chart-form-new-section-url-value="<%= new_admin_seating_charts_section_path(venue_id: "_venue_id_") %>"
->
-  <div class="text-right">
+<div data-controller="admin--seating-chart-form admin--seating-chart-form--venue-layout"
+     data-admin--seating-chart-form-admin--seating-chart-form--seat-outlet=".seating-chart-seat"
+     data-admin--seating-chart-form-new-seat-url-value="<%= new_admin_seating_charts_seat_path %>"
+     data-admin--seating-chart-form-ticket-type-options-url-value="<%= admin_seating_charts_venue_ticket_type_options_path(venue_id: "_venue_id_") %>"
+     data-admin--seating-chart-form-new-section-url-value="<%= new_admin_seating_charts_section_path(venue_id: "_venue_id_") %>">
+  <div class="text-left">
     <button type="button" data-action="admin--seating-chart-form#addSeat" class="btn-primary">Add Seat</button>
   </div>
   <div class="mt-4 flex justify-center">
-    <svg data-admin--seating-chart-form--venue-layout-target="svgCanvas" data-admin--seating-chart-form-target="svgCanvas" class="mt-4 rounded" style="<%= seating_chart_svg_style(seating_chart, local_assigns[:dup_venue_layout_from]) %>">
+    <svg data-admin--seating-chart-form--venue-layout-target="svgCanvas" data-admin--seating-chart-form-target="svgCanvas" class="mt-4 rounded" style="<%= seating_chart_svg_style(seating_chart) %>">
       <% seating_chart.sections.flat_map { |section| section.seats }.each do |seat| %>
         <%= render partial: "admin/seating_charts/seats/seat", locals: { seat: seat } %>
       <% end %>
     </svg>
   </div>
 
-  <div
-    data-controller="slide-over"
-    data-action="click@document->slide-over#hideOnOutsideClick keydown.esc@document->slide-over#hide"
-    class="relative z-10"
-    aria-labelledby="slide-over-title"
-    role="dialog" aria-modal="true"
-  >
+  <div data-controller="slide-over"
+       data-action="click@document->slide-over#hideOnOutsideClick keydown.esc@document->slide-over#hide"
+       class="relative z-10"
+       aria-labelledby="slide-over-title"
+       role="dialog" aria-modal="true">
     <div class="fixed top-1/2 right-0 z-20 -translate-y-1/2 transform">
       <button
         id="btn-slide-over-toggle"
         data-slide-over-target="toggle"
         data-action="slide-over#toggle"
-        class="hidden h-20 w-6 rounded-l-lg bg-indigo-600 text-white z-9 hover:bg-indigo-700"
-      >
+        class="hidden h-20 w-6 rounded-l-lg bg-indigo-600 text-white z-9 hover:bg-indigo-700">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-1 h-5 w-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
         </svg>
       </button>
     </div>
@@ -40,22 +36,17 @@
       <div class="pointer-events-none absolute inset-0 overflow-hidden" data-slide-over-target="backdrop">
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
           <div data-slide-over-target="wrapper" class="pointer-events-auto w-screen max-w-md translate-x-full transform transition duration-500 ease-in-out sm:duration-700">
-            <%= form_with(
-                  model: [:admin, seating_chart],
-                  data: { action: 'admin--seating-chart-form#submitForm' },
-                  id: 'eventLayoutForm',
-                  class: 'flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl') do |form|
-            %>
+            <%= form_with model: [:admin, seating_chart], data: { action: 'admin--seating-chart-form#addSeatFieldsToForm:prevent' }, id: 'eventLayoutForm', class: 'flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl' do |form| %>
               <div class="h-0 flex-1 overflow-y-auto">
-                <div class="bg-indigo-700 px-4 py-6 sm:px-6">
+                <div class="bg-amber-600 px-4 py-6 sm:px-6">
                   <div class="flex items-center justify-between">
                     <h2 class="text-base font-semibold leading-6 text-white" id="slide-over-title">Seating Chart Information</h2>
                     <div class="ml-3 flex h-7 items-center">
-                      <button id="btn-slide-over-close" data-action="slide-over#hide" type="button" class="relative rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+                      <button id="btn-slide-over-close" data-action="slide-over#hide" type="button" class="relative rounded-md bg-amber-600 text-amber-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
                         <span class="absolute -inset-2.5"></span>
                         <span class="sr-only">Close panel</span>
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                       </button>
                     </div>
@@ -78,50 +69,38 @@
                           <label class="form-label">Venue layout</label>
                           <%= form.label :venue_layout, class: "form-control-text" do %>
                             Choose a file
-                            <%= form.file_field(
+                            <%= form.file_field \
                                   :venue_layout,
                                   class: "hidden",
                                   data:
                                     {
                                       admin__seating_chart_form__venue_layout_target: 'imageInput',
                                       action: "admin--seating-chart-form--venue-layout#loadImage"
-                                    })
-                            %>
+                                    } %>
                           <% end %>
-                          <%= form.hidden_field(:dup_venue_layout_from, value: local_assigns[:dup_venue_layout_from].id) if local_assigns[:dup_venue_layout_from] %>
+                          <%= form.hidden_field(:venue_layout_signed_id, value: seating_chart.venue_layout.blob.signed_id) if seating_chart.new_record? && seating_chart.venue_layout.attached? %>
                         </div>
                       <% end %>
 
                       <div>
                         <%= form.label :venue_id %>
-                        <%= form.collection_select(
+                        <%= form.collection_select \
                               :venue_id,
                               Venue.active.select(:id, :name),
                               :id,
                               :name,
                               {},
-                              { data: { admin__seating_chart_form_target: "venueSelect", action: "admin--seating-chart-form#loadTicketTypeOptionsForVenue" } })
-                        %>
+                              { data: { admin__seating_chart_form_target: "venueSelect", action: "admin--seating-chart-form#loadTicketTypeOptionsForVenue" } } %>
                       </div>
 
                       <div class="flex items-end justify-between">
                         <h6 class="mr-2 form-label">Sections</h6>
-                        <%= link_to(
-                              "#",
-                              id: "btn-add-section",
-                              class: "btn-primary bg-blue-700 hover:bg-blue-600 px-1.5 py-1.5",
-                              data: { action: "admin--seating-chart-form#loadNewSectionForm:prevent" }) do
-                        %>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                          </svg>
-                        <% end %>
+                        <%= link_to_new_record "Add Section", "javascript:void(0);", data: { action: "admin--seating-chart-form#loadNewSectionForm" }, class: "p-0" %>
                       </div>
-
                       <div>
                         <%= turbo_frame_tag "seating_chart_sections" do %>
                           <% seating_chart.sections.each do |section| %>
-                            <%= form.fields_for :sections_attributes, section, index: section.id do |section_fields, index| %>
+                            <%= form.fields_for :sections_attributes, section, index: section.id || unix_timestamp_in_milliseconds do |section_fields, index| %>
                               <%= render "admin/seating_charts/sections/form", section_fields: section_fields, index: index %>
                             <% end %>
                           <% end %>
@@ -140,45 +119,42 @@
       </div>
     </div>
   </div>
-  <div
-    data-controller="admin--seating-chart-form--seat-form-modal"
-    data-action="keydown.esc@document->admin--seating-chart-form--seat-form-modal#close click@document->admin--seating-chart-form--seat-form-modal#hideOnOutsideClick"
-    data-admin--seating-chart-form-target="modal"
-    id="edit-seat-modal"
-    class="relative z-10 hidden"
-    aria-labelledby="modal-title"
-    role="dialog"
-    aria-modal="true"
-  >
-    <div
-      data-admin--seating-chart-form--seat-form-modal-target="backdrop"
-      data-transition-enter="ease-out duration-300"
-      data-transition-enter-start="opacity-0"
-      data-transition-enter-end="opacity-100"
-      data-transition-leave="ease-in duration-200"
-      data-transition-leave-start="opacity-100"
-      data-transition-leave-end="opacity-0"
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
+
+  <div data-controller="admin--seating-chart-form--seat-form-modal"
+       data-action="keydown.esc@document->admin--seating-chart-form--seat-form-modal#close click@document->admin--seating-chart-form--seat-form-modal#hideOnOutsideClick"
+       data-admin--seating-chart-form-target="modal"
+       id="edit-seat-modal"
+       class="relative z-10 hidden"
+       aria-labelledby="modal-title"
+       role="dialog"
+       aria-modal="true">
+    <div data-admin--seating-chart-form--seat-form-modal-target="backdrop"
+         data-transition-enter="ease-out duration-300"
+         data-transition-enter-start="opacity-0"
+         data-transition-enter-end="opacity-100"
+         data-transition-leave="ease-in duration-200"
+         data-transition-leave-start="opacity-100"
+         data-transition-leave-end="opacity-0"
+         class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
     </div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
       <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div
-          data-admin--seating-chart-form--seat-form-modal-target="body"
-          data-transition-enter="ease-out duration-300"
-          data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100"
-          data-transition-leave="ease-in duration-200"
-          data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100"
-          data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          class="relative translate-y-4 transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left opacity-0 shadow-xl transition-all duration-300 ease-out sm:my-8 sm:w-full sm:max-w-sm sm:translate-y-0 sm:scale-95 sm:p-6">
+        <div data-admin--seating-chart-form--seat-form-modal-target="body"
+             data-transition-enter="ease-out duration-300"
+             data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100"
+             data-transition-leave="ease-in duration-200"
+             data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100"
+             data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             class="relative translate-y-4 transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left opacity-0 shadow-xl transition-all duration-300 ease-out sm:my-8 sm:w-full sm:max-w-sm sm:translate-y-0 sm:scale-95 sm:p-6">
           <div>
             <div class="relative mx-auto h-12 items-center justify-between text-lg font-semibold">
               <h5 class="absolute inset-x-0 text-center modal-title" id="edit-seat-modal-label">Edit Seat</h5>
               <button type="button" data-action="admin--seating-chart-form--seat-form-modal#close" class="absolute right-0 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 <span class="sr-only">Close</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
               </button>
             </div>

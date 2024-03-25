@@ -1,11 +1,8 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="admin--seating-chart-form--venue-layout"
 export default class extends Controller {
-  static targets = [
-    "svgCanvas",
-    "imageInput"
-  ];
+  static targets = [ "svgCanvas", "imageInput" ];
 
   loadImage(event) {
     const file = event.target.files[0];
@@ -18,7 +15,7 @@ export default class extends Controller {
           this.svgCanvasTarget.style.height = `${img.height}px`;
 
           this.svgCanvasTarget.style.backgroundImage = `url(${e.target.result})`;
-          this.svgCanvasTarget.style.backgroundSize = 'cover';
+          this.svgCanvasTarget.style.backgroundSize = "cover";
         };
         img.src = e.target.result;
       };

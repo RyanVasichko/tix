@@ -1,5 +1,0 @@
-<%= turbo_stream.replace "application_modal" do %>
-  <%= render "shared/modal", title: "New Artist", max_w: "max-w-xl" do %>
-    <%= render "admin/artists/form", artist: @artist, url: admin_shows_artists_path %>
-  <% end %>
-<% end %>

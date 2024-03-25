@@ -1,35 +1,32 @@
-<div class="[&:not(:first-child)]:mt-2" id="<%= "#{dom_id(section_fields.object, :admin)}#{ "_new_" + SecureRandom.random_number(1_000_000).to_s unless section_fields.object.persisted? }" %>" data-controller="destroyable" data-destroyable-persisted-value="<%= section_fields.object.persisted? %>">
+<div class="[&:not(:first-child)]:mt-6" id="seating_chart_section_<%= section_fields.index %>_fields" data-controller="destroyable">
   <div class="flex justify-between">
     <%= section_fields.label :name %>
-    <button type="button" class="bg-blue-700 px-2 btn-primary btn-remove-section py-1.5 hover:bg-blue-600" data-action="destroyable#destroy admin--seating-chart-form#removeSection" data-section-id="<%= section_fields.index %>">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-      </svg>
-    </button>
+    <%= danger_button_tag type: "button", data: { action: "destroyable#destroy admin--seating-chart-form#removeSection", section_id: section_fields.index }, class: "p-1.5" do %>
+      <span class="sr-only">Remove section</span>
+      <%= svg_trash_can_2 class: "h-4 w-4" %>
+    <% end %>
   </div>
   <div>
-    <%= section_fields.text_field(
+    <%= section_fields.text_field \
           :name,
           class: "form-control-text mr-2 section-name-input",
           data:
             {
-              section_id: section_fields.object.id,
+              section_id: section_fields.index,
               admin__seating_chart_form_target: "sectionNameInput",
               section_index: index
-            })
-    %>
+            } %>
   </div>
   <div class="mt-2">
     <%= section_fields.label :ticket_type_id %>
-    <%= section_fields.select(
+    <%= section_fields.select \
           :ticket_type_id,
           section_fields.object.seating_chart&.venue&.ticket_types&.map { |tt| [tt.name, tt.id] } || [],
           {},
           {
             data: { admin__seating_chart_form_target: "ticketTypeSelect" },
             class: "section-ticket-type-select"
-          })
-    %>
+          } %>
   </div>
   <%= section_fields.hidden_field :_destroy, data: { destroyable_target: "destroyInput" } %>
   <%= section_fields.hidden_field :id if section_fields.object.persisted? %>

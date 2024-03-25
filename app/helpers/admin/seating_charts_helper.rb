@@ -1,6 +1,7 @@
 module Admin::SeatingChartsHelper
-  def seating_chart_svg_style(seating_chart, dup_venue_layout_from = nil)
-    venue_layout = dup_venue_layout_from&.venue_layout || seating_chart.venue_layout
+  def seating_chart_svg_style(seating_chart, venue_layout_signed_id = nil)
+    venue_layout = venue_layout_signed_id ? ActiveStorage::Blob.find_signed(venue_layout_signed_id) : seating_chart.venue_layout
+
     if venue_layout.attached?
       width = venue_layout.attachment.metadata["width"]
       height = venue_layout.attachment.metadata["height"]
