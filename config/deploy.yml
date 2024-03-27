@@ -22,6 +22,7 @@ builder:
 
 volumes:
   - "/var/lib/tix/db:/rails/storage/db"
+  - "/var/lib/tix/log:/rails/log"
 
 servers:
   web:
