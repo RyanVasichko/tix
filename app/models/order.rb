@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  include Shippable, Billable, KeywordSearchable, Searches, Searchable
+  include Shippable, Billable, Searches, Searchable
 
   belongs_to :orderer, polymorphic: true
   delegate :name, :phone, :email, to: :orderer, prefix: true
