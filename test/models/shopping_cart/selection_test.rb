@@ -16,4 +16,18 @@ class ShoppingCart::SelectionTest < ActiveSupport::TestCase
     selection.destroy!
     assert selection.selectable.destroyed?
   end
+
+  test "should be destroyed when expired" do
+    selection = FactoryBot.create(:shopping_cart_reserved_seating_ticket_selection, expires_at: 5.minutes.from_now)
+
+    travel_to 4.minutes.from_now do
+      perform_enqueued_jobs
+    end
+    assert ShoppingCart::Selection.exists?(id: selection.id)
+
+    travel_to 5.minutes.from_now do
+      perform_enqueued_jobs
+    end
+    assert_not ShoppingCart::Selection.exists?(id: selection.id)
+  end
 end

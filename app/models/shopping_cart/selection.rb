@@ -8,7 +8,7 @@ class ShoppingCart::Selection < ApplicationRecord
 
   delegated_type :selectable, types: %w[Merch Ticket], touch: true
   before_commit -> { selectable.destroy! }, if: -> { selectable.destroyed_with_selection? }, on: :destroy
-  before_commit -> { ExpirationJob.set(wait_until: expires_at).perform_later(self) }
+  before_commit -> { ExpirationJob.set(wait_until: expires_at).perform_later(self) }, if: -> { expires_at.present? }
 
   def expired?
     expires_at&.past?
