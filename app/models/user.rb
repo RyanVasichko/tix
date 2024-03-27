@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   include Stripeable, Shopper, Orderer, CanBeDeactivated, Searches, Searchable
 
+  before_create -> { self.last_active_at = Time.current }
+
   has_secure_password validations: false
 
   def name
