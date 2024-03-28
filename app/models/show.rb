@@ -43,7 +43,7 @@ class Show < ApplicationRecord
   private
 
   def rebuild_index_for_show_orders
-    jobs = orders.pluck(:id).map{ |order_id| Order::SearchIndex::PopulateJob.new(order_id) }
+    jobs = orders.pluck(:id).map { |order_id| Order::SearchIndex::PopulateJob.new(order_id) }
     ActiveJob.perform_all_later(jobs)
   end
 end
