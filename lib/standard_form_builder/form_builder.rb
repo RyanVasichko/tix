@@ -1,6 +1,6 @@
 module StandardFormBuilder
   class FormBuilder < ::ActionView::Helpers::FormBuilder
-    include ApplicationHelper, Combobox, CurrencyField, ImageFieldWithPreview, SubmitButton, CollectionCheckBoxes
+    include ApplicationHelper, CurrencyField, ImageFieldWithPreview, SubmitButton, CollectionCheckBoxes
 
     def label(method, text = nil, options = {}, &block)
       if text.is_a?(Hash)
@@ -60,7 +60,7 @@ module StandardFormBuilder
         if value.is_a?(Hash)
           value, options = options, value
         end
-        merge_default_input_classes_into_options_classes(options, "mt-2 block w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-offset focus:ring-amber-500/75  sm:leading-6")
+        merge_default_input_classes_into_options_classes(options, "mt-2 block w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-offset focus:ring-amber-500/75 sm:leading-6")
         add_error_fields_to_options(options, method)
         if %i[date_field time_field datetime_field].include?(method_name)
           options[:include_seconds] ||= false

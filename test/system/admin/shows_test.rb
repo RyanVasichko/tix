@@ -162,8 +162,6 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
   def fill_in_common_fields_for_show_create
     fill_in "Artist", with: @artist.name
-    assert_text @artist.name, wait: 5
-    find("li[data-combobox-option-label-param='#{@artist.name}']").click
 
     select @venue.name, from: "Venue"
 
