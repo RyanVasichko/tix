@@ -156,14 +156,16 @@
             </div>
 
             <div id="payment-element" data-checkout-target="payment-element" class="mt-4"></div>
-            <div class="relative mt-3 flex items-start">
-              <div class="flex h-6 items-center">
-                <%= form.check_box :save_payment_method, class: "form-control-check-box" %>
+            <% if order.can_save_payment_method? %>
+              <div class="mt-3">
+                <div class="flex h-6 items-center">
+                  <%= form.check_box :save_payment_method, class: "form-control-check-box" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :save_payment_method, "Save for future purchases" %>
+                </div>
               </div>
-              <div class="ml-3 text-sm leading-6">
-                <%= form.label :save_payment_method, "Save for future purchases" %>
-              </div>
-            </div>
+            <% end %>
           <% end %>
         </div>
       </div>

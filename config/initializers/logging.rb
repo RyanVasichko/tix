@@ -1,4 +1,4 @@
-return unless Rails.env.production?
+return unless Rails.env.production? && ENV.fetch("SECRET_KEY_BASE_DUMMY", "0") != "1"
 
 file_logger = ActiveSupport::Logger.new(Rails.root.join("log", "production.log"), 2, 50.megabytes)
 Rails.logger.broadcast_to(file_logger)

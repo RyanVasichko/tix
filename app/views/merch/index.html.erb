@@ -3,23 +3,13 @@
     <h2 class="text-2xl font-bold tracking-tight text-gray-900">Merchandise</h2>
 
     <div class="mt-4">
-      <%= form_with url: merch_index_path, method: :get, data: { controller: "merch-search" } do |form| %>
+      <%= form_with url: merch_index_path, method: :get do |form| %>
         <div class="inline">
-          <%= form.check_box "merch_category_id[]",
-                             {
-                               checked: all_selected?,
-                               include_hidden: false,
-                               data: { merch_search_target: "allCheckbox", action: "merch-search#uncheckCategoriesIfAllSelected merch-search#submitForm" },
-                               class: "peer sr-only"
-                             },
-                             "all" %>
-          <%= form.label "merch_category_id[]", "All", class: "rounded-3xl border mr-2 py-1.5 px-3 text-xs font-medium border-gray-200 bg-white text-gray-900 hover:bg-gray-50 uppercase sm:flex-1 cursor-pointer focus:outline-none peer-checked:border-transparent peer-checked:bg-amber-600 peer-checked:text-white peer-checked:hover:bg-amber-700", skip_class: true %>
+          <%= link_to "All", merch_index_path, class: classes_for_all_merch_chip %>
         </div>
         <%= form.collection_check_boxes :merch_category_id, @merch_categories, :id, :name, include_hidden: false do |b| %>
           <div class="inline">
-            <%= b.check_box checked: selected_category_ids.include?(b.value),
-                            data: { merch_search_target: "categoryIdCheckbox", action: "merch-search#uncheckAllIfCategorySelected merch-search#submitForm" },
-                            class: "peer sr-only" %>
+            <%= b.check_box checked: selected_category_ids.include?(b.value), onchange: "this.form.requestSubmit();", class: "peer sr-only" %>
             <%= b.label class: "rounded-3xl border mr-2 py-1.5 px-3 text-xs font-medium border-gray-200 bg-white text-gray-900 hover:bg-gray-50 uppercase sm:flex-1 cursor-pointer focus:outline-none peer-checked:border-transparent peer-checked:bg-amber-600 peer-checked:text-white peer-checked:hover:bg-amber-700", skip_class: true %>
           </div>
         <% end %>
