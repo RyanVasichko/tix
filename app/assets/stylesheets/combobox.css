@@ -1,0 +1,31 @@
+.hw-combobox {
+    @apply w-full !important;
+}
+
+.hw-combobox__main__wrapper {
+    @apply w-full rounded border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 !important;
+
+    &:has(.hw-combobox__input:focus) {
+        @apply ring-2 ring-amber-500/75 !important;
+    }
+
+    &:has(.hw-combobox__input:disabled) {
+        .hw-combobox__handle {
+            display: none;
+        }
+    }
+}
+
+.hw-combobox__option--selected {
+    @apply bg-yellow-100 !important;
+}
+
+.hw-combobox__input {
+    @apply placeholder:text-gray-400 ring-0 !important;
+}
+
+.hw-combobox__option {
+    &:hover {
+        @apply bg-yellow-100 !important;
+    }
+}

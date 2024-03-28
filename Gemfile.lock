@@ -163,6 +163,10 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
+    hotwire_combobox (0.2.0)
+      rails (>= 7.0.7.2)
+      stimulus-rails (>= 1.2)
+      turbo-rails (>= 1.2)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -375,6 +379,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   foreman
+  hotwire_combobox
   image_processing (~> 1.2)
   importmap-rails (~> 2.0)
   mission_control-jobs

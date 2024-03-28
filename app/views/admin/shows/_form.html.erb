@@ -15,8 +15,10 @@
 
         <div class="grid gap-6 md:grid-cols-2">
           <div id="show_artist_fields">
-            <%= form.combobox_label :artist_id %>
-            <%= form.collection_combobox :artist_id, form.object.persisted? ? Artist.where(id: form.object.artist_id) : Artist.active.order(:name), :id, :name, disabled: form.object.persisted?, class: "grow" %>
+            <%= form.label :artist_id %>
+            <div class="mt-2">
+              <%= form.combobox :artist_id, artist_combobox_options_for_show(form.object), disabled: form.object.persisted? %>
+            </div>
           </div>
 
           <div>

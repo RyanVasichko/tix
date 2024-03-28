@@ -1,3 +1,5 @@
+@import "combobox.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +7,7 @@
 .errors {
     @apply border border-red-500;
 }
+
 @keyframes slowFadeIn {
     0% {
         opacity: 0;
@@ -20,56 +23,7 @@
     }
 }
 
+
 .toast-message {
     animation: slowFadeIn 5s ease-out forwards;
-}
-
-@layer base {
-    .btn-primary {
-        @apply rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600;
-    }
-
-    .card {
-        @apply mx-auto overflow-visible rounded-lg border-b border-slate-300 bg-white px-4 py-5 shadow sm:px-6;
-    }
-
-    .form-label {
-        @apply block leading-6 text-gray-900 font-medium;
-    }
-
-    .form-control-text {
-        @apply mt-2 block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-600 sm:text-sm sm:leading-6;
-    }
-
-    .form-control-select {
-        @apply mt-2 block w-full rounded-md border-0 pr-10 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 py-1.5 focus:ring-2 focus:ring-amber-600 sm:text-sm sm:leading-6;
-    }
-
-    .form-control-check-box {
-        @apply h-4 w-4 rounded border-gray-300 text-amber-600 accent-amber-600;
-    }
-
-    .form-control-radio-button {
-        @apply mt-5 mr-4 h-4 w-4 border-gray-300 text-amber-600 accent-amber-500;
-    }
-
-    .table {
-        @apply min-w-full divide-y divide-gray-300;
-    }
-
-    .table-th {
-        @apply pr-3 pl-4 text-left text-sm font-semibold text-gray-900 py-3.5;
-    }
-
-    .table-tbody {
-        @apply divide-y divide-gray-200;
-    }
-
-    .table-td {
-        @apply py-4 pr-3 pl-4 text-sm font-medium;
-    }
-
-    .errors {
-        @apply border border-red-500;
-    }
 }
