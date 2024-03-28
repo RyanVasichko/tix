@@ -29,9 +29,8 @@ class SessionsController < ApplicationController
   end
 
   def log_in(user)
-    if Current.user.is_a? Users::Guest
+    if Current.user.guest?
       Current.user.shopping_cart.transfer_selections_to(user)
-      Current.user.destroy_later
     end
 
     session[:user_id] = user.id

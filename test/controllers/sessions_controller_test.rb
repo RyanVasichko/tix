@@ -47,11 +47,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in @user
 
-    seat.reload
-    assert_equal @user, seat.selected_by
-
-    perform_enqueued_jobs
-
-    assert_not User.exists?(id: guest.id)
+    assert_equal @user, seat.reload_selected_by
   end
 end

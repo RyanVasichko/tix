@@ -25,7 +25,7 @@ class ShoppingCart::SelectionTest < ActiveSupport::TestCase
     end
     assert ShoppingCart::Selection.exists?(id: selection.id)
 
-    travel_to 5.minutes.from_now do
+    travel_to 5.minutes.from_now + 1.second do
       perform_enqueued_jobs
     end
     assert_not ShoppingCart::Selection.exists?(id: selection.id)
