@@ -50,6 +50,10 @@ class Order::Checkout
     end
   end
 
+  def can_save_payment_method?
+    !user.guest?
+  end
+
   def total_due
     total_due_in_cents / 100.0
   end
