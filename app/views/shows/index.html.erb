@@ -1,10 +1,10 @@
-<div class="max-w-5xl lg:mt-8 card">
+<div class="mx-auto max-w-5xl card lg:mt-8">
   <h1 class="mb-5 text-center text-3xl font-semibold">
     Upcoming Shows
   </h1>
 
   <% @shows.each do |show| %>
-    <div id="<%= dom_id(show) %>" class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 md:grid-cols-2 last:border-b-0">
+    <div id="<%= dom_id(show) %>" class="grid grid-cols-1 gap-4 border-b border-gray-200 p-5 last:border-b-0 md:grid-cols-2">
       <div>
         <%= image_tag show.artist.image.variant(:medium), id: "shows_#{dom_id(show.artist.image)}", class: "md:max-h-48 rounded-md", data: { turbo_permanent: "" } %>
       </div>
