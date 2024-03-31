@@ -1,7 +1,7 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["destroyInput"];
+  static targets = [ "destroyInput" ];
 
   connect() {
   }
@@ -9,7 +9,7 @@ export default class extends Controller {
   destroy() {
     this.element.classList.add("hidden");
     if (this.destroyInputTarget) {
-      this.destroyInputTarget.value = '1';
+      this.destroyInputTarget.value = "1";
     }
   }
 }

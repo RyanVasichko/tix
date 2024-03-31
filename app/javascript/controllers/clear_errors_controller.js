@@ -1,6 +1,5 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="clear-errors"
 export default class extends Controller {
   connect() {
   }

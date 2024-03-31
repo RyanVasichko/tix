@@ -1,6 +1,5 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="dismissable"
 export default class extends Controller {
   static values = {
     autoDismiss: { type: Boolean, default: true },
@@ -14,8 +13,8 @@ export default class extends Controller {
   }
 
   dismiss() {
-    this.element.classList.remove('opacity-100');
-    this.element.classList.add('transition', 'ease-in', 'duration-100', 'opacity-0');
+    this.element.classList.remove("opacity-100");
+    this.element.classList.add("transition", "ease-in", "duration-100", "opacity-0");
     setTimeout(() => this.element.remove(), 100);
   }
 }

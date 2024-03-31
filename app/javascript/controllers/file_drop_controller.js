@@ -1,10 +1,9 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-const HIGHLIGHT_CLASSES = ['border-indigo-500', 'bg-indigo-50'];
+const HIGHLIGHT_CLASSES = [ "border-indigo-500", "bg-indigo-50" ];
 
-// Connects to data-controller="file-drop"
 export default class extends Controller {
-  static targets = ["input"];
+  static targets = [ "input" ];
 
   dragover(event) {
     event.preventDefault();

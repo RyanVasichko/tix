@@ -1,9 +1,8 @@
-import { Controller } from "@hotwired/stimulus"
-import { enter, leave, toggle } from "el-transition"
+import { Controller } from "@hotwired/stimulus";
+import { enter, leave, toggle } from "el-transition";
 
-// Connects to data-controller="dropdown"
 export default class extends Controller {
-  static targets = ["content"];
+  static targets = [ "content" ];
 
   toggle(event) {
     event.stopPropagation();

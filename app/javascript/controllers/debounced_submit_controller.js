@@ -1,10 +1,9 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 import debounce from "debounce";
 
-// Connects to data-controller="debounced-submit"
 export default class extends Controller {
-  static targets = ["form"];
-  static values = {wait: {type: Number, default: 250}};
+  static targets = [ "form" ];
+  static values = { wait: { type: Number, default: 250 } };
 
   get form() {
     return this.hasFormTarget ? this.formTarget : this.element.form;

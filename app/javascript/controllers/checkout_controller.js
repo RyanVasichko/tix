@@ -1,21 +1,16 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="checkout"
 export default class extends Controller {
-  static targets = ["submitButton", "newPaymentMethodRadioButton"];
+  static targets = [ "submitButton", "newPaymentMethodRadioButton" ];
   static values = {
-    amount: Number,
-    stripePublicKey: String
+    amount: Number, stripePublicKey: String
   };
 
   connect() {
     this.stripe = Stripe(this.stripePublicKeyValue);
 
     const elementsOptions = {
-      mode: "payment",
-      amount: this.amountValue,
-      currency: "usd",
-      paymentMethodCreation: "manual"
+      mode: "payment", amount: this.amountValue, currency: "usd", paymentMethodCreation: "manual"
     };
     this.stripeElements = this.stripe.elements(elementsOptions);
     const paymentElement = this.stripeElements.create("payment");

@@ -2,7 +2,6 @@ import { Controller } from "@hotwired/stimulus";
 import { Sortable } from "sortablejs";
 import { put } from "@rails/request.js";
 
-// Connects to data-controller="admin--merch"
 export default class extends Controller {
   static targets = [ "merch", "merchTableBody" ];
   static values = {

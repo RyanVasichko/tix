@@ -1,10 +1,9 @@
-import {Controller} from "@hotwired/stimulus";
-import debounce from 'debounce';
-import {post, destroy} from "@rails/request.js"
+import { Controller } from "@hotwired/stimulus";
+import debounce from "debounce";
+import { post, destroy } from "@rails/request.js";
 import Seat from "models/seating_chart/seat";
 import CurrentUser from "models/current_user";
 
-// Connects to data-controller="shows--seating-chart--seat"
 export default class extends Controller {
   static values = {
     selectedByUserId: String,
@@ -20,7 +19,7 @@ export default class extends Controller {
   connect() {
     this.#seat = new Seat(this.selectedByUserIdValue, this.selectionExpiresAtValue, this.soldToUserIdValue, this.heldValue);
     this.#presentForCurrentUser();
-    this.clickHandler = debounce(this.clickHandler.bind(this), 200, {immediate: true});
+    this.clickHandler = debounce(this.clickHandler.bind(this), 200, { immediate: true });
   }
 
   async clickHandler() {
@@ -30,13 +29,13 @@ export default class extends Controller {
 
     if (this.#seat.selectedByCurrentUser) {
       this.element.setAttribute("fill", "green");
-      await destroy(this.destroyTicketSelectionPathValue, {responseKind: "turbo-stream"});
+      await destroy(this.destroyTicketSelectionPathValue, { responseKind: "turbo-stream" });
       return;
     }
 
     if (this.#seat.selectable) {
       this.element.setAttribute("fill", "yellow");
-      await post(this.createTicketSelectionPathValue, {responseKind: "turbo-stream"});
+      await post(this.createTicketSelectionPathValue, { responseKind: "turbo-stream" });
     }
   }
 

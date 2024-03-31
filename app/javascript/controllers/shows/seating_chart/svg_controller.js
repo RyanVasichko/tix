@@ -1,7 +1,6 @@
-import {Controller} from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus";
 import * as d3 from "d3";
 
-// Connects to data-controller="shows--seating-chart--svg"
 export default class extends Controller {
   connect() {
     document.addEventListener("turbo:before-stream-render", this.replaceSeat);

@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { get } from "@rails/request.js";
 
-// Connects to data-controller="admin--shows-form"
 export default class extends Controller {
   static targets = [ "generalAdmissionShowFields", "reservedSeatingShowFields", "generalAdmissionSectionFields", "reservedSeatingSectionFields", "showTypeSelect", "venueSelect" ];
 

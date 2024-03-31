@@ -1,11 +1,11 @@
-import { enter, leave } from "el-transition"
-import ApplicationController from "controllers/application_controller";
+import { Controller } from "@hotwired/stimulus";
+import { enter, leave } from "el-transition";
 
-class ModalController extends ApplicationController {
-  static targets = ["body", "backdrop", "focus"];
+export default class extends Controller {
+  static targets = [ "body", "backdrop", "focus" ];
   static values = {
     openOnConnect: { type: Boolean, default: false }
-  }
+  };
 
   connect() {
     super.connect();
@@ -20,10 +20,7 @@ class ModalController extends ApplicationController {
     if (this.hasFocusTarget) {
       this.focusTarget.focus();
     }
-    await Promise.all([
-      enter(this.bodyTarget),
-      enter(this.backdropTarget)
-    ]);
+    await Promise.all([ enter(this.bodyTarget), enter(this.backdropTarget) ]);
     this.isOpen = true;
   }
 
@@ -36,10 +33,7 @@ class ModalController extends ApplicationController {
 
   async close() {
     this.isOpen = false;
-    await Promise.all([
-      leave(this.bodyTarget),
-      leave(this.backdropTarget)
-    ]);
+    await Promise.all([ leave(this.bodyTarget), leave(this.backdropTarget) ]);
     this.element.classList.add("hidden");
   }
 
@@ -49,5 +43,3 @@ class ModalController extends ApplicationController {
     }
   }
 }
-
-export default ModalController;
