@@ -39,8 +39,8 @@ Rails.application.routes.draw do
 
   resources :orders, only: %i[new create show index]
 
-  resource :shopping_cart, only: %i[show] do
-    scope module: :shopping_cart do
+  resource :shopping_carts, only: %i[show] do
+    scope module: :shopping_carts do
       resources :merch_selections, only: %i[destroy update]
 
       namespace :ticket_selections do

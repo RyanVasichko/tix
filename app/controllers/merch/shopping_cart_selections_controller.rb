@@ -11,7 +11,11 @@ class Merch::ShoppingCartSelectionsController < ApplicationController
     @merch_selection = Current.user.shopping_cart.selections.find_or_initialize_by \
       selectable: @merch,
       options: selection_params[:options].to_h
-    @merch_selection.quantity = @merch_selection.new_record? ? selection_params[:quantity].to_i : @merch_selection.quantity + selection_params[:quantity].to_i
+    @merch_selection.quantity = if @merch_selection.new_record?
+                                  selection_params[:quantity].to_i
+                                else
+                                  @merch_selection.quantity + selection_params[:quantity].to_i
+                                end
 
     if @merch_selection.save
       redirect_back_or_to merch_index_url, flash: { notice: "Your shopping was cart was successfully updated." }

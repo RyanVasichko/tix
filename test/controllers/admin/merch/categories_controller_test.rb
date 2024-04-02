@@ -11,7 +11,7 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_admin_merch_category_url
+    get new_admin_merch_category_url, as: :turbo_stream
     assert_response :success
   end
 
@@ -25,7 +25,7 @@ class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    get edit_admin_merch_category_url(@merch_category)
+    get edit_admin_merch_category_url(@merch_category), as: :turbo_stream
     assert_response :success
   end
 

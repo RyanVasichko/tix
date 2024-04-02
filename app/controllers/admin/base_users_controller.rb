@@ -23,10 +23,7 @@ class Admin::BaseUsersController < Admin::AdminController
     if @user.save
       redirect_to index_path, flash: { notice: "#{user_class_name} was successfully created." }
     else
-      respond_to do |format|
-        format.html { render "admin/users/edit", status: :unprocessable_entity }
-        format.turbo_stream { render "admin/users/create", status: :unprocessable_entity }
-      end
+      render "admin/users/new", status: :unprocessable_entity
     end
   end
 
@@ -38,10 +35,7 @@ class Admin::BaseUsersController < Admin::AdminController
     if @user.update(user_params)
       redirect_back_or_to index_path, flash: { notice: "#{user_class_name} was successfully updated." }
     else
-      respond_to do |format|
-        format.html { render "admin/users/edit", status: :unprocessable_entity }
-        format.turbo_stream { render "admin/users/update", status: :unprocessable_entity }
-      end
+      render "admin/users/edit", status: :unprocessable_entity
     end
   end
 

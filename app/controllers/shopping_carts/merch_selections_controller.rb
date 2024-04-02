@@ -1,4 +1,4 @@
-class ShoppingCart::MerchSelectionsController < ApplicationController
+class ShoppingCarts::MerchSelectionsController < ApplicationController
   before_action :set_merch_selection, only: %i[update destroy]
 
   def update
@@ -12,7 +12,6 @@ class ShoppingCart::MerchSelectionsController < ApplicationController
       redirect_back_or_to root_path, flash: { error: "Shopping cart could not be updated." }, status: :unprocessable_entity
     end
   end
-
   def destroy
     @merch_selection.destroy
     respond_to do |format|

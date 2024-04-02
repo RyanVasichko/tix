@@ -1,5 +1,0 @@
-<%= turbo_stream.replace "application_modal" do %>
-  <%= render "shared/modal", title: "Edit #{@merch.name}", max_w: "md:max-w-md lg:max-w-lg xl:max-w-xl" do %>
-    <%= render "admin/merch/form", merch: @merch %>
-  <% end %>
-<% end %>

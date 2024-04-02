@@ -1,5 +1,5 @@
-<%= turbo_stream.replace "application_modal" do %>
-  <%= render "shared/modal", title: "New Shipping Rate", max_w: "max-w-md" do %>
+<%= turbo_stream.update "application_modal" do %>
+  <%= render "shared/modal", title: "New Shipping Rate", width: "max-w-md" do %>
     <%= render "form", shipping_rate: @shipping_rate %>
   <% end %>
 <% end %>

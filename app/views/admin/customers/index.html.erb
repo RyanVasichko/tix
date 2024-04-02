@@ -11,7 +11,7 @@
     <% table.column :name do |user| %>
       <%= primary_link_to user.name,
                           edit_admin_customer_path(user),
-                          data: { turbo_frame: "application_modal" },
+                          data: { turbo_stream: "" },
                           class: "font-medium" %>
     <% end %>
     <% table.column :email %>

@@ -26,10 +26,7 @@ class Admin::Merch::CategoriesController < Admin::AdminController
     if @merch_category.update(merch_category_params)
       redirect_back_or_to admin_merch_index_url, flash: { notice: "Merch category was successfully updated." }
     else
-      respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render :update, status: :unprocessable_entity }
-      end
+      render :edit, status: :unprocessable_entity
     end
   end
 

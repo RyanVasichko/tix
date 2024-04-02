@@ -1,4 +1,4 @@
-class ShoppingCart::TicketSelections::GeneralAdmissionController < ApplicationController
+class ShoppingCarts::TicketSelections::GeneralAdmissionController < ApplicationController
   before_action :set_ticket_selection, only: %i[update destroy]
 
   def update

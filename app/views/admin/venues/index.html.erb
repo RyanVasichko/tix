@@ -4,7 +4,7 @@
     <% table.column :name do |venue| %>
       <%= primary_link_to venue.name,
                           edit_admin_venue_path(venue),
-                          data: { turbo_stream: true },
+                          data: { turbo_stream: "" },
                           class: "font-medium" %>
     <% end %>
     <% table.column :active do |venue| %>

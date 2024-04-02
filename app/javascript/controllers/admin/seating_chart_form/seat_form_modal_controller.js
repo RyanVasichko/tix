@@ -1,6 +1,6 @@
-import ModalController from "controllers/modal_controller";
+import { Controller } from "@hotwired/stimulus";
 
-export default class SeatFormModal extends ModalController {
+export default class extends Controller {
   static targets = [ "seatNumberInput", "tableNumberInput", "sectionSelect" ];
   #seat;
 
@@ -8,7 +8,11 @@ export default class SeatFormModal extends ModalController {
     this.#seat = seat;
     this.#populateSectionsSelectOptions(sections);
     this.#setSeatFields();
-    super.open();
+    this.element.showModal();
+  }
+
+  close() {
+    this.element.close();
   }
 
   save() {

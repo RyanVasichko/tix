@@ -11,7 +11,7 @@ class VenuesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_admin_venue_url
+    get new_admin_venue_url, as: :turbo_stream
     assert_response :success
   end
 
@@ -24,7 +24,7 @@ class VenuesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    get edit_admin_venue_url(@venue)
+    get edit_admin_venue_url(@venue), as: :turbo_stream
     assert_response :success
   end
 
@@ -35,7 +35,7 @@ class VenuesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Updated Venue Name", @venue.reload.name
   end
 
-  test "should deactive venue" do
+  test "should deactivate venue" do
     assert_difference("Venue.count", 0) do
       delete admin_venue_url(@venue)
     end

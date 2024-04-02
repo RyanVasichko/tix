@@ -1,11 +1,11 @@
 <h1 class="mb-4 text-center text-3xl font-semibold">Customer Questions</h1>
 
 <%= card do %>
-  <%= data_table collection: @customer_questions, namespace: :admin, pagy: @pagy do |table| %>
+  <%= data_table collection: @customer_questions, namespace: :admin, pagy: @pagy, new_record_modal: true do |table| %>
     <% table.column "Question" do |customer_question| %>
       <%= primary_link_to customer_question.question,
                           edit_admin_customer_question_path(customer_question),
-                          data: { turbo_stream: true },
+                          data: { turbo_stream: "" },
                           class: "font-medium" %>
     <% end %>
     <% table.column "Active" do |customer_question| %>

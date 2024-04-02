@@ -1,16 +1,12 @@
-<%= turbo_frame_tag "#{dom_id(customer_question, :admin)}_form", target: :_top do %>
-  <%= form_with(model: [:admin, customer_question]) do |form| %>
-    <%= turbo_frame_tag "customer_question_errors" do %>
-      <%= render "shared/error_messages", { model: customer_question } %>
-    <% end %>
+<%= form_with(model: [:admin, customer_question]) do |form| %>
+  <%= render "shared/error_messages", { model: customer_question } %>
 
-    <div class="mt-6">
-      <%= form.label :question %>
-      <%= form.text_area :question, tabindex: 1, autofocus: true, rows: 5 %>
-    </div>
+  <div class="mt-6">
+    <%= form.label :question %>
+    <%= form.text_area :question, autofocus: true, rows: 5 %>
+  </div>
 
-    <div class="mt-10 flex items-center justify-end">
-      <%= form.submit %>
-    </div>
-  <% end %>
+  <div class="mt-10 flex items-center justify-end">
+    <%= form.submit %>
+  </div>
 <% end %>

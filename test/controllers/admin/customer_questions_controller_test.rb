@@ -11,7 +11,7 @@ class Admin::CustomerQuestionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_admin_customer_question_url
+    get new_admin_customer_question_url, as: :turbo_stream
     assert_response :success
   end
 
@@ -27,7 +27,7 @@ class Admin::CustomerQuestionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    get edit_admin_customer_question_url(@customer_question)
+    get edit_admin_customer_question_url(@customer_question), as: :turbo_stream
     assert_response :success
   end
 

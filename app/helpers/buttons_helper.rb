@@ -15,6 +15,10 @@ module ButtonsHelper
     end
   end
 
+  def primary_button_tag(content_or_options, options = nil, &block)
+    button_tag_with_custom_classes(content_or_options, options, "rounded bg-amber-600 px-3 py-2 font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 group flex items-center justify-center", &block)
+  end
+
   private
 
   def button_tag_with_custom_classes(content_or_options, options = nil, default_classes = "", &block)
