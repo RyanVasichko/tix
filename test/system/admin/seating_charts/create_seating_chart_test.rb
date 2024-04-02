@@ -11,6 +11,10 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
   ]
   TOLERANCE = 2
 
+  setup do
+    sign_in FactoryBot.create(:admin)
+  end
+
   test "creating a seating chart" do
     venues = FactoryBot.create_list(:venue, 3, ticket_types_count: 4)
     selected_venue = venues.sample

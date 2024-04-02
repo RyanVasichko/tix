@@ -2,6 +2,7 @@ require "test_helper"
 
 class VenuesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
     @venue = FactoryBot.create(:venue)
   end
 

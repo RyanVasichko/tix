@@ -2,6 +2,7 @@ require "test_helper"
 
 class TicketTypesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
     @ticket_type = FactoryBot.create(:ticket_type)
     @ticket_type_params = {
       convenience_fee: 13.50,

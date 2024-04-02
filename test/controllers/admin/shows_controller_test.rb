@@ -1,7 +1,10 @@
 require "test_helper"
 
 class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
-  setup { @reserved_seating_show = FactoryBot.create(:reserved_seating_show) }
+  setup do
+    sign_in FactoryBot.create(:admin)
+    @reserved_seating_show = FactoryBot.create(:reserved_seating_show)
+  end
 
   test "should get index" do
     get admin_shows_path

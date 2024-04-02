@@ -51,7 +51,7 @@ Rails.application.routes.draw do
 
   # Admin routes
   namespace :admin do
-    get "/", to: "admin#index"
+    get "/", to: "home#index"
     resources :customer_questions, except: :show do
       resource :activation, only: :create, controller: "customer_questions/activation"
     end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class Admin::MerchControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in FactoryBot.create(:customer)
+    sign_in FactoryBot.create(:admin)
     @merch = FactoryBot.create(:merch)
     @merch_category_1 = FactoryBot.create(:merch_category)
     @merch_category_2 = FactoryBot.create(:merch_category)

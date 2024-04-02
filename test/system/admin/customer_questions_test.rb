@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class Admin::CustomerQuestionsTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @customer_question_1 = FactoryBot.create(:customer_question)
     @customer_question_2 = FactoryBot.create(:customer_question, :inactive)
   end

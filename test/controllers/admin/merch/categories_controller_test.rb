@@ -2,6 +2,8 @@ require "test_helper"
 
 class Admin::Merch::CategoriesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
+
     @merch_category = FactoryBot.create(:merch_category)
   end
 

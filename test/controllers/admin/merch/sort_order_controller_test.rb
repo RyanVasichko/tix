@@ -1,6 +1,10 @@
 require "test_helper"
 
 class Admin::Merch::SortOrderControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    sign_in FactoryBot.create(:admin)
+  end
+
   test "sorts merch" do
     merch1 = FactoryBot.create(:merch, order: 1)
     merch2 = FactoryBot.create(:merch, order: 2)

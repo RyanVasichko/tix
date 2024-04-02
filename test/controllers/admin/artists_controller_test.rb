@@ -2,6 +2,7 @@ require "test_helper"
 
 class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
     @artist = FactoryBot.create(:artist)
   end
 

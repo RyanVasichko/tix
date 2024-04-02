@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class Merch::ShippingRatesTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @shipping_rate = FactoryBot.create(:merch_shipping_rate)
 
     visit admin_merch_index_url

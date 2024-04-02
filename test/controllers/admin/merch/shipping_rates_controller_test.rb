@@ -2,6 +2,7 @@ require "test_helper"
 
 class Admin::Merch::ShippingRatesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
     @shipping_rate = FactoryBot.create(:merch_shipping_rate)
   end
 

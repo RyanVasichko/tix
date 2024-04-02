@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class VenuesTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @venue = FactoryBot.create(:venue)
   end
 

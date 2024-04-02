@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class Admin::ShowsTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @show = FactoryBot.create(:reserved_seating_show)
     FactoryBot.create_list(:venue, 3).tap { |venues| @venue = venues.sample }
     @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2, venue: @venue)

@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class Admin::ArtistsTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @artist = FactoryBot.create(:artist, :with_show)
   end
 

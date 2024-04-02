@@ -2,6 +2,7 @@ require "test_helper"
 
 class Admin::CustomerQuestions::ActivationControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in FactoryBot.create(:admin)
     @customer_question = FactoryBot.create(:customer_question, :inactive)
   end
 

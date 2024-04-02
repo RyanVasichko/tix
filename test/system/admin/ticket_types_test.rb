@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class TicketTypesTest < ApplicationSystemTestCase
   setup do
+    sign_in FactoryBot.create(:admin)
     @ticket_type = FactoryBot.create(:ticket_type, dinner_included: false)
     @ticket_type_params = {
       convenience_fee_type: "flat_rate",

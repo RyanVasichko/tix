@@ -5,6 +5,7 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   include Admin::SeatingCharts::SeatingChartFormTestHelpers
 
   setup do
+    sign_in FactoryBot.create(:admin)
     @venue = FactoryBot.create(:venue, ticket_types_count: 3)
     @seating_chart = FactoryBot.create(:seating_chart, sections_count: 2, section_seats_count: 2, venue: @venue)
     @section_1 = @seating_chart.sections.first
