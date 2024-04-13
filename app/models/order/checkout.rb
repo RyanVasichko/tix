@@ -9,9 +9,12 @@ class Order::Checkout
   delegate :stripe_payment_methods, to: :user
 
   validate :order_presented_to_the_user_matches_shopping_cart
+
   validates :payment_method_id, presence: true
+
   validates :shipping_address, presence: true, if: -> { order.purchases.any?(&:merch?) }
   validate :shipping_address_is_valid, if: -> { shipping_address.present? }
+
   validates :guest_orderer, presence: true, if: -> { user.guest? }
   validate :guest_orderer_is_valid, if: -> { guest_orderer.present? }
 
@@ -40,12 +43,13 @@ class Order::Checkout
       return false
     end
 
+    order.orderer = user.guest? ? guest_orderer : user
+    order.shipping_address = shipping_address
     ApplicationRecord.transaction do
-      order.orderer = user.guest? ? guest_orderer : user
-      order.shipping_address = shipping_address
       order.save!
-      raise ActiveRecord::Rollback unless order.process_payment(payment_method_id, save_payment_method: save_payment_method)
       user.shopping_cart_selections.find(shopping_cart_selection_ids).each(&:destroy!)
+      raise ActiveRecord::Rollback unless order.process_payment!(payment_method_id, save_payment_method: save_payment_method)
+
       true
     end
   end

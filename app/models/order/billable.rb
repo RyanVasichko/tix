@@ -21,7 +21,7 @@ module Order::Billable
     self.total_fees = purchases.sum(&:total_fees)
   end
 
-  def process_payment(payment_method_id, save_payment_method: false)
+  def process_payment!(payment_method_id, save_payment_method: false)
     build_payment(stripe_payment_method_id: payment_method_id, amount_in_cents: balance_paid_in_cents)
     payment.process!(save_payment_method)
   end
