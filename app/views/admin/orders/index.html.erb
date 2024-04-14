@@ -3,9 +3,9 @@
 <%= card width: "max-w-7xl" do %>
   <%= data_table collection: @orders, pagy: @pagy, new_record_button: false do |table| %>
     <% table.column :order_number do |order| %>
-      <%= primary_link_to order.order_number,
-                          [:admin, order],
-                          class: "font-medium" %>
+      <%= link_to order.order_number,
+                  [:admin, order],
+                  class: "link primary font-medium" %>
     <% end %>
     <% table.column :created_at, header: "Date" do |order| %>
       <%= order.created_at.to_fs(:date) %>

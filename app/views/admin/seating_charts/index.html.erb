@@ -5,18 +5,20 @@
 <%= card do %>
   <%= data_table collection: @seating_charts, namespace: :admin, pagy: @pagy do |table| %>
     <% table.column :name do |seating_chart| %>
-      <%= primary_link_to seating_chart.name, edit_admin_seating_chart_path(seating_chart), class: "hover:underline font-medium" %>
+      <%= link_to seating_chart.name,
+                  edit_admin_seating_chart_path(seating_chart),
+                  class: "link primary font-medium" %>
     <% end %>
 
     <% table.column "", sortable: false, cell_class: "text-right" do |seating_chart| %>
-      <%= primary_link_to 'Copy',
-                          new_admin_seating_chart_path(clone_from: seating_chart.id),
-                          class: "text-sm" %>
+      <%= link_to 'Copy',
+                  new_admin_seating_chart_path(clone_from: seating_chart.id),
+                  class: "link primary text-sm" %>
       |
-      <%= danger_link_to "Deactivate",
-                         [:admin, seating_chart],
-                         data: { turbo_method: "DELETE" },
-                         class: "text-sm" %>
+      <%= link_to "Deactivate",
+                  [:admin, seating_chart],
+                  data: { turbo_method: "DELETE" },
+                  class: "link danger text-sm" %>
     <% end %>
   <% end %>
 <% end %>

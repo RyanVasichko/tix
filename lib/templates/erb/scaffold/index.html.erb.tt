@@ -9,7 +9,7 @@
     <%- attributes.filter { |a| !["password_digest", "updated_at", "created_at"].include?(a) }.each do |attribute| -%>
     <% if attribute.name == "name" %>
     <%% table.column(:name) do |<%= singular_table_name %>| %>
-        <%%= primary_link_to <%= singular_table_name %>.name, edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %>
+        <%%= link_to <%= singular_table_name %>.name, edit_<%= singular_table_name %>_path(<%= singular_table_name %>), class: "link primary" %>
     <%% end %>
     <% else %>
     <%% table.column(:<%= attribute.name %>) %>

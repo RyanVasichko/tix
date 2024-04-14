@@ -3,23 +3,23 @@
 <%= card do %>
   <%= data_table collection: @customer_questions, namespace: :admin, pagy: @pagy, new_record_modal: true do |table| %>
     <% table.column "Question" do |customer_question| %>
-      <%= primary_link_to customer_question.question,
-                          edit_admin_customer_question_path(customer_question),
-                          data: { turbo_stream: "" },
-                          class: "font-medium" %>
+      <%= link_to customer_question.question,
+                  edit_admin_customer_question_path(customer_question),
+                  data: { turbo_stream: "" },
+                  class: "link primary font-medium" %>
     <% end %>
     <% table.column "Active" do |customer_question| %>
       <%= svg_check if customer_question.active? %>
     <% end %>
     <% table.column "", sortable: false, cell_class: "text-right" do |customer_question| %>
-      <%= danger_link_to "Deactivate",
-                         [:admin, customer_question],
-                         data: { turbo_method: :delete },
-                         class: "text-sm" if customer_question.active? %>
-      <%= success_link_to "Activate",
-                          admin_customer_question_activation_path(customer_question),
-                          data: { turbo_method: :post },
-                          class: "text-sm" unless customer_question.active? %>
+      <%= link_to "Deactivate",
+                  [:admin, customer_question],
+                  data: { turbo_method: :delete },
+                  class: "link danger text-sm" if customer_question.active? %>
+      <%= link_to "Activate",
+                  admin_customer_question_activation_path(customer_question),
+                  data: { turbo_method: :post },
+                  class: "link success text-sm" unless customer_question.active? %>
     <% end %>
   <% end %>
 <% end %>

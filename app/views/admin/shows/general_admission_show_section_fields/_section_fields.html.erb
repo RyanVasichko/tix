@@ -13,9 +13,10 @@
   </td>
   <% unless section_fields.object.persisted? %>
     <td class="align-middle table-td">
-      <%= danger_link_to "Delete",
+      <%= link_to "Delete",
                   "javascript:void(0);",
-                  data: { action: "destroyable#destroy" } %>
+                  data: { action: "destroyable#destroy" },
+                  class: "link danger" %>
     </td>
   <% end %>
 </tr>

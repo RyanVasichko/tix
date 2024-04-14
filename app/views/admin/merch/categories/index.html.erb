@@ -3,16 +3,16 @@
 
   <%= data_table collection: @merch_categories, keyword_search: false, new_record_modal: true do |table| %>
     <% table.column :name, sortable: false do |category| %>
-      <%= primary_link_to category.name,
-                          edit_admin_merch_category_path(category),
-                          data: { turbo_stream: true },
-                          class: "hover:underline font-medium" %>
+      <%= link_to category.name,
+                  edit_admin_merch_category_path(category),
+                  data: { turbo_stream: true },
+                  class: "link primary font-medium" %>
     <% end %>
     <% table.column "", sortable: false, cell_class: "text-right" do |category| %>
-      <%= danger_link_to "Delete",
-                         [:admin, category],
-                         data: { turbo_method: "DELETE", turbo: true, turbo_frame: :_top },
-                         class: "text-sm" %>
+      <%= link_to "Delete",
+                  [:admin, category],
+                  data: { turbo_method: "DELETE", turbo: true, turbo_frame: :_top },
+                  class: "link danger text-sm" %>
     <% end %>
   <% end %>
 <% end %>

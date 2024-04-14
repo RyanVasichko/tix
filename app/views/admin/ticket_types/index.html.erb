@@ -5,9 +5,9 @@
 <%= card do %>
   <%= data_table collection: @ticket_types, pagy: @pagy, namespace: :admin do |table| %>
     <% table.column :name do |ticket_type| %>
-      <%= primary_link_to ticket_type.name,
-                          edit_admin_ticket_type_path(ticket_type),
-                          class: "font-medium" %>
+      <%= link_to ticket_type.name,
+                  edit_admin_ticket_type_path(ticket_type),
+                  class: "link primary font-medium" %>
     <% end %>
     <% table.column :venue_name, header: "Venue" %>
     <% table.column :convenience_fee_type, header: "Convenience fee type" do |ticket_type| %>
@@ -21,15 +21,15 @@
     <% end %>
     <% table.column "", sortable: false do |ticket_type| %>
       <% if ticket_type.active? -%>
-        <%= danger_link_to "Deactivate",
-                           [:admin, ticket_type],
-                           data: { turbo_method: "delete" },
-                           class: "text-sm" %>
+        <%= link_to "Deactivate",
+                    [:admin, ticket_type],
+                    data: { turbo_method: "delete" },
+                    class: "link danger text-sm" %>
       <% else %>
-        <%= success_link_to "Activate",
-                            [:admin, ticket_type, { ticket_type: { active: true } }],
-                            data: { turbo_method: "patch" },
-                            class: "text-sm" %>
+        <%= link_to "Activate",
+                    [:admin, ticket_type, { ticket_type: { active: true } }],
+                    data: { turbo_method: "patch" },
+                    class: "link success text-sm" %>
       <% end %>
     <% end %>
   <% end %>

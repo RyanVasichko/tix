@@ -2,25 +2,25 @@
 <%= card do %>
   <%= data_table collection: @venues, pagy: @pagy, namespace: :admin, new_record_modal: true do |table| %>
     <% table.column :name do |venue| %>
-      <%= primary_link_to venue.name,
-                          edit_admin_venue_path(venue),
-                          data: { turbo_stream: "" },
-                          class: "font-medium" %>
+      <%= link_to venue.name,
+                  edit_admin_venue_path(venue),
+                  data: { turbo_stream: "" },
+                  class: "link primary font-medium" %>
     <% end %>
     <% table.column :active do |venue| %>
       <%= svg_check if venue.active? %>
     <% end %>
     <% table.column "", sortable: false, cell_class: "text-right" do |venue| %>
       <% if venue.active? -%>
-        <%= danger_link_to "Deactivate",
-                           [:admin, venue],
-                           data: { turbo_method: "delete" },
-                           class: "text-sm" %>
+        <%= link_to "Deactivate",
+                    [:admin, venue],
+                    data: { turbo_method: "delete" },
+                    class: "link danger text-sm" %>
       <% else %>
-        <%= success_link_to "Activate",
-                            [:admin, venue, { venue: { active: true } }],
-                            data: { turbo_method: "patch" },
-                            class: "text-sm" %>
+        <%= link_to "Activate",
+                    [:admin, venue, { venue: { active: true } }],
+                    data: { turbo_method: "patch" },
+                    class: "link success text-sm" %>
       <% end %>
     <% end %>
   <% end %>

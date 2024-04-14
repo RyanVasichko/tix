@@ -45,14 +45,14 @@
             <%= svg_check if merch.active? %>
           </td>
           <td class="px-6 py-4 text-right">
-            <%= success_link_to "Put on sale",
-                                admin_merch_on_sale_path(merch),
-                                data: { turbo_method: "post", turbo: true },
-                                class: "text-sm" unless merch.active? %>
-            <%= danger_link_to "Take off sale",
-                               [:admin, merch],
-                               data: { turbo_method: "delete", turbo: true },
-                               class: "text-sm" if merch.active? %>
+            <%= link_to "Put on sale",
+                        admin_merch_on_sale_path(merch),
+                        data: { turbo_method: "post", turbo: true },
+                        class: "link success text-sm" unless merch.active? %>
+            <%= link_to "Take off sale",
+                        [:admin, merch],
+                        data: { turbo_method: "delete", turbo: true },
+                        class: "link danger text-sm" if merch.active? %>
         </tr>
       <% end %>
       </tbody>

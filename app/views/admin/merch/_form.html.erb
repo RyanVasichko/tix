@@ -29,7 +29,7 @@
     <h3 class="flex justify-between text-md">
       Categories
 
-      <%= link_to "Add Category", new_admin_merch_category_field_path, class: "btn-primary px-2.5 py-1.5 text-xs", data: { turbo_stream: true } %>
+      <%= link_to_new_record "Add Category", new_admin_merch_category_field_path, data: { turbo_stream: true } %>
     </h3>
 
     <div class="grid grid-cols-3 gap-4 p-4 align-middle">

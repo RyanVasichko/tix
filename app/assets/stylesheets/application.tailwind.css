@@ -1,5 +1,6 @@
 @import "combobox.css";
 @import "button.css";
+@import "link.css";
 
 @tailwind base;
 @tailwind components;

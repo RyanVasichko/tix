@@ -11,10 +11,10 @@
     <% table.column(:dinner_starts_at, date: true) %>
     <% table.column(:dinner_ends_at, date: true) %>
     <% table.column(header: "", sortable: false, cell_class: "text-right") do |show| %>
-      <%= primary_link_to "Edit",
-                          edit_admin_show_path(show),
-                          data: { turbo_frame: "_top" },
-                          class: "text-sm" %>
+      <%= link_to "Edit",
+                  edit_admin_show_path(show),
+                  data: { turbo_frame: "_top" },
+                  class: "link primary text-sm" %>
     <% end %>
   <% end %>
 <% end %>
