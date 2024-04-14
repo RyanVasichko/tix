@@ -1,7 +1,7 @@
 <div class="[&:not(:first-child)]:mt-6" id="seating_chart_section_<%= section_fields.index %>_fields" data-controller="destroyable">
   <div class="flex justify-between">
     <%= section_fields.label :name %>
-    <%= danger_button_tag type: "button", data: { action: "destroyable#destroy admin--seating-chart-form#removeSection", section_id: section_fields.index }, class: "p-1.5" do %>
+    <%= button_tag type: "button", data: { action: "destroyable#destroy admin--seating-chart-form#removeSection", section_id: section_fields.index }, class: "button danger p-1.5" do %>
       <span class="sr-only">Remove section</span>
       <%= svg_trash_can_2 class: "h-4 w-4" %>
     <% end %>

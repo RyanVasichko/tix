@@ -45,7 +45,7 @@
         </dl>
 
         <div class="hidden border-t border-gray-200 px-4 py-6 hover:pointer sm:px-6 lg:block">
-          <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
+          <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "button primary w-full px-4 py-3 text-base font-medium" do %>
             <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
             <span class="group-disabled:hidden">Place Order</span>
             <span class="group-disabled:block hidden">Placing Order...</span>
@@ -171,7 +171,7 @@
       </div>
 
       <div class="px-4 py-6 sm:px-6 lg:hidden">
-        <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "group flex items-center justify-center w-full rounded-md border border-transparent bg-amber-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-50" do %>
+        <%= button_tag type: "submit", data: { checkout_target: "submitButton" }, class: "button primary w-full px-4 py-3 text-base font-medium" do %>
           <div class="mr-2 group-disabled:block hidden h-4 w-4 loader"></div>
           <span class="group-disabled:hidden">Place Order</span>
           <span class="group-disabled:block hidden">Placing Order...</span>

@@ -1,29 +1,30 @@
 @import "combobox.css";
+@import "button.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .errors {
-    @apply border border-red-500;
+  @apply border border-red-500;
 }
 
 @keyframes slowFadeIn {
-    0% {
-        opacity: 0;
-    }
-    20% {
-        opacity: 1;
-    }
-    80% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 
 .toast-message {
-    animation: slowFadeIn 5s ease-out forwards;
+  animation: slowFadeIn 5s ease-out forwards;
 }
