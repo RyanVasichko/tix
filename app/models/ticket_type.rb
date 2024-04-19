@@ -22,10 +22,10 @@ class TicketType < ApplicationRecord
   scope :keyword_search, ->(query) {
     joins(:venue)
       .where(<<~SQL, keyword: "%#{query}%")
-        ticket_types.name LIKE :keyword OR
-        venues.name LIKE :keyword OR
-        ticket_types.convenience_fee_type LIKE :keyword OR
-        ticket_types.payment_method LIKE :keyword
+        ticket_types.name ILIKE :keyword OR
+        venues.name ILIKE :keyword OR
+        ticket_types.convenience_fee_type ILIKE :keyword OR
+        ticket_types.payment_method ILIKE :keyword
       SQL
   }
 end

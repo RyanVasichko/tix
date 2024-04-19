@@ -3,12 +3,77 @@ require "test_helper"
 class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in FactoryBot.create(:admin)
-    @reserved_seating_show = FactoryBot.create(:reserved_seating_show)
   end
 
-  test "should get index" do
+  test "index should get index" do
+    FactoryBot.create(:general_admission_show)
     get admin_shows_path
     assert_response :success
+  end
+
+  test "index should be keyword searchable by show date" do
+    set_up_shows_for_search_and_sort_tests
+    get admin_shows_path(q: (Time.current + 1.month).to_fs(:date))
+
+    assert_response :success
+    assert_includes response.body, "Radiohead"
+    assert_not_includes response.body, "Nirvana"
+  end
+
+  test "index should be keyword searchable by artist" do
+    set_up_shows_for_search_and_sort_tests
+    get admin_shows_path(q: "radio")
+
+    assert_response :success
+    assert_includes response.body, "Radiohead"
+    assert_not_includes response.body, "Nirvana"
+  end
+
+  test "index should be keyword searchable by venue" do
+    set_up_shows_for_search_and_sort_tests
+    get admin_shows_path(q: "astro")
+
+    assert_response :success
+    assert_includes response.body, "Radiohead"
+    assert_not_includes response.body, "Nirvana"
+  end
+
+  test "index should be sortable by show_date" do
+    set_up_shows_for_search_and_sort_tests
+
+    get admin_shows_path(sort: "show_date", sort_direction: "asc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "Radiohead"
+    assert_select "tbody tr:nth-child(2) td", text: "Nirvana"
+
+    get admin_shows_path(sort: "show_date", sort_direction: "desc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "Nirvana"
+    assert_select "tbody tr:nth-child(2) td", text: "Radiohead"
+  end
+
+  test "index should be sortable by artist_name" do
+    set_up_shows_for_search_and_sort_tests
+
+    get admin_shows_path(sort: "artist_name", sort_direction: "asc")
+    assert_select "tbody tr:first-child td", text: "Nirvana"
+    assert_select "tbody tr:nth-child(2) td", text: "Radiohead"
+
+    get admin_shows_path(sort: "artist_name", sort_direction: "desc")
+    assert_select "tbody tr:first-child td", text: "Radiohead"
+    assert_select "tbody tr:nth-child(2) td", text: "Nirvana"
+  end
+
+  test "index should be sortable by venue_name" do
+    set_up_shows_for_search_and_sort_tests
+
+    get admin_shows_path(sort: "venue_name", sort_direction: "asc")
+    assert_select "tbody tr:first-child td", text: "Radiohead"
+    assert_select "tbody tr:nth-child(2) td", text: "Nirvana"
+
+    get admin_shows_path(sort: "venue_name", sort_direction: "desc")
+    assert_select "tbody tr:first-child td", text: "Nirvana"
+    assert_select "tbody tr:nth-child(2) td", text: "Radiohead"
   end
 
   test "should get new" do
@@ -71,7 +136,7 @@ class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil show
     assert_equal artist, show.artist
     assert_equal seating_chart.name, show.seating_chart_name
-    assert_equal show_date, show.show_date
+    assert_equal show_date.to_date, show.show_date
     assert_equal front_end_on_sale_at, show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, show.front_end_off_sale_at
     assert_equal back_end_on_sale_at, show.back_end_on_sale_at
@@ -142,7 +207,7 @@ class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil show
     assert_equal artist, show.artist
     assert_nil show.seating_chart_name
-    assert_equal show_date, show.show_date
+    assert_equal show_date.to_date, show.show_date
     assert_equal front_end_on_sale_at, show.front_end_on_sale_at
     assert_equal front_end_off_sale_at, show.front_end_off_sale_at
     assert_equal back_end_on_sale_at, show.back_end_on_sale_at
@@ -171,9 +236,10 @@ class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
+    show = FactoryBot.create(:reserved_seating_show)
     FactoryBot.create(:seating_chart)
 
-    get edit_admin_show_path(@reserved_seating_show)
+    get edit_admin_show_path(show)
     assert_response :success
   end
 
@@ -208,5 +274,19 @@ class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Show.count", -1) { delete admin_show_path(@reserved_seating_show) }
 
     assert_redirected_to admin_shows_path
+  end
+
+  private
+
+  def set_up_shows_for_search_and_sort_tests
+    FactoryBot.create :reserved_seating_show,
+                      artist: Artist.build(name: "Radiohead"),
+                      show_date: Time.current + 1.month,
+                      venue: FactoryBot.build(:venue, name: "Astrodome")
+
+    FactoryBot.create :general_admission_show,
+                      artist: Artist.build(name: "Nirvana"),
+                      show_date: Time.current + 2.months,
+                      venue: FactoryBot.build(:venue, name: "Reliant Stadium")
   end
 end

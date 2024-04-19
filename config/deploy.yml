@@ -8,26 +8,26 @@ registry:
 
 env:
   clear:
-    DB_HOST: 5.78.94.148
+    DB_HOST: <%= ENV.fetch("HOST") %>
     RAILS_SERVE_STATIC_FILES: 1
     WEB_CONCURRENCY: 0
     RAILS_MAX_THREADS: 3
     HOST: tix.ryanvasichko.com
   secret:
     - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
 
 builder:
   local:
     arch: amd64
 
 volumes:
-  - "/var/lib/tix/db:/rails/storage/db"
   - "/var/lib/tix/log:/rails/log"
 
 servers:
   web:
     hosts:
-      - 5.78.94.148
+      - <%= ENV.fetch("HOST") %>
     cmd: "./bin/rails server"
     labels:
       traefik.http.routers.web.entrypoints: websecure
@@ -36,16 +36,28 @@ servers:
       traefik.http.routers.web.middlewares: compression
   worker:
     hosts:
-      - 5.78.94.148
+      - <%= ENV.fetch("HOST") %>
     cmd: "bundle exec rake solid_queue:start"
 
 accessories:
   redis:
     image: redis:latest
-    host: 5.78.94.148
+    host: <%= ENV.fetch("HOST") %>
     port: 6379
     directories:
       - "data:/data"
+  db:
+    image: postgres:16
+    host: <%= ENV.fetch("HOST") %>
+    port: 5432
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+      clear:
+        POSTGRES_USER: tix
+        POSTGRES_DB: tix_production
+    directories:
+      - "data:/var/lib/postgresql/data"
 
 traefik:
   options:

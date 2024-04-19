@@ -51,7 +51,7 @@
             <th class="px-6 py-3 text-xs">
               <% if cell.sortable %>
                 <%= link_to("#{keyword_search_url}?#{data_table_header_cell_sort_query_params(cell)}",
-                            data: { turbo_frame: "#{turbo_frame_id_for_collection(collection)}_data_table" },
+                            data: { turbo_frame: "#{turbo_frame_id_for_collection(collection)}_data_table", turbo_action: "replace" },
                             class: "flex items-center") do %>
                   <%= cell.text %>
                   <%= svg_arrow_up(class: "w-4 h-4 ml-1") if sort.to_s.casecmp?(cell.as.to_s) && sort_direction.to_s == "asc" %>

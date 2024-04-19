@@ -24,7 +24,7 @@ ENV RAILS_ENV="production" \
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev
 
 # Install jemalloc
 RUN apt-get update && \
@@ -51,7 +51,7 @@ FROM base
 
 # Install packages needed for deployment and jemalloc
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libjemalloc2 && \
+    apt-get install --no-install-recommends -y curl libvips libjemalloc2 libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set environment variable to use jemalloc

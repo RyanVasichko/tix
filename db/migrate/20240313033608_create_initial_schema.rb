@@ -1,5 +1,15 @@
-class CreateInitialSchema < ActiveRecord::Migration[7.2]
+class CreateInitialSchema < ActiveRecord::Migration[7.1]
   def change
+    create_table :addresses do |t|
+      t.string :address_1, null: false
+      t.string :address_2
+      t.string :city, null: false
+      t.string :state, null: false
+      t.string :zip_code, null: false
+
+      t.timestamps
+    end
+
     create_table :venues do |t|
       t.string :name, null: false
       t.boolean :active, null: false, default: true
@@ -33,21 +43,21 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
+    create_table :seating_chart_sections do |t|
+      t.string :name, null: false
+      t.index [:name, :seating_chart_id]
+      t.references :seating_chart, null: false, foreign_key: true
+      t.references :ticket_type, null: false, foreign_key: true
+
+      t.timestamps
+    end
+
     create_table :seating_chart_seats do |t|
       t.integer :x, null: false
       t.integer :y, null: false
       t.string :seat_number, null: false
       t.string :table_number, null: false
       t.references :seating_chart_section, null: false, foreign_key: true
-
-      t.timestamps
-    end
-
-    create_table :seating_chart_sections do |t|
-      t.string :name, null: false
-      t.index [:name, :seating_chart_id]
-      t.references :seating_chart, null: false, foreign_key: true
-      t.references :ticket_type, null: false, foreign_key: true
 
       t.timestamps
     end
@@ -60,7 +70,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.references :shopping_cart, null: false, foreign_key: true
       t.references :selectable, polymorphic: true, null: false
       t.integer :quantity, null: false, default: 1
-      t.json :options
+      t.jsonb :options
       t.datetime :expires_at, null: true
       t.bigint :lock_version, null: false, default: 0
 
@@ -92,6 +102,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.index [:email, :active]
       t.index [:email], unique: true
       t.index [:shopper_uuid], unique: true
+      t.datetime :last_active_at, null: false
 
       t.check_constraint <<-SQL, name: 'check_user_information'
         (
@@ -113,6 +124,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.string :name, null: false
       t.string :bio
       t.string :url
+      t.integer :shows_count, default: 0, null: false
       t.boolean :active, null: false, default: true
 
       t.timestamps
@@ -122,7 +134,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.references :artist, null: false, foreign_key: true
       t.references :venue, null: false, foreign_key: true
       t.string :seating_chart_name
-      t.datetime :show_date, null: false
+      t.date :show_date, null: false
       t.datetime :doors_open_at, null: false
       t.datetime :show_starts_at, null: false
       t.datetime :dinner_starts_at, null: false
@@ -184,6 +196,14 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
+    create_table :order_shipping_addresses do |t|
+      t.string :first_name, null: false
+      t.string :last_name, null: false
+      t.references :address, null: false
+
+      t.timestamps
+    end
+
     create_table :orders do |t|
       t.decimal :balance_paid, null: false, precision: 8, scale: 2
       t.decimal :total_price, null: false, precision: 8, scale: 2
@@ -200,7 +220,7 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
     create_table :order_purchases do |t|
       t.references :order, null: false, foreign_key: true
       t.references :purchaseable, polymorphic: true, null: false
-      t.json :options
+      t.jsonb :options
       t.decimal :item_price, null: false, precision: 8, scale: 2
       t.integer :quantity, null: false, default: 1
       t.decimal :total_fees, null: false, default: 0, precision: 8, scale: 2
@@ -244,24 +264,6 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
       t.index :merch_category_id
     end
 
-    create_table :order_shipping_addresses do |t|
-      t.string :first_name, null: false
-      t.string :last_name, null: false
-      t.references :address, null: false
-
-      t.timestamps
-    end
-
-    create_table :addresses do |t|
-      t.string :address_1, null: false
-      t.string :address_2
-      t.string :city, null: false
-      t.string :state, null: false
-      t.string :zip_code, null: false
-
-      t.timestamps
-    end
-
     create_table :customer_questions do |t|
       t.text :question
       t.boolean :active, null: false, default: true
@@ -299,20 +301,5 @@ class CreateInitialSchema < ActiveRecord::Migration[7.2]
 
       t.timestamps
     end
-
-    execute <<~SQL
-      CREATE VIRTUAL TABLE IF NOT EXISTS order_search_indices USING fts5(
-        order_id,
-        created_at,
-        order_number,
-        orderer_name,
-        orderer_phone,
-        orderer_email,
-        balance_paid,
-        artist_name,
-        tickets_count,
-        tokenize='trigram case_sensitive 0'
-      );
-    SQL
   end
 end

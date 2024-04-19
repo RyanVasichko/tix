@@ -22,9 +22,10 @@ gem "tailwindcss-rails", "~> 2.3"
 gem "stripe"
 
 # Database
-gem "sqlite3", "~> 1.7"
+gem "pg"
 
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+gem "chronic"
 
 # Storage
 gem "aws-sdk-s3", require: false
@@ -34,16 +35,17 @@ gem "hotwire_combobox"
 gem "bcrypt", "~> 3.1.7"
 gem "pagy"
 
+gem "faker"
+gem "factory_bot_rails"
+
 group :development, :test do
+  gem "bullet", "~> 7.1"
   gem "rubocop-rails-omakase", require: false
   gem "awesome_print"
   gem "byebug"
   gem "rubocop"
   gem "foreman"
   gem "brakeman", require: false
-
-  gem "faker"
-  gem "factory_bot_rails"
 end
 
 group :development do

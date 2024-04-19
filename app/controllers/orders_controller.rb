@@ -1,10 +1,10 @@
 class OrdersController < ApplicationController
   def index
-    @orders = Current.user.orders
+    @orders = Current.user.orders.includes_purchases
   end
 
   def show
-    @order = Current.user.orders.find(params[:id])
+    @order = Current.user.orders.includes_purchases.find(params[:id])
   end
 
   def new

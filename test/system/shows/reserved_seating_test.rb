@@ -31,7 +31,6 @@ class Shows::ReservedSeatingTest < ApplicationSystemTestCase
     within("#shopping_cart_count") { assert_text "1" }
     assert_equal seat.reload.selected_by, customer
 
-    sleep 0.25
     find("#shopping_cart_toggle").click
 
     assert_selector "#shopping_cart"
@@ -57,7 +56,6 @@ class Shows::ReservedSeatingTest < ApplicationSystemTestCase
     within("#shopping_cart_count") { assert_text "0" }
     assert_nil seat.reload.selected_by
 
-    sleep 0.25
     find("#shopping_cart_toggle").click
 
     within("#shopping_cart") { refute_text "Table #{seat.table_number} Seat #{seat.seat_number}" }

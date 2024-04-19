@@ -4,12 +4,12 @@
 
 <%= card do %>
   <%= data_table collection: @shows, namespace: :admin, pagy: @pagy do |table| %>
-    <% table.column(:show_date, header: "Show Date", date: true) %>
+    <% table.column(:show_date, header: "Show Date", format: :date) %>
     <% table.column(:artist_name, header: "Artist") %>
     <% table.column(:venue_name, header: "Venue") %>
-    <% table.column(:doors_open_at, date: true) %>
-    <% table.column(:dinner_starts_at, date: true) %>
-    <% table.column(:dinner_ends_at, date: true) %>
+    <% table.column(:doors_open_at, format: :hour_minute, sortable: false) %>
+    <% table.column(:dinner_starts_at, format: :hour_minute, sortable: false) %>
+    <% table.column(:dinner_ends_at, format: :hour_minute, sortable: false) %>
     <% table.column(header: "", sortable: false, cell_class: "text-right") do |show| %>
       <%= link_to "Edit",
                   edit_admin_show_path(show),

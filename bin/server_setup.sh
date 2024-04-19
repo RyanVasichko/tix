@@ -46,16 +46,9 @@ configure_ubuntu_auto_updates() {
 
 # Main execution
 
-# Create /letsencrypt directory
 ensure_directory "/letsencrypt"
-
-# 1. Create /letsencrypt/acme.json file and chmod it to 600
 ensure_file_with_permissions "/letsencrypt/acme.json" "600"
-
-# 2. Create /var/lib/tix/db folder and chown it to 5000:5000
-ensure_directory_with_ownership "/var/lib/tix/db" "5000" "5000"
-
-# 3. Enable Ubuntu auto-updates and configure automatic reboot at 2 AM
+ensure_directory_with_ownership "/var/lib/tix/log" "5000" "5000"
 configure_ubuntu_auto_updates
 
 echo "Setup completed."

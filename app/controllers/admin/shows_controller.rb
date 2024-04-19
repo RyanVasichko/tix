@@ -4,10 +4,10 @@ class Admin::ShowsController < Admin::AdminController
   before_action :set_admin_show, only: %i[edit update destroy]
 
   self.default_sort_field = :show_date
-  sortable_by :show_date, :artist_name, :venue_name, :doors_open_at, :dinner_starts_at, :dinner_ends_at
+  sortable_by :show_date, :artist_name, :venue_name
 
   def index
-    shows = Show.search(search_params)
+    shows = Show.includes_artist.includes(:venue).search(search_params)
     shows = shows.upcoming unless params.dig(:search, :show_off_sale) == "1"
 
     @pagy, @shows = pagy(shows)

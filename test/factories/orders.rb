@@ -3,6 +3,7 @@ FactoryBot.define do
     balance_paid { total_price }
     total_price { Faker::Commerce.price }
     total_fees { Faker::Commerce.price(range: 0..5.0) }
+    order_number { nil }
     association :shipping_address, factory: :order_shipping_address
 
     transient do

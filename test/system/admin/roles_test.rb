@@ -27,18 +27,27 @@ class Admin::RolesTest < ApplicationSystemTestCase
 
     within "##{dom_id(role, :admin)}" do
       fill_in "user_role[name]", with: "New Role"
-      find("input[type='checkbox'][name='user_role[hold_seats]']").check
-      find("input[type='checkbox'][name='user_role[release_seats]']").check
-      find("input[type='checkbox'][name='user_role[manage_customers]']").check
-      find("input[type='checkbox'][name='user_role[manage_admins]']").check
     end
+    grant_permission_and_dismiss_toast_messages(role, :hold_seats)
+    grant_permission_and_dismiss_toast_messages(role, :release_seats)
+    grant_permission_and_dismiss_toast_messages(role, :manage_customers)
+    grant_permission_and_dismiss_toast_messages(role, :manage_admins)
 
-    assert_text "Role was successfully updated"
     assert_equal "New Role", role.reload.name
     assert role.hold_seats
     assert role.release_seats
     assert role.manage_customers
     assert role.manage_admins
+
+    revoke_permission_and_dismiss_toast_messages(role, :hold_seats)
+    revoke_permission_and_dismiss_toast_messages(role, :release_seats)
+    revoke_permission_and_dismiss_toast_messages(role, :manage_customers)
+    revoke_permission_and_dismiss_toast_messages(role, :manage_admins)
+
+    assert_not role.reload.hold_seats
+    assert_not role.release_seats
+    assert_not role.manage_customers
+    assert_not role.manage_admins
   end
 
   test "Creating a role" do
@@ -76,6 +85,17 @@ class Admin::RolesTest < ApplicationSystemTestCase
     within "##{dom_id(role, :admin)}" do
       find("input[type='checkbox'][name='user_role[#{permission}]']").check
     end
+    dismiss_role_updated_toast_messages
+  end
+
+  def revoke_permission_and_dismiss_toast_messages(role, permission)
+    within "##{dom_id(role, :admin)}" do
+      find("input[type='checkbox'][name='user_role[#{permission}]']").uncheck
+    end
+    dismiss_role_updated_toast_messages
+  end
+
+  def dismiss_role_updated_toast_messages
     assert_text "Role was successfully updated"
     dismiss_all_toast_messages
     refute_text "Role was successfully updated"

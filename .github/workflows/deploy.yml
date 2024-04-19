@@ -16,9 +16,9 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       RAILS_ENV: production
-      MULTIARCH: false
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      HOST: ${{ secrets.HOST }}
 
     steps:
       - name: Checkout code

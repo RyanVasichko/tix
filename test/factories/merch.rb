@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :merch do
     price { Faker::Commerce.price(range: 0..1000.0, as_string: true) }
-    name { Faker::Commerce.product_name }
+    name { Faker::Commerce.unique.product_name }
     description { Faker::Lorem.sentence }
     active { true }
     options { Array.new(rand(1..5)) { Faker::Color.unique.color_name } }

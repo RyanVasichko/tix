@@ -10,8 +10,8 @@ module Admin::SeatingCharts::SeatingChartFormTestHelpers
       click_on "Save changes"
     end
     assert_no_selector("#edit-seat-modal", visible: true)
-
-    all("circle").last
+    seat_selector = "circle[data-admin--seating-chart-form--seat-seat-number-value='#{seat_number}'][data-admin--seating-chart-form--seat-table-number-value='#{table_number}']"
+    find(seat_selector)
   end
 
   def add_section(name, ticket_type_name, use_existing_input: false)

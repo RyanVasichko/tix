@@ -11,6 +11,8 @@ class Admin::MerchControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get admin_merch_index_url
     assert_response :success
+
+    assert_includes response.body, @merch.name
   end
 
   test "should get new" do

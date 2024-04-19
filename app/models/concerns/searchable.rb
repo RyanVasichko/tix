@@ -32,7 +32,7 @@ module Searchable
     def define_order_by_scope_for_property(property)
       scope :"order_by_#{property}", ->(direction = :asc) {
         if columns_hash[property.to_s].type.presence_in([:string, :text])
-          order(Arel.sql("#{table_name}.#{property} COLLATE NOCASE #{direction}"))
+          order(Arel.sql("LOWER(#{table_name}.#{property}) #{direction}"))
         else
           order(property => direction)
         end
@@ -50,7 +50,7 @@ module Searchable
         association_reflection = reflect_on_association(association)
 
         if association_reflection.klass.columns_hash[property.to_s].type.presence_in([:string, :text])
-          joins(association_reflection.name).order(Arel.sql("#{association_reflection.plural_name}.#{property} COLLATE NOCASE #{direction}"))
+          joins(association_reflection.name).order(Arel.sql("LOWER(#{association_reflection.plural_name}.#{property}) #{direction}"))
         else
           joins(association_reflection.name).order("#{association_reflection.plural_name}.#{property}" => direction)
         end

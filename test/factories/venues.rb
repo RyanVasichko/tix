@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :venue do
-    name { "#{Faker::Company.name} Arena" }
+    name { "#{Faker::Company.unique.name} Arena" }
     active { true }
     association :address
 

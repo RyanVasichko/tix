@@ -193,7 +193,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
     assert_equal @artist, created_show.artist
     assert_equal "This is some additional text", created_show.additional_text
 
-    assert_equal @show_date, created_show.show_date
+    assert_equal @show_date.to_date, created_show.show_date
     assert_equal @show_starts_at, created_show.show_starts_at
     assert_equal @doors_open_at, created_show.doors_open_at
     assert_equal @dinner_starts_at, created_show.dinner_starts_at

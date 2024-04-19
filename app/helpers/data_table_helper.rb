@@ -35,7 +35,7 @@ module DataTableHelper
   def data_table_form_with(collection, keyword_search_url, &block)
     form_with \
       url: keyword_search_url,
-      data: { turbo_frame: turbo_frame_id_for_collection(collection) },
+      data: { turbo_frame: turbo_frame_id_for_collection(collection), turbo_action: "replace" },
       method: :get,
       class: "flex items-center justify-between",
       &block
@@ -57,12 +57,11 @@ module DataTableHelper
       @row_builder = TableRowBuilder.new
     end
 
-    def column(property = nil, header: nil, as: nil, date: false, sortable: true, cell_class: "", &block)
+    def column(property = nil, header: nil, as: nil, format: nil, sortable: true, cell_class: "", &block)
       @header_builder.cell(header || property&.to_s&.humanize, as: as || property, sortable: sortable)
       block ||= ->(record) {
-        record.public_send(property).yield_self do |value|
-          value = value.to_fs(:date) if date
-          value
+        record.public_send(property).then do |value|
+          format ? value.to_fs(format) : value
         end
       }
       @row_builder.cell(classes: cell_class, &block)

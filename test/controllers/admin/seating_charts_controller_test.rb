@@ -5,6 +5,38 @@ class Admin::SeatingChartsControllerTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:admin)
   end
 
+  test "index should display seating charts" do
+    FactoryBot.create(:seating_chart, name: "Full House")
+    get admin_seating_charts_url
+
+    assert_select "tbody tr td", text: "Full House"
+  end
+
+  test "index should sort by name" do
+    FactoryBot.create(:seating_chart, name: "Full House")
+    FactoryBot.create(:seating_chart, name: "VIP Only")
+
+    get admin_seating_charts_url(sort: "name", sort_direction: "asc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "Full House"
+    assert_select "tbody tr:nth-child(2) td", text: "VIP Only"
+
+    get admin_seating_charts_url(sort: "name", sort_direction: "desc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "VIP Only"
+    assert_select "tbody tr:nth-child(2) td", text: "Full House"
+  end
+
+  test "index should be keyword searchable by name" do
+    FactoryBot.create(:seating_chart, name: "Full House")
+    FactoryBot.create(:seating_chart, name: "VIP Only")
+
+    get admin_seating_charts_url(q: "ful")
+    assert_response :success
+    assert_includes response.body, "Full House"
+    assert_not_includes response.body, "VIP Only"
+  end
+
   test "should create seating chart with two sections and two seats in each" do
     venue = FactoryBot.create(:venue, ticket_types_count: 2)
     params = {

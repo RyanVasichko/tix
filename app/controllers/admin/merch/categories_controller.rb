@@ -37,12 +37,10 @@ class Admin::Merch::CategoriesController < Admin::AdminController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_merch_category
     @merch_category = Merch::Category.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def merch_category_params
     params.fetch(:merch_category, {}).permit(:name)
   end

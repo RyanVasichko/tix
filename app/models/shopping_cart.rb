@@ -6,7 +6,7 @@ class ShoppingCart < ApplicationRecord
   has_one :user
 
   def adjust_ticket_selections_for!(show_section_id:, quantity:)
-    ticket = Tickets::GeneralAdmission.find_or_initialize_for_show_section_and_shopping_cart(user, show_section_id)
+    ticket = Tickets::GeneralAdmission.find_or_initialize_for_show_section_and_shopping_cart(user.shopping_cart, show_section_id)
     selection = ticket_selections.find_or_initialize_by(selectable: ticket)
 
     if quantity.zero?

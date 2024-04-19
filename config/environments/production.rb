@@ -23,7 +23,6 @@ Rails.application.configure do
   config.require_master_key = true unless ENV.fetch("SECRET_KEY_BASE_DUMMY", 0) == "1"
 
   config.cache_store = :solid_cache_store
-  config.solid_cache.connects_to = { database: { writing: :cache } }
 
   config.action_controller.perform_caching = true
   config.action_controller.enable_fragment_cache_logging = true

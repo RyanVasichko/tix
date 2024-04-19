@@ -45,6 +45,7 @@ class VenuesTest < ApplicationSystemTestCase
     @venue.deactivate!
     visit admin_venues_url
     check "Include deactivated?"
+    assert_selector "tbody tr td", text: @venue.name
     within "tr", text: @venue.name do
       click_on "Activate"
     end

@@ -44,22 +44,15 @@ FactoryBot.define do
     password_confirmation { "Radiohead" }
   end
 
-  trait :superadmin do
-    after(:build) do |user|
-      user.role = User::Role.find_by_name("superadmin") || FactoryBot.build(:user_role, :superadmin)
-    end
-  end
-
   factory :guest, traits: %i[user], class: "Users::Guest" do
   end
 
   factory :customer, traits: %i[user registered with_password], class: "Users::Customer" do
-    registered
-    with_password
   end
 
-  factory :admin, traits: %i[user registered with_password superadmin], class: "Users::Admin" do
-    registered
-    with_password
+  factory :admin, traits: %i[user registered with_password], class: "Users::Admin" do
+    after(:build) do |admin|
+      admin.role ||= User::Role.find_by_name("superadmin") || FactoryBot.build(:user_role, :superadmin)
+    end
   end
 end

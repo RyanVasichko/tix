@@ -3,12 +3,36 @@ require "test_helper"
 class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in FactoryBot.create(:admin)
-    @artist = FactoryBot.create(:artist)
   end
 
   test "should get index" do
     get admin_artists_url
     assert_response :success
+  end
+
+  test "index should search by name" do
+    FactoryBot.create(:artist, name: "Radiohead")
+    FactoryBot.create(:artist, name: "LCD Soundsystem")
+
+    get admin_artists_url(q: "radio")
+    assert_response :success
+    assert_includes response.body, "Radiohead"
+    assert_not_includes response.body, "LCD Soundsystem"
+  end
+
+  test "index should order by name" do
+    FactoryBot.create(:artist, name: "Radiohead")
+    FactoryBot.create(:artist, name: "LCD Soundsystem")
+
+    get admin_artists_url(sort: "name", sort_direction: "asc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "LCD Soundsystem"
+    assert_select "tbody tr:nth-child(2) td", text: "Radiohead"
+
+    get admin_artists_url(sort: "name", sort_direction: "desc")
+    assert_response :success
+    assert_select "tbody tr:first-child td", text: "Radiohead"
+    assert_select "tbody tr:nth-child(2) td", text: "LCD Soundsystem"
   end
 
   test "should get new" do
@@ -34,11 +58,13 @@ class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    get edit_admin_artist_url(@artist)
+    artist = FactoryBot.create(:artist)
+    get edit_admin_artist_url(artist)
     assert_response :success
   end
 
   test "should update artists" do
+    artist = FactoryBot.create(:artist)
     params = {
       artist:
       {
@@ -49,7 +75,7 @@ class Admin::ArtistsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    patch admin_artist_url(@artist), params: params
+    patch admin_artist_url(artist), params: params
     assert_redirected_to admin_artists_url
   end
 

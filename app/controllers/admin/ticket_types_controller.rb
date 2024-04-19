@@ -8,7 +8,7 @@ class Admin::TicketTypesController < Admin::AdminController
 
   # GET /admin/ticket_types
   def index
-    @ticket_types = TicketType.search(search_params)
+    @ticket_types = TicketType.includes(:venue).search(search_params)
     @ticket_types = @ticket_types.active unless include_deactivated?
     @pagy, @ticket_types = pagy(@ticket_types)
   end

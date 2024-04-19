@@ -9,7 +9,7 @@
     <% end %>
 
     <% table.column "", sortable: false, cell_class: "text-right" do |artist| %>
-      <%= link_to artist.shows.any? ? "Deactivate" : "Delete",
+      <%= link_to artist.shows_count.positive? ? "Deactivate" : "Delete",
                   [:admin, artist],
                   data: { turbo_method: "DELETE" },
                   class: "link danger text-sm" if artist.active? %>

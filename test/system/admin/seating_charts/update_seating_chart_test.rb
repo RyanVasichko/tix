@@ -27,7 +27,6 @@ class Admin::SeatingCharts::UpdateSeatingChartTest < ApplicationSystemTestCase
   test "adding a new seat to a section" do
     close_slide_over
     new_seat = add_seat(seat_number: 5, table_number: 6, section_name: @section_1.name)
-    sleep 0.1
     drag_to(new_seat, 678, 732)
     open_slide_over
 
