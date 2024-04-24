@@ -145,7 +145,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
-    hotwire_combobox (0.2.2)
+    hotwire_combobox (0.2.3)
       rails (>= 7.0.7.2)
       stimulus-rails (>= 1.2)
       turbo-rails (>= 1.2)
@@ -268,7 +268,7 @@ GEM
     redis-client (0.22.0)
       connection_pool
     regexp_parser (2.9.0)
-    reline (0.5.1)
+    reline (0.5.3)
       io-console (~> 0.5)
     requestjs-rails (0.0.11)
       railties (>= 6.1.0)
