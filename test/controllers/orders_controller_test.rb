@@ -126,7 +126,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create should create an order for merch, general admission tickets, and reserved seating tickets for a guest" do
-    delete logout_url
+    delete destroy_user_session_path
     get root_url
     @user = Users::Guest.last
 
@@ -156,7 +156,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create should not allow a guest to place an order without contact information" do
-    delete logout_url
+    delete destroy_user_session_url
     get root_url
     @user = Users::Guest.last
 

@@ -1,0 +1,25 @@
+<h2 class="my-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+  Sign In
+</h2>
+
+<%= card width: "max-w-md" do %>
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <%= form_with(scope: "session", url: user_session_path) do |f| %>
+      <%= f.label :email, class: "mt-4" %>
+      <%= f.email_field :email, autocomplete: "email", autofocus: true %>
+
+      <%= f.label :password, class: "mt-4" %>
+      <%= f.password_field :password, required: true, autocomplete: "current-password" %>
+
+      <div class="mt-4 flex items-center justify-end">
+        <%= link_to "Forgot password?", new_user_password_reset_path, class: "link primary" %>
+      </div>
+
+      <%= f.submit "Sign In", class: "w-full mt-4" %>
+
+      <div class="mt-6 text-center text-sm">
+        Don't have an account? <%= link_to "Sign Up", new_user_path, class: "link primary" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

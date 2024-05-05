@@ -1,4 +1,3 @@
-# test/system/base_user_test.rb
 require "application_system_test_case"
 
 class Admin::BaseUserTestCase < ApplicationSystemTestCase
@@ -46,8 +45,6 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     fill_in "Last name", with: user_type
     fill_in "Email", with: "fake_email@test.com"
     fill_in "Phone", with: "555-555-5555"
-    fill_in "Password", with: "password"
-    fill_in "Password confirmation", with: "password"
   end
 
   def assert_user_attributes(user)
@@ -55,7 +52,6 @@ class Admin::BaseUserTestCase < ApplicationSystemTestCase
     assert_equal user_type, user.last_name
     assert_equal "fake_email@test.com", user.email
     assert_equal "555-555-5555", user.phone
-    assert user.authenticate("password")
   end
 
   def user_type

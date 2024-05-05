@@ -12,10 +12,6 @@ class Admin::CustomersTest < Admin::BaseUserTestCase
     run_visit_the_index_test
   end
 
-  test "creating a customer" do
-    run_create_user_test
-  end
-
   test "updating a customer" do
     run_update_user_test
   end

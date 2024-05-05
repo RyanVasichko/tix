@@ -18,15 +18,6 @@ class Admin::BaseUsersController < Admin::AdminController
     render "admin/users/new"
   end
 
-  def create
-    @user = user_klass.new(user_params)
-    if @user.save
-      redirect_to index_path, flash: { notice: "#{user_class_name} was successfully created." }
-    else
-      render "admin/users/new", status: :unprocessable_entity
-    end
-  end
-
   def edit
     render "admin/users/edit"
   end
@@ -42,7 +33,7 @@ class Admin::BaseUsersController < Admin::AdminController
   private
 
   def base_permitted_parameters
-    %i[first_name last_name email password password_confirmation phone]
+    %i[first_name last_name email phone]
   end
 
   def set_user

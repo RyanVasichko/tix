@@ -8,13 +8,14 @@ class OrdersController < ApplicationController
   end
 
   def new
+    if Current.user.shopping_cart.empty?
+      redirect_to \
+        root_path,
+        flash: { notice: "Your shopping cart is empty, add some items to your shopping cart to check out" }
+      return
+    end
+
     @checkout = Order::Checkout.new(user: Current.user)
-
-    return unless Current.user.shopping_cart.empty?
-
-    redirect_to \
-      root_path,
-      flash: { notice: "Your shopping cart is empty, add some items to your shopping cart to check out" }
   end
 
   def create

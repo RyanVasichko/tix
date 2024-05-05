@@ -14,12 +14,16 @@ class Admin::AdminsTest < Admin::BaseUserTestCase
   end
 
   test "creating a admin" do
-    run_create_user_test do
-      select @roles.third.name, from: "Role"
+    assert_difference -> { Users::Admin.count }, 1 do
+      run_create_user_test do
+        select @roles.third.name, from: "Role"
+      end
     end
 
     created_user = Users::Admin.last
     assert_equal @roles.third.id, created_user.user_role_id
+
+    assert_enqueued_email_with UserMailer, :password_reset_email, args: created_user
   end
 
   test "updating a admin" do

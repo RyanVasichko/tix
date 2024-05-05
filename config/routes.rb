@@ -1,22 +1,24 @@
 Rails.application.routes.draw do
-  # Root route
   root to: "shows#index"
-
   get "up" => "rails/health#show", as: :rails_health_check
-
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
-  # Sessions
-  get "login", to: "sessions#new"
-  post "login", to: "sessions#create"
-  delete "logout", to: "sessions#destroy"
-
   # Public-facing routes
+  get "sign_up", to: "users#new", as: :new_user
+  post "sign_up", to: "users#create", as: :users
+  scope module: :users do
+    get "sign_in", to: "sessions#new", as: :new_user_session
+    post "sign_in", to: "sessions#create", as: :user_session
+    delete "sign_out", to: "sessions#destroy", as: :destroy_user_session
+  end
+  resource :user, only: %i[edit update destroy] do
+    resource :password_reset, only: %i[new create edit update], controller: "users/password_resets"
+  end
+
   resources :shows, only: %i[index]
   namespace :shows do
     resources :general_admission, param: :show_id, only: [] do
       scope module: :general_admission do
-        # TODO: Make this ticket_selections
         resource :ticket_selections, only: %i[new create]
       end
     end

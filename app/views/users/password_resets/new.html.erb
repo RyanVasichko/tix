@@ -1,0 +1,12 @@
+<h2 class="my-6 text-center text-3xl font-semibold">
+  Forgot your password?
+</h2>
+
+<%= card width: "max-w-md" do %>
+  <%= form_with(scope: "user", url: user_password_reset_path, html: { method: :post }) do |f| %>
+    <%= f.label :email, class: "mt-4" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", required: "" %>
+
+    <%= f.submit "Send me reset password instructions", class: "w-full mt-4" %>
+  <% end %>
+<% end %>

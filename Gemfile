@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby file: ".ruby-version"
 
 # Infrastructure
-gem "rails", "~> 7.0"
+gem "rails", github: "rails/rails", branch: "main"
 gem "puma", "~> 6.0"
 gem "redis"
 gem "solid_cache"
@@ -35,14 +35,15 @@ gem "hotwire_combobox"
 gem "bcrypt", "~> 3.1.7"
 gem "pagy"
 
+# Fake data generation
 gem "faker"
 gem "factory_bot_rails"
+gem "mocha"
 
 group :development, :test do
-  gem "bullet", "~> 7.1"
   gem "rubocop-rails-omakase", require: false
   gem "awesome_print"
-  gem "byebug"
+  gem "debug"
   gem "rubocop"
   gem "foreman"
   gem "brakeman", require: false
@@ -56,7 +57,7 @@ end
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
-  gem "mocha"
+
   gem "simplecov"
   gem "webmock"
 end

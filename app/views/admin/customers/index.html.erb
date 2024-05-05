@@ -4,8 +4,7 @@
   <%= data_table collection: @users,
                  pagy: @pagy,
                  namespace: :admin,
-                 new_record_modal: true,
-                 new_record_url: new_admin_customer_path,
+                 new_record_button: false,
                  keyword_search_url: admin_customers_path,
                  infer_include_deactivated_search_param: false do |table| %>
     <% table.column :name do |user| %>

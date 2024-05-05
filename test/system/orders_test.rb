@@ -10,6 +10,7 @@ class OrdersTest < ApplicationSystemTestCase
 
     assert_difference "customer.orders.reload.count" do
       sign_in customer
+      visit root_path
 
       find("#shopping_cart_toggle").click
       click_on "Checkout"

@@ -1,0 +1,82 @@
+<% content_for :head do %>
+  <meta name="turbo-refresh-scroll" content="preserve">
+<% end %>
+
+<h2 class="my-6 text-center text-3xl font-semibold">
+  My Profile
+</h2>
+
+<%= card do %>
+  <div class="grid grid-cols-1 border-b border-zinc-200 py-8 md:grid-cols-3">
+    <h3 class="mt-4 text-xl font-semibold">My personal information</h3>
+
+    <%= form_with(model: @user, scope: "user", url: user_path, class: "space-y-4 md:col-span-2") do |f| %>
+      <div>
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", disabled: "", class: "bg-gray-100" %>
+      </div>
+
+      <div>
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
+
+      <div>
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
+
+      <div>
+        <%= f.label :phone do %>
+          Phone <span class="text-xs">(optional)</span>
+        <% end %>
+        <%= f.telephone_field :phone %>
+      </div>
+
+      <div>
+        <%= f.submit "Update", class: "mt-6" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="<%= class_names("grid grid-cols-1 md:grid-cols-3", "border-b border-zinc-200 py-8": !@user.admin?) %>">
+    <h3 class="mt-4 text-xl font-semibold">Change my password</h3>
+    <%= form_with(model: @user, scope: "user", url: user_path, class: "space-y-4 md:col-span-2") do |f| %>
+      <div>
+        <%= f.label :password_challenge, "Current password" %>
+        <%= f.password_field :password_challenge, autocomplete: "current-password" %>
+      </div>
+
+      <div>
+        <%= f.label :password, "New password", class: "inline-block" %><em class="text-xs">(8 characters minimum)</em>
+        <%= f.password_field :password, autocomplete: "new-password" %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+      </div>
+
+      <div>
+        <%= f.submit "Change my password", class: "mt-6" %>
+      </div>
+    <% end %>
+  </div>
+
+  <% unless @user.admin? %>
+    <div class="grid grid-cols-1 py-8 md:grid-cols-3">
+      <div>
+        <h3 class="mt-4 text-xl font-semibold">Delete my account</h3>
+        <span class="text-sm font-light text-gray-500">This action is not reversible. All information related to this account will be deleted permanently.</span>
+      </div>
+
+      <div class="flex h-full items-end">
+        <%= button_to "Delete my account",
+                      user_path,
+                      method: "delete",
+                      class: "button danger",
+                      data: { turbo_confirm: "Are you sure you want to delete your account? This cannot be undone." } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

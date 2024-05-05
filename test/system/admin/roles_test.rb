@@ -26,7 +26,8 @@ class Admin::RolesTest < ApplicationSystemTestCase
     assert_not role.manage_admins
 
     within "##{dom_id(role, :admin)}" do
-      fill_in "user_role[name]", with: "New Role"
+      fill_in "Name", with: ""
+      fill_in "Name", with: "New Role"
     end
     grant_permission_and_dismiss_toast_messages(role, :hold_seats)
     grant_permission_and_dismiss_toast_messages(role, :release_seats)

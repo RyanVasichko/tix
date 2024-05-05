@@ -91,31 +91,37 @@ class CreateInitialSchema < ActiveRecord::Migration[7.1]
       t.string :first_name
       t.string :last_name
       t.string :phone
-      t.string :email
+      t.string :email, index: { unique: true, where: "email IS NOT NULL" }
       t.string :password_digest
       t.string :type, null: false
       t.string :stripe_customer_id
       t.references :shopping_cart, null: false, foreign_key: true
       t.references :user_role, null: true, foreign_key: true
-      t.string :shopper_uuid, null: false
+      t.string :shopper_uuid, null: false, index: { unique: true }
       t.boolean :active, default: true, null: false
-      t.index [:email, :active]
-      t.index [:email], unique: true
-      t.index [:shopper_uuid], unique: true
+      t.index [:email, :active], where: "email IS NOT NULL"
       t.datetime :last_active_at, null: false
 
       t.check_constraint <<-SQL, name: 'check_user_information'
         (
-           type != 'Users::Guest'#{' '}
-           AND first_name IS NOT NULL#{' '}
-           AND last_name IS NOT NULL#{' '}
-           AND email IS NOT NULL#{' '}
+           type != 'Users::Guest'
+           AND first_name IS NOT NULL
+           AND last_name IS NOT NULL
+           AND email IS NOT NULL
            AND password_digest IS NOT NULL
         )
         OR type = 'Users::Guest'
       SQL
 
       t.check_constraint "type != 'Users::Admin' OR user_role_id IS NOT NULL", name: 'check_admin_role'
+
+      t.timestamps
+    end
+
+    create_table :user_sessions do |t|
+      t.references :user, null: false, foreign_key: true, index: true
+      t.string :token, null: false, index: { unique: true }
+      t.datetime :last_active_at, null: false
 
       t.timestamps
     end

@@ -445,6 +445,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_210206) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token", null: false
+    t.datetime "last_active_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_user_sessions_on_token", unique: true
+    t.index ["user_id"], name: "index_user_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -460,8 +470,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_210206) do
     t.datetime "last_active_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email", "active"], name: "index_users_on_email_and_active"
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email", "active"], name: "index_users_on_email_and_active", where: "(email IS NOT NULL)"
+    t.index ["email"], name: "index_users_on_email", unique: true, where: "(email IS NOT NULL)"
     t.index ["shopper_uuid"], name: "index_users_on_shopper_uuid", unique: true
     t.index ["shopping_cart_id"], name: "index_users_on_shopping_cart_id"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
@@ -506,6 +516,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_210206) do
   add_foreign_key "ticket_types", "venues"
   add_foreign_key "tickets", "show_sections"
   add_foreign_key "tickets", "users", column: "held_by_id"
+  add_foreign_key "user_sessions", "users"
   add_foreign_key "users", "shopping_carts"
   add_foreign_key "users", "user_roles"
   add_foreign_key "venues", "addresses"

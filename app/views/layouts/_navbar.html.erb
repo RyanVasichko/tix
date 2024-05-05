@@ -45,14 +45,14 @@
                  aria-orientation="vertical"
                  tabindex="-1">
               <% if Current.user.guest? %>
-                <%= link_to "Sign In", login_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
-              <% end %>
-              <% unless Current.user.guest? %>
+                <%= link_to "Sign In", new_user_session_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+              <% else %>
                 <div class="block px-4 py-2 text-sm text-gray-700 border-b border-b-gray-100">
                   <span class="italic">Signed in as:</span> <%= Current.user.name %>
                 </div>
                 <%= link_to "My Orders", orders_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
-                <%= link_to "Sign Out", logout_path, data: { turbo_method: "delete" }, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+                <%= link_to "My Profile", edit_user_path, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
+                <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: "delete" }, role: "menuitem", tabindex: "-1", class: "block px-4 py-2 text-sm text-gray-700" %>
               <% end %>
             </div>
           </div>

@@ -7,13 +7,8 @@ require_relative "../lib/faker/seating_chart"
 
 WebMock.enable!
 
-Bullet.enable = ENV["ENABLE_BULLET"] == "1"
-Bullet.bullet_logger = true
-Bullet.unused_eager_loading_enable = false
-Bullet.raise = true # raise an error if n+1 query occurs
-
 class ActiveSupport::TestCase
-  include ActiveJob::TestHelper # Used for perform_enqueued_jobs
+  include ActiveJob::TestHelper
 
   parallelize(workers: :number_of_processors)
 
@@ -23,14 +18,6 @@ class ActiveSupport::TestCase
 
   setup do
     Faker::UniqueGenerator.clear
-    Bullet.start_request if Bullet.enable?
-  end
-
-  teardown do
-    if Bullet.enabled?
-      Bullet.perform_out_of_channel_notifications if Bullet.notification?
-      Bullet.end_request
-    end
   end
 end
 

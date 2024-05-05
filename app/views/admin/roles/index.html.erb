@@ -36,6 +36,7 @@
           <%= form_with model: role, url: role.new_record? ? admin_roles_path : admin_role_path(role), id: dom_id(role, :admin), class: "table-row bg-white border-b last:border-none hover:bg-gray-50" do |form| %>
             <div class="table-cell px-6 py-4">
               <%= form.text_field :name, class: "peer" %>
+              <%= form.label :name, class: "sr-only" %>
               <p class="mt-2 hidden peer-focus:block text-xs">Press Enter to save</p>
             </div>
             <div class="table-cell px-6 py-4">

@@ -1,50 +1,36 @@
-<%= form_with model: [:admin, user], url: url do |form| %>
-  <div class="mt-6 grid grid-cols-2 gap-4">
-    <div>
-      <%= form.label :first_name %>
-      <%= form.text_field :first_name, autofocus: true %>
-    </div>
-
-    <div>
-      <%= form.label :last_name %>
-      <%= form.text_field :last_name %>
-    </div>
+<%= form_with model: [:admin, user], url: url, html: { class: "grid grid-cols-2 gap-x-4 gap-y-6 p-2" } do |form| %>
+  <div>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name, autofocus: true %>
   </div>
 
-  <div class="mt-6 grid grid-cols-2 gap-4">
-    <div>
-      <%= form.label :email %>
-      <%= form.email_field :email %>
-    </div>
-
-    <div>
-      <%= form.label :phone %>
-      <%= form.telephone_field :phone %>
-    </div>
+  <div>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
   </div>
 
-  <% if user.is_a?(Users::Admin) %>
-    <div class="mt-6 grid grid-cols-1 gap-4">
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :phone %>
+    <%= form.telephone_field :phone %>
+  </div>
+
+  <% if user.admin? %>
+    <div class="col-span-2">
       <div>
         <%= form.label :user_role_id, "Role" %>
         <%= form.collection_select :user_role_id, User::Role.order(:name), :id, :name %>
       </div>
+
+      <em class="col-span-2 mt-4 block text-sm">An email to reset their password will be sent after the admin is created.</em>
     </div>
   <% end %>
 
-  <div class="mt-6 grid grid-cols-2 gap-4">
-    <div>
-      <%= form.label :password %>
-      <%= form.password_field :password %>
-    </div>
-
-    <div>
-      <%= form.label :password_confirmation %>
-      <%= form.password_field :password_confirmation %>
-    </div>
-  </div>
-
-  <div class="mt-6 flex justify-end">
+  <div class="col-span-2 flex justify-end">
     <%= form.submit %>
   </div>
 <% end %>

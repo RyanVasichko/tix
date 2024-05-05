@@ -1,16 +1,21 @@
+<% dropdown_id = "#{id}_dropdown" if local_assigns[:id] %>
 <div data-controller="openable" data-action="click@document->openable#hide" class="relative inline-block text-left">
   <div>
     <button
       type="button"
-      id="<%= id %>_dropdown"
+      id="<%= dropdown_id %>"
       data-action="openable#toggle"
       aria-expanded="true"
       aria-haspopup="true"
-      class="flex items-center rounded-full bg-amber-100 text-amber-400 hover:text-amber-600">
+      class="flex items-center">
       <span class="sr-only">Open options</span>
-      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"/>
-      </svg>
+      <% if content_for?(:dropdown_icon) %>
+        <%= yield(:dropdown_icon) %>
+      <% else %>
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"/>
+        </svg>
+      <% end %>
     </button>
   </div>
   <div
@@ -22,7 +27,7 @@
     data-transition-leave-start="transform opacity-100 scale-100"
     data-transition-leave-end="transform opacity-0 scale-95"
     aria-orientation="vertical"
-    aria-labelledby="<%= id %>_dropdown"
+    aria-labelledby="<%= dropdown_id %>"
     tabindex="-1"
     class="hidden absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-0 scale-95">
     <div class="py-1" role="none">
