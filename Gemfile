@@ -61,3 +61,5 @@ group :test do
   gem "simplecov"
   gem "webmock"
 end
+
+gem "thruster", "~> 0.1.4"
