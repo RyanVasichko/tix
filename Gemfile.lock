@@ -204,7 +204,7 @@ GEM
       rails (~> 7.1)
       stimulus-rails
       turbo-rails
-    mocha (2.2.0)
+    mocha (2.4.0)
       ruby2_keywords (>= 0.0.5)
     net-imap (0.4.10)
       date
