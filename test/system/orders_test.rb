@@ -111,12 +111,12 @@ class OrdersTest < ApplicationSystemTestCase
   private
 
   def fill_in_credit_card_information
-    frame = find('iframe[name^="__privateStripeFrame"]')
+    frame = find('iframe[name^="__privateStripeFrame"]', wait: 10)
     within_frame(frame) do
       fill_in "Card number", with: "4242424242424242"
-      fill_in "Expiration", with: "12/#{(Time.now.year + 1).to_s[-2 ..]}]}"
+      fill_in "Expiration", with: "12/#{(Time.now.year + 1).to_s[-2..]}]}"
       fill_in "CVC", with: "123"
-      fill_in "ZIP", with: "77019"
+      fill_in "Zip code", with: "77019"
     end
   end
 
