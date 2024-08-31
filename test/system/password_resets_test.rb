@@ -19,5 +19,8 @@ class PasswordResetsTest < ApplicationSystemTestCase
     fill_in "New password", with: "NewPassword"
     fill_in "Confirm new password", with: "NewPassword"
     click_on "Reset my password"
+    assert_text "Your password has been successfully reset."
+
+    assert customer.reload.authenticate("NewPassword")
   end
 end

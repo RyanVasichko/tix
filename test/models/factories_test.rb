@@ -2,7 +2,9 @@ require "test_helper"
 
 class FactoriesTest < ActiveSupport::TestCase
   test "FactoryBot lints" do
-    FactoryBot.lint
+    assert_nothing_raised do
+      FactoryBot.lint
+    end
   end
 
   test "factories make the correct number of objects" do
