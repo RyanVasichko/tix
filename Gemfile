@@ -18,7 +18,7 @@ gem "importmap-rails", "~> 2.0"
 gem "requestjs-rails"
 gem "stimulus-rails"
 gem "turbo-rails", "~> 2.0"
-gem "tailwindcss-rails", "~> 2.6"
+gem "tailwindcss-rails", "~> 2.7"
 gem "stripe"
 
 # Database
