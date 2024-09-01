@@ -4,13 +4,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby file: ".ruby-version"
 
 # Infrastructure
-gem "rails", github: "rails/rails", branch: "main"
+gem "rails"
 gem "puma", "~> 6.0"
 gem "redis"
-gem "solid_cache", "~> 0.6.0"
-gem "solid_queue", "~> 0.3.0"
+gem "solid_cache"
+gem "solid_queue"
 gem "appsignal"
 gem "mission_control-jobs"
+gem "msgpack", ">= 1.7.0"
 
 # Assets
 gem "propshaft"

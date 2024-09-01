@@ -4,38 +4,34 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 }.to_i %>
   retries: 5000
   default_transaction_mode: immediate
+  database: storage/db/tix_<%= Rails.env %>.sqlite3
 
 cache: &cache
   <<: *default
+  database: storage/db/tix_cache_<%= Rails.env %>.sqlite3
   migrations_paths: "db/cache/migrate"
 
 jobs: &jobs
   <<: *default
+  database: storage/db/tix_jobs_<%= Rails.env %>.sqlite3
   migrations_paths: "db/jobs/migrate"
 
 development:
   primary:
     <<: *default
-    database: storage/db/tix_development.sqlite3
   jobs:
     <<: *jobs
-    database: storage/db/tix_jobs_development.sqlite3
   cache:
     <<: *cache
-    database: storage/db/tix_cache_development.sqlite3
 
 test:
   primary:
     <<: *default
-    database: storage/db/tix_test.sqlite3
 
 production:
   primary:
     <<: *default
-    database: storage/db/tix.sqlite3
   cache:
     <<: *cache
-    database: storage/db/tix_cache.sqlite3
   jobs:
     <<: *jobs
-    database: storage/db/tix_jobs.sqlite3

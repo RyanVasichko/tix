@@ -13,10 +13,6 @@ module Tix
 
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { database: { writing: :jobs } }
-    config.solid_queue.silence_polling = true
-
-    config.cache_store = :solid_cache_store
-    config.solid_cache.connects_to = { database: { writing: :cache } }
 
     config.mission_control.jobs.base_controller_class = "Admin::AdminController"
 
