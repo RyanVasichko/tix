@@ -13,7 +13,7 @@ class Admin::ShowsControllerTest < ActionDispatch::IntegrationTest
 
   test "index should be keyword searchable by show date" do
     set_up_shows_for_search_and_sort_tests
-    get admin_shows_path(q: (Time.current + 1.month).to_fs(:date))
+    get admin_shows_path(q: (Time.current + 1.month).strftime("%-m/%d/%Y"))
 
     assert_response :success
     assert_includes response.body, "Radiohead"

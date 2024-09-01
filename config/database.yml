@@ -2,7 +2,7 @@ default: &default
   adapter: sqlite3
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 }.to_i %>
-  timeout: 5000
+  retries: 5000
   default_transaction_mode: immediate
 
 cache: &cache

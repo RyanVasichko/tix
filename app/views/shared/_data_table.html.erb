@@ -83,8 +83,8 @@
     <!-- TABLE FOOTER -->
     <nav class="flex flex-col flex-wrap items-center justify-between rounded-b-xl border-x border-b border-gray-200 bg-zinc-50 p-2 pt-2 text-sm md:flex-row" aria-label="Table navigation">
       <% if local_assigns[:pagy] %>
-        <% start_row = (pagy.page - 1) * pagy.items + 1 %>
-        <% end_row = start_row + pagy.items - 1 %>
+        <% start_row = (pagy.page - 1) * pagy.vars[:items] + 1 %>
+        <% end_row = start_row + pagy.vars[:items] - 1 %>
         <% end_row = pagy.count if end_row > pagy.count %>
         <span class="mb-4 block w-full font-normal text-gray-500 md:mb-0 md:inline md:w-auto">
         Showing <span class="font-semibold text-gray-900"><%= start_row %>
