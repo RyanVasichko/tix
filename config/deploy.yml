@@ -27,7 +27,7 @@ servers:
   web:
     hosts:
       - <%= ENV.fetch("HOST") %>
-    cmd: "bundle exec thrust ./bin/rails server"
+    cmd: "bin/rails server"
     labels:
       traefik.http.routers.web.entrypoints: websecure
       traefik.http.routers.web.rule: Host(`tix.ryanvasichko.com`)
