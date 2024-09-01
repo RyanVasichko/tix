@@ -8,7 +8,7 @@ gem "rails", github: "rails/rails", branch: "main"
 gem "puma", "~> 6.0"
 gem "redis"
 gem "solid_cache", "~> 0.6.0"
-gem "solid_queue", "~> 0.3.0"
+gem "solid_queue", "~> 0.6.1"
 gem "appsignal"
 gem "mission_control-jobs"
 
