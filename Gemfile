@@ -61,4 +61,4 @@ group :test do
   gem "webmock"
 end
 
-gem "thruster", "~> 0.1.4"
+gem "thruster", "~> 0.1.8"
