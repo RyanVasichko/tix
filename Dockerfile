@@ -9,7 +9,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -22,7 +22,7 @@ ENV RAILS_ENV="production" \
 FROM base as build
 
 # Install packages needed to build gems
-RUN apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config
+RUN apt-get install --no-install-recommends -y build-essential git  pkg-config libsqlite3-0
 
 # Install application gems
 COPY Gemfile Gemfile.lock .ruby-version ./
@@ -39,8 +39,10 @@ RUN SECRET_KEY_BASE_DUMMY=1 HOST=dummy ./bin/rails assets:precompile
 # Final stage for app image
 FROM base
 
-# Clean up installation packages to reduce image size
-RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Install packages needed for deployment and jemalloc
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libjemalloc2 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"

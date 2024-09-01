@@ -105,4 +105,18 @@ class ShowTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(next_year, 9, 19, 14, 0, 0), show.dinner_starts_at
     assert_equal Time.zone.local(next_year, 9, 19, 15, 0, 0), show.dinner_ends_at
   end
+
+  test "should rebuild the order index when the artist changes" do
+    skip "I can't get order_search_indices to create in test environment"
+
+    show = FactoryBot.create(:reserved_seating_show)
+    order = FactoryBot.create(:customer_order, with_existing_shows: true)
+
+    show.artist = FactoryBot.create(:artist)
+    show.save
+
+    perform_enqueued_jobs
+
+    assert Order::SearchIndex.find_by(order_id: order.id)
+  end
 end

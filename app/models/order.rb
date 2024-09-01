@@ -5,12 +5,8 @@ class Order < ApplicationRecord
   delegate :name, :phone, :email, to: :orderer, prefix: true
 
   has_many :purchases, class_name: "Order::Purchase"
-  scope :includes_purchases, -> { includes(purchases: :purchaseable) }
-
   has_many :tickets, through: :purchases, source: :purchaseable, source_type: "Ticket"
-
   has_many :shows, through: :tickets, source: :show
-  scope :includes_show, -> { includes(shows: :artist) }
 
   before_commit :set_order_number, on: :create, unless: -> { order_number.present? }
 

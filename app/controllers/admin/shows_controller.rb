@@ -7,7 +7,7 @@ class Admin::ShowsController < Admin::AdminController
   sortable_by :show_date, :artist_name, :venue_name
 
   def index
-    shows = Show.includes_artist.includes(:venue).search(search_params)
+    shows = Show.search(search_params)
     shows = shows.upcoming unless params.dig(:search, :show_off_sale) == "1"
 
     @pagy, @shows = pagy(shows)

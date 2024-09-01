@@ -1,26 +1,41 @@
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 }.to_i %>
-  port: 5432
+  timeout: 5000
+  default_transaction_mode: immediate
 
-local: &local
+cache: &cache
   <<: *default
-  password: password
-  user: postgres
-  host: localhost
+  migrations_paths: "db/cache/migrate"
+
+jobs: &jobs
+  <<: *default
+  migrations_paths: "db/jobs/migrate"
 
 development:
-  <<: *local
-  database: tix_development
+  primary:
+    <<: *default
+    database: storage/db/tix_development.sqlite3
+  jobs:
+    <<: *jobs
+    database: storage/db/tix_jobs_development.sqlite3
+  cache:
+    <<: *cache
+    database: storage/db/tix_cache_development.sqlite3
 
 test:
-  <<: *local
-  database: tix_test
+  primary:
+    <<: *default
+    database: storage/db/tix_test.sqlite3
 
 production:
-  <<: *default
-  database: tix_production
-  host: <%= ENV["DB_HOST"] %>
-  user: tix
-  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  primary:
+    <<: *default
+    database: storage/db/tix.sqlite3
+  cache:
+    <<: *cache
+    database: storage/db/tix_cache.sqlite3
+  jobs:
+    <<: *jobs
+    database: storage/db/tix_jobs.sqlite3

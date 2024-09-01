@@ -10,5 +10,5 @@ class Venue < ApplicationRecord
 
   orderable_by :name, :active
 
-  scope :keyword_search, ->(query) { where("name ILIKE ?", "%#{query}%") }
+  scope :keyword_search, ->(query) { where("name LIKE ?", "%#{query}%") }
 end

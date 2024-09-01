@@ -196,7 +196,7 @@ class Admin::OrdersControllerTest < ActionDispatch::IntegrationTest
                                                 last_name: "Bretter",
                                                 phone: "(123) 456-7890",
                                                 email: "Peter.Bretter@example.com"))
-              .tap { |order| order.update!(created_at: Time.current - 1.week, balance_paid: 42.69) }
+    Order.last.update!(created_at: Time.current - 1.week, balance_paid: 42.69)
 
     FactoryBot.create(:guest_order,
                       order_number: "DEF123",
@@ -207,6 +207,8 @@ class Admin::OrdersControllerTest < ActionDispatch::IntegrationTest
                                                 last_name: "Jansen",
                                                 phone: "987 654-3210",
                                                 email: "RachelJansen@example.com"))
-              .tap { |order| order.update!(created_at: Time.current - 2.weeks, balance_paid: 69.42) }
+    Order.last.update!(created_at: Time.current - 2.weeks, balance_paid: 69.42)
+
+    perform_enqueued_jobs
   end
 end

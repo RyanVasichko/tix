@@ -6,5 +6,5 @@ class CustomerQuestion < ApplicationRecord
   validates :question, presence: true
 
   orderable_by :question, :active
-  scope :keyword_search, ->(query) { where("question ILIKE ?", "%#{query}%") }
+  scope :keyword_search, ->(query) { where("question LIKE ?", "%#{query}%") }
 end

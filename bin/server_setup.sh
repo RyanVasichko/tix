@@ -47,8 +47,12 @@ configure_ubuntu_auto_updates() {
 # Main execution
 
 ensure_directory "/letsencrypt"
+
 ensure_file_with_permissions "/letsencrypt/acme.json" "600"
+
+ensure_directory_with_ownership "/var/lib/tix/db" "5000" "5000"
 ensure_directory_with_ownership "/var/lib/tix/log" "5000" "5000"
+
 configure_ubuntu_auto_updates
 
 echo "Setup completed."

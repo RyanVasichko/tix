@@ -2,7 +2,7 @@ class MerchController < ApplicationController
   helper_method :all_selected?, :selected_category_ids
 
   def index
-    @merch = Merch.includes_image.active.order(:order)
+    @merch = Merch.active.order(:order)
     @merch = @merch.for_categories(selected_category_ids) unless all_selected?
     @merch_categories = Merch::Category.joins(:merch).uniq
   end

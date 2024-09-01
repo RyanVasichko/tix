@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
+ActiveRecord::Schema[7.2].define(version: 2024_03_27_224155) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -70,8 +67,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "customer_questions_shows", id: false, force: :cascade do |t|
-    t.bigint "show_id", null: false
-    t.bigint "customer_question_id", null: false
+    t.integer "show_id", null: false
+    t.integer "customer_question_id", null: false
     t.index ["customer_question_id"], name: "index_customer_questions_shows_on_customer_question_id"
     t.index ["show_id"], name: "index_customer_questions_shows_on_show_id"
   end
@@ -96,8 +93,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "merch_merch_categories", id: false, force: :cascade do |t|
-    t.bigint "merch_id", null: false
-    t.bigint "merch_category_id", null: false
+    t.integer "merch_id", null: false
+    t.integer "merch_category_id", null: false
     t.index ["merch_category_id"], name: "index_merch_merch_categories_on_merch_category_id"
     t.index ["merch_id"], name: "index_merch_merch_categories_on_merch_id"
   end
@@ -132,10 +129,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "order_purchases", force: :cascade do |t|
-    t.bigint "order_id", null: false
+    t.integer "order_id", null: false
     t.string "purchaseable_type", null: false
-    t.bigint "purchaseable_id", null: false
-    t.jsonb "options"
+    t.integer "purchaseable_id", null: false
+    t.json "options"
     t.decimal "item_price", precision: 8, scale: 2, null: false
     t.integer "quantity", default: 1, null: false
     t.decimal "total_fees", precision: 8, scale: 2, default: "0.0", null: false
@@ -150,7 +147,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   create_table "order_shipping_addresses", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.bigint "address_id", null: false
+    t.integer "address_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["address_id"], name: "index_order_shipping_addresses_on_address_id"
@@ -163,9 +160,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
     t.decimal "shipping_charges", precision: 8, scale: 2, default: "0.0", null: false
     t.string "order_number"
     t.string "orderer_type", null: false
-    t.bigint "orderer_id", null: false
-    t.bigint "order_payment_id"
-    t.bigint "shipping_address_id"
+    t.integer "orderer_id", null: false
+    t.integer "order_payment_id"
+    t.integer "shipping_address_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_payment_id"], name: "index_orders_on_order_payment_id"
@@ -178,7 +175,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
     t.integer "y", null: false
     t.string "seat_number", null: false
     t.string "table_number", null: false
-    t.bigint "seating_chart_section_id", null: false
+    t.integer "seating_chart_section_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["seating_chart_section_id"], name: "index_seating_chart_seats_on_seating_chart_section_id"
@@ -186,8 +183,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
 
   create_table "seating_chart_sections", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "seating_chart_id", null: false
-    t.bigint "ticket_type_id", null: false
+    t.integer "seating_chart_id", null: false
+    t.integer "ticket_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "seating_chart_id"], name: "index_seating_chart_sections_on_name_and_seating_chart_id"
@@ -199,18 +196,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
     t.string "name", null: false
     t.boolean "active", default: true, null: false
     t.boolean "published", default: true, null: false
-    t.bigint "venue_id", null: false
+    t.integer "venue_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["venue_id"], name: "index_seating_charts_on_venue_id"
   end
 
   create_table "shopping_cart_selections", force: :cascade do |t|
-    t.bigint "shopping_cart_id", null: false
+    t.integer "shopping_cart_id", null: false
     t.string "selectable_type", null: false
-    t.bigint "selectable_id", null: false
+    t.integer "selectable_id", null: false
     t.integer "quantity", default: 1, null: false
-    t.jsonb "options"
+    t.json "options"
     t.datetime "expires_at"
     t.bigint "lock_version", default: 0, null: false
     t.datetime "created_at", null: false
@@ -220,9 +217,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "shopping_cart_tickets", force: :cascade do |t|
-    t.bigint "show_section_id", null: false
+    t.integer "show_section_id", null: false
     t.integer "quantity", null: false
-    t.bigint "shopping_cart_id", null: false
+    t.integer "shopping_cart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["shopping_cart_id"], name: "index_shopping_cart_tickets_on_shopping_cart_id"
@@ -235,7 +232,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "show_seats", force: :cascade do |t|
-    t.bigint "ticket_id", null: false
+    t.integer "ticket_id", null: false
     t.integer "x", null: false
     t.integer "y", null: false
     t.integer "seat_number", null: false
@@ -246,7 +243,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "show_sections", force: :cascade do |t|
-    t.bigint "show_id", null: false
+    t.integer "show_id", null: false
     t.decimal "ticket_price", precision: 10, scale: 2, null: false
     t.string "convenience_fee_type", null: false
     t.string "payment_method", null: false
@@ -263,7 +260,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   create_table "show_upsales", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.bigint "show_id", null: false
+    t.integer "show_id", null: false
     t.decimal "price", precision: 8, scale: 2, null: false
     t.integer "quantity", null: false
     t.boolean "active", default: true, null: false
@@ -273,8 +270,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "shows", force: :cascade do |t|
-    t.bigint "artist_id", null: false
-    t.bigint "venue_id", null: false
+    t.integer "artist_id", null: false
+    t.integer "venue_id", null: false
     t.string "seating_chart_name"
     t.date "show_date", null: false
     t.datetime "doors_open_at", null: false
@@ -295,122 +292,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
     t.index ["venue_id"], name: "index_shows_on_venue_id"
   end
 
-  create_table "solid_cache_entries", force: :cascade do |t|
-    t.binary "key", null: false
-    t.binary "value", null: false
-    t.datetime "created_at", null: false
-    t.bigint "key_hash", null: false
-    t.integer "byte_size", null: false
-    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
-    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
-    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
-  end
-
-  create_table "solid_queue_blocked_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
-    t.string "concurrency_key", null: false
-    t.datetime "expires_at", null: false
-    t.datetime "created_at", null: false
-    t.index ["concurrency_key", "priority", "job_id"], name: "index_solid_queue_blocked_executions_for_release"
-    t.index ["expires_at", "concurrency_key"], name: "index_solid_queue_blocked_executions_for_maintenance"
-    t.index ["job_id"], name: "index_solid_queue_blocked_executions_on_job_id", unique: true
-  end
-
-  create_table "solid_queue_claimed_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.bigint "process_id"
-    t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_claimed_executions_on_job_id", unique: true
-    t.index ["process_id", "job_id"], name: "index_solid_queue_claimed_executions_on_process_id_and_job_id"
-  end
-
-  create_table "solid_queue_failed_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.text "error"
-    t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_failed_executions_on_job_id", unique: true
-  end
-
-  create_table "solid_queue_jobs", force: :cascade do |t|
-    t.string "queue_name", null: false
-    t.string "class_name", null: false
-    t.text "arguments"
-    t.integer "priority", default: 0, null: false
-    t.string "active_job_id"
-    t.datetime "scheduled_at"
-    t.datetime "finished_at"
-    t.string "concurrency_key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["active_job_id"], name: "index_solid_queue_jobs_on_active_job_id"
-    t.index ["class_name"], name: "index_solid_queue_jobs_on_class_name"
-    t.index ["finished_at"], name: "index_solid_queue_jobs_on_finished_at"
-    t.index ["queue_name", "finished_at"], name: "index_solid_queue_jobs_for_filtering"
-    t.index ["scheduled_at", "finished_at"], name: "index_solid_queue_jobs_for_alerting"
-  end
-
-  create_table "solid_queue_pauses", force: :cascade do |t|
-    t.string "queue_name", null: false
-    t.datetime "created_at", null: false
-    t.index ["queue_name"], name: "index_solid_queue_pauses_on_queue_name", unique: true
-  end
-
-  create_table "solid_queue_processes", force: :cascade do |t|
-    t.string "kind", null: false
-    t.datetime "last_heartbeat_at", null: false
-    t.bigint "supervisor_id"
-    t.integer "pid", null: false
-    t.string "hostname"
-    t.text "metadata"
-    t.datetime "created_at", null: false
-    t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
-    t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
-  end
-
-  create_table "solid_queue_ready_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
-    t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
-    t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
-  end
-
-  create_table "solid_queue_recurring_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "task_key", null: false
-    t.datetime "run_at", null: false
-    t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
-    t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
-  end
-
-  create_table "solid_queue_scheduled_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
-    t.datetime "scheduled_at", null: false
-    t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true
-    t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_dispatch_all"
-  end
-
-  create_table "solid_queue_semaphores", force: :cascade do |t|
-    t.string "key", null: false
-    t.integer "value", default: 1, null: false
-    t.datetime "expires_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
-    t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
-    t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
-  end
-
   create_table "ticket_types", force: :cascade do |t|
-    t.bigint "venue_id", null: false
+    t.integer "venue_id", null: false
     t.string "name", null: false
     t.decimal "convenience_fee", precision: 8, scale: 2
     t.string "convenience_fee_type", null: false
@@ -425,8 +308,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.bigint "show_section_id", null: false
-    t.bigint "held_by_id"
+    t.integer "show_section_id", null: false
+    t.integer "held_by_id"
     t.string "type"
     t.bigint "lock_version", default: 0, null: false
     t.datetime "created_at", null: false
@@ -446,7 +329,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   end
 
   create_table "user_sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "token", null: false
     t.datetime "last_active_at", null: false
     t.datetime "created_at", null: false
@@ -463,27 +346,26 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
     t.string "password_digest"
     t.string "type", null: false
     t.string "stripe_customer_id"
-    t.bigint "shopping_cart_id", null: false
-    t.bigint "user_role_id"
+    t.integer "shopping_cart_id", null: false
+    t.integer "user_role_id"
     t.string "shopper_uuid", null: false
     t.boolean "active", default: true, null: false
-    t.datetime "last_active_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email", "active"], name: "index_users_on_email_and_active", where: "(email IS NOT NULL)"
-    t.index ["email"], name: "index_users_on_email", unique: true, where: "(email IS NOT NULL)"
+    t.datetime "last_active_at"
+    t.index ["email"], name: "index_users_on_email", unique: true, where: "email IS NOT NULL"
     t.index ["shopper_uuid"], name: "index_users_on_shopper_uuid", unique: true
     t.index ["shopping_cart_id"], name: "index_users_on_shopping_cart_id"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
-    t.check_constraint "type::text <> 'Users::Admin'::text OR user_role_id IS NOT NULL", name: "check_admin_role"
-    t.check_constraint "type::text <> 'Users::Guest'::text AND first_name IS NOT NULL AND last_name IS NOT NULL AND email IS NOT NULL AND password_digest IS NOT NULL OR type::text = 'Users::Guest'::text", name: "check_user_information"
+    t.check_constraint "        (\n           type != 'Users::Guest'\n           AND first_name IS NOT NULL\n           AND last_name IS NOT NULL\n           AND email IS NOT NULL\n           AND password_digest IS NOT NULL\n        )\n        OR type = 'Users::Guest'\n", name: "check_user_information"
+    t.check_constraint "type != 'Users::Admin' OR user_role_id IS NOT NULL", name: "check_admin_role"
   end
 
   create_table "venues", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "active", default: true, null: false
     t.string "phone"
-    t.bigint "address_id"
+    t.integer "address_id"
     t.decimal "sales_tax", precision: 4, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -507,12 +389,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_23_210206) do
   add_foreign_key "show_upsales", "shows"
   add_foreign_key "shows", "artists"
   add_foreign_key "shows", "venues"
-  add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "ticket_types", "venues"
   add_foreign_key "tickets", "show_sections"
   add_foreign_key "tickets", "users", column: "held_by_id"

@@ -5,7 +5,7 @@ class Admin::OrdersController < Admin::AdminController
   self.default_sort_field = :created_at
 
   def index
-    @pagy, @orders = pagy(Order.includes_show.includes(:orderer).search(search_params))
+    @pagy, @orders = pagy(Order.search(search_params))
   end
 
   def show

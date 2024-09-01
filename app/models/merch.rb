@@ -8,7 +8,6 @@ class Merch < ApplicationRecord
     image.variant :medium, resize_to_limit: [600, 600], format: :webp, convert: :webp, preprocessed: true
   end
   validates :image, attached: true
-  scope :includes_image, -> { includes(image_attachment: :blob) }
 
   has_and_belongs_to_many :categories, class_name: "Merch::Category", association_foreign_key: :merch_category_id,
                           foreign_key: :merch_id, join_table: :merch_merch_categories

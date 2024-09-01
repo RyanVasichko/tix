@@ -25,7 +25,7 @@ module Authentication
 
   def session_from_cookies
     if token = cookies.signed[:session_token]
-      if session = User::Session.includes(:user).find_by(token: token)
+      if session = User::Session.find_by(token: token)
         return session
       else
         cookies.delete(:session_token)

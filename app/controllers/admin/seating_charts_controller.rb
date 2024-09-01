@@ -61,7 +61,7 @@ class Admin::SeatingChartsController < Admin::AdminController
   private
 
   def set_seating_chart
-    @seating_chart = SeatingChart.includes(sections: [:seats]).find(params[:id])
+    @seating_chart = SeatingChart.find(params[:id])
   end
 
   def set_clone_from

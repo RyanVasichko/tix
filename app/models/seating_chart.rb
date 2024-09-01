@@ -13,5 +13,5 @@ class SeatingChart < ApplicationRecord
 
   orderable_by :name
 
-  scope :keyword_search, ->(query) { where("name ILIKE ?", "%#{query}%") }
+  scope :keyword_search, ->(query) { where("name LIKE ?", "%#{query}%") }
 end

@@ -8,20 +8,19 @@ registry:
 
 env:
   clear:
-    DB_HOST: <%= ENV.fetch("HOST") %>
     RAILS_SERVE_STATIC_FILES: 1
     WEB_CONCURRENCY: 0
     RAILS_MAX_THREADS: 3
-    HOST: tix.ryanvasichko.com
+    HOST: <%= ENV.fetch("HOST") %>
   secret:
     - RAILS_MASTER_KEY
-    - POSTGRES_PASSWORD
 
 builder:
   local:
     arch: amd64
 
 volumes:
+  - "/var/lib/tix/db:/rails/storage/db"
   - "/var/lib/tix/log:/rails/log"
 
 servers:
@@ -46,18 +45,6 @@ accessories:
     port: 6379
     directories:
       - "data:/data"
-  db:
-    image: postgres:16
-    host: <%= ENV.fetch("HOST") %>
-    port: 5432
-    env:
-      secret:
-        - POSTGRES_PASSWORD
-      clear:
-        POSTGRES_USER: tix
-        POSTGRES_DB: tix_production
-    directories:
-      - "data:/var/lib/postgresql/data"
 
 traefik:
   options:

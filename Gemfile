@@ -7,8 +7,8 @@ ruby file: ".ruby-version"
 gem "rails", github: "rails/rails", branch: "main"
 gem "puma", "~> 6.0"
 gem "redis"
-gem "solid_cache"
-gem "solid_queue"
+gem "solid_cache", "~> 0.6.0"
+gem "solid_queue", "~> 0.3.0"
 gem "appsignal"
 gem "mission_control-jobs"
 
@@ -22,10 +22,9 @@ gem "tailwindcss-rails", "~> 2.6"
 gem "stripe"
 
 # Database
-gem "pg"
+gem "sqlite3", "~> 2.0"
 
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
-gem "chronic"
 
 # Storage
 gem "aws-sdk-s3", require: false

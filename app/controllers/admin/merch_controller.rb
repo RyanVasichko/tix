@@ -3,7 +3,7 @@ class Admin::MerchController < Admin::AdminController
 
   def index
     @include_off_sale = params[:include_off_sale] == "1"
-    @merch = Merch.includes(:categories)
+    @merch = Merch.all
     @merch = @merch.order(:order)
   end
 
