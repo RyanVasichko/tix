@@ -17,6 +17,7 @@ module FactoryRunners
             with_existing_venue: true,
             venue_layout_blob: VENUE_LAYOUT_BLOB
           Faker::SeatingChart.unique.clear
+          Faker::Commerce.unique.clear
         end
         puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
       end
@@ -32,6 +33,7 @@ module FactoryRunners
             with_existing_venue: true,
             venue_layout_blob: VENUE_LAYOUT_BLOB
           Faker::SeatingChart.unique.clear
+          Faker::Commerce.unique.clear
         end
         puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
       end
