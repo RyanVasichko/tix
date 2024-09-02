@@ -32,16 +32,15 @@ FactoryBot.define do
   factory :reserved_seating_show, traits: [:show], class: Shows::ReservedSeating do
     seating_chart_name { Faker::Lorem.word }
     type { Shows::ReservedSeating.to_s }
+    venue_layout do
+      ActiveStorage::Blob.create_and_upload! \
+        io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
+        filename: "seating_chart.bmp",
+        content_type: "image/bmp"
+    end
 
     transient do
       section_tickets_count { 5 }
-      venue_layout_blob do
-        ActiveStorage::Blob.create_and_upload!(
-          io: File.open(Rails.root.join("test", "fixtures", "files", "seating_chart.bmp")),
-          filename: "seating_chart.bmp",
-          content_type: "image/bmp"
-        )
-      end
     end
 
     after(:build) do |show, evaluator|
@@ -55,8 +54,6 @@ FactoryBot.define do
           show: show,
           tickets_count: evaluator.section_tickets_count)
       end
-
-      show.venue_layout.attach(evaluator.venue_layout_blob)
     end
   end
 

@@ -8,22 +8,24 @@ module FactoryRunners
 
     def run
       with_forking do
-        upcoming_reserved_seating_shows_count.times do
+        upcoming_reserved_seating_shows_count.times do |t|
           FactoryBot.create \
             :reserved_seating_show,
             with_existing_artist: true,
             sections_count: 4,
             section_tickets_count: 90,
             with_existing_venue: true,
-            venue_layout_blob: VENUE_LAYOUT_BLOB
+            venue_layout: VENUE_LAYOUT_BLOB
+
           Faker::SeatingChart.unique.clear
           Faker::Commerce.unique.clear
         end
+
         puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
       end
 
       with_forking do
-        past_reserved_seating_shows_count.times do
+        past_reserved_seating_shows_count.times do |t|
           FactoryBot.create \
             :reserved_seating_show,
             :past,
@@ -31,10 +33,12 @@ module FactoryRunners
             sections_count: 4,
             section_tickets_count: 90,
             with_existing_venue: true,
-            venue_layout_blob: VENUE_LAYOUT_BLOB
+            venue_layout: VENUE_LAYOUT_BLOB
+
           Faker::SeatingChart.unique.clear
           Faker::Commerce.unique.clear
         end
+
         puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
       end
     end
