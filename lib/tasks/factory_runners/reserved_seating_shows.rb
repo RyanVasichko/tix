@@ -1,45 +1,41 @@
 require_relative "has_venue_layout"
-require_relative "forking"
 
 module FactoryRunners
   class ReservedSeatingShows
     include HasVenueLayout
-    include Forking
 
     def run
-      with_forking do
-        upcoming_reserved_seating_shows_count.times do |t|
-          FactoryBot.create \
-            :reserved_seating_show,
-            with_existing_artist: true,
-            sections_count: 4,
-            section_tickets_count: 90,
-            with_existing_venue: true,
-            venue_layout: VENUE_LAYOUT_BLOB
+      puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
+      bar = ProgressBar.new(upcoming_reserved_seating_shows_count, :bar, :counter, :percentage)
+      upcoming_reserved_seating_shows_count.times do
+        FactoryBot.create \
+          :reserved_seating_show,
+          with_existing_artist: true,
+          sections_count: 4,
+          section_tickets_count: 90,
+          with_existing_venue: true,
+          venue_layout: VENUE_LAYOUT_BLOB
 
-          Faker::SeatingChart.unique.clear
-          Faker::Commerce.unique.clear
-        end
-
-        puts "- #{upcoming_reserved_seating_shows_count} upcoming reserved seating shows"
+        Faker::SeatingChart.unique.clear
+        Faker::Commerce.unique.clear
+        bar.increment!
       end
 
-      with_forking do
-        past_reserved_seating_shows_count.times do |t|
-          FactoryBot.create \
-            :reserved_seating_show,
-            :past,
-            with_existing_artist: true,
-            sections_count: 4,
-            section_tickets_count: 90,
-            with_existing_venue: true,
-            venue_layout: VENUE_LAYOUT_BLOB
+      puts "- #{past_reserved_seating_shows_count} past reserved seating shows"
+      bar = ProgressBar.new(past_reserved_seating_shows_count, :bar, :counter, :percentage)
+      past_reserved_seating_shows_count.times do
+        FactoryBot.create \
+          :reserved_seating_show,
+          :past,
+          with_existing_artist: true,
+          sections_count: 4,
+          section_tickets_count: 90,
+          with_existing_venue: true,
+          venue_layout: VENUE_LAYOUT_BLOB
 
-          Faker::SeatingChart.unique.clear
-          Faker::Commerce.unique.clear
-        end
-
-        puts "- #{upcoming_reserved_seating_shows_count} past reserved seating shows"
+        Faker::SeatingChart.unique.clear
+        Faker::Commerce.unique.clear
+        bar.increment!
       end
     end
 

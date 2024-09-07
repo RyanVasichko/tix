@@ -1,35 +1,32 @@
-require_relative "forking"
-
 module FactoryRunners
   class GeneralAdmissionShows
-    include Forking
 
     def run
-      with_forking do
-        upcoming_general_admission_shows_count.times do
-          FactoryBot.create \
-            :general_admission_show,
-            with_existing_artist: true,
-            sections_count: 2,
-            with_existing_venue: true
+      puts "- #{upcoming_general_admission_shows_count} upcoming general admission shows"
+      bar = ProgressBar.new(upcoming_general_admission_shows_count, :bar, :counter, :percentage)
+      upcoming_general_admission_shows_count.times do
+        FactoryBot.create \
+          :general_admission_show,
+          with_existing_artist: true,
+          sections_count: 2,
+          with_existing_venue: true
 
-          Faker::Commerce.unique.clear
-        end
-        puts "- #{upcoming_general_admission_shows_count} upcoming general admission shows"
+        bar.increment!
+        Faker::Commerce.unique.clear
       end
 
-      with_forking do
-        past_general_admission_shows_count.times do
-          FactoryBot.create \
-            :general_admission_show,
-            :past,
-            with_existing_artist: true,
-            sections_count: 2,
-            with_existing_venue: true
+      puts "- #{past_general_admission_shows_count} past general admission shows"
+      bar = ProgressBar.new(past_general_admission_shows_count, :bar, :counter, :percentage)
+      past_general_admission_shows_count.times do
+        FactoryBot.create \
+          :general_admission_show,
+          :past,
+          with_existing_artist: true,
+          sections_count: 2,
+          with_existing_venue: true
 
-          Faker::Commerce.unique.clear
-        end
-        puts "- #{past_general_admission_shows_count} past general admission shows"
+        bar.increment!
+        Faker::Commerce.unique.clear
       end
     end
 

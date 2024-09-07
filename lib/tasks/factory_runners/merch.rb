@@ -1,18 +1,27 @@
 module FactoryRunners
   class Merch
     def run
-      merch_categories = FactoryBot.create_list(:merch_category, merch_categories_count)
       puts "- #{merch_categories_count} merch categories"
+      bar = ProgressBar.new(merch_categories_count, :bar, :counter, :percentage)
+      merch_categories = (1..merch_categories_count).map do
+        category = FactoryBot.create(:merch_category)
+        bar.increment!
+        category
+      end
 
+      puts "- #{merch_count} merch"
+      bar = ProgressBar.new(merch_count, :bar, :counter, :percentage)
       merch_count.times do
         FactoryBot.create(:merch, categories: merch_categories, image_blob: MERCH_IMAGE_BLOB)
+        bar.increment!
       end
-      puts "- #{merch_count} merch"
 
+      puts "- #{merch_shipping_rates_count} merch shipping rates"
+      bar = ProgressBar.new(merch_shipping_rates_count, :bar, :counter, :percentage)
       merch_shipping_rates_count.times do |index|
         ::Merch::ShippingRate.create!(weight: index * 5, price: index + 1)
+        bar.increment!
       end
-      puts "- #{merch_shipping_rates_count} merch shipping rates"
     end
 
     private

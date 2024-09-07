@@ -35,6 +35,8 @@ gem "hotwire_combobox"
 gem "bcrypt", "~> 3.1.7"
 gem "pagy"
 
+gem "progress_bar", "~> 1.3"
+
 # Fake data generation
 gem "faker"
 gem "factory_bot_rails"

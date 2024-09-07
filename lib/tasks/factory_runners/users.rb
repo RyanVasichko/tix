@@ -1,12 +1,24 @@
 module FactoryRunners
   class Users
     def run
-      FactoryBot.create_list(:customer, customers_count)
-      puts "- #{customers_count} customers"
-
-      FactoryBot.create(:admin, password: "Radiohead", password_confirmation: "Radiohead", email: "fake_admin@test.com")
-      FactoryBot.create_list(:admin, admins_count)
       puts "- #{admins_count + 1} admins"
+
+      bar = ProgressBar.new(admins_count, :bar, :counter, :percentage)
+      FactoryBot.create(:admin, password: "Radiohead", password_confirmation: "Radiohead", email: "fake_admin@test.com")
+      bar.increment!
+
+      admins_count.times do
+        FactoryBot.create(:admin)
+        bar.increment!
+      end
+
+      bar = ProgressBar.new(customers_count, :bar, :counter, :percentage)
+
+      puts "- #{customers_count} customers"
+      customers_count.times do
+        FactoryBot.create(:customer)
+        bar.increment!
+      end
     end
 
     private

@@ -1,16 +1,24 @@
 module FactoryRunners
   class Orders
     def run
-      FactoryBot.create_list \
-        :customer_order,
-        customer_orders_count,
-        with_existing_shows: true,
-        with_existing_user: true,
-        with_existing_merch: true
       puts "- #{customer_orders_count} customer orders"
+      bar = ProgressBar.new(customer_orders_count, :bar, :counter, :percentage)
+      customer_orders_count.times do
+        FactoryBot.create \
+          :customer_order,
+          with_existing_shows: true,
+          with_existing_user: true,
+          with_existing_merch: true
 
-      FactoryBot.create_list(:guest_order, guest_orders_count, with_existing_shows: true, with_existing_merch: true)
+        bar.increment!
+      end
+
       puts "- #{guest_orders_count} guest orders"
+      bar = ProgressBar.new(guest_orders_count, :bar, :counter, :percentage)
+      guest_orders_count.times do
+        FactoryBot.create(:guest_order, with_existing_shows: true, with_existing_merch: true)
+        bar.increment!
+      end
     end
 
     private

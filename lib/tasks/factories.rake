@@ -24,21 +24,21 @@ namespace :db do
       require_relative "./factory_runners/users"
       require_relative "./factory_runners/venues"
 
+      Rails.logger.level = :warn
+
       Tickets::ReservedSeating.suppressing_turbo_broadcasts do
         ShoppingCart.suppressing_turbo_broadcasts do
           start = Time.current
 
           puts "Creating:"
 
+          FactoryRunners::Users.new.run
           FactoryRunners::Artists.new.run
           FactoryRunners::Venues.new.run
           FactoryRunners::GeneralAdmissionShows.new.run
           FactoryRunners::ReservedSeatingShows.new.run
 
-          Process.waitall
-
           FactoryRunners::Merch.new.run
-          FactoryRunners::Users.new.run
           FactoryRunners::Orders.new.run
 
           puts "Factories loaded. Total time: #{Time.current - start}"
