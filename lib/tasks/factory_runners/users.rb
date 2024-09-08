@@ -16,12 +16,21 @@ module FactoryRunners
 
       puts "- #{customers_count} customers"
       customers_count.times do
-        FactoryBot.create(:customer)
+        create_customer
         bar.increment!
       end
     end
 
     private
+
+    def create_customer
+      tries = 0
+      customer = FactoryBot.build(:customer)
+      until tries > 10 || customer.save
+        customer = FactoryBot.build(:customer)
+        tries += 1
+      end
+    end
 
     def customers_count
       ENV.fetch("CUSTOMERS_COUNT", 10).to_i

@@ -15,7 +15,7 @@
 
 namespace :db do
   namespace :factories do
-    task load: [:environment, "db:reset"] do
+    task load: [:environment, "db:drop", "db:prepare"] do
       require_relative "./factory_runners/artists"
       require_relative "./factory_runners/general_admission_shows"
       require_relative "./factory_runners/merch"
