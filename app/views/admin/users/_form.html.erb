@@ -26,7 +26,9 @@
         <%= form.collection_select :user_role_id, User::Role.order(:name), :id, :name %>
       </div>
 
-      <em class="col-span-2 mt-4 block text-sm">An email to reset their password will be sent after the admin is created.</em>
+      <% if user.new_record? %>
+        <em class="col-span-2 mt-4 block text-sm">An email to reset their password will be sent after the admin is created.</em>
+      <% end %>
     </div>
   <% end %>
 
