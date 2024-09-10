@@ -21,7 +21,7 @@ FactoryBot.define do
       build_show = evaluator.reserved_seating_tickets_count.positive? && order.purchases.filter(&:ticket?).empty?
       seats = []
       if build_show && evaluator.with_existing_shows
-        seats = Show::Seat.not_sold.order("RANDOM()").limit(evaluator.reserved_seating_tickets_count)
+        seats = Show::Seat.not_sold.random(evaluator.reserved_seating_tickets_count)
         raise "Not enough seats to build order" if seats.count < evaluator.reserved_seating_tickets_count
       else
         show = FactoryBot.build(:reserved_seating_show)
@@ -34,7 +34,7 @@ FactoryBot.define do
 
       if evaluator.general_admission_tickets_count.positive?
         sections = if evaluator.with_existing_shows
-                     Show::Sections::GeneralAdmission.order("RANDOM()").limit(evaluator.general_admission_tickets_count)
+                     Show::Sections::GeneralAdmission.random(evaluator.general_admission_tickets_count)
                    else
                      FactoryBot.create_list(:general_admission_show_section, evaluator.general_admission_tickets_count)
                    end
@@ -80,7 +80,7 @@ FactoryBot.define do
 
     after(:build) do |order, evaluator|
       order.orderer ||= FactoryBot.build(:customer) unless evaluator.with_existing_user
-      order.orderer ||= Users::Customer.order("RANDOM()").first if evaluator.with_existing_user
+      order.orderer ||= Users::Customer.random(1).first if evaluator.with_existing_user
     end
   end
 end
