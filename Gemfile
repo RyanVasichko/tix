@@ -9,7 +9,6 @@ gem "puma", "~> 6.0"
 gem "redis"
 gem "solid_cache"
 gem "solid_queue"
-gem "appsignal"
 gem "mission_control-jobs"
 gem "msgpack", ">= 1.7.0"
 
