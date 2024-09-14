@@ -9,6 +9,7 @@ gem "puma", "~> 6.0"
 gem "redis"
 gem "solid_cache"
 gem "solid_queue"
+gem "solid_cable"
 gem "mission_control-jobs"
 gem "msgpack", ">= 1.7.0"
 
@@ -64,5 +65,3 @@ group :test do
 end
 
 gem "thruster", "~> 0.1.4"
-
-gem "solid_cable", "~> 3.0"

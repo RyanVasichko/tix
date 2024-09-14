@@ -1,0 +1,3 @@
+destroy_inactive_guests:
+  class: Users::Guest::DestroyInactiveJob
+  schedule: every day at midnight

@@ -2,10 +2,6 @@ default: &default
   dispatchers:
     - polling_interval: 1
       batch_size: 500
-      recurring_tasks:
-        destroy_inactive_guests:
-          class: Users::Guest::DestroyInactiveJob
-          schedule: every day at midnight
   workers:
     - queues: "*"
       threads: 2
