@@ -33,8 +33,8 @@
     </div>
     <!-- SEATING CHART -->
     <div class="col-span-6 mt-10">
-      <svg data-controller="shows--seating-chart--svg" data-loader-target="content" viewBox="0 0 <%= width %> <%= height %>">
-        <image data-loader-target="loadable" data-action="load->loader#showContent" href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
+      <svg data-controller="shows--seating-chart--svg" viewBox="0 0 <%= width %> <%= height %>">
+        <image href="<%= url_for(@show.venue_layout) %>" id="<%= dom_id(@show.venue_layout) %>" width="<%= width %>" height="<%= height %>" data-turbo-permanent>
         </image>
         <%= render partial: "shows/reserved_seating/sections/section", collection: @show.sections, cached: true %>
       </svg>
