@@ -16,6 +16,10 @@ jobs: &jobs
   database: storage/db/tix_jobs_<%= Rails.env %>.sqlite3
   migrations_paths: "db/jobs/migrate"
 
+cable: &cable
+  <<: *default
+  database: storage/db/tix_cable_<%= Rails.env %>.sqlite3
+
 development:
   primary:
     <<: *default
@@ -23,6 +27,8 @@ development:
     <<: *jobs
   cache:
     <<: *cache
+  cable:
+    <<: *cable
 
 test:
   primary:
@@ -35,3 +41,5 @@ production:
     <<: *cache
   jobs:
     <<: *jobs
+  cable:
+    <<: *cable

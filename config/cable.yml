@@ -1,11 +1,16 @@
+solid_cable: &solid_cable
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
+
 development:
-  adapter: redis
-  url: redis://localhost:6379/1
+  <<: *solid_cable
 
 test:
   adapter: test
 
 production:
-  adapter: redis
-  url: redis://@<%= ENV["DB_HOST"] %>:6379/0
-  channel_prefix: tix_production
+  <<: *solid_cable

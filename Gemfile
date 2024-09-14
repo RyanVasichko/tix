@@ -64,3 +64,5 @@ group :test do
 end
 
 gem "thruster", "~> 0.1.4"
+
+gem "solid_cable", "~> 3.0"
