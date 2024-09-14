@@ -14,8 +14,6 @@ module Tix
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { database: { writing: :jobs } }
 
-    config.mission_control.jobs.base_controller_class = "Admin::AdminController"
-
     config.time_zone = 'Central Time (US & Canada)'
 
     config.active_record.automatically_invert_plural_associations = true

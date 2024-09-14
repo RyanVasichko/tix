@@ -8,6 +8,8 @@ Rails.application.configure do
 
   config.active_record.sqlite3_production_warning = false
 
+  config.mission_control.jobs.base_controller_class = "Admin::AdminController"
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
