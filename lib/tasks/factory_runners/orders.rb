@@ -8,7 +8,9 @@ module FactoryRunners
           :customer_order,
           with_existing_shows: true,
           with_existing_user: true,
-          with_existing_merch: true
+          with_existing_merch: true,
+          reserved_seating_tickets_count: 3,
+          general_admission_tickets_count: 2
 
         bar.increment!
       end
@@ -16,7 +18,12 @@ module FactoryRunners
       puts "- #{guest_orders_count} guest orders"
       bar = ProgressBar.new(guest_orders_count, :bar, :counter, :percentage)
       guest_orders_count.times do
-        FactoryBot.create(:guest_order, with_existing_shows: true, with_existing_merch: true)
+        FactoryBot.create \
+          :guest_order,
+          with_existing_shows: true,
+          with_existing_merch: true,
+          reserved_seating_tickets_count: 3,
+          general_admission_tickets_count: 2
         bar.increment!
       end
     end
