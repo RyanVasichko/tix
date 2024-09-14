@@ -38,7 +38,7 @@ class Admin::SeatingCharts::CreateSeatingChartTest < ApplicationSystemTestCase
 
     click_on "Save"
 
-    assert_text "Seating chart was successfully created."
+    assert_text "Seating chart was successfully created.", wait: 10
 
     seating_chart = SeatingChart.last
 

@@ -37,7 +37,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
       click_on "Create Show"
 
-      assert_text "Show was successfully created"
+      assert_text "Show was successfully created", wait: 15
     end
 
     created_show = Shows::ReservedSeating.last
@@ -80,7 +80,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       fill_in_common_fields_for_show_create
 
       click_on "Add Section"
-      sleep 0.25
+      assert_selector ".general_admission_show_section_fields", count: 1
       within all(".general_admission_show_section_fields").last do
         find(".show_section_name_field").set("Section 1")
         find(".show_section_convenience_fee_field").set("2.50")
@@ -89,7 +89,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
       end
 
       click_on "Add Section"
-      sleep 0.25
+      assert_selector ".general_admission_show_section_fields", count: 2
       within all(".general_admission_show_section_fields").last do
         find(".show_section_name_field").set("Section 2")
         find(".show_section_convenience_fee_field").set("3.50")
@@ -148,7 +148,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   private
 
   def set_up_common_fields_for_show_create
-    @artist = FactoryBot.create(:artist, name: "Radiohead")
+    @artist = FactoryBot.create(:artist)
     @show_date = Time.current.change(month: 4, day: 5, hour: 0, min: 0, sec: 0) + 1.year
     @front_end_on_sale_at = @show_date.change(month: 3, day: 5, hour: 8, min: 0, sec: 0)
     @front_end_off_sale_at = @show_date.change(month: 4, day: 20, hour: 21, min: 0, sec: 0)

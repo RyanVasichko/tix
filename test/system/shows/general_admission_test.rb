@@ -21,8 +21,7 @@ class Shows::GeneralAdmissionTest < ApplicationSystemTestCase
       select 2, from: section_2.name
 
       click_on "Add to shopping cart"
-      sleep 0.1
-      assert_selector "#shopping_cart_count", text: "3"
+      assert_selector "#shopping_cart_count", text: "3", wait: 10
     end
   end
 end

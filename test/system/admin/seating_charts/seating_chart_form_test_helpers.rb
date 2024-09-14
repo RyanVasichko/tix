@@ -15,8 +15,11 @@ module Admin::SeatingCharts::SeatingChartFormTestHelpers
   end
 
   def add_section(name, ticket_type_name, use_existing_input: false)
-    click_on "Add Section" unless use_existing_input
-    sleep 0.25 # Wait for the new input to get rendered
+    unless use_existing_input
+      initial_input_count = all(".section-name-input").size
+      click_on "Add Section" unless use_existing_input
+      assert_selector ".section-name-input", count: initial_input_count + 1
+    end
 
     within("#seating_chart_sections") do
       all(".section-name-input").last.set(name)
