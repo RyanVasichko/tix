@@ -20,7 +20,7 @@ builder:
     arch: amd64
 
 volumes:
-  - "/var/lib/tix/db:/rails/storage/db"
+  - "/var/lib/tix/storage:/rails/storage"
   - "/var/lib/tix/log:/rails/log"
 
 servers:
@@ -37,14 +37,6 @@ servers:
     hosts:
       - <%= ENV.fetch("HOST") %>
     cmd: "bundle exec rake solid_queue:start"
-
-accessories:
-  redis:
-    image: redis:latest
-    host: <%= ENV.fetch("HOST") %>
-    port: 6379
-    directories:
-      - "data:/data"
 
 traefik:
   options:
