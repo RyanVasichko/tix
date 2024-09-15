@@ -11,7 +11,7 @@ env:
     RAILS_SERVE_STATIC_FILES: 1
     WEB_CONCURRENCY: 0
     RAILS_MAX_THREADS: 3
-    HOST: <%= ENV.fetch("HOST") %>
+    HOST: tix.ryanvasichko.com
   secret:
     - RAILS_MASTER_KEY
 
@@ -26,7 +26,7 @@ volumes:
 servers:
   web:
     hosts:
-      - <%= ENV.fetch("HOST") %>
+      - <%= ENV.fetch("TIX_HOST_IP") %>
     cmd: "./bin/rails server"
     labels:
       traefik.http.routers.web.entrypoints: websecure
@@ -35,7 +35,7 @@ servers:
       traefik.http.routers.web.middlewares: compression
   worker:
     hosts:
-      - <%= ENV.fetch("HOST") %>
+      - <%= ENV.fetch("TIX_HOST_IP") %>
     cmd: "bundle exec rake solid_queue:start"
 
 traefik:
