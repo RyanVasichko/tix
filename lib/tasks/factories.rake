@@ -1,6 +1,5 @@
 # Giga seed:
 # DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
-#   FACTORIES_FORKING=0 \
 #   HOST=dummy \
 #   RAILS_ENV=production \
 #   ARTISTS_COUNT=3000 \
