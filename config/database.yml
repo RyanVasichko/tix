@@ -19,6 +19,7 @@ jobs: &jobs
 cable: &cable
   <<: *default
   database: storage/tix_cable_<%= Rails.env %>.sqlite3
+  migrations_paths: "db/cable/migrate"
 
 development:
   primary:
