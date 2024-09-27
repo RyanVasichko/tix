@@ -50,5 +50,3 @@ coverage/
 *.DS_Store
 .byebug_history
 db/data/*
-
-.kamal/secrets

@@ -16,8 +16,8 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       RAILS_ENV: production
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-      KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      TIX_RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      TIX_GITHUB_REGISTRY_PAT: ${{ secrets.GITHUB_TOKEN }}
       TIX_HOST_IP: ${{ secrets.TIX_HOST_IP }}
 
     steps:
