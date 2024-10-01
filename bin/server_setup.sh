@@ -46,10 +46,16 @@ configure_ubuntu_auto_updates() {
         echo "APT::Periodic::Unattended-Upgrade \"1\";" | sudo tee -a "$apt_config_file"
     fi
 
-    # Configure automatic reboot at 2 AM if not already set
+    # Ensure unattended-upgrades configuration for automatic reboot
+    if ! grep -q "Unattended-Upgrade::Automatic-Reboot" "$unattended_upgrades_config"; then
+        echo "Configuring automatic reboot in $unattended_upgrades_config..."
+        echo -e "\n// Automatically reboot if required\nUnattended-Upgrade::Automatic-Reboot \"true\";" | sudo tee -a "$unattended_upgrades_config"
+    fi
+
+    # Ensure reboot time is set
     if ! grep -q "Unattended-Upgrade::Automatic-Reboot-Time" "$unattended_upgrades_config"; then
         echo "Configuring automatic reboot at 2 AM in $unattended_upgrades_config..."
-        echo -e "\n// Automatically reboot at 2 AM if required\nUnattended-Upgrade::Automatic-Reboot-Time \"02:00\";" | sudo tee -a "$unattended_upgrades_config"
+        echo -e "\nUnattended-Upgrade::Automatic-Reboot-Time \"02:00\";" | sudo tee -a "$unattended_upgrades_config"
     fi
 
     # Restart the unattended-upgrades service to apply changes
@@ -63,8 +69,6 @@ configure_ubuntu_auto_updates() {
 timedatectl set-timezone America/Chicago
 
 # Ensure directories and files
-ensure_directory "/letsencrypt"
-ensure_file_with_permissions "/letsencrypt/acme.json" "600"
 ensure_directory_with_ownership "/var/lib/tix/storage" "5000" "5000"
 ensure_directory_with_ownership "/var/lib/tix/log" "5000" "5000"
 
