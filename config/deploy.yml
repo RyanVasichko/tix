@@ -18,6 +18,9 @@ env:
 builder:
   arch: amd64
 
+ssh:
+  user: deploy
+
 volumes:
   - "/var/lib/tix/storage:/rails/storage"
   - "/var/lib/tix/log:/rails/log"
