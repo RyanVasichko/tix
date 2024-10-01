@@ -148,7 +148,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
   private
 
   def set_up_common_fields_for_show_create
-    @artist = FactoryBot.create(:artist)
+    @artist = FactoryBot.create(:artist, name: "Radiohead")
     @show_date = Time.current.change(month: 4, day: 5, hour: 0, min: 0, sec: 0) + 1.year
     @front_end_on_sale_at = @show_date.change(month: 3, day: 5, hour: 8, min: 0, sec: 0)
     @front_end_off_sale_at = @show_date.change(month: 4, day: 20, hour: 21, min: 0, sec: 0)
