@@ -2,8 +2,7 @@ default: &default
   adapter: sqlite3
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 }.to_i %>
-  retries: 5000
-  default_transaction_mode: immediate
+  timeout: 10000
   database: storage/tix_<%= Rails.env %>.sqlite3
 
 cache: &cache
