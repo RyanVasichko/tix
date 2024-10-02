@@ -15,9 +15,8 @@ class Merch::ShoppingCartSelectionsControllerTest < ActionDispatch::IntegrationT
 
   test "new should not return a form for deactivated merch" do
     @merch.update! active: false
-    assert_raises(ActiveRecord::RecordNotFound) do
-      get new_merch_shopping_cart_selection_url(@merch)
-    end
+    get new_merch_shopping_cart_selection_url(@merch)
+    assert_response :not_found
   end
 
   test "post should add merch to the shopping cart if merch has not already been selected for the same option" do
@@ -35,12 +34,11 @@ class Merch::ShoppingCartSelectionsControllerTest < ActionDispatch::IntegrationT
   test "post should not add deactivated merch to the shopping cart" do
     @merch.update! active: false
 
-    assert_raises(ActiveRecord::RecordNotFound) do
-      post merch_shopping_cart_selections_url(@merch),
-           params: {
-             shopping_cart_selection: { quantity: 2, options: { "size" => "large" } }
-           }
-    end
+    post merch_shopping_cart_selections_url(@merch),
+         params: {
+           shopping_cart_selection: { quantity: 2, options: { "size" => "large" } }
+         }
+    assert_response :not_found
   end
 
   test "post should increment the quantity if merch has already been selected for the same option" do

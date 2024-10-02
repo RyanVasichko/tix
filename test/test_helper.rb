@@ -4,6 +4,7 @@ require "rails/test_help"
 require "mocha/minitest"
 require "webmock/minitest"
 require_relative "../lib/faker/seating_chart"
+require_relative "test_helpers/session_test_helper"
 
 WebMock.enable!
 

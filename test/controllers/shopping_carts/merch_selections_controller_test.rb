@@ -20,9 +20,8 @@ class ShoppingCart::MerchSelectionsControllerTest < ActionDispatch::IntegrationT
     merch_selection = FactoryBot.create(:shopping_cart_merch_selection)
     assert_not_equal user, merch_selection.user
 
-    assert_raises(ActiveRecord::RecordNotFound) do
-      patch shopping_carts_merch_selection_url(merch_selection), params: { shopping_cart_selection: { quantity: merch_selection.quantity + 2 } }
-    end
+    patch shopping_carts_merch_selection_url(merch_selection), params: { shopping_cart_selection: { quantity: merch_selection.quantity + 2 } }
+    assert_response :not_found
   end
 
   test "destroy should destroy merch selections" do
@@ -44,8 +43,7 @@ class ShoppingCart::MerchSelectionsControllerTest < ActionDispatch::IntegrationT
     merch_selection = FactoryBot.create(:shopping_cart_merch_selection)
     assert_not_equal user, merch_selection.user
 
-    assert_raises(ActiveRecord::RecordNotFound) do
-      delete shopping_carts_merch_selection_url(merch_selection)
-    end
+    delete shopping_carts_merch_selection_url(merch_selection)
+    assert_response :not_found
   end
 end

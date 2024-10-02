@@ -1,5 +1,6 @@
 class Order::SearchIndex < ApplicationRecord
   belongs_to :order
+  self.primary_key = :order_id
 
   def self.populate_for(order)
     transaction do

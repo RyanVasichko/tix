@@ -1,5 +1,5 @@
 require_relative "boot"
-require_relative "../lib/middleware/logging_silencer"
+
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -9,14 +9,10 @@ Bundler.require(*Rails.groups)
 module Tix
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.0
 
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { database: { writing: :jobs } }
-
-    config.time_zone = 'Central Time (US & Canada)'
-
-    config.active_record.automatically_invert_plural_associations = true
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -27,10 +23,8 @@ module Tix
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-
+    #
     config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    config.middleware.insert_before Rails::Rack::Logger, Middleware::LoggingSilencer, ["/up"]
   end
 end
