@@ -29,7 +29,7 @@ servers:
   web:
     hosts:
       - <%= ENV.fetch("TIX_HOST_IP") %>
-    cmd: "bundle exec thrust ./bin/rails server"
+    cmd: "./bin/thrust ./bin/rails server"
   worker:
     hosts:
       - <%= ENV.fetch("TIX_HOST_IP") %>
