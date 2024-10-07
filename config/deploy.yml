@@ -19,7 +19,7 @@ builder:
   arch: amd64
 
 ssh:
-  user: deploy
+  user: ubuntu
 
 volumes:
   - "/var/lib/tix/storage:/rails/storage"
