@@ -1,0 +1,106 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Set timezone to America/Chicago
+      ansible.builtin.command:
+        cmd: timedatectl set-timezone America/Chicago
+      register: result
+      changed_when: "'Time zone' in result.stdout"
+      tags: timezone
+
+    - name: Ensure /var/lib/tix/storage directory exists with correct ownership
+      ansible.builtin.file:
+        path: /var/lib/tix/storage
+        state: directory
+        owner: "5000"
+        group: "5000"
+        mode: '0755'
+
+    - name: Ensure /var/lib/tix/log directory exists with correct ownership
+      ansible.builtin.file:
+        path: /var/lib/tix/log
+        state: directory
+        owner: "5000"
+        group: "5000"
+        mode: '0755'
+
+    - name: Ensure curl is installed
+      ansible.builtin.package:
+        name: curl
+        state: present
+
+    # Create deploy user with sudo access and SSH setup
+    - name: Ensure deploy user exists
+      ansible.builtin.user:
+        name: deploy
+        comment: "Deploy User"
+        shell: /bin/bash
+        state: present
+        create_home: yes
+
+    - name: Add deploy user to sudo group
+      ansible.builtin.user:
+        name: deploy
+        groups: sudo
+        append: yes
+
+    - name: Ensure deploy user can use sudo without password
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/deploy
+        content: "deploy ALL=(ALL) NOPASSWD:ALL\n"
+        mode: '0440'
+
+    - name: Create .ssh directory for deploy user
+      ansible.builtin.file:
+        path: /home/deploy/.ssh
+        state: directory
+        mode: '0700'
+        owner: deploy
+        group: deploy
+
+    - name: Add SSH key for deploy user
+      ansible.builtin.copy:
+        dest: /home/deploy/.ssh/authorized_keys
+        content: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+        mode: '0600'
+        owner: deploy
+        group: deploy
+
+    - name: Ensure correct ownership of home directory for deploy user
+      ansible.builtin.file:
+        path: /home/deploy
+        state: directory
+        owner: deploy
+        group: deploy
+        mode: '0755'
+
+    # Install Docker using the get.docker.com script only if Docker is not installed
+    - name: Check if Docker is installed
+      ansible.builtin.command:
+        cmd: docker --version
+      ignore_errors: yes
+      register: docker_installed
+
+    - name: Install Docker using the get.docker.com script
+      ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
+      when: docker_installed.failed
+      tags: docker_install
+
+    - name: Ensure Docker service is started and enabled
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+      tags: docker_service
+
+    - name: Add deploy user to docker group
+      ansible.builtin.user:
+        name: deploy
+        groups: docker
+        append: yes
+
+    - name: Verify Docker is installed
+      ansible.builtin.command:
+        cmd: docker --version
+      tags: docker_check
