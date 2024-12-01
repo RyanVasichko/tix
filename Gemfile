@@ -23,7 +23,7 @@ gem "tailwindcss-rails", "~> 3.0"
 gem "stripe"
 
 # Database
-gem "sqlite3", "~> 2.2"
+gem "sqlite3", "~> 2.3"
 
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
