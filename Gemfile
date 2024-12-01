@@ -5,7 +5,7 @@ ruby file: ".ruby-version"
 
 # Infrastructure
 gem "rails", "8.0.0.beta1"
-gem "puma", "~> 6.0"
+gem "puma", "~> 6.5"
 gem "redis"
 gem "solid_cache"
 gem "solid_queue"
