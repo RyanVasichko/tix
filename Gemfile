@@ -15,7 +15,7 @@ gem "msgpack", ">= 1.7.0"
 
 # Assets
 gem "propshaft"
-gem "importmap-rails", "~> 2.0"
+gem "importmap-rails", "~> 2.1"
 gem "requestjs-rails"
 gem "stimulus-rails"
 gem "turbo-rails", "~> 2.0"
