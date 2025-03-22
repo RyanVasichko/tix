@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Project rules
+
+- Stick to vanilla rails as closely as possible
+- Do not create services. If logic needs to be encapsulated somewhere outside of an already-existing model or concern, create a PORO model. You can also use ActiveModel, etc. in this for validations, etc.
+- Use concerns to encapsulate logic, e.g. [refundable.rb](mdc:app/models/order/purchase/refundable.rb), [shippable.rb](mdc:app/models/order/shippable.rb). For model-specific concerns namespace them under the model and place them in the proper folder, don't just add concerns to the models/concerns directory that are for a specific model
+- Use rails generators when adding things that have a generator and then modify the generated files
