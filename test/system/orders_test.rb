@@ -44,10 +44,12 @@ class OrdersTest < ApplicationSystemTestCase
     find("##{dom_id(merch_1)}").click
     select "3", from: "Quantity"
     click_on "Add to Shopping Cart"
+    assert_no_selector "#application_modal dialog[open]", wait: 10
 
     find("##{dom_id(merch_2)}").click
     select "2", from: "Quantity"
     click_on "Add to Shopping Cart"
+    assert_no_selector "#application_modal dialog[open]", wait: 10
 
     visit shows_reserved_seating_url(reserved_seating_show)
     seat = reserved_seating_show.seats.available.first
@@ -60,13 +62,10 @@ class OrdersTest < ApplicationSystemTestCase
 
     select 2, from: general_admission_show.sections.first.name
     click_on "Add to shopping cart"
+    assert_no_selector "#application_modal dialog[open]", wait: 10
 
     dismiss_all_toast_messages
-    sleep 0.25
-    find("#shopping_cart_toggle").click
-    unless has_link? href: new_order_path, wait: 5
-      find("#shopping_cart_toggle").click
-    end
+    open_shopping_cart
 
     click_on "Checkout"
 
@@ -111,12 +110,13 @@ class OrdersTest < ApplicationSystemTestCase
   private
 
   def fill_in_credit_card_information
-    frame = find('iframe[name^="__privateStripeFrame"]', wait: 10)
-    within_frame(frame) do
-      fill_in "Card number", with: "4242424242424242"
-      fill_in "Expiration", with: "12/#{(Time.now.year + 1).to_s[-2..]}]}"
-      fill_in "CVC", with: "123"
-      fill_in "ZIP code", with: "77019"
+    page.driver.with_playwright_page do |playwright_page|
+      frame = playwright_page.locator('iframe[title="Secure payment input frame"]').first.content_frame
+
+      frame.get_by_placeholder("1234 1234 1234 1234").fill("4242424242424242")
+      frame.get_by_placeholder("MM / YY").fill("12/#{(Time.now.year + 1).to_s[-2..]}")
+      frame.get_by_placeholder("CVC").fill("123")
+      frame.get_by_placeholder("12345").fill("77019")
     end
   end
 

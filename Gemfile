@@ -58,7 +58,7 @@ end
 
 group :test do
   gem "capybara"
-  gem "selenium-webdriver"
+  gem "capybara-playwright-driver", "~> 0.5.10"
 
   gem "simplecov"
   gem "webmock"

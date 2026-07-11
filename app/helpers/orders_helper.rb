@@ -1,5 +1,11 @@
 module OrdersHelper
   def order_form_with(order, &block)
+    stripe_public_key = if Rails.env.test?
+      Rails.application.credentials.stripe&.public_key || "pk_test_dummy"
+    else
+      Rails.application.credentials.stripe.public_key
+    end
+
     form_with model: order,
               url: orders_path,
               scope: :order,
@@ -8,7 +14,7 @@ module OrdersHelper
                   controller: "checkout",
                   action: "checkout#handlePaymentMethod",
                   checkout_amount_value: order.total_due_in_cents,
-                  checkout_stripe_public_key_value: Rails.application.credentials.stripe.public_key
+                  checkout_stripe_public_key_value: stripe_public_key
                 },
               class: "lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16",
               &block

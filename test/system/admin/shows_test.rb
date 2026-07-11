@@ -166,16 +166,16 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
     select @venue.name, from: "Venue"
 
-    fill_in "Show date", with: @show_date.to_formatted_s(:date_field)
-    fill_in "Doors open at", with: @doors_open_at.to_formatted_s(:time_field)
-    fill_in "Dinner starts at", with: @dinner_starts_at.to_formatted_s(:time_field)
-    fill_in "Dinner ends at", with: @dinner_ends_at.to_formatted_s(:time_field)
-    fill_in "Show starts at", with: @show_starts_at.to_formatted_s(:time_field)
+    fill_in "Show date", with: @show_date.to_date.iso8601
+    fill_in "Doors open at", with: @doors_open_at.strftime("%H:%M")
+    fill_in "Dinner starts at", with: @dinner_starts_at.strftime("%H:%M")
+    fill_in "Dinner ends at", with: @dinner_ends_at.strftime("%H:%M")
+    fill_in "Show starts at", with: @show_starts_at.strftime("%H:%M")
 
-    fill_in "Back end on sale at", with: @back_end_on_sale_at.to_formatted_s(:datetime_field)
-    fill_in "Back end off sale at", with: @back_end_off_sale_at.to_formatted_s(:datetime_field)
-    fill_in "Front end on sale at", with: @front_end_on_sale_at.to_formatted_s(:datetime_field)
-    fill_in "Front end off sale at", with: @front_end_off_sale_at.to_formatted_s(:datetime_field)
+    fill_in "Back end on sale at", with: @back_end_on_sale_at.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Back end off sale at", with: @back_end_off_sale_at.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Front end on sale at", with: @front_end_on_sale_at.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Front end off sale at", with: @front_end_off_sale_at.strftime("%Y-%m-%dT%H:%M")
 
     fill_in "Additional text", with: "This is some additional text"
     check @customer_question.question
@@ -217,9 +217,7 @@ class Admin::ShowsTest < ApplicationSystemTestCase
 
   def fill_ticket_price_for_section(div_id_suffix, price)
     within("#show_section_#{div_id_suffix}_fields") do
-      # Using find with XPath to locate the desired input field based on ending substring
-      xpath_expression = %{.//input[substring(@name, string-length(@name) - string-length('][ticket_price]') +1) = '][ticket_price]']}
-      find(:xpath, xpath_expression).set(price)
+      find("input[name$='[ticket_price]']").set(price)
     end
   end
 end

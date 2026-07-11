@@ -7,7 +7,7 @@ class PasswordResetsTest < ApplicationSystemTestCase
     visit new_user_session_path
     click_on "Forgot password?"
 
-    fill_in "Email", with: customer.email
+    find("#user_email").set(customer.email)
     click_on "Send me reset password instructions"
     assert_text "If you have an account an email has been sent with instructions for resetting your password."
     assert_enqueued_email_with UserMailer, :password_reset_email, args: customer

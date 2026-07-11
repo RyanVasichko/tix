@@ -35,8 +35,7 @@ class ProfilesTest < ApplicationSystemTestCase
     visit edit_user_url
 
     assert_difference -> { Users::Customer.count }, -1 do
-      click_on "Delete my account"
-      accept_confirm
+      accept_confirm { click_on "Delete my account" }
       assert_text "Your account has been successfully deleted."
     end
     assert_nil User.find_by_id(@user.id)

@@ -7,7 +7,15 @@ module Draggable
     delta_y = y - original_y
 
     driver = element.session.driver
-    builder = driver.browser.action
-    builder.drag_and_drop_by(element.native, delta_x, delta_y).perform
+    driver.with_playwright_page do |page|
+      bounding_box = element.native.bounding_box
+      start_x = bounding_box["x"] + bounding_box["width"] / 2
+      start_y = bounding_box["y"] + bounding_box["height"] / 2
+
+      page.mouse.move(start_x, start_y)
+      page.mouse.down
+      page.mouse.move(start_x + delta_x, start_y + delta_y)
+      page.mouse.up
+    end
   end
 end
